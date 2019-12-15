@@ -1,0 +1,67 @@
+{
+  "apiSchemaFile": "domain-api-schema",
+  "baseTypeName": "SimplestPut03",
+  "method": "PUT",
+  "mockData": {},
+  "paramsModelName": "SimplestPut03Parameters",
+  "paramsSchema": {
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^\\d{1,5}$",
+        "description": "Important query parameter"
+      },
+      "optionalProperty": {
+        "type": "string",
+        "description": "Optional query parameter"
+      }
+    },
+    "required": [
+      "id"
+    ],
+    "type": "object",
+    "description": "Model of parameters for API /{id}"
+  },
+  "path": "/{id}",
+  "queryParams": [
+    "optionalProperty"
+  ],
+  "requestIsRequired": true,
+  "requestModelName": "SimplestPut03Request",
+  "requestSchema": {
+    "application/json": {
+      "type": [
+        "null",
+        "string",
+        "object"
+      ],
+      "description": "Required request body"
+    }
+  },
+  "responseModelName": "SimplestPut03Response",
+  "responseSchema": {
+    "200": {
+      "application/json": {
+        "title": "Abstract Success Response",
+        "description": "Successful result",
+        "type": "object",
+        "properties": {
+          "importantProperty": {
+            "type": "string"
+          },
+          "optionalProperty": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "importantProperty"
+        ]
+      }
+    }
+  },
+  "servers": [
+    "http://localhost"
+  ],
+  "typingsDependencies": [],
+  "typingsDirectory": "typings"
+}

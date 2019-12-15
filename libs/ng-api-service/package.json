@@ -1,0 +1,26 @@
+{
+  "name": "@codegena/ng-api-service",
+  "description": "ApiService: base class for automatic generated classes",
+  "version": "2.1.0",
+  "scripts": {
+    "lint": "ng lint",
+    "check": "npm run prepare:ng-api-service && npm run lint && ng test --no-watch --no-progress --browsers=ChromeHeadlessCI",
+    "prepare": "tsc src/prepare.ts --outDir ./dist --allowSyntheticDefaultImports true --esModuleInterop true && node ./dist/prepare.js"
+  },
+  "dependencies": {
+    "@types/node": ">= 8",
+    "ajv": ">= 6",
+    "prettier": ">= 1"
+  },
+  "peerDependencies": {
+    "@angular/common": ">= 6",
+    "@angular/core": ">= 6",
+    "@angular/platform-browser-dynamic": ">= 6",
+    "zone.js": ">= 0",
+    "rxjs": ">= 6",
+    "lodash": ">= 4",
+    "@types/lodash": ">= 4",
+    "core-js": "*",
+    "zone.js": ">= 0"
+  }
+}

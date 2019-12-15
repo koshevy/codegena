@@ -1,0 +1,50 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "02 — Simplest case"
+  },
+  "paths": {
+    "/": {
+      "summary": "Simplest operation with POST method support",
+      "post": {
+        "summary": "POST with no parameters, inline successful response, optional inline body request",
+        "operationId": "simplestPost02",
+        "requestBody": {
+          "description": "Optional request body",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": ["null", "string", "object"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Abstract Success Response",
+                  "description": "An object with abstract data, used in successful response",
+                  "type": "object",
+                  "properties": {
+                    "importantProperty": {
+                      "type": "string"
+                    },
+                    "optionalProperty": {
+                      "type": "number"
+                    }
+                  },
+                  "required": ["importantProperty"]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

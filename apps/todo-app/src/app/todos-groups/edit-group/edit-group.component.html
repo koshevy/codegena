@@ -1,0 +1,36 @@
+<form [formGroup]="formGroup" *ngIf="context$ | async as context">
+  <div class="form-group">
+    <label for="groupTitle">Tasks group name <strong class="text-danger">*</strong></label>
+    <input formControlName="title"
+           nullableControl
+           autocomplete="off"
+           type="text"
+           class="form-control"
+           id="groupTitle"
+           placeholder="E.g., Sport schedule"
+           tooltipClass="validation-error">
+  </div>
+  <div class="form-group">
+    <label for="editGroupDescription">Description <strong class="text-danger">*</strong></label>
+    <input formControlName="description"
+           nullableControl
+           autocomplete="off"
+           type="text"
+           class="form-control"
+           id="editGroupDescription"
+           placeholder="E.g., Fitness, games, martial arts schedule and goals"
+           tooltipClass="validation-error">
+  </div>
+  <div class="form-group">
+    <label for="editGroupTasks">Create with tasks</label>
+    <textarea formControlName="tasksText" nullableControl id="editGroupTasks" type="text" class="form-control"></textarea>
+    <small class="form-text text-muted">
+      Write your tasks on each row
+    </small>
+  </div>
+  <button type="button" class="btn btn-info" [disabled]="!context.savingEnabled" (click)="onSave();">
+    {{ context.formType === 'create' ? 'Create' : 'Save' }}
+  </button>
+  &nbsp;
+  <button type="button" class="btn btn-light" (click)="onCancel();">Cancel</button>
+</form>

@@ -1,0 +1,25 @@
+{
+  "name": "@codegena/oapi3ts-cli",
+  "version": "2.1.0",
+  "dependencies": {
+    "@codegena/oapi3ts": ">= 2",
+    "@codegena/ng-api-service": ">= 2",
+    "ajv": ">= 6",
+    "hash": "*",
+    "lodash": ">= 4",
+    "prettier": ">= 1"
+  },
+  "devDependencies": {
+    "@angular/common": ">= 6",
+    "@angular/core": ">= 6",
+    "@types/node": ">= 8",
+    "core-js": "*",
+    "hash.js": "*",
+    "rxjs": ">= 6",
+    "zone.js": "^0.9.1"
+  },
+  "browser": {
+    "fs": false,
+    "path": false
+  }
+}

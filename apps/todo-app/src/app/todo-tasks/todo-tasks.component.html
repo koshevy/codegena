@@ -1,0 +1,29 @@
+<div class="container-fluid" *ngIf="context$ | async as context">
+  <div class="row">
+    <div class="group-list min-vh-100 col-xl-3 col-lg-3 col-md-5 col-sm-6 d-none d-sm-block pt-4" style="background: #efefef">
+      <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
+        <h5>Groups</h5>
+        <ul class="list-unstyled">
+          <li *ngFor="let group of context?.groups">
+            <a href="javascript:;">
+              {{ group?.title }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="min-vh-100 col-xl-5 col-lg-5 col-md-7 col-sm-6 col-12 pt-4">
+      <task-list [taskList]="syncedTaskList"
+                 [selectedTaskUid]="context.selectedTaskUid"
+                 (eventsOutput)="onTaskListEvent($event)"
+      ></task-list>
+    </div>
+    <div class="pt-2 min-vh-100 col-xl-4 col-lg-4 d-none d-lg-block" style="background: #efefef">
+      <div #taskEditor
+           *ngIf="context.selectedTaskUid"
+           (keydown)="onEditorKeydown($event)"
+           [froalaEditor]="frolaOptions"
+           [formControl]="taskEditorControl"></div>
+    </div>
+  </div>
+</div>

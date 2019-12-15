@@ -1,0 +1,71 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "03 — Simplest case"
+  },
+  "paths": {
+    "/{id}": {
+      "summary": "Simplest operation with PUT method support",
+      "put": {
+        "summary": "PUT with inline path parameters, inline successful response, required inline body request",
+        "operationId": "simplestPut03",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Important query parameter",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{1,5}$"
+            }
+          },
+          {
+            "name": "optionalProperty",
+            "in": "query",
+            "description": "Optional query parameter",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Required request body",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": ["null", "string", "object"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Abstract Success Response",
+                  "description": "An object with abstract data, used in successful response",
+                  "type": "object",
+                  "properties": {
+                    "importantProperty": {
+                      "type": "string"
+                    },
+                    "optionalProperty": {
+                      "type": "number"
+                    }
+                  },
+                  "required": ["importantProperty"]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,300 @@
+{
+  "description": "Test cases for isolated schema converting tests",
+  "simple": {
+    "number": {
+      "title": "Simple number schema",
+      "description": "Should be converted in numeric type descriptor",
+      "type": "number",
+      "min": 0,
+      "max": 100
+    },
+    "string": {
+      "title": "Simple string schema",
+      "description": "Should be converted in string type descriptor",
+      "type": "string",
+      "minLength": 0,
+      "minLength": 100
+    },
+    "arrayOfAny": {
+      "title": "Simple array with common item definitions (any)",
+      "type": "array"
+    },
+    "arrayOfObjects": {
+      "title": "Simple array with common item definitions (objects)",
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "arrayOfArrays": {
+      "title": "Simple array with common item definitions (arrays)",
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        }
+      }
+    },
+    "arrayExactly": {
+      "title": "Simple array with exactly items order",
+      "type": "array",
+      "items": [
+        {
+          "type": "string",
+          "description": "String item at first place"
+        },
+        {
+          "type": "number",
+          "description": "Number item at second place"
+        },
+        {
+          "type": "object",
+          "description": "Object item at third place",
+          "additionalProperties": {
+            "type": "boolean"
+          }
+        }
+      ]
+    }
+  },
+  "complex": {
+    "complexOneOf": {
+      "title": "Complex union schema",
+      "description": "Complex union of different types with complex condition",
+      "oneOf": [
+        {
+          "type": "object",
+          "description": "First case: a person",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "Type of person",
+              "enum": [
+                "individual",
+                "person"
+              ]
+            },
+            "firstName": {
+              "type": "string"
+            },
+            "lastName": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "firstName",
+            "lastName"
+          ]
+        },
+        {
+          "type": "object",
+          "description": "Second case: an organization",
+          "properties": {
+            "type": {
+              "description": "Type of commercial organization",
+              "type": "string",
+              "enum": [
+                "commercial-company",
+                "non-government-organization"
+              ]
+            },
+            "companyName": {
+              "type": "string"
+            },
+            "branch": {
+              "type": "string",
+              "enum": [
+                "it",
+                "horeca",
+                "retail",
+                "sport"
+              ]
+            }
+          },
+          "required": [
+            "type",
+            "companyName"
+          ]
+        },
+        {
+          "type": "string",
+          "description": "Information should be obtained by last OPERATION_ID in cookies",
+          "enum": ["[PROFILE_FROM_STORAGE]"]
+        },
+        {
+          "type": "number",
+          "description": "Information should be obtained by last unsaved request",
+          "enum": [-1]
+        }
+      ]
+    },
+    "simpleAllOf": {
+      "title": "Simple merging schema",
+      "description": "Simple merging of object types",
+      "allOf": [
+        {
+          "type": "object",
+          "description": "First case: a person",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "Type of person",
+              "enum": [
+                "individual",
+                "person"
+              ]
+            },
+            "firstName": {
+              "type": "string"
+            },
+            "lastName": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "firstName",
+            "lastName"
+          ]
+        },
+        {
+          "type": "object",
+          "description": "Second case: an organization",
+          "properties": {
+            "type": {
+              "description": "Type of commercial organization",
+              "type": "string",
+              "enum": [
+                "commercial-company",
+                "non-government-organization"
+              ]
+            },
+            "companyName": {
+              "type": "string"
+            },
+            "branch": {
+              "type": "string",
+              "enum": [
+                "it",
+                "horeca",
+                "retail",
+                "sport"
+              ]
+            }
+          },
+          "required": [
+            "type",
+            "companyName"
+          ]
+        }
+      ]
+    },
+    "complexAllOf": {
+      "title": "Complex merging schema",
+      "description": "Complex merging of different types with complex condition",
+      "allOf": [
+        {
+          "type": "object",
+          "description": "First case: a person",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "Type of person",
+              "enum": [
+                "individual",
+                "person"
+              ]
+            },
+            "firstName": {
+              "type": "string"
+            },
+            "lastName": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "firstName",
+            "lastName"
+          ]
+        },
+        {
+          "description": "Nested 'allOf' rule",
+          "allOf": [
+            {
+              "description": "A simple case for merging",
+              "type": "object",
+              "properties": {
+                "rareOrganizationCode": {
+                  "readOnly": "true",
+                  "description": "A rare property added to typical organization data",
+                  "type": "boolean"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "description": "Second case: an organization",
+              "properties": {
+                "type": {
+                  "description": "Type of commercial organization",
+                  "type": "string",
+                  "enum": [
+                    "commercial-company",
+                    "non-government-organization"
+                  ]
+                },
+                "companyName": {
+                  "type": "string"
+                },
+                "branch": {
+                  "type": "string",
+                  "enum": [
+                    "it",
+                    "horeca",
+                    "retail",
+                    "sport"
+                  ]
+                }
+              },
+              "required": [
+                "type",
+                "companyName"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "description": "Information should be obtained by last OPERATION_ID in cookies",
+          "enum": ["[PROFILE_FROM_STORAGE]"]
+        },
+        {
+          "type": "number",
+          "description": "Information should be obtained by last unsaved request",
+          "enum": [-1]
+        },
+        {
+          "type": "boolean",
+          "description": "Simple value should not be included in variants"
+        },
+        {
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "Data, wrapped by OneOf (1 item)",
+              "enum": [1]
+            },
+            {
+              "type": "number",
+              "description": "Data, wrapped by OneOf (2 item)",
+              "enum": [2]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

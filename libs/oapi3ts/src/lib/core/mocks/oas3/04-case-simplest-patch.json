@@ -1,0 +1,107 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "03 — Simplest case"
+  },
+  "paths": {
+    "/{id}": {
+      "summary": "Simplest operation with PATCH method support",
+      "patch": {
+        "summary": "PATCH with parameters, inline successful responses (200, 202), inline default error response, required body request",
+        "operationId": "simplestPut04",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Important query parameter",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{1,5}$"
+            }
+          },
+          {
+            "name": "optionalProperty",
+            "in": "query",
+            "description": "Optional query parameter",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Required request body",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": ["null", "string", "object"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Has wrote",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["message", "id"]
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "No changes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["message", "id"]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error answer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["message", "id"]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -7,5 +7,24 @@
     "tslint.json": "*",
     "nx.json": "*"
   },
-  "projects": {}
+  "projects": {
+    "todo-app": {
+      "tags": []
+    },
+    "todo-app-backend": {
+      "tags": []
+    },
+    "oapi3ts": {
+      "tags": []
+    },
+    "ng-api-service": {
+      "tags": []
+    },
+    "oapi3ts-cli": {
+      "tags": []
+    },
+    "todo-app-scheme": {
+      "tags": []
+    }
+  }
 }

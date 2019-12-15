@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "types": ["node", "lodash", "jest"]
+  },
+  "include": ["**/*.ts"],
+  "exclude": [
+    "node_modules",
+    "src/test-setup.ts",
+    "**/*.spec.ts"
+  ]
+}

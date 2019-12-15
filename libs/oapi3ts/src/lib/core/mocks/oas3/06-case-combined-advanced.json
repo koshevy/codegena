@@ -1,0 +1,843 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "03 — Combined case",
+    "description": "Describe example api of TODO app. Uses `#/components/schemas` section for storing shared models."
+  },
+  "paths": {
+    "/list": {
+      "summary": "Get lists of TODO's",
+      "get": {
+        "summary": "Get list of todo's lists",
+        "operationId": "getLists",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/isComplete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/todoItemSaved"
+          },
+          "400": {
+            "$ref": "#/components/responses/errorBadRequest"
+          },
+          "500": {
+            "$ref": "#/components/responses/errorServer"
+          }
+        }
+      },
+      "post": {
+        "operationId": "createList",
+        "description": "Create new list",
+        "requestBody": {
+          "description": "Required request body",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToDosListBlank"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToDosList"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/errorBadRequest"
+          },
+          "500": {
+            "$ref": "#/components/responses/errorServer"
+          }
+        }
+      }
+    },
+    "/list/{listId}": {
+      "operationId": "rewriteList",
+      "get": {
+        "summary": "Get todo's list",
+        "operationId": "getList",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/listId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/todoItemSaved"
+          },
+          "400": {
+            "$ref": "#/components/responses/errorBadRequest"
+          },
+          "500": {
+            "$ref": "#/components/responses/errorServer"
+          }
+        }
+      },
+      "put": {
+        "description": "Rewrite an entire todo's list",
+        "operationId": "rewriteList",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/listId"
+          },
+          {
+            "$ref": "#/components/parameters/forceSave"
+          }
+        ],
+        "requestBody": {
+          "description": "Required request body",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToDosListBlank"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/todoItemSaved"
+          },
+          "204": {
+            "description": "No changes. Should no have a response!"
+          },
+          "400": {
+            "$ref": "#/components/responses/errorBadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/errorListNotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/errorConflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/errorServer"
+          }
+        }
+      },
+      "patch": {
+        "description": "Partially update of list",
+        "operationId": "updateList",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/listId"
+          },
+          {
+            "$ref": "#/components/parameters/forceSave"
+          }
+        ],
+        "requestBody": {
+          "description": "Required request body",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToDosListBlank"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Todo list saved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToDosList"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/errorBadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/errorListNotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/errorConflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/errorServer"
+          }
+        }
+      }
+    },
+    "/list/{listId}/item": {
+      "summary": "List item",
+      "get": {
+        "operationId": "getListItems",
+        "description": "Get items of specified list",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/listId"
+          },
+          {
+            "$ref": "#/components/parameters/isComplete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/todoItemSaved"
+          },
+          "400": {
+            "$ref": "#/components/responses/errorBadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/errorListItemNotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/errorServer"
+          }
+        }
+      },
+      "post": {
+        "operationId": "createListItem",
+        "description": "Create new list item",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/listId"
+          },
+          {
+            "$ref": "#/components/parameters/forceSave"
+          }
+        ],
+        "requestBody": {
+          "description": "List item",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToDosItemBlank"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToDosItem"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/errorBadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/errorListItemNotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/errorConflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/errorServer"
+          }
+        }
+      }
+    },
+    "/list/{listId}/item/{itemId}": {
+      "put": {
+        "operationId": "rewriteListItem",
+        "description": "Rewrite list item",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/listId"
+          },
+          {
+            "$ref": "#/components/parameters/itemId"
+          },
+          {
+            "$ref": "#/components/parameters/forceSave"
+          }
+        ],
+        "requestBody": {
+          "description": "List item",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToDosItemBlank"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/todoItemSaved"
+          },
+          "400": {
+            "$ref": "#/components/responses/errorBadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/errorListItemNotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/errorConflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/errorServer"
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateListItem",
+        "description": "Update list item",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/listId"
+          },
+          {
+            "$ref": "#/components/parameters/itemId"
+          },
+          {
+            "name": "forceSave",
+            "in": "query",
+            "description": "Force save list despite conflicts",
+            "required": false,
+            "schema": {
+              "type": ["boolean", "null"],
+              "default": null
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "List item",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToDosItemBlank"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/todoItemSaved"
+          },
+          "400": {
+            "$ref": "#/components/responses/errorBadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/errorListItemNotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/errorConflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/errorServer"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "forceSave": {
+        "name": "forceSave",
+        "in": "query",
+        "description": "Force save list despite conflicts",
+        "required": false,
+        "schema": {
+          "type": ["boolean", "null"],
+          "default": null
+        }
+      },
+      "itemId": {
+        "name": "itemId",
+        "in": "path",
+        "description": "Uid of TODO list item",
+        "required": true,
+        "schema": {
+          "type": "number"
+        }
+      },
+      "isComplete": {
+        "name": "isComplete",
+        "in": "query",
+        "description": "Filter lists by `complete` status",
+        "required": false,
+        "schema": {
+          "type": ["boolean", "null"],
+          "default": null
+        }
+      },
+      "listId": {
+        "name": "listId",
+        "in": "path",
+        "description": "Uid of TODO list",
+        "required": true,
+        "schema": {
+          "type": "number"
+        }
+      }
+    },
+    "responses": {
+      "errorBadRequest": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/HttpErrorBadRequest"
+            }
+          }
+        }
+      },
+      "errorConflict": {
+        "description": "Conflict",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/HttpErrorConflict"
+            }
+          }
+        }
+      },
+      "errorListItemNotFound": {
+        "description": "List item not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/HttpErrorNotFound"
+            }
+          }
+        }
+      },
+      "errorListNotFound": {
+        "description": "List not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/HttpErrorNotFound"
+            }
+          }
+        }
+      },
+      "errorServer": {
+        "description": "Server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/HttpErrorServer"
+            }
+          }
+        }
+      },
+      "todoItemSaved": {
+        "description": "Todos item saved",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ToDosItem"
+            }
+          }
+        }
+      },
+      "todoListSaved": {
+        "description": "Todo list saved",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ToDosList"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "AttachmentMeta": {
+        "description": "Common meta data model of any type of attachment",
+        "oneOf": [
+          {"$ref": "#/components/schemas/AttachmentMetaImage"},
+          {"$ref": "#/components/schemas/AttachmentMetaDocument"},
+          {"$ref": "#/components/schemas/ExternalResource"}
+        ]
+      },
+      "AttachmentMetaImage": {
+        "type": "object",
+        "description": "Meta data of image attached to task",
+        "properties": {
+          "mediaId": {
+            "type": "string",
+            "description": "An unique id of media. Metadata with unique get from server in return of uploaded image file.",
+            "pattern": "^[a-z0-9]{16}$"
+          },
+          "type": {
+            "type": "string",
+            "description": "Marks attachment as an image",
+            "enum": ["image"]
+          },
+          "url": {
+            "description": "Url of uploaded image",
+            "$ref": "#/components/schemas/Url"
+          },
+          "thumbs": {
+            "type": "object",
+            "description": "Possible thumbnails of uploaded image",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "description": "Url of cached thumb",
+                  "$ref": "#/components/schemas/Url"
+                },
+                "imageOptions": {
+                  "description": "Information of image",
+                  "$ref": "#/components/schemas/ImageOptions"
+                }
+              }
+            }
+          },
+          "format": {
+            "description": "Format of uploaded image",
+            "type": "string",
+            "enum": ["png", "jpeg", "gif", "svg", "tiff"]
+          },
+          "imageOptions": {
+            "description": "Url of cached thumb",
+            "$ref": "#/components/schemas/ImageOptions"
+          }
+        },
+        "required": [
+          "mediaId",
+          "type",
+          "url",
+          "format",
+          "imageOptions"
+        ]
+      },
+      "AttachmentMetaDocument": {
+        "type": "object",
+        "description": "Meta data of document attached to task",
+        "properties": {
+          "docId": {
+            "type": "string",
+            "description": "An unique id of document. Metadata with unique get from server in return of uploaded image file.",
+            "pattern": "^[a-z0-9]{16}$"
+          },
+          "type": {
+            "type": "string",
+            "description": "Marks attachment as an document",
+            "enum": ["document"]
+          },
+          "url": {
+            "description": "Url of uploaded document",
+            "$ref": "#/components/schemas/Url"
+          },
+          "format": {
+            "type": "string",
+            "description": "Format of document",
+            "enum": ["doc", "docx", "pdf", "rtf", "xls", "xlsx", "txt"]
+          },
+          "size": {
+            "type": "number",
+            "description": "File size",
+            "min": 0,
+            "max": 8388607
+          }
+        },
+        "required": [
+          "docId",
+          "type",
+          "url",
+          "format",
+          "size"
+        ]
+      },
+      "ExternalResource": {
+        "description": "Link to any external resource in attachment",
+        "$ref": "#/components/schemas/Url"
+      },
+      "HttpErrorBadRequest": {
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "syntax",
+              "semantic"
+            ]
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JsonError"
+            }
+          }
+        }
+      },
+      "HttpErrorConflict": {
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "HttpErrorNotFound": {
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "HttpErrorServer": {
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "syntax",
+              "semantic"
+            ]
+          }
+        }
+      },
+      "ImageOptions": {
+        "type": "object",
+        "properties": {
+          "width": {
+            "type": "number",
+            "min": 1,
+            "max": 3000
+          },
+          "height": {
+            "type": "number",
+            "min": 1,
+            "max": 3000
+          },
+          "size": {
+            "type": "number",
+            "min": 0,
+            "max": 8388607
+          }
+        },
+        "required": [
+          "width",
+          "height",
+          "size"
+        ]
+      },
+      "JsonError": {
+        "type": "object",
+        "required": [
+          "originalMessage",
+          "jsonPointer"
+        ],
+        "properties": {
+          "originalMessage": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "jsonPointer": {
+            "type": "string"
+          }
+        }
+      },
+      "ToDosItemBlank": {
+        "title": "Base part of data of item in todo's list",
+        "description": "Data about list item needed for creation of it",
+        "properties": {
+          "listUid": {
+            "description": "An unique id of list that item belongs to",
+            "type": "number",
+            "min": 1,
+            "max": 2147483647
+          },
+          "title": {
+            "description": "Short brief of task to be done",
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 64
+          },
+          "description": {
+            "description": "Detailed description and context of the task. Allowed using of Common Markdown.",
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 512
+          },
+          "isDone": {
+            "description": "Status of task: is done or not",
+            "type": "boolean",
+            "default": "false"
+          },
+          "attachments": {
+            "type": "array",
+            "description": "Any material attached to the task: may be screenshots, photos, pdf- or doc- documents on something else",
+            "items": {
+              "$ref": "#/components/schemas/AttachmentMeta"
+            },
+            "maxItems": 16
+          }
+        },
+        "required": [
+          "isDone",
+          "listUid",
+          "title"
+        ]
+      },
+      "ToDosItem": {
+        "title": "Item in todo's list",
+        "description": "Describe data structure of an item in list of tasks",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ToDosItemBlank"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "uid": {
+                "description": "An unique id of task",
+                "type": "number",
+                "min": 1,
+                "max": 2147483647,
+                "readOnly": true
+              },
+              "dateCreated": {
+                "description": "Date/time (ISO) when task was created",
+                "type": "string",
+                "format": "date-time",
+                "readOnly": true
+              },
+              "dateChanged": {
+                "description": "Date/time (ISO) when task was changed last time",
+                "type": "string",
+                "format": "date-time",
+                "readOnly": true
+              },
+              "position": {
+                "description": "Position of a task in list. Allows to track changing of state of a concrete item, including changing od position.",
+                "type": "number",
+                "min": 0,
+                "max": 4096
+              }
+            },
+            "required": [
+              "dateChanged",
+              "dateCreated",
+              "position",
+              "uid"
+            ]
+          }
+        ]
+      },
+      "ToDosListBlank": {
+        "title": "Base part of data of list",
+        "description": "Data needed for list creation",
+        "type": "object",
+        "properties": {
+          "title": {
+            "description": "Title of a list",
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 64
+          },
+          "description": {
+            "description": "Detailed description of a list. Allowed using of Common Markdown.",
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 512
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ToDosItem"
+            }
+          },
+          "isComplete": {
+            "description": "Whether all tasks in list are complete",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "isComplete",
+          "items",
+          "title"
+        ]
+      },
+      "ToDosListExtendedData": {
+        "title": "Extended data of list",
+        "description": "Extended data has to be obtained after first save",
+        "type": "object",
+        "properties": {
+          "uid": {
+            "description": "An unique id of task",
+            "type": "number",
+            "min": 1,
+            "max": 2147483647
+          },
+          "dateCreated": {
+            "description": "Date/time (ISO) when task was created",
+            "type": "string",
+            "format": "date-time"
+          },
+          "dateChanged": {
+            "description": "Date/time (ISO) when task was changed last time",
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "dateChanged",
+          "dateCreated",
+          "uid"
+        ]
+      },
+      "ToDosList": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ToDosListBlank"
+          },
+          {
+            "$ref": "#/components/schemas/ToDosListExtendedData"
+          }
+        ]
+      },
+      "Url": {
+        "description": "Link to any external resource",
+        "type": "string",
+        "pattern": "^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?"
+      }
+    }
+  }
+}

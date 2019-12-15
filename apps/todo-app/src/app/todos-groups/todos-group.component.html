@@ -1,0 +1,141 @@
+<ng-container *ngIf="context$ | async as context; else loading" class="list-group">
+  <ng-container *ngIf="!context.noInternetError; else noInternet">
+    <h2>Task groups</h2>
+    <p>
+      Summary {{context.summaryTaskDoneCount}}
+      of {{context.summaryTaskCount}}
+      tasks done in {{context.summaryGroupCount}} groups
+    </p>
+    <p>
+      <button type="button" class="btn btn-light btn-lg btn-block" (click)="createGroup()">
+        <mat-icon>add_circle</mat-icon>
+        Add group
+      </button>
+    </p>
+    <ul *ngIf="context?.groups?.length > 0; else noItems"
+        class="list-group"
+        cdkDropList
+        (cdkDropListDropped)="groupDropped($event)">
+      <li *ngFor="let group of context.groups; let index = i"
+          class="list-group-item"
+          [class.optimistic]="group.optimistic"
+          [class.failed]="group.failed"
+          [class.removing]="group.removing"
+          [cdkDragDisabled]="group.optimistic || group.failed || group.removing"
+          cdkDrag
+      >
+        <h4 ngbDropdown>
+          {{group.title}}
+          <span class="badge badge-pill badge-info">
+            {{ group.countOfDone }} / {{ group.totalCount }}
+          </span>
+
+          <a *ngIf="!group.removing"
+             href="javascript:;"
+             class="text-muted text-decoration-none pl-2"
+             ngbDropdownToggle>
+            <mat-icon [inline]="true">more_horiz</mat-icon>
+          </a>
+          <div ngbDropdownMenu aria-labelledby="Actions menu">
+            <ng-container *ngIf="!group.optimistic && !group.failed; else optimisticItemMenu">
+              <button ngbDropdownItem (click)="markGroupAsDone(group)">
+                <mat-icon>done_all</mat-icon>
+                Mark all as done
+              </button>
+              <button ngbDropdownItem (click)="markGroupAsUndone(group)">
+                <mat-icon>check_box_outline_blank</mat-icon>
+                Mark all as undone
+              </button>
+              <button ngbDropdownItem (click)="editGroup(group)">
+                <mat-icon>edit</mat-icon>
+                Edit
+              </button>
+              <button ngbDropdownItem (click)="removeGroup(group)">
+                <mat-icon>delete_outline</mat-icon>
+                Delete
+              </button>
+            </ng-container>
+            <ng-template #optimisticItemMenu>
+              <button ngbDropdownItem *ngIf="group.failed" (click)="tryAgainUpdate(group)">
+                <mat-icon>replay</mat-icon>
+                Try again
+              </button>
+              <button ngbDropdownItem (click)="removeIncompleteGroup(group)">
+                <mat-icon>not_interested</mat-icon>
+                Cancel operation
+              </button>
+            </ng-template>
+          </div>
+        </h4>
+        <p>
+          <span class="text-muted">
+            <mat-icon>done_all</mat-icon>
+          </span>
+          {{group.description}}
+        </p>
+        <span class="drag-handle text-muted" cdkDragHandle>
+          <mat-icon>menu</mat-icon>
+        </span>
+      </li>
+    </ul>
+    <br>
+    <div class="card bottom-panel"
+         [class.loading]="context.isBottomPanelDisabled">
+      <div class="card-header">
+        <small>
+          <a href="javascript:;"
+             class="text-dark text-decoration-none"
+             [attr.disabled]="context.areAllComplete"
+             (click)="markAllAsDone();">
+            <mat-icon>done_all</mat-icon>
+            Complete all
+          </a>
+          &nbsp;
+          <span class="text-muted">•</span>
+          &nbsp;
+          <a href="javascript:;"
+             class="text-dark text-decoration-none"
+             [attr.disabled]="context.areAllIncomplete"
+             (click)="markAllAsUndone();">
+            <mat-icon>check_box_outline_blank</mat-icon>
+            Reset all
+          </a>
+          &nbsp;
+          <span class="text-muted">•</span>
+          &nbsp;
+          <a href="#"
+             [attr.disabled]="context.areAllIncomplete"
+             class="text-dark text-decoration-none">
+            <mat-icon>delete_outline</mat-icon>
+            Clear completed
+          </a>
+        </small>
+      </div>
+    </div>
+    <ng-template #noItems>
+      You have no groups of task yet!
+      <br/>
+    </ng-template>
+  </ng-container>
+</ng-container>
+
+<ng-template #loading>
+  <svg class="page-placeholder"
+       version="1.1"
+       viewBox="-0.5 -0.5 694 310"
+       xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <rect height="17" pointer-events="none" rx="2" ry="2" stroke="none" width="171" x="0" y="0"></rect>
+      <rect height="10" pointer-events="none" rx="2" ry="2" stroke="none" width="231" x="0" y="25"></rect>
+      <rect height="26" pointer-events="none" rx="2" ry="2" stroke="none" width="693" x="0" y="45"></rect>
+      <rect height="58" pointer-events="none" rx="2" ry="2" stroke="none" width="693" x="0" y="81"></rect>
+      <rect height="58" pointer-events="none" rx="2" ry="2" stroke="none" width="693" x="0" y="143"></rect>
+      <rect height="58" pointer-events="none" rx="2" ry="2" stroke="none" width="693" x="0" y="205"></rect>
+      <rect height="30" pointer-events="none" rx="4.5" ry="4.5" stroke="none" width="692" x="0" y="280"></rect>
+    </g>
+  </svg>
+</ng-template>
+
+<ng-template #noInternet>
+  <no-internet></no-internet>
+</ng-template>

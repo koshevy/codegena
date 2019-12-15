@@ -1,0 +1,24 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc",
+    "target": "es2015",
+    "declaration": true,
+    "inlineSources": true,
+    "lib": ["dom", "es2018"]
+  },
+  "angularCompilerOptions": {
+    "preserveSymlinks": true,
+    "annotateForClosureCompiler": true,
+    "skipTemplateCodegen": true,
+    "strictMetadataEmit": true,
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true,
+    "enableResourceInlining": false
+  },
+  "exclude": [
+    "node_modules",
+    "src/test-setup.ts",
+    "**/*.spec.ts"
+  ]
+}

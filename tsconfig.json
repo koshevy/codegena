@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
     "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
@@ -15,7 +16,40 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@codegena/oapi3ts": [
+        "dist/oapi3ts",
+        "libs/oapi3ts/src/index.ts"
+      ],
+      "@codegena/oapi3ts/*": [
+        "dist/oapi3ts/*",
+        "libs/oapi3ts/src/*"
+      ],
+      "@codegena/ng-api-service": [
+        "dist/ng-api-service",
+        "libs/ng-api-service/src/index.ts"
+      ],
+      "@codegena/ng-api-service/*": [
+        "dist/ng-api-service/*",
+        "libs/ng-api-service/src/*"
+      ],
+      "@codegena/oapi3ts-cli": [
+        "dist/oapi3ts-cli",
+        "libs/oapi3ts-cli/src/index.ts"
+      ],
+      "@codegena/oapi3ts-cli/*": [
+        "dist/oapi3ts-cli/*",
+        "libs/oapi3ts-cli/src/*"
+      ],
+      "@codegena/todo-app-scheme": [
+        "dist/todo-app-scheme",
+        "libs/todo-app-scheme/src/index.ts"
+      ],
+      "@codegena/todo-app-scheme/*": [
+        "dist/todo-app-scheme/*",
+        "libs/todo-app-scheme/src/*"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
