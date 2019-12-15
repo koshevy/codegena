@@ -33,7 +33,7 @@ In the future, it's can be appended with:
 
 - [todo-app-backend](https://github.com/koshevy/codegena/tree/master/apps/todo-app-backend) — demo backend application (NestJS) uses `@codegena` tools
 - [todo-app](https://github.com/koshevy/codegena/tree/master/apps/todo-app) — demo frontend application (Angular) uses `@codegena` tools
-- Source code of [codegena-playground](https://stackblitz.com/edit/codegena-playground). Explains how to do API in a browser. 
+- Source code of [codegena-playground](https://stackblitz.com/edit/codegena-playground). Explains how to use API in a browser. 
 
 ## How to use
 
