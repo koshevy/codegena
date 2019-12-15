@@ -15,29 +15,37 @@ In the future, it's can be appended with:
 - Backend services templates
 - Pure validation tools and validation presets
 
+## Table of contents
+
+1. [Demo](#demo)
+1. [Packages](#packages)
+1. [How to use](#how-to-use)
+   - [oapi3ts-cli: using in NodeJS scripts](#oapi3ts-cli-using-in-nodejs-scripts)
+   - [CLI arguments for oapi3ts-cli](#cli-arguments-for-oapi3ts-cli)
+   - [oapi3ts API](#oapi3ts-api)
+1. [Work with this project](#work-with-this-project)
+
+
 ## Demo
 
 - [TypeScript types and Angular client services](https://github.com/koshevy/codegena/tree/master/libs/todo-app-scheme) in a demo project
-- [Playground on stackblitz](https://codegena-playground.stackblitz.io/)
+- [Stackblitz playground](https://codegena-playground.stackblitz.io/)
 - [Example of using of generated data types](https://github.com/koshevy/codegena/blob/master/apps/todo-app-backend/src/app/app.controller.ts) in a demo backend-controller
 - [Example of using of generated data types](https://github.com/koshevy/codegena/blob/master/apps/todo-app/src/app/todo-tasks/todo-tasks.store.ts) in a demo frontend application
+- [todo-app-backend](https://github.com/koshevy/codegena/tree/master/apps/todo-app-backend) — demo backend application (NestJS) uses `@codegena` tools
+- [todo-app](https://github.com/koshevy/codegena/tree/master/apps/todo-app) — demo frontend application (Angular) uses `@codegena` tools
+- Source code of [codegena-playground](https://stackblitz.com/edit/codegena-playground). Explains how to use API in a browser.
 
 ## Packages
 
 - [oapi3ts](https://github.com/koshevy/codegena/tree/master/libs/oapi3ts) — core library with base adadpters for supported languages. Does generation of data types and models.
 - [ng-api-service](https://github.com/koshevy/codegena/tree/master/libs/ng-api-service) — experimental library for generating Angular client services
 - [oapi3ts-cli](https://github.com/koshevy/codegena/tree/master/libs/oapi3ts-cli) — Aggregator for supported generation libraries. Provides application working in browser or in CLI.
-- [todo-app-scheme](https://github.com/koshevy/codegena/tree/master/libs/todo-app-scheme) — Demo library with auto generated data types and Angular services. Works locally, does't get published in NPM.
-
-# Demo apps
-
-- [todo-app-backend](https://github.com/koshevy/codegena/tree/master/apps/todo-app-backend) — demo backend application (NestJS) uses `@codegena` tools
-- [todo-app](https://github.com/koshevy/codegena/tree/master/apps/todo-app) — demo frontend application (Angular) uses `@codegena` tools
-- Source code of [codegena-playground](https://stackblitz.com/edit/codegena-playground). Explains how to use API in a browser. 
+- [todo-app-scheme](https://github.com/koshevy/codegena/tree/master/libs/todo-app-scheme) — Demo library with auto generated data types and Angular services. Works locally, does't get published in NPM. 
 
 ## How to use
 
-#### @codegena/oapi3ts-cli: using in NodeJS scripts
+#### oapi3ts-cli: using in NodeJS scripts
 
 Install packages of scope:
 
@@ -65,7 +73,7 @@ node ./update-typings.js --srcPath ./specs/todo-app-spec.json --destPath ./src/l
 
 Class `CliApplication` will get command line arguments `destPath`, `srcPath` and `separatedFiles` by itself.
 
-#### CLI arguments for @codegena/oapi3ts-cli
+#### CLI arguments for oapi3ts-cli
 
 
 | CLI Argument       | Description                                                                   |
@@ -82,7 +90,7 @@ config via CLI:
 | **defaultContentType**          | Default content-type contains no prefixes/suffixes in type names.             |
 | **implicitTypesRefReplacement** | Mode when models that refer to any models via `$ref` are replacing implicitly even if firsts have names |
 
-#### @codegena/oapi3ts API
+#### oapi3ts API
 
 You can use API of `@codegena/oapi3ts` to convert whole OAS3 schema object to data type descriptions. Example for TypeScript:
 
@@ -90,6 +98,7 @@ You can use API of `@codegena/oapi3ts` to convert whole OAS3 schema object to da
 import { Convertor } from '@codegena/oapi3ts';
 
 const convertor: Convertor = new Convertor();
+const context = {};
 
 /**
  * Base models of specification:
@@ -111,8 +120,8 @@ Convertor.renderRecursive(
     entryPoints,
     (descriptor: DataTypeDescriptor, text) => {
         // Here your code: you get text and type descriptor.
-        // You can see how oapi3codegen's CLI uses this calback here:
-        // https://github.com/koshevy/oapi3codegen/blob/master/cli.ts#L73
+        // Example of using: 
+        // https://github.com/koshevy/codegena/blob/master/libs/oapi3ts-cli/src/abstract-application.ts#L57
     }
 );
 ```
@@ -182,3 +191,14 @@ export interface AnotherType {
   age?: number;
 }
 ```
+
+## Work with this project
+
+| Command                         | Action                                                                   |
+|---------------------------------|-------------------------------------------------------------------------------|
+| `ng run todo-app-backand` | Run demo backend application. |
+| `ng run todo-app` | Run demo frontend application. |
+| `yarn run build:all-libs`          | Build all valuable libs and turn applications to use prebuilt versions of libs (not TypeScript). It's necessary for running and test applications and libraries in terms close to production. prefixes/suffixes in type names.             |
+| `yarn run clear:prebuilt-libs` | Clear prebuilt libs versions and return project to using live reloading TypeScript sources. |
+| `yarn run test:libs` | Test libraries supposed to be published. |
+
