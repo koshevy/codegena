@@ -16,7 +16,7 @@
     "@angular/common": ">= 6",
     "@angular/core": ">= 6",
     "@angular/platform-browser-dynamic": ">= 6",
-    "zone.js": ">= 0",
+    "jest-preset-angular": ">= 7",
     "rxjs": ">= 6",
     "lodash": ">= 4",
     "@types/lodash": ">= 4",

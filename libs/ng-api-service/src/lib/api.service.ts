@@ -294,11 +294,12 @@ export abstract class ApiService<R, B, P = null> implements RequestSender<R, B> 
             });
         }
 
-        return Observable.create((subscriber: Subscriber<HttpResponse<R>>) => {
+        return new Observable((subscriber: Subscriber<HttpResponse<R>>) => {
 
             // todo should validate headers
 
             // валидация входных параметров
+            // tslint:disable-next-line:no-unused-expression
             (this._validate(
                 params,
                 ValidationType.ParamsValidation,
@@ -378,6 +379,7 @@ export abstract class ApiService<R, B, P = null> implements RequestSender<R, B> 
 
                         try {
                             // валидация ответа
+                            // tslint:disable-next-line:no-unused-expression
                             (this._validate(
                                 body,
                                 ValidationType.ResponseValidation,

@@ -151,7 +151,8 @@ export class TodoTasksStore {
             });
         }
 
-        return forkJoin(...selectedGroups.map(
+        const requests = _.map<string, Observable<GetGroupItemsResponse<200>>>(
+            selectedGroups,
             groupId => this.getGroupItemsService.request(
                 null,
                 { groupId }
@@ -162,7 +163,9 @@ export class TodoTasksStore {
                     true
                 )
             )
-        )).pipe(
+        ) ;
+
+        return forkJoin(requests).pipe(
             map<ToDoTask[][], ToDoTask[]>(_.flatten),
             map<ToDoTask[], ComponentTruth>(tasks => ({
                 ...truth,
