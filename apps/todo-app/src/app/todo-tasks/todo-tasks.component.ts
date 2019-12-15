@@ -13,7 +13,7 @@ import {
     share,
     startWith,
     takeUntil
-} from "rxjs/operators";
+} from 'rxjs/operators';
 import {
     Component,
     ChangeDetectorRef,
@@ -38,7 +38,7 @@ import {
     PositionMove,
     PositionMoveByStep,
     ToDoTaskTeaser
-} from "./lib/context";
+} from './lib/context';
 
 import { TodoTasksStore } from './todo-tasks.store';
 
@@ -127,7 +127,7 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
     /**
      * Flow that collect all changes of values that could influence
      * to component state. Once one of that changes, this flow prepare
-     * it in a common "Truth", and emits this complete "Truth".
+     * it in a common 'Truth', and emits this complete 'Truth'.
      */
     truth$: Observable<ComponentTruth>;
 
@@ -143,7 +143,7 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
     destroy$: Subject<void>;
 
     /**
-     * Part of "truth": channel with manual-triggered actions and theirs data
+     * Part of 'truth': channel with manual-triggered actions and theirs data
      */
     manualActions$: Subject<ComponentTruth> = new Subject();
 
@@ -435,7 +435,7 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
                             )
                         )
                         .tap(v => console.log('tap:', v))
-                        .filter(task => (task && task.title.trim() !== ""))
+                        .filter(task => (task && task.title.trim() !== ''))
                         .value();
 
                     return foundItems;
