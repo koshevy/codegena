@@ -1,200 +1,72 @@
-# Code generation from OpenAPI 3 to TypeScript
+# Codegeneration from OAS3
 
-Lightweight and simple. Can be used for *browser's* and for Node.js ecosystems.
-Now supports converting from **OpenAPI 3** to **TypeScript** types (OpenAPI 2 and below are not supported).
-
-<details>
-<summary>For example, creates constructions such as (click to expand):</summary>
-
-```typescript
-/**
- * Typical 401 response
- */
-export interface HttpErrorUnauthorized {
-  /**
-   * Error message
-   */
-  message: string;
-
-  /**
-   * Data appropriate to
-   * [WWW-Authenticate](https://tools.ietf.org/html/rfc7235#section-3.1).
-   */
-  wwwAuthenticate?: {
-    /**
-     * Prompt to authenticate
-     */
-    title: string;
-
-    /**
-     * Kind of authorization user has to use
-     */
-    type: string;
-
-    /**
-     * Type of authority ("barrier" or etc.)
-     */
-    realm: string;
-  };
-}
-
-export interface GetParametersMeta_response401
-  extends HttpErrorUnauthorized {
-
-  /**
-   * Error message
-   */
-  message: string;
-
-  /**
-   * Data appropriate to
-   * [WWW-Authenticate](https://tools.ietf.org/html/rfc7235#section-3.1).
-   */
-  wwwAuthenticate?: {
-    /**
-     * Prompt to authenticate
-     */
-    title: string;
-
-    /**
-     * Kind of authorization user has to use
-     */
-    type: string;
-
-    /**
-     * Type of authority ("barrier" or etc.)
-     */
-    realm: string;
-  };
-}
-
-/**
- * Kind of request error: syntax or semantic. Syntax error means the
- * application logic error, semantics — error of data, that contragent
- * inputs.
- */
-export enum HttpErrorBadRequestTypeEnum {
-  Syntax = "syntax",
-  Semantic = "semantic"
-}
-
-/**
- * Typical response one Bad Request Error (400)
- */
-export interface HttpErrorBadRequest {
-  /**
-   * Common error message
-   */
-  message: string;
-
-  /**
-   * Kind of request error: syntax or semantic. Syntax error means the
-   * application logic error, semantics — error of data, that contragent
-   * inputs.
-   */
-  type?: HttpErrorBadRequestTypeEnum;
-
-  /**
-   * Explained description of error
-   */
-  description?: string;
-
-  /**
-   * Additional list of errors with JSON-pointers
-   */
-  errors?: Array<{
-    originalMessage: string;
-
-    message?: string;
-
-    jsonPointer: string;
-  }>;
-}
-
-/**
- * ## MetaDataView
- * MetaData helps decide what the method has to use to
- * interpret and render parameter or category of parameters.
- */
-export type GetParametersMeta_response200 = Array<Category | Parameter>;
-
-```
-</details>
-
------
-
-> #### 🚦 Status of project
-> - **Stabilization:** ready to use in non-production projects (see Road Map).
-> - **Not supported YML (only JSON)**. *Will be supported soon. Now, you can use something like [js-yaml](https://www.npmjs.com/package/js-yaml)*
-> - ***🐞 UPDATE:*** Fixed problem with infinity loop in recursive types!
+> Now supporting TypeScript data types and model. Also, generating experimental Angular2+ services.
 >
-> Please, if it possible: send me your schemas that not converts properly.
+> Supporting of other languages and frameworks might be possible in the future.
 
-### Online demo
+This project is a kit of tools for generation code from OpenAPI3 specification:
 
-Work in progress! Now, see how to use.
+- Data types and models (see [generated examples](https://github.com/koshevy/codegena/tree/master/libs/todo-app-scheme/src/lib/typings) from [this spec](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/specs/todo-app-spec.json))
+- Client services ([examples](https://github.com/koshevy/codegena/tree/master/libs/todo-app-scheme/src/lib/services))
+- Validation tools in clients
+- Extracted JSON Schemas ([example](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/services/schema.f494efb9904ca366b64883.ts))
 
-### Road map
+In the future, it's can be appended with:
+- Backend services templates
+- Pure validation tools and validation presets
 
-Work is just started, and current functionality (creating TypeScript types) —
-It's just a first part of the supposed functionality.
-With time, it's supposed, possibilities of this plugin will be extended by:
+## Demo
 
-- *Make project well documented [in progress]*
-- *YAML support [in progress]*
-- *Stabilization [in progress]*
-- *Playground site [in progress]*
-- Plugins support
-- Generation classes (now creates only interfaces) with internal validation [ *concept description is coming soon* ]
-- Generation API Classes
-    - Solutions for AngularX based on *Assured requests idea* with internal validation [ *concept description is coming soon* ]
-    - *May be, something else...*
-- **DDD-tools** (Start kit for OpenAPI3-projects):
-    - Bundler for complex files structure. Need fo organization complex API-libraries.
-    - [Dredd](https://www.npmjs.com/package/dredd)
-    - Most populars doc-generators (at least, [Redoc](https://www.npmjs.com/package/redoc) and [SwaggerUI](https://www.npmjs.com/package/swagger-ui))
-    - Convention for working with DDD OpenAPI3
-- **Other languages** (is there are need for it?): Kotlin, Java, PHP, 
+- [TypeScript types and Angular client services](https://github.com/koshevy/codegena/tree/master/libs/todo-app-scheme) in a demo project
+- [Playground on stackblitz](https://codegena-playground.stackblitz.io/)
+- [Example of using of generated data types](https://github.com/koshevy/codegena/blob/master/apps/todo-app-backend/src/app/app.controller.ts) in a demo backend-controller
+- [Example of using of generated data types](https://github.com/koshevy/codegena/blob/master/apps/todo-app/src/app/todo-tasks/todo-tasks.store.ts) in a demo frontend application
 
-### Ideology
+## Packages
 
-- **Data format loyalty:** it's should be as useful as it possible regardless validity of source data.
-- **Integration**: solution should be able to be integrated to any system (at least, based on NPM). It's mean, should have CLI and API.
+- [oapi3ts](https://github.com/koshevy/codegena/tree/master/libs/oapi3ts) — core library with base adadpters for supported languages. Does generation of data types and models.
+- [ng-api-service](https://github.com/koshevy/codegena/tree/master/libs/ng-api-service) — experimental library for generating Angular client services
+- [oapi3ts-cli](https://github.com/koshevy/codegena/tree/master/libs/oapi3ts-cli) — Aggregator for supported generation libraries. Provides application working in browser or in CLI.
+- [todo-app-scheme](https://github.com/koshevy/codegena/tree/master/libs/todo-app-scheme) — Demo library with auto generated data types and Angular services. Works locally, does't get published in NPM.
 
-### Why not swagger-codegen?
+# Demo apps
 
-- Uses NPM instead Java (install via npm and easy-integratable)
-- Lightweight ([swagger-codegen](https://github.com/swagger-api/swagger-codegen) solution — it's about a 14mb for ready JAR)
-- Supports OpenAPI3
-- Above all, intended for TypeScript 
+- [todo-app-backend](https://github.com/koshevy/codegena/tree/master/apps/todo-app-backend) — demo backend application (NestJS) uses `@codegena` tools
+- [todo-app](https://github.com/koshevy/codegena/tree/master/apps/todo-app) — demo frontend application (Angular) uses `@codegena` tools
+- Source code of [codegena-playground](https://stackblitz.com/edit/codegena-playground). Explains how to do API in a browser. 
 
-## Install
+## How to use
 
-##### 1. Install TypeScript
+#### @codegena/oapi3ts-cli: using in NodeJS scripts
 
-```sh
-npm install typescript@latest -g
-``` 
+Install packages of scope:
 
-##### 2. Install oapi3codegen global (for CLI using)
-
-```sh
-npm install oapi3codegen -g
-``` 
-
-##### 3. Install oapi3codegen for local project
-
-```sh
-npm install oapi3codegen --save
-``` 
-
-## Using via CLI
-
-```sh
-oapi3codegen --srcPath /PATH/TO/SRC/open-api-file.json --destPath /PATH/TO/DEST --separatedFiles true
+```
+npm i @codegena/oapi3ts, @codegena/ng-api-service, @codegena/oapi3ts-cli
 ```
 
-#### CLI arguments
+Further, you can use `@codegena/oapi3ts-cli` in NodeJS scripts. For example, let create `update-typings.js` script with code:
+
+```javascript
+"use strict";
+
+var cliLib = require('@codegena/oapi3ts-cli');
+var cliApp = new cliLib.CliApplication;
+
+cliApp.createTypings();
+cliApp.createServices('angular');
+```
+
+Then launch:
+
+```
+node ./update-typings.js --srcPath ./specs/todo-app-spec.json --destPath ./src/lib --separatedFiles true
+```
+
+Class `CliApplication` will get command line arguments `destPath`, `srcPath` and `separatedFiles` by itself.
+
+#### CLI arguments for @codegena/oapi3ts-cli
+
 
 | CLI Argument       | Description                                                                   |
 |--------------------|-------------------------------------------------------------------------------|
@@ -210,12 +82,12 @@ config via CLI:
 | **defaultContentType**          | Default content-type contains no prefixes/suffixes in type names.             |
 | **implicitTypesRefReplacement** | Mode when models that refer to any models via `$ref` are replacing implicitly even if firsts have names |
 
-## Using via API (TypeScript)
+#### @codegena/oapi3ts API
 
-You can convert whole OpenAPI3-specification:
+You can use API of `@codegena/oapi3ts` to convert whole OAS3 schema object to data type descriptions. Example for TypeScript:
 
 ```typescript
-import { Convertor } from 'oapi3codegen';
+import { Convertor } from '@codegena/oapi3ts';
 
 const convertor: Convertor = new Convertor();
 
@@ -245,8 +117,7 @@ Convertor.renderRecursive(
 );
 ```
 
-And also, you can convert stand-alone JSON-schema into type descriptor,
-that could be rendered:
+And also, you can convert just a JSON-schema into type descriptor and render it:
 
 ```typescript
 import { Convertor } from 'oapi3codegen';
@@ -291,12 +162,11 @@ _.each(convertResult, typeDescriptor => {
 
     console.log(typeCode);
 });
-
 ```
 
-And this code will print result:
+It will output:
 
-```typescript
+```plaintext
 /**
  * ## Person
  * Information about person you have to register in your system.
@@ -312,11 +182,3 @@ export interface AnotherType {
   age?: number;
 }
 ```
-
-## API (TypeScript)
-
-Coming soon...
-
-## How to extend?
-
-Coming soon...
