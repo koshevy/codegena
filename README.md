@@ -7,12 +7,12 @@
 This project is a kit of tools for generation code from OpenAPI3 specification:
 
 - Data types and models (see [generated examples](https://github.com/koshevy/codegena/tree/master/libs/todo-app-scheme/src/lib/typings) from [this spec](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/specs/todo-app-spec.json))
-- Client services ([examples](https://github.com/koshevy/codegena/tree/master/libs/todo-app-scheme/src/lib/services))
+- API client services ([examples](https://github.com/koshevy/codegena/tree/master/libs/todo-app-scheme/src/lib/services))
 - Validation tools in clients
 - Extracted JSON Schemas ([example](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/services/schema.f494efb9904ca366b64883.ts))
 
-In the future, it's can be appended with:
-- Backend services templates
+In the future it's can be appended with:
+- API backend services templates
 - Pure validation tools and validation presets
 
 ## Table of contents
@@ -34,7 +34,7 @@ In the future, it's can be appended with:
 - [Example of using of generated data types](https://github.com/koshevy/codegena/blob/master/apps/todo-app/src/app/todo-tasks/todo-tasks.store.ts) in a demo frontend application
 - [todo-app-backend](https://github.com/koshevy/codegena/tree/master/apps/todo-app-backend) — demo backend application (NestJS) uses `@codegena` tools
 - [todo-app](https://github.com/koshevy/codegena/tree/master/apps/todo-app) — demo frontend application (Angular) uses `@codegena` tools
-- Source code of [codegena-playground](https://stackblitz.com/edit/codegena-playground). Explains how to use API in a browser.
+- [Source code of codegena-playground](https://stackblitz.com/edit/codegena-playground). Demonstrates work in a browser.
 
 ## Packages
 
@@ -80,7 +80,7 @@ Class `CliApplication` will get command line arguments `destPath`, `srcPath` and
 |--------------------|-------------------------------------------------------------------------------|
 | **srcPath**        | Path of url of JSON file with OpenAPI3 specification                          |
 | **destPath**       | Path for destination directory                                                |
-| **separatedFiles** | Whether should converted types be saved in separated files, or in single file |
+| **separatedFiles** | Whether should converted types been saved in separate files, or in single file |
 
 Also, you can set some of options for convertor's [configuration](https://github.com/koshevy/oapi3codegen/blob/master/core/config.ts#L99)
 config via CLI:
@@ -198,7 +198,7 @@ export interface AnotherType {
 |---------------------------------|-------------------------------------------------------------------------------|
 | `ng run todo-app-backand` | Run demo backend application. |
 | `ng run todo-app` | Run demo frontend application. |
-| `yarn run build:all-libs`          | Build all valuable libs and turn applications to use prebuilt versions of libs (not TypeScript). It's necessary for running and test applications and libraries in terms close to production. prefixes/suffixes in type names.             |
+| `yarn run build:all-libs`          | Build all valuable libs and turn applications to use prebuilt versions of libs (not TypeScript). It's necessary for running and testing applications and libraries in terms close to production.             |
 | `yarn run clear:prebuilt-libs` | Clear prebuilt libs versions and return project to using live reloading TypeScript sources. |
 | `yarn run test:libs` | Test libraries supposed to be published. |
 
