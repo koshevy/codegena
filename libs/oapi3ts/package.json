@@ -1,7 +1,26 @@
 {
   "name": "@codegena/oapi3ts",
   "version": "2.1.0",
-  "description": "Compiler from OpenApi3 to TypeScript",
+  "description": "Codegeneration from OAS3 to TypeScript",
+  "author": "koshevy@gmail.com",
+  "keywords": [
+    "swagger",
+    "oas",
+    "oas3",
+    "oas 3",
+    "openapi",
+    "openapi3",
+    "open-api",
+    "open api",
+    "codegeneration",
+    "code generation",
+    "typescript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/koshevy/codegena.git"
+  },
+  "license": "MIT",
   "dependencies": {
     "@types/lodash": ">= 4",
     "@types/node": ">= 8",

@@ -9,9 +9,9 @@ This library contains TypeScript typings and API-services (Angular) of demo appp
 
 | Command                         | Action                                                                   |
 |---------------------------------|-------------------------------------------------------------------------------|
-| `yarn run prepare`          | Prepares library to work. Run it at the first time. |
-| `yarn run typings:generate` | Generates typings and services from [spec file](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/specs/todo-app-spec.json). |
-| `yarn run docs:swagger-ui` | Runs `swagger-ui` for spec file at http://localhost:3001. |
+| `npm run prepare`          | Prepares library to work. Run it at the first time. |
+| `npm run typings:generate` | Generates typings and services from [spec file](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/specs/todo-app-spec.json). |
+| `npm run docs:swagger-ui` | Runs `swagger-ui` for spec file at http://localhost:3001. |
 
 Other commands see in package.json.
 

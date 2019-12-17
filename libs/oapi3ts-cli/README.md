@@ -1,24 +1,54 @@
-# Oapi3tsCli
+# CLI Application API for codegeneration from OAS3
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.2.0.
+> This is an experimental library. Now supporting TypeScript data types and model. Also, generating experimental Angular2+ services.
+>
+> Supporting of other languages and frameworks might be possible in the future.
 
-## Code scaffolding
+It's a part of [@codegena](https://github.com/koshevy/codegena) scope.
 
-Run `ng generate component component-name --project oapi3ts-cli` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project oapi3ts-cli`.
-> Note: Don't forget to add `--project oapi3ts-cli` or else it will be added to the default project in your `angular.json` file. 
+See in action: https://codegena-playground.stackblitz.io/ / https://stackblitz.com/edit/codegena-playground.
 
-## Build
+## Using in NodeJS scripts
 
-Run `ng build oapi3ts-cli` to build the project. The build artifacts will be stored in the `dist/` directory.
+Install packages of scope:
 
-## Publishing
+```
+npm i @codegena/oapi3ts @codegena/ng-api-service @codegena/oapi3ts-cli
+```
 
-After building your library with `ng build oapi3ts-cli`, go to the dist folder `cd dist/oapi3ts-cli` and run `npm publish`.
+So you can use `@codegena/oapi3ts-cli` in NodeJS scripts. For example, let create `update-typings.js` script with code:
 
-## Running unit tests
+```javascript
+"use strict";
 
-Run `ng test oapi3ts-cli` to execute the unit tests via [Karma](https://karma-runner.github.io).
+var cliLib = require('@codegena/oapi3ts-cli');
+var cliApp = new cliLib.CliApplication;
 
-## Further help
+cliApp.createTypings();
+cliApp.createServices('angular');
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Then launch:
+
+```
+node ./update-typings.js --srcPath ./specs/todo-app-spec.json --destPath ./src/lib --separatedFiles true
+```
+
+Class `CliApplication` will get command line arguments `destPath`, `srcPath` and `separatedFiles` by itself.
+
+#### CLI arguments
+
+
+| CLI Argument       | Description                                                                   |
+|--------------------|-------------------------------------------------------------------------------|
+| **srcPath**        | Path of url of JSON file with OpenAPI3 specification                          |
+| **destPath**       | Path for destination directory                                                |
+| **separatedFiles** | Whether should converted types been saved in separate files, or in single file |
+
+Also, you can set some of options for convertor's [configuration](https://github.com/koshevy/oapi3codegen/blob/master/core/config.ts#L99)
+config via CLI:
+
+| Option                          | Description                                                                   |
+|---------------------------------|-------------------------------------------------------------------------------|
+| **defaultContentType**          | Default content-type contains no prefixes/suffixes in type names.             |
+| **implicitTypesRefReplacement** | Mode when models that refer to any models via `$ref` are replacing implicitly even if firsts have names |

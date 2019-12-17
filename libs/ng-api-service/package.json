@@ -1,7 +1,27 @@
 {
   "name": "@codegena/ng-api-service",
-  "description": "ApiService: base class for automatic generated classes",
+  "description": "Extension for @codegena/oapi3ts: Angular services for work with REST API",
   "version": "2.1.0",
+  "author": "koshevy@gmail.com",
+  "keywords": [
+    "swagger",
+    "oas",
+    "oas3",
+    "oas 3",
+    "openapi",
+    "openapi3",
+    "open-api",
+    "open api",
+    "codegeneration",
+    "code generation",
+    "typescript",
+    "angular"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/koshevy/codegena.git"
+  },
+  "license": "MIT",
   "scripts": {
     "lint": "ng lint",
     "check": "npm run prepare:ng-api-service && npm run lint && ng test --no-watch --no-progress --browsers=ChromeHeadlessCI",

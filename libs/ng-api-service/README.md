@@ -3,6 +3,6 @@
 Angular-module with base class for automatic generated API-services
 and secondary infrastructure.
 
-Used in `@codegena/oapi3ts`.
+Used in `@codegena/oapi3ts-cli`.
 
 `TBD`

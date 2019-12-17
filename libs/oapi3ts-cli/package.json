@@ -1,6 +1,27 @@
 {
   "name": "@codegena/oapi3ts-cli",
+  "description": "CLI Application API for codegeneration from OAS3",
   "version": "2.1.0",
+  "author": "koshevy@gmail.com",
+  "keywords": [
+    "swagger",
+    "oas",
+    "oas3",
+    "oas 3",
+    "openapi",
+    "openapi3",
+    "open-api",
+    "open api",
+    "codegeneration",
+    "code generation",
+    "typescript",
+    "angular"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/koshevy/codegena.git"
+  },
+  "license": "MIT",
   "dependencies": {
     "@codegena/oapi3ts": ">= 2",
     "@codegena/ng-api-service": ">= 2",

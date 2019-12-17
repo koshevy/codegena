@@ -1,18 +1,18 @@
 # Codegeneration from OAS3
 
-> Now supporting TypeScript data types and model. Also, generating experimental Angular2+ services.
+> This is an experimental library. Now supporting TypeScript data types and model. Also, generating experimental Angular2+ services.
 >
 > Supporting of other languages and frameworks might be possible in the future.
 
 This project is a kit of tools for generation code from OpenAPI3 specification:
 
 - Data types and models (see [generated examples](https://github.com/koshevy/codegena/tree/master/libs/todo-app-scheme/src/lib/typings) from [this spec](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/specs/todo-app-spec.json))
-- API client services ([examples](https://github.com/koshevy/codegena/tree/master/libs/todo-app-scheme/src/lib/services))
+- REST API client services ([examples](https://github.com/koshevy/codegena/tree/master/libs/todo-app-scheme/src/lib/services))
 - Validation tools in clients
 - Extracted JSON Schemas ([example](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/services/schema.f494efb9904ca366b64883.ts))
 
 In the future it's can be appended with:
-- API backend services templates
+- REST API backend service templates
 - Pure validation tools and validation presets
 
 ## Table of contents
@@ -53,7 +53,7 @@ Install packages of scope:
 npm i @codegena/oapi3ts, @codegena/ng-api-service, @codegena/oapi3ts-cli
 ```
 
-Further, you can use `@codegena/oapi3ts-cli` in NodeJS scripts. For example, let create `update-typings.js` script with code:
+So you can use `@codegena/oapi3ts-cli` in NodeJS scripts. For example, let create `update-typings.js` script with code:
 
 ```javascript
 "use strict";
@@ -198,7 +198,8 @@ export interface AnotherType {
 |---------------------------------|-------------------------------------------------------------------------------|
 | `ng run todo-app-backand` | Run demo backend application. |
 | `ng run todo-app` | Run demo frontend application. |
-| `yarn run build:all-libs`          | Build all valuable libs and turn applications to use prebuilt versions of libs (not TypeScript). It's necessary for running and testing applications and libraries in terms close to production.             |
-| `yarn run clear:prebuilt-libs` | Clear prebuilt libs versions and return project to using live reloading TypeScript sources. |
-| `yarn run test:libs` | Test libraries supposed to be published. |
+| `npm run build:all-libs`          | Build all valuable libs and turn applications to use prebuilt versions of libs (not TypeScript). It's necessary for running and testing applications and libraries in terms close to production.             |
+| `npm run clear:prebuilt-libs` | Clear prebuilt libs versions and return project to using live reloading TypeScript sources. |
+| `npm run test:libs` | Test libraries supposed to be published. |
+| `npm run docs:swagger-ui` | Runs `swagger-ui` for spec file at http://localhost:3001.  |
 
