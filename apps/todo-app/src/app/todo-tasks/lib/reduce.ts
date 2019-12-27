@@ -1,4 +1,4 @@
-import * as _ from "lodash";
+import _ from "lodash";
 
 import {
     ActionType,
@@ -10,18 +10,21 @@ import {
     ToDoTaskTeaser
 } from "./context";
 
-import { moveItemInArray } from "@angular/cdk/drag-drop";
 import {
     addEmptyTaskAfterSelected,
+    assureTaskUidIsActual,
     editTaskInList,
-    markTaskInListAs,
+    getDefaultGroupUid,
     moveTaskInArray,
-    moveTaskInArrayByOneStep
+    moveTaskInArrayByOneStep,
+    toggleTaskInList,
+    validateTask
 } from "./helpers";
 
 export function getDefaultState(): ComponentContext {
     return {
         $$lastAction: null,
+        hasInvalidTasks: false,
         selectedTaskUid: null,
         totalTasksCount: 0
     };
@@ -44,7 +47,7 @@ export function reduce(
 ): ComponentContext {
     switch (truth.$$lastAction) {
 
-        case ActionType.AddNewTaskOptimistic:
+        case ActionType.AddNewTask:
             return {
                 ...context,
                 ...truth,
@@ -53,11 +56,17 @@ export function reduce(
                     : truth.lastAddedTask.uid,
                 tasks: [
                     ...context.tasks,
-                    truth.lastAddedTask
+                    {
+                        ...truth.lastAddedTask,
+                        groupUid: getDefaultGroupUid(
+                            context.selectedGroupUids,
+                            context.groups
+                        )
+                    }
                 ]
             };
 
-        case ActionType.AddNewEmptyTaskAfterOptimistic:
+        case ActionType.AddNewEmptyTaskAfter:
             return {
                 ...context,
                 ...truth,
@@ -65,15 +74,17 @@ export function reduce(
                 tasks: addEmptyTaskAfterSelected(
                     context.tasks,
                     context.selectedTaskUid,
-                    truth.lastAddedTask
+                    {
+                        ...truth.lastAddedTask,
+                        groupUid: getDefaultGroupUid(
+                            context.selectedGroupUids,
+                            context.groups
+                        )
+                    }
                 )
             };
 
         case ActionType.ChangeTaskPosition:
-            // todo describe API for ChangeGroup and use
-            break;
-
-        case ActionType.ChangeTaskPositionOptimistic:
 
             let affectedTaskUids;
 
@@ -100,7 +111,7 @@ export function reduce(
                 lastAffectedTaskUIds: affectedTaskUids
             };
 
-        case ActionType.DeleteTaskOptimistic:
+        case ActionType.DeleteTask:
             let selectedTaskAfterDelete = context.selectedTaskUid;
             let shouldSelectItemWithIndex: number;
 
@@ -140,16 +151,24 @@ export function reduce(
                 tasks: tasksAfterDeleting
             };
 
-        case ActionType.EditTaskOptimistic:
+        case ActionType.EditTask:
 
-            const editingTaskUid = truth.lastEditingData.uid
+            let editingTaskUid = truth.lastEditingData.uid
                 ? truth.lastEditingData.uid
                 : context.selectedTaskUid;
+
+            editingTaskUid = assureTaskUidIsActual(
+                editingTaskUid,
+                context.earlyCreatedTaskUids
+            );
 
             return {
                 ...context,
                 ...truth,
-                selectedTaskUid: editingTaskUid,
+                lastEditingData: {
+                    ...truth.lastEditingData,
+                    uid: editingTaskUid
+                },
                 tasks: editTaskInList(
                     context.tasks,
                     editingTaskUid,
@@ -165,24 +184,64 @@ export function reduce(
                 ...truth
             };
 
-        case ActionType.MarkTaskAsDoneOptimistic:
-        case ActionType.MarkTaskAsUnDoneOptimistic:
+        case ActionType.MarkTaskAsDone:
+        case ActionType.MarkTaskAsUnDone:
+
+            let tasksWithUpdatedStatus: ToDoTaskTeaser[];
+
+            try {
+                tasksWithUpdatedStatus = toggleTaskInList(
+                    context.tasks,
+                    truth.lastToggledTaskUid,
+                    truth.$$lastAction === ActionType.MarkTaskAsDone
+                )
+            } catch(err) {
+                console.warn('Error occured on task update');
+                console.warn(err);
+
+                tasksWithUpdatedStatus = context.tasks;
+            }
 
             return {
                 ...context,
                 ...truth,
-                tasks: markTaskInListAs(
-                    context.tasks,
-                    truth.lastToggledTaskUid,
-                    truth.$$lastAction === ActionType.MarkTaskAsDoneOptimistic
-                )
+                tasks: tasksWithUpdatedStatus
             };
 
-        case ActionType.SaveChangedItems:
+        case ActionType.SaveChangedTasks:
+
+            const updatedTasks = context.tasks;
+            const earlyCreatedTaskUids = context.earlyCreatedTaskUids || {};
+
+            // apply changed UIDs for early created and saved at first time
+            _.each(
+                truth.lastBufferedChangedTasks,
+                savedTask => {
+                    if (!savedTask.prevTempUid) {
+                        return;
+                    }
+
+                    const index = _.findIndex(
+                        updatedTasks,
+                        task => task.uid === savedTask.prevTempUid
+                    );
+
+                    // registration information about temporary UID
+                    if (index !== -1) {
+                        updatedTasks[index] = savedTask;
+                    }
+                    // replacing temporary task record with new already saved
+                    if (!earlyCreatedTaskUids[savedTask.prevTempUid]) {
+                        earlyCreatedTaskUids[savedTask.prevTempUid] = savedTask.uid;
+                    }
+                }
+            );
 
             return {
                 ...context,
-                ...truth
+                ...truth,
+                tasks: updatedTasks,
+                earlyCreatedTaskUids
             };
 
         case ActionType.SelectTask:
@@ -205,9 +264,42 @@ export function reduce(
  * @return
  */
 export function afterReduce(context: ComponentContext): ComponentContext {
-    const calculatedData: ComponentCalculatedData = {
-        totalTasksCount: (context.tasks || []).length
-    };
+    validateTasksInContext(context);
 
-    return _.assign(context, calculatedData);
+    return _.assign(context, {
+        totalTasksCount: (context.tasks || []).length,
+        hasInvalidTasks: !!_.find(
+            context.tasks || [],
+            task => task.isInvalid
+        )
+    } as ComponentCalculatedData);
+}
+
+/**
+ * Iterates over tasks changed in last action and do validation of them.
+ * @param context
+ */
+function validateTasksInContext(context: ComponentContext): void {
+    let changedTask, changedTaskUid;
+    switch (context.$$lastAction) {
+        case ActionType.AddNewEmptyTaskAfter:
+        case ActionType.AddNewTask:
+            changedTaskUid = context.lastAddedTask.uid;
+            break;
+
+        case ActionType.EditTask:
+            // concrete UID could be set or supposed to be the `selectedTaskUid`
+            changedTaskUid = context.lastEditingData.uid
+                || context.selectedTaskUid;
+    }
+
+    if (changedTaskUid) {
+        changedTask = _.find(context.tasks, task =>
+            task.uid === changedTaskUid
+        );
+    }
+
+    if(changedTask) {
+        validateTask(changedTask);
+    }
 }

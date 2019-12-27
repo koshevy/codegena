@@ -1,36 +1,37 @@
 import * as _ from 'lodash';
 
 import {
-    MonoTypeOperatorFunction,
     Observable,
     forkJoin,
     of,
-    throwError,
     queueScheduler
 } from 'rxjs';
 import {
-    catchError,
     filter,
     map,
     mergeMap,
     observeOn,
+    retryWhen,
     scan,
     share,
     shareReplay,
     switchMap,
+    tap,
     takeUntil
-} from "rxjs/operators";
+} from 'rxjs/operators';
 
 import { Injectable } from '@angular/core';
 
 import { pickResponseBody } from '@codegena/ng-api-service';
 import {
-    ToDoGroup,
-    ToDoTask,
+    CreateGroupItemResponse,
+    CreateGroupItemService,
     GetGroupsResponse,
     GetGroupItemsResponse,
     GetGroupsService,
     GetGroupItemsService,
+    ToDoGroup,
+    ToDoTask,
     UpdateFewItemsService,
     UpdateFewItemsResponse,
     UpdateGroupItemService
@@ -53,6 +54,11 @@ import {
     reduce
 } from './lib/reduce';
 
+import {
+    downgradeTeaserToTaskBlank,
+    downgradeTeasersToTasks
+} from './lib/helpers'
+
 /**
  * Store-service for {@link TodosGroupComponent}.
  * Create and maintain data flow and reducing.
@@ -64,6 +70,7 @@ import {
 export class TodoTasksStore {
 
     constructor(
+        protected createGroupItemService: CreateGroupItemService,
         protected getGroupsService: GetGroupsService,
         protected getGroupItemsService: GetGroupItemsService,
         protected updateFewItemsService: UpdateFewItemsService
@@ -91,9 +98,7 @@ export class TodoTasksStore {
                 getDefaultState()
             ),
             // Maps context to expand with calculated options
-            map<ComponentContext, ComponentContext>(afterReduce),
-            // For cases when gets default state before subscribes
-            shareReplay(1)
+            map<ComponentContext, ComponentContext>(afterReduce)
         );
     }
 
@@ -105,18 +110,9 @@ export class TodoTasksStore {
     ): Observable<ComponentTruth> {
         switch (truth.$$lastAction) {
             case ActionType.InitializeWithRouteParams:
+                return this.initSelectedGroupData(truth);
 
-                return this.getGroupsService.request(null, {
-                    isComplete: false,
-                    withItems: false
-                }).pipe(
-                    pickResponseBody<GetGroupsResponse<200>>(200, null, true),
-                    switchMap<ToDoGroup[], Observable<ComponentTruth>>(
-                        groups => this.applySelectedGroupsToTruth(truth, groups)
-                    )
-                );
-
-            case ActionType.SaveChangedItems:
+            case ActionType.SaveChangedTasks:
                 return this.saveChangedTasks(truth);
 
             default:
@@ -127,18 +123,42 @@ export class TodoTasksStore {
     // *** Middleware chains
 
     /**
+     * Primary loading all groups list (with no tasks data within)
+     * and additional loading tasks of groups marked as "selected"
+     * in a truth.
+     *
+     * @param {ComponentTruth} truth
+     * @return {Observable<ComponentTruth>}
+     */
+    protected initSelectedGroupData(truth: ComponentTruth): Observable<ComponentTruth> {
+        return this.getGroupsService.request(null, {
+            isComplete: null,
+            withItems: false
+        }).pipe(
+            pickResponseBody<GetGroupsResponse<200>>(200, null, true),
+            switchMap<ToDoGroup[], Observable<ComponentTruth>>(
+                groups => this.loadItemsOfSelectedGroups({
+                    ...truth,
+                    groups
+                })
+            )
+        );
+    }
+
+    /**
+     * Load tasks of those of given group that
+     * presented in `truth.selectedGroupUids`.
      *
      * @param truth
-     * @param groups
      * @return
      * Return prepared truth for reducing to {@link ComponentContext}
      * in {@link reduce}: will get items of selected groups and
      * current selected group cursor.
      */
-    private applySelectedGroupsToTruth(
-        truth: ComponentTruth,
-        groups: ToDoGroup[]
+    protected loadItemsOfSelectedGroups(
+        truth: ComponentTruth
     ): Observable<ComponentTruth> {
+        const groups = truth.groups;
         const selectedGroups: string[] = (truth.selectedGroupUids || []).length
             ? _.intersection(groups.map(group => group.uid), truth.selectedGroupUids)
             : groups.map(group => group.uid);
@@ -165,6 +185,9 @@ export class TodoTasksStore {
             )
         ) ;
 
+        /**
+         * Load tasks of all selected groups
+         */
         return forkJoin(requests).pipe(
             map<ToDoTask[][], ToDoTask[]>(_.flatten),
             map<ToDoTask[], ComponentTruth>(tasks => ({
@@ -172,7 +195,7 @@ export class TodoTasksStore {
                 groups,
                 selectedGroupUids: selectedGroups,
                 selectedTaskUid: _.get(tasks, '0.uid', null),
-                tasks: _.sortBy(tasks, 'position'),
+                tasks: _.orderBy(tasks, ['position']),
             }))
         );
     }
@@ -183,22 +206,98 @@ export class TodoTasksStore {
      * @param itemsUids
      * @return
      */
-    private saveChangedTasks(truth: ComponentTruth): Observable<ComponentTruth> {
+    protected saveChangedTasks(truth: ComponentTruth): Observable<ComponentTruth> {
+        if (!truth.lastBufferedChangedTasks || !truth.lastBufferedChangedTasks.length) {
+            return of(truth);
+        }
+
+        /**
+         * Just created items should be saved by other way —
+         * creating API
+         */
+        const justCreatedItems = _.remove(
+            truth.lastBufferedChangedTasks,
+            task => task.isJustCreated
+        );
+
+        const requests: Array<Observable<ToDoTask[]>> = [];
+
+        // add request to update
+        if (truth.lastBufferedChangedTasks.length) {
+            requests.push(
+                this.updateEditedTasks(truth.lastBufferedChangedTasks)
+            );
+        }
+
+        // add request to create
+        if (justCreatedItems.length) {
+            requests.push(
+                this.createTasks(justCreatedItems)
+            );
+        }
+
+        return forkJoin(requests).pipe(
+            map<ToDoTask[][], ComponentTruth>(result =>
+                ({
+                    ...truth,
+                    lastBufferedChangedTasks: _.flatten(result)
+                })
+            ),
+        );
+    }
+
+    // *** Helpers
+
+    private assureBuffersUidsActual(
+        truth: ComponentTruth,
+        context: ComponentContext
+    ): ComponentTruth {
+
+        _.each(context.lastBufferedChangedTasks, bufferedTask => {
+            const foundSameWithNewUid = _.find(
+                context.tasks,
+                task => task.prevTempUid === bufferedTask.uid
+            );
+        });
+
+        return truth;
+    }
+
+    private updateEditedTasks(editedTasks: ToDoTaskTeaser[]): Observable<ToDoTask[]> {
         return this.updateFewItemsService.request(
-            truth.lastBufferedChangedTasks || [],
+            downgradeTeasersToTasks(editedTasks),
             {}
         ).pipe(
             pickResponseBody<UpdateFewItemsResponse<200>>(
                 200,
                 null,
                 true
-            ),
-            map(updatedTasks => {
-                return {
-                    ...truth,
-                    lastBufferedChangedTasks: updatedTasks
-                };
-            })
+            )
         );
+    }
+
+    private createTasks(createdTasks: ToDoTaskTeaser[]): Observable<ToDoTask[]> {
+        const createRequests = _.map<ToDoTaskTeaser, Observable<ToDoTask>>(
+            createdTasks,
+            task => {
+                const prevTempUid = task.uid;
+
+                return this.createGroupItemService.request(
+                    downgradeTeaserToTaskBlank(task),
+                    {
+                        groupId: task.groupUid
+                    }
+                ).pipe(
+                    pickResponseBody<CreateGroupItemResponse<201>>(
+                        201,
+                        null,
+                        true
+                    ),
+                    map(newTask => ({...newTask, prevTempUid}))
+                )
+            }
+        );
+
+        return forkJoin(createRequests);
     }
 }

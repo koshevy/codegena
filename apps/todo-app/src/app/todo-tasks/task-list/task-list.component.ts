@@ -93,8 +93,9 @@ export class TaskListComponent implements OnInit, OnChanges {
         }
     }
 
-    trackByTasks(index, item: ToDoTask): string {
-        return item.uid;
+    isTaskSelected(task: ToDoTaskTeaser): boolean {
+        return task.uid === this.selectedTaskUid
+            || task.prevTempUid === this.selectedTaskUid;
     }
 
     /**
@@ -119,6 +120,10 @@ export class TaskListComponent implements OnInit, OnChanges {
 
     setFocusNewTaskInput() {
         (this.newTaskInput.nativeElement as HTMLElement).focus();
+    }
+
+    trackByTasks(index, item: ToDoTask): string {
+        return item.uid;
     }
 
     // *** Events

@@ -89,8 +89,45 @@ li.tasks-list-item {
       vertical-align: top;
     }
 
+    &:not(.selected) {
+      .delete-task {
+        color: $success;
+      }
+    }
+
     .task-title {
       text-decoration: line-through;
+    }
+  }
+
+  &.is-invalid:not(.cdk-drag-preview) {
+    &:before, .mat-icon {
+      color: $danger;
+      border-color: $danger;
+    }
+
+    &:focus,
+    &:focus-within {
+      outline-style: dashed;
+      outline-width: 3px;
+      outline-color: $danger;
+    }
+
+    &:before {
+      color: $danger !important;
+    }
+
+    color: $danger;
+
+    .drag-handle {
+      position: absolute;
+      right: 12px;
+      color: $danger;
+    }
+
+    &.selected {
+        background: rgba($danger, .15);
+        border-color: rgba($danger, .15);
     }
   }
 
@@ -155,4 +192,10 @@ li.tasks-list-item {
   margin: 0 auto;
   width: 50%;
   height: 300px;
+}
+
+.alert-danger{
+  &, * {
+      color: $danger !important;
+  }
 }

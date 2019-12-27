@@ -15,6 +15,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -33,10 +34,11 @@ import {
     GetGroupsService,
     GetGroupItemsService,
     UpdateFewItemsService,
+    CreateGroupItemService,
     CreateGroupService,
     UpdateGroupService,
-    UpdateGroupItemService
-} from '@codegena/todo-app-scheme';
+    UpdateGroupItemService,
+} from "@codegena/todo-app-scheme";
 
 import { EditGroupComponent } from './todos-groups/edit-group/edit-group.component';
 import { TodoTasksComponent } from './todo-tasks/todo-tasks.component';
@@ -63,21 +65,22 @@ const API_SERVICES_PROVIDERS = [
     CreateGroupService,
     UpdateFewItemsService,
     UpdateGroupService,
-    UpdateGroupItemService
+    UpdateGroupItemService,
+    CreateGroupItemService
 ];
 
 @NgModule({
     bootstrap: [TodoAppComponent],
     declarations: [
+        ConfirmationComponent,
         EditGroupComponent,
         ErrorValidationDirective,
         NoInternetComponent,
         NullableAccessorDirective,
+        TaskListComponent,
         TodoAppComponent,
         TodosGroupComponent,
-        ConfirmationComponent,
         TodoTasksComponent,
-        TaskListComponent,
     ],
     entryComponents: [
         EditGroupComponent,
@@ -85,9 +88,9 @@ const API_SERVICES_PROVIDERS = [
         TaskListComponent,
     ],
     exports: [
-        TodoAppComponent,
         ConfirmationComponent,
         TaskListComponent,
+        TodoAppComponent,
     ],
     imports: [
         ApiModule,
@@ -107,6 +110,7 @@ const API_SERVICES_PROVIDERS = [
         MatProgressSpinnerModule,
         MatProgressBarModule,
         MatSnackBarModule,
+        MatTooltipModule,
         OverlayModule,
         ObserversModule,
         FroalaEditorModule.forRoot(),
