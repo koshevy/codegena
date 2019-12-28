@@ -129,6 +129,10 @@ li.tasks-list-item {
         background: rgba($danger, .15);
         border-color: rgba($danger, .15);
     }
+
+    @include gradient-striped(rgba($danger, .05));
+    background-size: 1rem 1rem;
+    cursor: no-drop;
   }
 
   &.cdk-drag-preview {

@@ -38,7 +38,7 @@ import {
     CreateGroupService,
     UpdateGroupService,
     UpdateGroupItemService,
-} from "@codegena/todo-app-scheme";
+} from '@codegena/todo-app-scheme';
 
 import { EditGroupComponent } from './todos-groups/edit-group/edit-group.component';
 import { TodoTasksComponent } from './todo-tasks/todo-tasks.component';

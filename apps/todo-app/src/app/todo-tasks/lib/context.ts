@@ -19,6 +19,7 @@ export const enum ActionType {
     DeleteTask = '[Delete task]',
     SelectTask = '[Select task]',
     SaveChangedTasks = '[Save changed items]',
+    MarksChangedTasksAsPending = '[Marks changed tasks as pending]',
     MarkTaskAsDone = '[Mark task as done]',
     MarkTaskAsUnDone = '[Mark task as undone]',
 }
@@ -31,6 +32,11 @@ export interface ToDoTaskTeaser extends ToDoTask {
      * and not saved yet.
      */
     isJustCreated?: boolean;
+
+    /**
+     * Means this task is saving now.
+     */
+    isPending?: boolean;
 
     /**
      * Previous uid of task temporary assigned until

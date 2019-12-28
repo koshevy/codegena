@@ -80,7 +80,16 @@ export function parseFullTextTask(fullText): {
     };
 }
 
-export function syncTaskListValidStatus(
+/**
+ * Syncs significant statuses of task in two lists:
+ * - {@link ToDoTaskTeaser.isInvalid}
+ * - {@link ToDoTaskTeaser.isJustCreated}
+ * - {@link ToDoTaskTeaser.isPending}
+ *
+ * @param from
+ * @param to
+ */
+export function syncTasksStatus(
     from: ToDoTaskTeaser[],
     to: ToDoTaskTeaser[]
 ) {
@@ -89,7 +98,9 @@ export function syncTaskListValidStatus(
             throw new Error(`Can't sync validation status! Task lists have are not overlapped!`)
         }
 
-        to[i].isInvalid = task.isInvalid;
+        to[i].isInvalid = !!task.isInvalid;
+        to[i].isJustCreated = !!task.isJustCreated;
+        to[i].isPending = !!task.isPending;
     });
 }
 
@@ -102,7 +113,7 @@ export function syncTaskListValidStatus(
  * @param selectedTaskUid uid of already selected item
  * @return
  */
-export function addEmptyTaskAfterSelected(
+export function insertEmptyTaskAfterSelected(
     tasks: ToDoTaskTeaser[],
     selectedTaskUid: string,
     newItem: ToDoTaskTeaser
@@ -117,7 +128,37 @@ export function addEmptyTaskAfterSelected(
         throw new Error('Can\'t find task with set id!');
     }
 
-    tasks.splice(selectedItemIndex + 1, 0, newItem);
+    // Clear unused not valid tasks from last time
+    // if they are not going to be saved
+    tasks = filterTasksWithPositionCollapse(
+        tasks,
+        task =>
+            !task.isInvalid || !task.isJustCreated || !!task.isPending
+    );
+
+    const position = (selectedItemIndex < (tasks.length - 1))
+        ? tasks[selectedItemIndex + 1].position
+        : null;
+
+    // inserts new tasks
+    tasks.splice(
+        selectedItemIndex + 1, 0,
+        position
+            ? { ...newItem, position }
+            : _.omit(newItem, ['position'])
+    );
+
+
+    // also, if task was added not at the end of task list,
+    // further items get shifted
+    if (position) {
+        for(let i = selectedItemIndex + 2; i < tasks.length; i++) {
+            tasks[i] = {
+                ...tasks[i],
+                position: tasks[i].position + 1
+            };
+        }
+    }
 
     return tasks;
 }
@@ -312,9 +353,12 @@ export function downgradeTeaserToTask(
 
     if (!task.description || !task.description.trim()) {
         delete task.description;
+    } else {
+        task.description = task.description.trim();
     }
 
     delete task.isJustCreated;
+    delete task.isPending;
     delete task.prevTempUid;
 
     return task;
@@ -330,12 +374,10 @@ export function downgradeTeaserToTask(
 export function downgradeTeaserToTaskBlank(
     taskTeaser: ToDoTaskTeaser
 ): ToDoTaskBlank {
-    const task = { ...taskTeaser };
+    const task = downgradeTeaserToTask(taskTeaser) as any;
 
     delete task.dateChanged;
     delete task.dateCreated;
-    delete task.isJustCreated;
-    delete task.prevTempUid;
     delete task.uid;
 
     return task;
@@ -364,4 +406,37 @@ export function validateTask(task: ToDoTaskTeaser): void {
     task.isInvalid = task.isJustCreated
         ? !taskBlankValidator(downgradeTeaserToTaskBlank(task))
         : !taskValidator(downgradeTeaserToTask(task));
+}
+
+/**
+ *
+ * @param tasks
+ * @param condition
+ * @return
+ * New array without filtered elements and with collapsed
+ * {@link ToDoTaskTeaser.position} of tasks that follow after
+ * removed items.
+ */
+export function filterTasksWithPositionCollapse(
+    tasks: ToDoTaskTeaser[],
+    condition: (task: ToDoTaskTeaser) => boolean
+): ToDoTaskTeaser[] {
+    let offset = 0;
+    const result = [];
+
+    for (let i = 0; i < tasks.length; i++) {
+        const task = offset
+            ? { ...tasks[i], position: tasks[i].position - offset }
+            : tasks[i];
+
+        if (condition(task)) {
+            result.push(task);
+        } else {
+            offset++;
+        }
+    }
+
+    console.log('result', result);
+
+    return result;
 }

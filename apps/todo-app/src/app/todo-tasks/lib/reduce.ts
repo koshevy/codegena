@@ -11,10 +11,11 @@ import {
 } from "./context";
 
 import {
-    addEmptyTaskAfterSelected,
     assureTaskUidIsActual,
     editTaskInList,
+    filterTasksWithPositionCollapse,
     getDefaultGroupUid,
+    insertEmptyTaskAfterSelected,
     moveTaskInArray,
     moveTaskInArrayByOneStep,
     toggleTaskInList,
@@ -71,7 +72,7 @@ export function reduce(
                 ...context,
                 ...truth,
                 selectedTaskUid: truth.lastAddedTask.uid,
-                tasks: addEmptyTaskAfterSelected(
+                tasks: insertEmptyTaskAfterSelected(
                     context.tasks,
                     context.selectedTaskUid,
                     {
@@ -113,34 +114,34 @@ export function reduce(
 
         case ActionType.DeleteTask:
             let selectedTaskAfterDelete = context.selectedTaskUid;
-            let shouldSelectItemWithIndex: number;
+            let indexOfNewSelectedTask: number;
 
             // change `selectedTaskUid` when it gets deleted
             if (truth.lastDeletedTaskUid === context.selectedTaskUid) {
-                shouldSelectItemWithIndex = _.findIndex(
+                indexOfNewSelectedTask = _.findIndex(
                     context.tasks,
                     (task: ToDoTaskTeaser) => task.uid === context.selectedTaskUid
                 );
 
-                if (shouldSelectItemWithIndex === -1) {
+                if (indexOfNewSelectedTask === -1) {
                     throw new Error('Can\'t find item with selected uid in list of tasks!');
                 }
 
-                if (shouldSelectItemWithIndex > 0) {
-                    shouldSelectItemWithIndex--;
+                if (indexOfNewSelectedTask > 0) {
+                    indexOfNewSelectedTask--;
                 } else if (context.tasks.length === 1) {
-                    shouldSelectItemWithIndex = null;
+                    indexOfNewSelectedTask = null;
                 }
             }
 
-            const tasksAfterDeleting = _.remove(
+            const tasksAfterDeleting = filterTasksWithPositionCollapse(
                 context.tasks,
                 task => task.uid !== truth.lastDeletedTaskUid
             );
 
-            if (shouldSelectItemWithIndex !== undefined) {
-                selectedTaskAfterDelete = tasksAfterDeleting[shouldSelectItemWithIndex]
-                    ? tasksAfterDeleting[shouldSelectItemWithIndex].uid
+            if (indexOfNewSelectedTask !== undefined) {
+                selectedTaskAfterDelete = tasksAfterDeleting[indexOfNewSelectedTask]
+                    ? tasksAfterDeleting[indexOfNewSelectedTask].uid
                     : null;
             }
 
@@ -182,6 +183,30 @@ export function reduce(
             return {
                 ...context,
                 ...truth
+            };
+
+        case ActionType.MarksChangedTasksAsPending:
+
+            const bufferedUids = _.map<ToDoTaskTeaser, string>(
+                truth.lastBufferedChangedTasks,
+                task => task.uid
+            );
+
+            const tasks = _.map(context.tasks, (task, index) => {
+                if (_.includes(bufferedUids, task.uid)) {
+                    return {
+                        ...task,
+                        isPending: true
+                    }
+                }
+
+                return task;
+            });
+
+            return {
+                ...context,
+                ...truth,
+                tasks
             };
 
         case ActionType.MarkTaskAsDone:

@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 
 import {
     Observable,
+    concat,
     forkJoin,
     of,
     queueScheduler
@@ -9,6 +10,7 @@ import {
 import {
     filter,
     map,
+    mergeAll,
     mergeMap,
     observeOn,
     retryWhen,
@@ -113,7 +115,17 @@ export class TodoTasksStore {
                 return this.initSelectedGroupData(truth);
 
             case ActionType.SaveChangedTasks:
-                return this.saveChangedTasks(truth);
+                return concat([
+                    // Initially inserts preparing action:
+                    // `ActionType.MarksChangedTasksAsPending` reaches the reducer
+                    // first and mark all actions in payload as a `pending`
+                    of({
+                        ...truth,
+                        $$lastAction: ActionType.MarksChangedTasksAsPending
+                    }),
+                    this.saveChangedTasks(truth)
+                ]).pipe(mergeAll());
+                // return this.saveChangedTasks(truth);
 
             default:
                 return of({...truth});

@@ -49,7 +49,7 @@ import {
     createNewTaskTeaser,
     getFullTextOfSelectedTask,
     parseFullTextTask,
-    syncTaskListValidStatus
+    syncTasksStatus
 } from './lib/helpers';
 
 // TaskListComponent types
@@ -317,7 +317,7 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
                  */
                 if (context.lastEditingData.description === undefined) { // not in editor
                     this.updateTaskEditor(context);
-                    syncTaskListValidStatus(
+                    syncTasksStatus(
                         context.tasks,
                         this.syncedTaskList
                     );
@@ -341,13 +341,20 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
 
                 break;
 
-            // for this case nothing to apply in component
+            // notify and do `syncTasksStatus`
             case ActionType.SaveChangedTasks:
 
                 this.matSnackBar.open('Changes saved', null, {
                     duration: 1000,
                     panelClass: ['alert', 'alert-success']
                 });
+
+            // do `syncTasksStatus`
+            case ActionType.MarksChangedTasksAsPending:
+                syncTasksStatus(
+                    context.tasks,
+                    this.syncedTaskList
+                );
 
                 break;
 
@@ -356,6 +363,8 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
                 this.syncedTaskList = context.tasks
                     ? [...context.tasks]
                     : null;
+
+                setTimeout(() => this.setFocusToActiveTask(), 0);
         }
 
         // Update View related with this.syncedTaskList
