@@ -24,6 +24,11 @@ export interface ToDoTaskBlank {
    */
   isDone: boolean;
   /**
+   * Position of a task in group. Allows to track changing of state of a concrete
+   * item, including changing od position.
+   */
+  position?: number;
+  /**
    * Any material attached to the task: may be screenshots, photos, pdf- or doc-
    * documents on something else
    */

@@ -17,7 +17,7 @@ import {
 // Typings for this API method
 import { GetGroupsParameters, GetGroupsResponse } from '../typings';
 // Schemas
-import { schema as domainSchema } from './schema.f494efb9904ca366b64883';
+import { schema as domainSchema } from './schema.b4c655ec1635af1be28bd6';
 
 /**
  * Service for angular based on ApiAgent solution.
@@ -83,20 +83,20 @@ export class GetGroupsService extends ApiService<
             type: 'array',
             items: {
               $ref:
-                'schema.f494efb9904ca366b64883#/components/schemas/ToDoGroup'
+                'schema.b4c655ec1635af1be28bd6#/components/schemas/ToDoGroup'
             }
           }
         },
         '400': {
           'application/json': {
             $ref:
-              'schema.f494efb9904ca366b64883#/components/schemas/HttpErrorBadRequest'
+              'schema.b4c655ec1635af1be28bd6#/components/schemas/HttpErrorBadRequest'
           }
         },
         '500': {
           'application/json': {
             $ref:
-              'schema.f494efb9904ca366b64883#/components/schemas/HttpErrorServer'
+              'schema.b4c655ec1635af1be28bd6#/components/schemas/HttpErrorServer'
           }
         }
       }

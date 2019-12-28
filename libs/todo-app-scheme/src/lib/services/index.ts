@@ -11,4 +11,4 @@ export * from './update-group-item.api.service';
 export * from './rewrite-group-item.api.service';
 export * from './update-few-items.api.service';
 
-export { schema } from './schema.f494efb9904ca366b64883';
+export { schema } from './schema.b4c655ec1635af1be28bd6';

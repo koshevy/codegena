@@ -858,6 +858,13 @@
             "default": "false",
             "example": false
           },
+          "position": {
+            "description": "Position of a task in group. Allows to track changing of state of a concrete item, including changing od position.",
+            "type": "number",
+            "min": 0,
+            "max": 4096,
+            "example": 0
+          },
           "attachments": {
             "type": "array",
             "description": "Any material attached to the task: may be screenshots, photos, pdf- or doc- documents on something else",
@@ -906,13 +913,6 @@
                 "format": "date-time",
                 "readOnly": true,
                 "example": "2019-11-17T11:20:51.555Z"
-              },
-              "position": {
-                "description": "Position of a task in group. Allows to track changing of state of a concrete item, including changing od position.",
-                "type": "number",
-                "min": 0,
-                "max": 4096,
-                "example": 0
               }
             },
             "required": [
