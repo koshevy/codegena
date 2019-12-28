@@ -1,13 +1,14 @@
 import { getNowISO } from './helpers';
+import _ from 'lodash';
 import * as generateUid from 'nanoid';
 
 import { ToDoGroup, ToDoTask } from '@codegena/todo-app-scheme/src/lib/typings';
 
 const nowISO = getNowISO();
 let lastGeneratedGroupUid: string;
-let autoIncrementPosition = 0;
+let autoIncrementPosition = 1;
 
-export const defaultGroups: ToDoGroup[] = [
+export const defaultGroups: ToDoGroup[] = _.cloneDeep([
     {
         uid: lastGeneratedGroupUid = generateUid(),
         dateChanged: nowISO,
@@ -128,4 +129,4 @@ export const defaultGroups: ToDoGroup[] = [
         isComplete: false,
         title: 'Hobbies',
     },
-];
+]);

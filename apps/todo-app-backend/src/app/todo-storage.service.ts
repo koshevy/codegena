@@ -33,6 +33,11 @@ import { defaultGroups } from './defaults';
  */
 @Injectable()
 export class TodoStorageService {
+
+    /**
+     * This service stores all data in session.
+     * Session should be set before using via {@link setSession}.
+     */
     public session;
 
     constructor() {
@@ -192,6 +197,7 @@ export class TodoStorageService {
      * @throws NotFoundException
      */
     getTasksOfGroup(groupUid: string, isComplete?: boolean): ToDoTask[] {
+
         return _(this.getGroupByUid(groupUid).items)
             .filter(
                 (task: ToDoTask) =>
@@ -203,6 +209,14 @@ export class TodoStorageService {
             .value();
     }
 
+    getAllTasksOrdered(): ToDoTask[] {
+        return _(this.getGroups())
+            .map<ToDoTask[]>((group: ToDoGroup) => group.items)
+            .flatten()
+            .orderBy(['position'], ['asc'])
+            .value();
+    }
+
     /**
      * @param groupUid
      * @param taskBlank
@@ -211,9 +225,23 @@ export class TodoStorageService {
      */
     createTaskOfGroup(groupUid: string, taskBlank: ToDoTaskBlank): ToDoTask {
         const group = this.getGroupByUid(groupUid);
+
+        if (taskBlank.position) {
+            const thresold = this.getNewPosition(true);
+            if (taskBlank.position >= thresold) {
+                throw new Error([
+                    `Wrong position of task (${taskBlank.position})!`,
+                    `Position should't be greater than ${(thresold || 1)-1}`,
+                    `or should't be set.`
+                ].join(' '));
+            }
+
+            this.shiftTasksPositions(taskBlank.position);
+        }
+
         const newTask = createTaskFromBlank(
             taskBlank,
-            this.getNewPosition(),
+            taskBlank.position || this.getNewPosition(),
             groupUid
         );
 
@@ -275,7 +303,7 @@ export class TodoStorageService {
         return foundTask;
     }
 
-    protected getNewPosition(): number {
+    protected getNewPosition(dryRun: boolean = false): number {
         if (!this.session.autoIncrementPosition) {
             const maxPosition = _(this.getGroups())
                 .map<ToDoTask[]>((group: ToDoGroup) => group.items)
@@ -286,6 +314,21 @@ export class TodoStorageService {
             this.session.autoIncrementPosition = maxPosition;
         }
 
-        return ++this.session.autoIncrementPosition;
+        return dryRun
+            ? this.session.autoIncrementPosition + 1
+            : ++this.session.autoIncrementPosition;
+    }
+
+    protected shiftTasksPositions(fromPosition: number): void {
+        const tasks = this.getAllTasksOrdered();
+        const fromIndex = _.findIndex(tasks, (task: ToDoTask) =>
+            task.position === fromPosition
+        );
+
+        if (fromIndex !== -1) {
+            for (let i = fromIndex; i < tasks.length; i++) {
+                tasks[i].position++;
+            }
+        }
     }
 }
