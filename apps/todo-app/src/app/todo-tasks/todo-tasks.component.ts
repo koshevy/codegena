@@ -1,6 +1,13 @@
 import _ from 'lodash';
 
-import { asyncScheduler, merge, of, Observable, Subject } from 'rxjs';
+import {
+    asyncScheduler,
+    merge,
+    of,
+    Observable,
+    Subject,
+    NEVER
+} from 'rxjs';
 import {
     bufferWhen,
     debounceTime,
@@ -15,7 +22,7 @@ import {
     switchMap,
     takeUntil,
     tap
-} from "rxjs/operators";
+} from 'rxjs/operators';
 import {
     Component,
     ChangeDetectorRef,
@@ -404,7 +411,7 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
         return this.ngZone.runOutsideAngular(() =>
             this.store.getNewContextFlow(this.truth$).pipe(
                 retryWhen(source =>
-                    source.pipe(tap(error => {
+                    source.pipe(switchMap(error => {
                         this.matSnackBar.open(
                             `
                             Something goes wrong (see console).
@@ -415,6 +422,18 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
 
                         console.error('Error occured in action');
                         console.error(error);
+
+                        if (error.name === 'HttpErrorResponse') {
+                            this.matSnackBar.open(
+                                `It seems, there are no internet or problems with server!`,
+                                'Got it', {
+                                    panelClass: ['alert', 'alert-danger']
+                                });
+
+                            return NEVER;
+                        } else {
+                            return of(error);
+                        }
                     }))
                 ),
                 shareReplay()
