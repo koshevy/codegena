@@ -10,33 +10,39 @@ export const enum ActionType {
     // Initialize state
     InitializeWithDefaultState = '[Initialize task list with default state]',
     InitializeWithRouteParams = '[Initialize task list with route params]',
-
     // Change state
-    AddNewTaskOptimistic = '[Add new task optimistic]',
+    AddNewTask = '[Add new task]',
     // This is what happens once you press Shift+Enter
-    AddNewEmptyTaskAfterOptimistic = '[Add new empty task after selected optimistic]',
-    EditTaskOptimistic = '[Edit task optimistic]',
+    AddNewEmptyTaskAfter = '[Add new empty task after selected]',
+    EditTask = '[Edit task]',
     ChangeTaskPosition = '[Change task position]',
-    ChangeTaskPositionOptimistic = '[Change task position optimistic]',
-    DeleteTaskOptimistic = '[Delete task optimistic]',
+    DeleteTask = '[Delete task]',
     SelectTask = '[Select task]',
-    SaveChangedItems = '[Save changed items]',
-    MarkTaskAsDoneOptimistic = '[Mark task as done optimistic]',
-    MarkTaskAsUnDoneOptimistic = '[Mark task as undone optimistic]',
+    SaveChangedTasks = '[Save changed items]',
+    MarksChangedTasksAsPending = '[Marks changed tasks as pending]',
+    MarkTaskAsDone = '[Mark task as done]',
+    MarkTaskAsUnDone = '[Mark task as undone]',
 }
 
 export interface ToDoTaskTeaser extends ToDoTask {
-    /**
-     * Marks this item was failed during adding
-     */
-    failed?: boolean;
+    isInvalid?: boolean;
 
     /**
-     * Marks this item added to groups optimistically.
+     * Means this task just created, has temporary uid
+     * and not saved yet.
      */
-    optimistic?: boolean;
+    isJustCreated?: boolean;
 
-    pending?: boolean;
+    /**
+     * Means this task is saving now.
+     */
+    isPending?: boolean;
+
+    /**
+     * Previous uid of task temporary assigned until
+     * it gets saved and gets new UID from backend.
+     */
+    prevTempUid?: string;
 }
 
 export interface TaskEditingData {
@@ -67,10 +73,9 @@ export interface ComponentTruth {
     $$lastAction: ActionType | null;
 
     groups?: ToDoGroup[];
-    groupPositionChanging?: PositionChanging;
     lastAddedTask?: ToDoTaskTeaser;
     lastAffectedTaskUIds?: string[];
-    lastBufferedChangedTasks?: ToDoTask[];
+    lastBufferedChangedTasks?: ToDoTaskTeaser[];
     lastDeletedTaskUid?: string;
     lastEditingData?: TaskEditingData;
     lastSelectedTaskUid?: string;
@@ -85,12 +90,25 @@ export interface ComponentTruth {
  * each action-inducted reducing.
  */
 export interface ComponentCalculatedData {
+    hasInvalidTasks: boolean;
     totalTasksCount: number;
 }
 
 export interface ComponentContext
     extends ComponentTruth,
             ComponentCalculatedData {
+
+    /**
+     * New tasks get created in front end app with UID also created on FE side.
+     * But after task saved, backend assign new UID.
+     *
+     * This property stores all replacements of UID and helps
+     * to recognize UID's in payload of actions, emitted before new task saved,
+     * but not complete yet.
+     */
+    earlyCreatedTaskUids?: {
+        [oldUid: string]: string
+    };
 
     /**
      * UID task in list, marked as "selected"

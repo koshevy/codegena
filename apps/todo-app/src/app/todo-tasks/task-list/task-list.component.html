@@ -24,7 +24,7 @@
     </div>
 
     <ul #tasksList
-        class="pt-2 tasks-list list-unstyled"
+        class="pt-2 p-0 mb-0 tasks-list list-unstyled"
         cdkDropList
         tabindex="0"
         (cdkDropListDropped)="onTaskDropped($event)"
@@ -32,12 +32,17 @@
       <li *ngFor="let task of taskList; trackBy: trackByTasks"
           class="tasks-list-item task.pending"
           [class.is-done]="task.isDone"
-          [class.selected]="task.uid === selectedTaskUid"
+          [class.is-new]="task.isNew"
+          [class.is-invalid]="task.isInvalid"
+          [class.selected]="isTaskSelected(task)"
           (click)="onTaskToggle($event, task)"
           (focusin)="onTaskFocusIn($event, task)"
           (input)="onTaskInput($event, task)"
           (keydown)="onTaskKeydown($event, task)"
           [attr.data-group-uid]="task.groupUid"
+          matTooltip="Incorrect title or description. Task can't be saved."
+          [matTooltipDisabled]="!task.isInvalid"
+          matTooltipClass="text-white bg-danger lead small"
           cdkDrag>
         <span class="task-title pr-2" [attr.contenteditable]="!task.pending" [innerHtml]="task.title"></span>
         <span *ngIf="!task.pending" class="delete-task" (click)="onTaskDelete(task)">
@@ -48,6 +53,21 @@
         </span>
       </li>
     </ul>
+    <div class="mt-1 mb-3 text-muted small">
+      <small>
+        <strong>↑/↓</strong> — Go to prev / next task
+        &nbsp;•&nbsp;
+        <strong>Shift+↑/↓</strong> — Move task up / down
+        &nbsp;•&nbsp;
+        <strong>Ctrl+Enter</strong> — Toggle status
+        &nbsp;•&nbsp;
+        <strong>Shift+Enter</strong> — Add new task at next line
+        &nbsp;•&nbsp;
+        <strong>Enter</strong> — Go edit task details
+        &nbsp;•&nbsp;
+        <strong>Ctrl+Backspace</strong> — Delete selected item
+      </small>
+    </div>
     <div class="card bottom-panel">
       <div class="card-header">
         <small>
@@ -76,6 +96,7 @@
         </small>
       </div>
     </div>
+
   </ng-container>
 
   <ng-template #noItems>

@@ -22,11 +22,6 @@ export interface ToDoTask extends ToDoTaskBlank {
    */
   readonly dateChanged: string;
   /**
-   * Position of a task in group. Allows to track changing of state of a concrete
-   * item, including changing od position.
-   */
-  position: number;
-  /**
    * ## UID of element
    */
   groupUid?: string;
@@ -42,6 +37,11 @@ export interface ToDoTask extends ToDoTaskBlank {
    * Status of task: is done or not
    */
   isDone: boolean;
+  /**
+   * Position of a task in group. Allows to track changing of state of a concrete
+   * item, including changing od position.
+   */
+  position?: number;
   /**
    * Any material attached to the task: may be screenshots, photos, pdf- or doc-
    * documents on something else

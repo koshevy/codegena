@@ -196,8 +196,8 @@ export interface AnotherType {
 
 | Command                         | Action                                                                   |
 |---------------------------------|-------------------------------------------------------------------------------|
-| `ng run todo-app-backand` | Run demo backend application. |
-| `ng run todo-app` | Run demo frontend application. |
+| `ng serve todo-app-backend` | Run demo backend application. |
+| `ng serve todo-app` | Run demo frontend application. |
 | `npm run build:all-libs`          | Build all valuable libs and turn applications to use prebuilt versions of libs (not TypeScript). It's necessary for running and testing applications and libraries in terms close to production.             |
 | `npm run clear:prebuilt-libs` | Clear prebuilt libs versions and return project to using live reloading TypeScript sources. |
 | `npm run test:libs` | Test libraries supposed to be published. |

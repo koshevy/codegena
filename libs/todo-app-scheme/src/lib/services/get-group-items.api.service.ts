@@ -17,7 +17,7 @@ import {
 // Typings for this API method
 import { GetGroupItemsParameters, GetGroupItemsResponse } from '../typings';
 // Schemas
-import { schema as domainSchema } from './schema.f494efb9904ca366b64883';
+import { schema as domainSchema } from './schema.b4c655ec1635af1be28bd6';
 
 /**
  * Service for angular based on ApiAgent solution.
@@ -71,7 +71,7 @@ export class GetGroupItemsService extends ApiService<
       params: {
         properties: {
           groupId: {
-            $ref: 'schema.f494efb9904ca366b64883#/components/schemas/Uid'
+            $ref: 'schema.b4c655ec1635af1be28bd6#/components/schemas/Uid'
           },
           isComplete: { type: ['boolean', 'null'], default: null }
         },
@@ -84,26 +84,26 @@ export class GetGroupItemsService extends ApiService<
           'application/json': {
             type: 'array',
             items: {
-              $ref: 'schema.f494efb9904ca366b64883#/components/schemas/ToDoTask'
+              $ref: 'schema.b4c655ec1635af1be28bd6#/components/schemas/ToDoTask'
             }
           }
         },
         '400': {
           'application/json': {
             $ref:
-              'schema.f494efb9904ca366b64883#/components/schemas/HttpErrorBadRequest'
+              'schema.b4c655ec1635af1be28bd6#/components/schemas/HttpErrorBadRequest'
           }
         },
         '404': {
           'application/json': {
             $ref:
-              'schema.f494efb9904ca366b64883#/components/schemas/HttpErrorNotFound'
+              'schema.b4c655ec1635af1be28bd6#/components/schemas/HttpErrorNotFound'
           }
         },
         '500': {
           'application/json': {
             $ref:
-              'schema.f494efb9904ca366b64883#/components/schemas/HttpErrorServer'
+              'schema.b4c655ec1635af1be28bd6#/components/schemas/HttpErrorServer'
           }
         }
       }

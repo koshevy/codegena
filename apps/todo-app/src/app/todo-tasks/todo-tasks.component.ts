@@ -1,18 +1,27 @@
 import _ from 'lodash';
 
-import { asyncScheduler, merge, of, Observable, Subject } from 'rxjs';
+import {
+    asyncScheduler,
+    merge,
+    of,
+    Observable,
+    Subject,
+    NEVER
+} from 'rxjs';
 import {
     bufferWhen,
-    catchError,
     debounceTime,
     distinctUntilChanged,
     filter,
     map,
     observeOn,
-    scan,
+    retryWhen,
     share,
+    shareReplay,
     startWith,
-    takeUntil
+    switchMap,
+    takeUntil,
+    tap
 } from 'rxjs/operators';
 import {
     Component,
@@ -24,6 +33,7 @@ import {
     NgZone,
     ViewChild
 } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 // It's just why plugin can be skipped by tree-shaker
 import * as frolaListPlugin from 'froala-editor/js/plugins/lists.min';
@@ -43,9 +53,10 @@ import {
 import { TodoTasksStore } from './todo-tasks.store';
 
 import {
-    createNewToDoTaskBlank,
+    createNewTaskTeaser,
     getFullTextOfSelectedTask,
-    parseFullTextTask
+    parseFullTextTask,
+    syncTasksStatus
 } from './lib/helpers';
 
 // TaskListComponent types
@@ -57,7 +68,7 @@ import {
 
 // ***
 
-const autoSavePeriod = 2000;
+const autoSavePeriod = 800;
 
 // ***
 
@@ -158,13 +169,14 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
      */
     syncedTaskList: ToDoTaskTeaser[];
 
-    // *** Public events
+    // *** Public methods
 
     constructor(
         private store: TodoTasksStore,
         private cdr: ChangeDetectorRef,
         private matSnackBar: MatSnackBar,
-        private ngZone: NgZone
+        private ngZone: NgZone,
+        private route: ActivatedRoute
     ) {
         this.destroy$ = new Subject<void>();
         // Merged sources of truth
@@ -172,6 +184,8 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
         // Make context flow
         this.context$ = this.getNewContextFlow();
     }
+
+    // *** Hooks
 
     ngOnInit(): void {
         // Bind context applier to context changes
@@ -186,13 +200,14 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
             this.changeSelectedTask.bind(this)
         );
 
-        // Turn on listener triggering `SaveChangedItems`
+        // Turn on listener triggering `SaveChangedTasks`
         // when any task changed
         this.initAutoSaveListener();
     }
 
     ngOnDestroy(): void {
         this.destroy$.next();
+        this.destroy$.complete()
     }
 
     // *** Events
@@ -223,6 +238,12 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
         }
     }
 
+    /**
+     * Listening custom events from {@link TaskListComponent}.
+     *
+     * @param event
+     * Event payload dat sent from
+     */
     onTaskListEvent(event: TaskListEventData): void {
         switch (event.type) {
             case TaskListEventType.FocusDelegated:
@@ -236,7 +257,7 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
                 break;
             case TaskListEventType.TaskChanged:
                 this.manualActions$.next({
-                    $$lastAction: ActionType.EditTaskOptimistic,
+                    $$lastAction: ActionType.EditTask,
                     lastEditingData: {
                         title: event.title,
                         uid: event.uid
@@ -252,7 +273,7 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
                 break;
             case TaskListEventType.TaskDeleted:
                 this.manualActions$.next({
-                    $$lastAction: ActionType.DeleteTaskOptimistic,
+                    $$lastAction: ActionType.DeleteTask,
                     lastDeletedTaskUid: event.uid
                 });
                 break;
@@ -278,20 +299,12 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
      * @param context
      */
     protected applyContext(context: ComponentContext): void {
-        // Assert context was intialized correctly
         if (!context) {
-            this.matSnackBar.open('Something goes wrong!', 'Reload', {
-                panelClass: ['alert', 'alert-danger']
-            }).onAction().subscribe(() => {
-                // Repeats attempt
-                location.reload();
-            });
-
             return;
         }
 
         switch (context.$$lastAction) {
-            case ActionType.AddNewTaskOptimistic:
+            case ActionType.AddNewTask:
                 this.updateTaskEditor(context);
                 this.syncedTaskList = context.tasks
                     ? [...context.tasks]
@@ -304,10 +317,18 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
 
                 break;
 
-            case ActionType.EditTaskOptimistic:
-                // it's mean only title wa changed (from list)
-                if (context.lastEditingData.description === undefined) {
+            case ActionType.EditTask:
+                /**
+                 * {@link this.syncedTaskList} has to be saved after editing
+                 * only when editing was caused in a TaskEditor. If editing
+                 * happened in TaskList, updating list should drive to cursor reset.
+                 */
+                if (context.lastEditingData.description === undefined) { // not in editor
                     this.updateTaskEditor(context);
+                    syncTasksStatus(
+                        context.tasks,
+                        this.syncedTaskList
+                    );
                 } else {
                     this.syncedTaskList = context.tasks
                         ? [...context.tasks]
@@ -317,9 +338,9 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
                 break;
 
             // Return focus to selected task after moving
-            case ActionType.ChangeTaskPositionOptimistic:
-            case ActionType.AddNewEmptyTaskAfterOptimistic:
-            case ActionType.DeleteTaskOptimistic:
+            case ActionType.ChangeTaskPosition:
+            case ActionType.AddNewEmptyTaskAfter:
+            case ActionType.DeleteTask:
                 this.syncedTaskList = context.tasks
                     ? [...context.tasks]
                     : null;
@@ -328,13 +349,20 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
 
                 break;
 
-            // for this case nothing to apply in component
-            case ActionType.SaveChangedItems:
+            // notify and do `syncTasksStatus`
+            case ActionType.SaveChangedTasks:
 
                 this.matSnackBar.open('Changes saved', null, {
                     duration: 1000,
                     panelClass: ['alert', 'alert-success']
                 });
+
+            // do `syncTasksStatus`
+            case ActionType.MarksChangedTasksAsPending:
+                syncTasksStatus(
+                    context.tasks,
+                    this.syncedTaskList
+                );
 
                 break;
 
@@ -343,9 +371,11 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
                 this.syncedTaskList = context.tasks
                     ? [...context.tasks]
                     : null;
+
+                setTimeout(() => this.setFocusToActiveTask(), 0);
         }
 
-        // Update view related with this.syncedTaskList
+        // Update View related with this.syncedTaskList
         this.cdr.detectChanges();
     }
 
@@ -361,50 +391,78 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
                 startWith({
                     $$lastAction: ActionType.InitializeWithDefaultState
                 }),
-                share(),
-                takeUntil(this.destroy$)
+                share()
             )
         );
     }
 
     protected getNewRouteParamsTruthFlow(): Observable<ComponentTruth> {
-        return of({
-            $$lastAction: ActionType.InitializeWithRouteParams,
-            selectedGroups: []
-        }) as Observable<ComponentTruth>;
+        return this.route.queryParams.pipe(
+            map<{selectedGroup?: string}, ComponentTruth>(queryParams => ({
+                $$lastAction: ActionType.InitializeWithRouteParams,
+                selectedGroupUids: queryParams.selectedGroup
+                    ? [queryParams.selectedGroup]
+                    : []
+            }))
+        );
     }
 
     protected getNewContextFlow(): Observable<ComponentContext> {
         return this.ngZone.runOutsideAngular(() =>
             this.store.getNewContextFlow(this.truth$).pipe(
-                catchError(error => {
-                    console.error('Error has occured in action:');
-                    console.error(error);
+                retryWhen(source =>
+                    source.pipe(switchMap(error => {
+                        this.matSnackBar.open(
+                            `
+                            Something goes wrong (see console).
+                            Context was refreshed.`,
+                            'Got it', {
+                            panelClass: ['alert', 'alert-danger']
+                        });
 
-                    return of(null);
-                })
+                        console.error('Error occured in action');
+                        console.error(error);
+
+                        if (error.name === 'HttpErrorResponse') {
+                            this.matSnackBar.open(
+                                `It seems, there are no internet or problems with server!`,
+                                'Got it', {
+                                    panelClass: ['alert', 'alert-danger']
+                                });
+
+                            return NEVER;
+                        } else {
+                            return of(error);
+                        }
+                    }))
+                ),
+                shareReplay(),
+                takeUntil(this.destroy$)
             )
         );
     }
 
     /**
-     * Listens actions changing any tasks and
-     * buffer them to save all once in a period.
+     * Listens actions changing any tasks, buffer them
+     * and emit action {@link ActionType.SaveChangedTasks}
+     * once in a period.
      */
     protected initAutoSaveListener(): void {
+        // buffering UID's of changed tasks and emitting ActionType.SaveChangedTasks
         this.context$.pipe(
             observeOn(asyncScheduler),
-            map<ComponentContext, ToDoTaskTeaser[] | null>(context => {
-                let changedTaskUid: string[];
+            filter(context => !!context),
+            switchMap<ComponentContext, Observable<ToDoTaskTeaser>>(context => {
+                let changedTaskUid: string[] = [];
 
                 // Decide what are UID of a recently changed task
                 switch (context.$$lastAction) {
-                    case ActionType.AddNewEmptyTaskAfterOptimistic:
-                    case ActionType.AddNewTaskOptimistic:
+                    case ActionType.AddNewEmptyTaskAfter:
+                    case ActionType.AddNewTask:
                         changedTaskUid = [context.lastAddedTask.uid];
                         break;
 
-                    case ActionType.EditTaskOptimistic:
+                    case ActionType.EditTask:
                         changedTaskUid = [
                             // concrete UID could be set or supposed to be the `selectedTaskUid`
                             context.lastEditingData.uid
@@ -413,93 +471,68 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
 
                         break;
 
-                    case ActionType.MarkTaskAsUnDoneOptimistic:
-                    case ActionType.MarkTaskAsDoneOptimistic:
+                    case ActionType.MarkTaskAsUnDone:
+                    case ActionType.MarkTaskAsDone:
                         changedTaskUid = [context.lastToggledTaskUid];
                         break;
 
-                    case ActionType.ChangeTaskPositionOptimistic:
+                    case ActionType.ChangeTaskPosition:
                         changedTaskUid = context.lastAffectedTaskUIds;
 
                         break;
                 }
 
-                // Find whole changed ToDoTaskTeaser
-                if (changedTaskUid) {
-                    const foundItems = _(changedTaskUid)
-                        .tap(v => console.log('tap 0:', v))
-                        .map<ToDoTaskTeaser>((uid: string) =>
-                            _.find(
-                                context.tasks,
-                                task => task.uid === uid
-                            )
+                return of(
+                    // Map task uids to ToDoTaskTeaser objects from context.tasks
+                    ..._.map<string, ToDoTaskTeaser>(changedTaskUid, uid =>
+                        _.find(
+                            context.tasks,
+                            task => task.uid === uid
                         )
-                        .tap(v => console.log('tap:', v))
-                        .filter(task => (task && task.title.trim() !== ''))
-                        .value();
-
-                    return foundItems;
-                } else {
-                    return null;
-                }
+                    )
+                );
             }),
-            filter(uid => !!uid),
+            filter(task => !!task && !task.isInvalid),
             bufferWhen(() =>
-                this.context$.pipe(debounceTime(autoSavePeriod))
+                this.context$.pipe(
+                    debounceTime(autoSavePeriod),
+                    filter(task => !task.hasInvalidTasks)
+                )
             ),
-            filter(bufferedUids => !!bufferedUids.length),
-        ).subscribe((bufferedTasks: ToDoTaskTeaser[][]) => {
-            // uid of tasks have to be saved
-            const flatTask = _(bufferedTasks)
+            filter(bufferedUids => !!bufferedUids.length)
+        ).subscribe((bufferedTasks: ToDoTaskTeaser[]) => {
+            // unique tasks have to be saved
+            const uniqueTasks = _(bufferedTasks)
                 .reverse()
-                .flatten()
                 .uniqBy(task => task.uid)
-                .value();
-
-            if (!flatTask.length) {
-                return;
-            }
+                .value() as ToDoTaskTeaser[];
 
             this.manualActions$.next({
-                $$lastAction: ActionType.SaveChangedItems,
-                lastBufferedChangedTasks: flatTask
+                $$lastAction: ActionType.SaveChangedTasks,
+                lastBufferedChangedTasks: uniqueTasks
             });
         });
     }
 
-    // *** Private methods
+    // *** Private methods (utilites)
 
     private addNewTask({title}: TaskListEventData<TaskListEventType.TaskAdded>): void {
-        const lastAddedTask: ToDoTaskTeaser = {
-            ...createNewToDoTaskBlank(title),
-            failed: false,
-            optimistic: true,
-            pending: false
-        };
-
         this.manualActions$.next({
-            $$lastAction: ActionType.AddNewTaskOptimistic,
-            lastAddedTask
+            $$lastAction: ActionType.AddNewTask,
+            lastAddedTask: createNewTaskTeaser(title)
         });
     }
 
     private addNewEmptyTaskAfterSelected(): void {
-        const lastAddedTask: ToDoTaskTeaser = {
-            ...createNewToDoTaskBlank(''),
-            failed: false,
-            optimistic: true,
-            pending: false
-        };
-
         this.manualActions$.next({
-            $$lastAction: ActionType.AddNewEmptyTaskAfterOptimistic,
-            lastAddedTask
+            $$lastAction: ActionType.AddNewEmptyTaskAfter,
+            lastAddedTask: createNewTaskTeaser('')
         });
     }
 
     private changeSelectedTask(fullText): void {
         this.manualActions$.next({
-            $$lastAction: ActionType.EditTaskOptimistic,
+            $$lastAction: ActionType.EditTask,
             lastEditingData: {
                 ...parseFullTextTask(fullText),
                 uid: null
@@ -509,7 +542,7 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
 
     private moveTaskFromTo({from, to}: TaskListEventData<TaskListEventType.TaskMoved>) {
         this.manualActions$.next({
-            $$lastAction: ActionType.ChangeTaskPositionOptimistic,
+            $$lastAction: ActionType.ChangeTaskPosition,
             lastTaskPositionChanging: { from, to }
         });
     }
@@ -524,7 +557,7 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
 
         // Move item position
         this.manualActions$.next({
-            $$lastAction: ActionType.ChangeTaskPositionOptimistic,
+            $$lastAction: ActionType.ChangeTaskPosition,
             lastTaskPositionChanging: direction
         });
     }
@@ -549,8 +582,8 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
 
     private toggleTaskIsDone(event: TaskListEventData<TaskListEventType.TaskToggled>): void {
         const actionType = event.isDone
-            ? ActionType.MarkTaskAsDoneOptimistic
-            : ActionType.MarkTaskAsUnDoneOptimistic;
+            ? ActionType.MarkTaskAsDone
+            : ActionType.MarkTaskAsUnDone;
 
         this.manualActions$.next({
             $$lastAction: actionType,

@@ -1,14 +1,38 @@
 import _ from 'lodash';
+import * as generateUid from 'nanoid';
+import Ajv from 'ajv';
+
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 
-import { ToDoTask, ToDoGroup } from '@codegena/todo-app-scheme';
+import {
+    ToDoTask,
+    ToDoGroup,
+    ToDoTaskBlank,
+    /**
+     * JSON Schema for validation of tasks.
+     */
+    schema as TodAppJsonSchema
+} from "@codegena/todo-app-scheme";
 import {
     PositionMoveByStep,
     TaskEditingData,
     ToDoTaskTeaser
 } from './context';
 
-let newBlankUidCounter = 0;
+// ***
+
+const avjFactory = new Ajv({
+    allErrors: true,
+    coerceTypes: false
+});
+const taskValidator = avjFactory.compile({
+    ...TodAppJsonSchema.components.schemas.ToDoGroupBlank,
+    components: TodAppJsonSchema.components,
+});
+const taskBlankValidator = avjFactory.compile({
+    ...TodAppJsonSchema.components.schemas.ToDoGroupBlank,
+    components: TodAppJsonSchema.components,
+});
 
 // *** Component helpers
 
@@ -19,7 +43,7 @@ export function getFullTextOfSelectedTask(
     const currentTask = _.find(
         tasks,
         (task: ToDoTaskTeaser) =>
-            task.uid === selectedTaskUid
+            task.uid === selectedTaskUid || task.prevTempUid === selectedTaskUid
     );
 
     let fullText: string;
@@ -27,7 +51,7 @@ export function getFullTextOfSelectedTask(
     if (currentTask) {
         fullText = [
             `<h3>${currentTask.title}</h3>`,
-            `${currentTask.description}`
+            `${currentTask.description || ''}`
         ].join('\n');
     } else {
         fullText = null;
@@ -56,7 +80,31 @@ export function parseFullTextTask(fullText): {
     };
 }
 
-// *** Store
+/**
+ * Syncs significant statuses of task in two lists:
+ * - {@link ToDoTaskTeaser.isInvalid}
+ * - {@link ToDoTaskTeaser.isJustCreated}
+ * - {@link ToDoTaskTeaser.isPending}
+ *
+ * @param from
+ * @param to
+ */
+export function syncTasksStatus(
+    from: ToDoTaskTeaser[],
+    to: ToDoTaskTeaser[]
+) {
+    _.each(from, (task, i) => {
+        if (to[i].uid !== task.uid && to[i].uid !== task.prevTempUid) {
+            throw new Error(`Can't sync validation status! Task lists have are not overlapped!`)
+        }
+
+        to[i].isInvalid = !!task.isInvalid;
+        to[i].isJustCreated = !!task.isJustCreated;
+        to[i].isPending = !!task.isPending;
+    });
+}
+
+// *** Store helpers
 
 /**
  * Add task into list after selected item
@@ -65,33 +113,69 @@ export function parseFullTextTask(fullText): {
  * @param selectedTaskUid uid of already selected item
  * @return
  */
-export function addEmptyTaskAfterSelected<T extends ToDoTask>(
-    tasks: T[],
+export function insertEmptyTaskAfterSelected(
+    tasks: ToDoTaskTeaser[],
     selectedTaskUid: string,
-    newItem: T
-): T[] {
+    newItem: ToDoTaskTeaser
+): ToDoTaskTeaser[] {
     const selectedItemIndex = _.findIndex(
         tasks,
-        (task: ToDoTask) => task.uid === selectedTaskUid
+        (task: ToDoTaskTeaser) =>
+            task.uid === selectedTaskUid || task.prevTempUid === selectedTaskUid
     );
 
     if (selectedItemIndex === -1) {
         throw new Error('Can\'t find task with set id!');
     }
 
-    tasks.splice(selectedItemIndex + 1, 0, newItem);
+    // Clear unused not valid tasks from last time
+    // if they are not going to be saved
+    tasks = filterTasksWithPositionCollapse(
+        tasks,
+        task =>
+            !task.isInvalid || !task.isJustCreated || !!task.isPending
+    );
+
+    const position = (selectedItemIndex < (tasks.length - 1))
+        ? tasks[selectedItemIndex + 1].position
+        : null;
+
+    // inserts new tasks
+    tasks.splice(
+        selectedItemIndex + 1, 0,
+        position
+            ? { ...newItem, position }
+            : _.omit(newItem, ['position'])
+    );
+
+
+    // also, if task was added not at the end of task list,
+    // further items get shifted
+    if (position) {
+        for(let i = selectedItemIndex + 2; i < tasks.length; i++) {
+            tasks[i] = {
+                ...tasks[i],
+                position: tasks[i].position + 1
+            };
+        }
+    }
 
     return tasks;
 }
 
-export function createNewToDoTaskBlank(title, groupUid: number = null): ToDoTask {
+export function createNewTaskTeaser(title, groupUid?: string): ToDoTaskTeaser {
+    const date = new Date();
+
     return {
-        description: '',
+        dateCreated: date.toISOString(),
+        dateChanged: date.toISOString(),
         groupUid,
         isDone: false,
+        isJustCreated: true,
+        position: null,
         title,
-        uid: getNewUid()
-    } as any;
+        uid: generateUid()
+    };
 }
 
 export function editTaskInList(
@@ -122,11 +206,7 @@ export function editTaskInList(
     return [...tasks];
 }
 
-function getNewUid(): number {
-    return --newBlankUidCounter;
-}
-
-export function markTaskInListAs<T extends ToDoTask>(
+export function toggleTaskInList<T extends ToDoTask>(
     tasks: T[],
     uid: string,
     isDone: boolean
@@ -235,4 +315,128 @@ export function swapTasksPositions(
     const fromPosition = tasks[firstIndex].position;
     tasks[firstIndex].position = tasks[secondIndex].position;
     tasks[secondIndex].position = fromPosition;
+}
+
+/**
+ * Get default `groupUid` for new created {@link ToDoTask}
+ *
+ * @param selectedGroupUids
+ * @param tasks
+ * @return
+ * One default groupUid
+ */
+export function getDefaultGroupUid(
+    selectedGroupUids: string[],
+    groups: ToDoGroup[]
+): string {
+    if (selectedGroupUids && selectedGroupUids.length) {
+        return _.first(selectedGroupUids);
+    }
+
+    return groups
+        ? _.first(groups).uid
+        : null;
+}
+
+/**
+ * Downgrade difference between {@link ToDoTaskTeaser} and {@link ToDoTask}:
+ * `ToDoTaskTeaser` have additional temporary UI data but can fail validation
+ * when it's gets saved.
+ *
+ * @param taskTeaser
+ * @return
+ */
+export function downgradeTeaserToTask(
+    taskTeaser: ToDoTaskTeaser
+): ToDoTask {
+    const task = { ...taskTeaser };
+
+    if (!task.description || !task.description.trim()) {
+        delete task.description;
+    } else {
+        task.description = task.description.trim();
+    }
+
+    delete task.isJustCreated;
+    delete task.isPending;
+    delete task.prevTempUid;
+
+    return task;
+}
+
+/**
+ * Similar to {@link downgradeTeaserToTask}, but for
+ * {@link ToDoTaskBlank} — when it's using for first time saving.
+ *
+ * @param taskTeaser
+ * @return
+ */
+export function downgradeTeaserToTaskBlank(
+    taskTeaser: ToDoTaskTeaser
+): ToDoTaskBlank {
+    const task = downgradeTeaserToTask(taskTeaser) as any;
+
+    delete task.dateChanged;
+    delete task.dateCreated;
+    delete task.uid;
+
+    return task;
+}
+
+export function downgradeTeasersToTasks(
+    taskTeasers: ToDoTaskTeaser[]
+): ToDoTask[] {
+    return _.map(taskTeasers, downgradeTeaserToTask);
+}
+
+export function assureTaskUidIsActual(
+    uid: string,
+    earlyChangedUids: {[prevUid: string]: string}
+) {
+    return (earlyChangedUids || {})[uid] || uid;
+}
+
+/**
+ * Updates {@link ToDoTaskTeaser.isInvalid} property of `task`;
+ * Mutates object.
+ *
+ * @param task
+ */
+export function validateTask(task: ToDoTaskTeaser): void {
+    task.isInvalid = task.isJustCreated
+        ? !taskBlankValidator(downgradeTeaserToTaskBlank(task))
+        : !taskValidator(downgradeTeaserToTask(task));
+}
+
+/**
+ *
+ * @param tasks
+ * @param condition
+ * @return
+ * New array without filtered elements and with collapsed
+ * {@link ToDoTaskTeaser.position} of tasks that follow after
+ * removed items.
+ */
+export function filterTasksWithPositionCollapse(
+    tasks: ToDoTaskTeaser[],
+    condition: (task: ToDoTaskTeaser) => boolean
+): ToDoTaskTeaser[] {
+    let offset = 0;
+    const result = [];
+
+    for (let i = 0; i < tasks.length; i++) {
+        const task = offset
+            ? { ...tasks[i], position: tasks[i].position - offset }
+            : tasks[i];
+
+        if (condition(task)) {
+            result.push(task);
+        } else {
+            offset++;
+        }
+    }
+
+    console.log('result', result);
+
+    return result;
 }

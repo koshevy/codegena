@@ -237,6 +237,11 @@ export const schema = {
             "type": "boolean",
             "default": "false"
           },
+          "position": {
+            "type": "number",
+            "min": 0,
+            "max": 4096
+          },
           "attachments": {
             "type": "array",
             "items": {
@@ -271,11 +276,6 @@ export const schema = {
                 "type": "string",
                 "format": "date-time",
                 "readOnly": true
-              },
-              "position": {
-                "type": "number",
-                "min": 0,
-                "max": 4096
               }
             },
             "required": [
@@ -365,6 +365,6 @@ export const schema = {
       }
     }
   },
-  "$id": "schema.f494efb9904ca366b64883"
+  "$id": "schema.b4c655ec1635af1be28bd6"
 };
 
