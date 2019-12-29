@@ -24,7 +24,10 @@
           [cdkDragDisabled]="group.optimistic || group.failed || group.removing"
           cdkDrag
       >
-        <h4 ngbDropdown>
+        <h4 ngbDropdown [class.mb-0]="!group.description">
+          <span class="text-muted">
+            <mat-icon>done_all</mat-icon>
+          </span>
           {{group.title}}
           <span class="badge badge-pill badge-info">
             {{ group.countOfDone }} / {{ group.totalCount }}
@@ -67,10 +70,7 @@
             </ng-template>
           </div>
         </h4>
-        <p>
-          <span class="text-muted">
-            <mat-icon>done_all</mat-icon>
-          </span>
+        <p *ngIf="group.description" style="max-width: 720px">
           {{group.description}}
         </p>
         <span class="drag-handle text-muted" cdkDragHandle>

@@ -54,8 +54,8 @@
 .drag-handle{
   position: absolute;
   right: 6px;
-  top: 50px;
-  transform: translateY(-25%);
+  top: 50%;
+  transform: translateY(-40%);
   cursor: grab;
 }
 
