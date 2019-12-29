@@ -207,6 +207,7 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
 
     ngOnDestroy(): void {
         this.destroy$.next();
+        this.destroy$.complete()
     }
 
     // *** Events
@@ -390,8 +391,7 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
                 startWith({
                     $$lastAction: ActionType.InitializeWithDefaultState
                 }),
-                share(),
-                takeUntil(this.destroy$)
+                share()
             )
         );
     }
@@ -436,7 +436,8 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
                         }
                     }))
                 ),
-                shareReplay()
+                shareReplay(),
+                takeUntil(this.destroy$)
             )
         );
     }
@@ -498,7 +499,7 @@ export class TodoTasksComponent implements OnDestroy, OnInit {
                     filter(task => !task.hasInvalidTasks)
                 )
             ),
-            filter(bufferedUids => !!bufferedUids.length),
+            filter(bufferedUids => !!bufferedUids.length)
         ).subscribe((bufferedTasks: ToDoTaskTeaser[]) => {
             // unique tasks have to be saved
             const uniqueTasks = _(bufferedTasks)

@@ -44,7 +44,6 @@
           [matTooltipDisabled]="!task.isInvalid"
           matTooltipClass="text-white bg-danger lead small"
           cdkDrag>
-        {{task.position}}
         <span class="task-title pr-2" [attr.contenteditable]="!task.pending" [innerHtml]="task.title"></span>
         <span *ngIf="!task.pending" class="delete-task" (click)="onTaskDelete(task)">
           <mat-icon>delete_outline</mat-icon>
