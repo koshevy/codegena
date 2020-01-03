@@ -1,6 +1,6 @@
 # Codegeneration from OAS3
 
-> This is an experimental library. Now supporting TypeScript data types and model. Also, generating experimental Angular2+ services.
+> This is an experimental library. Now supporting TypeScript data types and model. Also, generating experimental Angular services.
 >
 > Supporting of other languages and frameworks might be possible in the future.
 
@@ -11,9 +11,27 @@ This project is a kit of tools for generation code from OpenAPI3 specification:
 - Validation tools in clients
 - Extracted JSON Schemas ([example](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/services/schema.f494efb9904ca366b64883.ts))
 
-In the future it's can be appended with:
+In the future it can be appended with:
 - REST API backend service templates
 - Pure validation tools and validation presets
+
+## Some features:
+
+Features of data type generation:
+
+- Can deal with recursive dependencies and deep nestings
+- Smart adding of comments for different contexts ([types](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/to-do-task.ts#L6) / [properties](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/to-do-task.ts#L45) / [type variants](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/to-do-task.ts#L50) / [interface concatenation parts](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/to-do-group.ts#L6) )
+- Extracts common types and adds [imports](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/attachment-meta-image.ts#L2) where it is necessary
+- Makes correct arrays of [simple](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/http-error-bad-request.ts#L7) and [complex](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/to-do-task.ts#L49) types
+- Marks [optional parameters](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/get-groups-parameters.ts#L9) of objects if they are not in `required`.
+- Understands where has to use [OOP inheritance](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/to-do-task.ts#L10) and [interface concatenation](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/to-do-group.ts#L5), including concatenation with [anonymous interface](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/update-group-request.ts#L11)
+- Converts JSON Schema enums to [simple type definitions](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/attachment-meta-document.ts#L22) or in TypeScript Enum, if it uses `$ref` to component.  
+- Converts `additionalProperties` to [correct typescript constructions](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/attachment-meta-image.ts#L24)
+- Converts `anyOf` / `allOf` to type variants 
+- Makes complex data types of
+  - [responses with few codes](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/update-group-response.ts)
+  - requests (including [inline schemas](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/update-group-request.ts#L11))
+  - [parameters](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/update-group-parameters.ts) (both in a query and in a search)
 
 ## Table of contents
 
