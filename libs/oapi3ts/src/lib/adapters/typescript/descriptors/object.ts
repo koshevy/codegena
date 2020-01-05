@@ -84,7 +84,16 @@ export class ObjectTypeScriptDescriptor
             ancestors
         );
 
-        // Обработка собственных свойств
+        // autofill properties from `required` not presented in `properties`
+        // with default options
+        _.each(schema.required || [], propertyName => {
+            if (!schema.properties[propertyName]) {
+                schema.properties[propertyName] = {
+                    description: "Auto filled property from `required`"
+                }
+            }
+        });
+
         if (schema.properties) {
             _.each(schema.properties, (propSchema, propName) => {
 
@@ -125,10 +134,17 @@ export class ObjectTypeScriptDescriptor
         // обработка свойств предков
         if (this.ancestors) {
             _.each(this.ancestors, ancestor => {
-                _.assign(
-                    this.propertiesSets[0],
-                    ancestor['propertiesSets'][0] || {}
+                const ancestorProperties = _.mapValues(
+                    ancestor['propertiesSets'][0] || {},
+                    // applying local `required` for inherited props
+                    (property, propertyName) => {
+                        return _.includes(this.schema.required || [], propertyName)
+                            ? {...property, required: true}
+                            : property
+                    }
                 );
+
+                _.assign(this.propertiesSets[0], ancestorProperties);
             });
         } else if (
             // если по итогам, свойств нет, указывается
