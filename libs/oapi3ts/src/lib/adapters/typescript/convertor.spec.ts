@@ -140,6 +140,100 @@ describe('Typescript convertor isolated schema\'s rendering', () => {
         ) as [ArrayTypeScriptDescriptor];
         const [descriptor] = container;
         const renderedArray = descriptor.render([], true);
+
+        expect(renderedArray.replace(/\s+/g, ' ').trim()).toBe([
+            `/**`,
+            `* ## Simple array with common item definitions (arrays)`,
+            `*/`,
+            `export type ArrayOfArrays = Array<Array<number>>;`,
+        ].join(' '));
+    });
+
+    it('should convert array scheme with exactly items order', () => {
+        const cases = schemaCases.simple;
+        const container = convertor.convert(
+            cases.arrayExactly,
+            {},
+            'ArrayWithExactlyOrder'
+        ) as [ArrayTypeScriptDescriptor];
+        const [descriptor] = container;
+        const renderedArray = descriptor.render([], true);
+
+        expect(renderedArray.replace(/\s+/g, ' ').trim()).toBe([
+            `/**`,
+            `* ## Simple array with exactly items order`,
+            `*/`,
+            `export type ArrayWithExactlyOrder = [`,
+            `string,`,
+            `// String item at first place`,
+            `number,`,
+            `// Number item at second place`,
+            `{`,
+            `[key: string]: boolean;`,
+            `}`,
+            `// Object item at third place`,
+            `];`
+        ].join(' '));
+    });
+
+    it('should convert complex `oneOf`-scheme as root', () => {
+        const cases = schemaCases.complex;
+        const container = convertor.convert(
+            cases.complexOneOf,
+            {},
+            'ComplexUnionOfObjects'
+        ) as [ObjectTypeScriptDescriptor];
+        const [descriptor] = container;
+        const renderedOneOf = descriptor.render([], true);
+
+        expect(renderedOneOf.replace(/\s+/g, ' ').trim()).toBe([
+            `/**`,
+            `* ## Complex union schema`,
+            `* Complex union of different types with complex condition`,
+            `*/`,
+            `export type ComplexUnionOfObjects =`,
+            `| {`,
+            `/**`,
+            `* Type of person`,
+            `*/`,
+            `type: 'individual' | 'person';`,
+            `firstName: string;`,
+            `lastName: string;`,
+            `}`,
+            `// First case: a person`,
+            `| {`,
+            `/**`,
+            `* Type of commercial organization`,
+            `*/`,
+            `type: 'commercial-company' | 'non-government-organization';`,
+            `companyName: string;`,
+            `branch?: 'it' | 'horeca' | 'retail' | 'sport';`,
+            `}`,
+            `// Second case: an organization`,
+            `| '[PROFILE_FROM_STORAGE]'`,
+            `// Information should be obtained by last OPERATION_ID in cookies`,
+            `| -1;`,
+            `// Information should be obtained by last unsaved request`
+        ].join(' '));
+    });
+
+    it('should convert simple `allOf`-scheme as root', () => {
+        const cases = schemaCases.complex;
+        const container = convertor.convert(
+            cases.simpleAllOf,
+            {},
+            'SimpleMixedAllOfType'
+        ) as [ObjectTypeScriptDescriptor];
+        const [descriptor] = container;
+        const renderedAllOf = descriptor.render([], true);
+
+        expect(renderedAllOf.replace(/\s+/g, ' ').trim()).toBe([
+            `/** * ## Simple merging schema * Simple merging of object types */`,
+            `export interface SimpleMixedAllOfType { /** * Type of commercial`,
+            `organization */ type: 'commercial-company' | 'non-government-organization';`,
+            `firstName?: string; lastName: string; companyName: string; branch?:`,
+            `'it' | 'horeca' | 'retail' | 'sport'; }`
+        ].join(' '));
     });
 
     it(
