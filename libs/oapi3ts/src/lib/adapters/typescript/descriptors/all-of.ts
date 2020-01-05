@@ -93,22 +93,6 @@ export class AllOfTypeScriptDescriptor extends AbstractTypeScriptDescriptor {
         this.initSubitemsData();
     }
 
-    /**
-     * `AllOfTypeScriptDescriptor`-friendly data
-     * for merging into other (usually parent) `AllOfTypeScriptDescriptor`.
-     */
-    public getAllOfFriendlyData(): {
-        localSchema: SchemaObject;
-        namedObjectDescriptors: DataTypeContainer;
-        otherAccessedTypes: DataTypeContainer;
-    } {
-        return {
-            localSchema: this.localSchema,
-            namedObjectDescriptors: this.namedObjectDescriptors,
-            otherAccessedTypes: this.otherAccessedTypes
-        };
-    }
-
     protected initSubitemsData(): void {
         const subDescriptors: DataTypeContainer = _(this.schema['allOf'])
             .map(schema => {
@@ -239,25 +223,32 @@ export class AllOfTypeScriptDescriptor extends AbstractTypeScriptDescriptor {
     }
 
     protected mergeToLocalScheme(scheme: SchemaObject) {
-        if (!this.localSchema) {
-            this.localSchema = {
+        const localSchema = this.localSchema
+            || {
                 description: this.schema.description,
                 properties: {},
                 required: [],
                 title: this.schema.title,
                 type: 'object',
             };
-        }
 
-        _.merge(
-            this.localSchema,
-            _.cloneDeep(_.pick(scheme, [
-                'properties',
-                'required',
-                'type',
-                'additionalProperties'
-            ]))
+        const mixingProps = [
+            'properties',
+            'required',
+            'type',
+            'additionalProperties'
+        ];
+
+        const overlap = _.pick(scheme, mixingProps);
+        const updatedDataDiff = _.merge(_.cloneDeep(localSchema), overlap);
+        const isItReallyChanged = !_.isEqual(
+            _.pick(updatedDataDiff, mixingProps),
+            _.pick(localSchema, mixingProps)
         );
+
+        if (isItReallyChanged) {
+            this.localSchema = _.merge(localSchema, overlap);
+        }
     }
 
     protected mergeOtherAllOf(otherAllOf: AllOfTypeScriptDescriptor): void {
