@@ -23,14 +23,14 @@ Features of data type generation:
 - Smart adding of comments for different contexts ([types](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/to-do-task.ts#L6) / [properties](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/to-do-task.ts#L45) / [type variants](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/to-do-task.ts#L50) / [interface concatenation parts](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/to-do-group.ts#L6) )
 - Extracts common types and adds [imports](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/attachment-meta-image.ts#L2) where it is necessary
 - Makes correct arrays of [simple](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/http-error-bad-request.ts#L7) and [complex](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/to-do-task.ts#L49) types
-- Marks [optional parameters](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/get-groups-parameters.ts#L9) of objects if they are not in `required`.
-- Understands where has to use [OOP inheritance](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/to-do-task.ts#L10) and [interface concatenation](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/to-do-group.ts#L5), including concatenation with [anonymous interface](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/update-group-request.ts#L11)
-- Converts JSON Schema enums to [simple type definitions](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/attachment-meta-document.ts#L22) or in TypeScript Enum, if it uses `$ref` to component.  
+- Marks [optional parameters](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/get-groups-parameters.ts#L9) of objects if they are not in `required`
+- Understands where has to use [OOP inheritance](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/to-do-task.ts#L10) and [interface concatenation](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/to-do-group.ts#L5)
+- Converts JSON Schema enums to [simple type definitions](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/attachment-meta-document.ts#L22) or in TypeScript Enum, if it uses `$ref` to component  
 - Converts `additionalProperties` to [correct typescript constructions](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/attachment-meta-image.ts#L24)
 - Converts `anyOf` / `allOf` to type variants 
 - Makes complex data types of
   - [responses with few codes](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/update-group-response.ts)
-  - requests (including [inline schemas](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/update-group-request.ts#L11))
+  - [requests](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/create-group-item-request.ts#L4)
   - [parameters](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/update-group-parameters.ts) (both in a query and in a search)
 
 ## Table of contents
