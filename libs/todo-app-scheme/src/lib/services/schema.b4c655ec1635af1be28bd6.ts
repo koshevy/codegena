@@ -276,7 +276,8 @@ export const schema = {
                 "type": "string",
                 "format": "date-time",
                 "readOnly": true
-              }
+              },
+              "position": {}
             },
             "required": [
               "dateChanged",
