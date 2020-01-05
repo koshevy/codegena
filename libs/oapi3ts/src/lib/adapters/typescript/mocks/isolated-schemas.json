@@ -15,6 +15,26 @@
       "minLength": 0,
       "minLength": 100
     },
+    "objectWithRequiredOverflow": {
+      "type": "object",
+      "properties": {
+        "firstProperty": {
+          "type": "number"
+        },
+        "secondProperty": {
+          "type": "string"
+        },
+        "thirdProperty": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "firstProperty",
+        "secondProperty",
+        "thirdProperty",
+        "fourthProperty"
+      ]
+    },
     "arrayOfAny": {
       "title": "Simple array with common item definitions (any)",
       "type": "array"
@@ -190,6 +210,45 @@
           ]
         }
       ]
+    },
+    "simpleAllOfWithOverlappedRequired": {
+      "title": "Simple merging schema with overlapped 'required'",
+      "description": "Overlapping required on non-anonymous schema",
+      "allOf": [
+        {
+          "$ref": "fake-file#/components/SourceObject"
+        },
+        {
+          "required": []
+        }
+      ],
+      "components": {
+        "SourceObject": {
+          "type": "object",
+          "description": "First case: a person",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "Type of person",
+              "enum": [
+                "individual",
+                "person"
+              ]
+            },
+            "firstName": {
+              "type": "string"
+            },
+            "lastName": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "firstName",
+            "lastName"
+          ]
+        }
+      }
     },
     "complexAllOf": {
       "title": "Complex merging schema",

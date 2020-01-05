@@ -708,6 +708,12 @@
               "$ref": "#/components/schemas/AttachmentMeta"
             },
             "maxItems": 16
+          },
+          "position": {
+            "description": "Position of a task in list. Allows to track changing of state of a concrete item, including changing od position.",
+            "type": "number",
+            "min": 0,
+            "max": 4096
           }
         },
         "required": [
@@ -744,12 +750,6 @@
                 "type": "string",
                 "format": "date-time",
                 "readOnly": true
-              },
-              "position": {
-                "description": "Position of a task in list. Allows to track changing of state of a concrete item, including changing od position.",
-                "type": "number",
-                "min": 0,
-                "max": 4096
               }
             },
             "required": [

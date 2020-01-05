@@ -71,6 +71,28 @@ describe('Typescript convertor isolated schema\'s rendering', () => {
             .toThrow();
     });
 
+    it(
+        [
+            'should convert object scheme to interface',
+            'and fill missed property from required'
+        ].join(' '), () => {
+            const cases = schemaCases.simple;
+            const container = convertor.convert(
+                cases.objectWithRequiredOverflow,
+                {}
+            ) as [ObjectTypeScriptDescriptor];
+            const [descriptor] = container;
+            const renderedObject = descriptor.render([], false)
+                .replace(/\s+/g, ' ').trim()
+
+            expect(renderedObject).toBe([
+                '{ firstProperty: number; secondProperty: string; thirdProperty:',
+                '{ [key: string]: any }; /** * Auto filled property from `required`',
+                '*/ fourthProperty: any }'
+            ].join(' '));
+        }
+    );
+
     it('should convert array scheme as array of any', () => {
         const cases = schemaCases.simple;
         const container = convertor.convert(
@@ -118,101 +140,28 @@ describe('Typescript convertor isolated schema\'s rendering', () => {
         ) as [ArrayTypeScriptDescriptor];
         const [descriptor] = container;
         const renderedArray = descriptor.render([], true);
-
-        expect(renderedArray.replace(/\s+/g, ' ').trim()).toBe([
-            `/**`,
-            `* ## Simple array with common item definitions (arrays)`,
-            `*/`,
-            `export type ArrayOfArrays = Array<Array<number>>;`,
-        ].join(' '));
     });
 
-    it('should convert array scheme with exactly items order', () => {
-        const cases = schemaCases.simple;
-        const container = convertor.convert(
-            cases.arrayExactly,
-            {},
-            'ArrayWithExactlyOrder'
-        ) as [ArrayTypeScriptDescriptor];
-        const [descriptor] = container;
-        const renderedArray = descriptor.render([], true);
+    it(
+        [
+            'should convert simple anonymous `allOf`-scheme',
+            'as a non-root with overlapping of object by {"required": []}'
+        ].join(' '),
+        () => {
+            const cases = schemaCases.complex;
+            convertor.setForeignSchemeFn(() => cases.simpleAllOfWithOverlappedRequired);
 
-        expect(renderedArray.replace(/\s+/g, ' ').trim()).toBe([
-            `/**`,
-            `* ## Simple array with exactly items order`,
-            `*/`,
-            `export type ArrayWithExactlyOrder = [`,
-            `string,`,
-            `// String item at first place`,
-            `number,`,
-            `// Number item at second place`,
-            `{`,
-            `[key: string]: boolean;`,
-            `}`,
-            `// Object item at third place`,
-            `];`
-        ].join(' '));
-    });
+            const container = convertor.convert(
+                cases.simpleAllOfWithOverlappedRequired,
+                {},
+                null
+            ) as [ObjectTypeScriptDescriptor];
+            const [descriptor] = container;
+            const renderedAllOf = descriptor.render([], false);
 
-    it('should convert complex `oneOf`-scheme as root', () => {
-        const cases = schemaCases.complex;
-        const container = convertor.convert(
-            cases.complexOneOf,
-            {},
-            'ComplexUnionOfObjects'
-        ) as [ObjectTypeScriptDescriptor];
-        const [descriptor] = container;
-        const renderedOneOf = descriptor.render([], true);
-
-        expect(renderedOneOf.replace(/\s+/g, ' ').trim()).toBe([
-            `/**`,
-            `* ## Complex union schema`,
-            `* Complex union of different types with complex condition`,
-            `*/`,
-            `export type ComplexUnionOfObjects =`,
-            `| {`,
-            `/**`,
-            `* Type of person`,
-            `*/`,
-            `type: 'individual' | 'person';`,
-            `firstName: string;`,
-            `lastName: string;`,
-            `}`,
-            `// First case: a person`,
-            `| {`,
-            `/**`,
-            `* Type of commercial organization`,
-            `*/`,
-            `type: 'commercial-company' | 'non-government-organization';`,
-            `companyName: string;`,
-            `branch?: 'it' | 'horeca' | 'retail' | 'sport';`,
-            `}`,
-            `// Second case: an organization`,
-            `| '[PROFILE_FROM_STORAGE]'`,
-            `// Information should be obtained by last OPERATION_ID in cookies`,
-            `| -1;`,
-            `// Information should be obtained by last unsaved request`
-        ].join(' '));
-    });
-
-    it('should convert simple `allOf`-scheme as root', () => {
-        const cases = schemaCases.complex;
-        const container = convertor.convert(
-            cases.simpleAllOf,
-            {},
-            'SimpleMixedAllOfType'
-        ) as [ObjectTypeScriptDescriptor];
-        const [descriptor] = container;
-        const renderedAllOf = descriptor.render([], true);
-
-        expect(renderedAllOf.replace(/\s+/g, ' ').trim()).toBe([
-            `/** * ## Simple merging schema * Simple merging of object types */`,
-            `export interface SimpleMixedAllOfType { /** * Type of commercial`,
-            `organization */ type: 'commercial-company' | 'non-government-organization';`,
-            `firstName?: string; lastName: string; companyName: string; branch?:`,
-            `'it' | 'horeca' | 'retail' | 'sport'; }`
-        ].join(' '));
-    });
+            expect(renderedAllOf.trim()).toBe('SourceObject // First case: a person');
+        }
+    );
 
     it('should convert complex `allOf`-scheme as root', () => {
         const cases = schemaCases.complex;
@@ -597,7 +546,7 @@ describe(
             expect(propertyNames).toEqual(['listId', 'itemId', 'forceSave']);
         });
 
-        // // RewriteListItemParameters code
+        // RewriteListItemParameters code
         it('should correct convert `RewriteListItemParameters` model that uses `$ref`', () => {
             const rewriteListItemParametersCode
                 = affectedModelsRendered['RewriteListItemParameters'];
@@ -622,6 +571,16 @@ describe(
             expect(response200.length).toBe(1);
             expect(response200[0] instanceof GenericDescriptor).toBeTruthy();
             expect(jsonResponse[0] instanceof AllOfTypeScriptDescriptor).toBeTruthy();
+        });
+
+        // ToDosItem — test of correct inheriting
+        it('should inherit properties and applying own `required` for them', () => {
+            const isPositionRequired = _.get(
+                affectedModels['ToDosItem'],
+                'propertiesSets.0.position.required'
+            );
+
+            expect(isPositionRequired).toBe(true);
         });
     });
 
