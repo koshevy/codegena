@@ -4,7 +4,7 @@
 >
 > Supporting of other languages and frameworks might be possible in the future.
 
-This project is a kit of tools for generation code from OpenAPI3 specification:
+This project is a kit of tools for code generation from OpenAPI3 specification:
 
 - Data types and models (see [generated examples](https://github.com/koshevy/codegena/tree/master/libs/todo-app-scheme/src/lib/typings) from [this spec](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/specs/todo-app-spec.json))
 - REST API client services ([examples](https://github.com/koshevy/codegena/tree/master/libs/todo-app-scheme/src/lib/services))
@@ -71,7 +71,7 @@ Install packages of scope:
 npm i @codegena/oapi3ts, @codegena/ng-api-service, @codegena/oapi3ts-cli
 ```
 
-So you can use `@codegena/oapi3ts-cli` in NodeJS scripts. For example, let create `update-typings.js` script with code:
+So you can use `@codegena/oapi3ts-cli` in NodeJS scripts. For example, lets create `update-typings.js` script with code:
 
 ```javascript
 "use strict";

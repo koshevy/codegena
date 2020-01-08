@@ -174,7 +174,7 @@ export class AllOfTypeScriptDescriptor extends AbstractTypeScriptDescriptor {
         let result;
 
         if (_.get(this.brandNewObjectDescriptor, 'modelName')) {
-            // Case when it's just an interface
+            // Case when it's just an new interface
             result = this.brandNewObjectDescriptor.render(
                 childrenDependencies,
                 rootLevel
