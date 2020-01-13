@@ -68,7 +68,7 @@ Features of data type generation:
 Install packages of scope:
 
 ```
-npm i @codegena/oapi3ts, @codegena/ng-api-service, @codegena/oapi3ts-cli
+npm i @codegena/oapi3ts @codegena/ng-api-service @codegena/oapi3ts-cli
 ```
 
 So you can use `@codegena/oapi3ts-cli` in NodeJS scripts. For example, lets create `update-typings.js` script with code:
@@ -86,7 +86,7 @@ cliApp.createServices('angular');
 Then launch:
 
 ```
-node ./update-typings.js --srcPath ./specs/todo-app-spec.json --destPath ./src/lib --separatedFiles true
+node ./update-typings.js --srcPath ./specs/todo-app-spec.json --destPath ./ --separatedFiles true
 ```
 
 Class `CliApplication` will get command line arguments `destPath`, `srcPath` and `separatedFiles` by itself.

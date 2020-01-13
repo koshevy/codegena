@@ -28,20 +28,20 @@
     "prepare": "tsc src/prepare.ts --outDir ./dist --allowSyntheticDefaultImports true --esModuleInterop true && node ./dist/prepare.js"
   },
   "dependencies": {
-    "@types/node": ">= 8",
     "ajv": ">= 6",
-    "prettier": ">= 1"
+    "prettier": ">= 1",
+    "lodash": ">= 4"
   },
   "devDependencies": {
-    "jest-preset-angular": ">= 7"
+    "jest-preset-angular": ">= 7",
+    "@types/lodash": ">= 4",
+    "@types/node": ">= 8"
   },
-  "peerDependencies": {
+  "optionalDependencies": {
     "@angular/common": ">= 6",
     "@angular/core": ">= 6",
     "@angular/platform-browser-dynamic": ">= 6",
     "rxjs": ">= 6",
-    "lodash": ">= 4",
-    "@types/lodash": ">= 4",
     "core-js": "*",
     "zone.js": ">= 0"
   }

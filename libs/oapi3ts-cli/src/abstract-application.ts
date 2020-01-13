@@ -16,7 +16,7 @@ import {
 import {
     ApiServiceTemplateData,
     createApiServiceWithTemplate
-} from '@codegena/ng-api-service';
+} from '@codegena/ng-api-service/src/lib/templates';
 
 /**
  * Abstract convertor application.

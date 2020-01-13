@@ -26,7 +26,7 @@
     "@codegena/oapi3ts": ">= 2",
     "@codegena/ng-api-service": ">= 2",
     "ajv": ">= 6",
-    "hash": "*",
+    "hash.js": ">= 1",
     "lodash": ">= 4",
     "prettier": ">= 1"
   },
