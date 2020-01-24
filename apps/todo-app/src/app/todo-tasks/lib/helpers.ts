@@ -143,9 +143,7 @@ export function insertEmptyTaskAfterSelected(
     // inserts new tasks
     tasks.splice(
         selectedItemIndex + 1, 0,
-        position
-            ? { ...newItem, position }
-            : _.omit(newItem, ['position'])
+        { ...newItem, position }
     );
 
 
@@ -379,6 +377,10 @@ export function downgradeTeaserToTaskBlank(
     delete task.dateChanged;
     delete task.dateCreated;
     delete task.uid;
+
+    if (!task.position) {
+        delete task.position;
+    }
 
     return task;
 }

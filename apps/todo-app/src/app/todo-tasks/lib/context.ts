@@ -24,14 +24,14 @@ export const enum ActionType {
     MarkTaskAsUnDone = '[Mark task as undone]',
 }
 
-export interface ToDoTaskTeaser extends ToDoTask {
+export interface ToDoTaskTeaser<IsJustCreated extends boolean = boolean> extends ToDoTask {
     isInvalid?: boolean;
 
     /**
      * Means this task just created, has temporary uid
      * and not saved yet.
      */
-    isJustCreated?: boolean;
+    isJustCreated?: IsJustCreated;
 
     /**
      * Means this task is saving now.
@@ -43,6 +43,15 @@ export interface ToDoTaskTeaser extends ToDoTask {
      * it gets saved and gets new UID from backend.
      */
     prevTempUid?: string;
+
+    /**
+     * Just created objects of type `ToDoTaskTeaser`
+     * may skip `position` because should be converted to `ToDoTaskBlank`
+     * before first save, but not to `ToDoTask`.
+     */
+    position: IsJustCreated extends true
+        ? number | null
+        : number;
 }
 
 export interface TaskEditingData {
