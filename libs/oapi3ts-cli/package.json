@@ -36,9 +36,11 @@
     "@types/node": ">= 8",
     "core-js": "*",
     "jest-preset-angular": ">= 7",
-    "hash.js": "*",
     "rxjs": ">= 6",
     "zone.js": "^0.9.1"
+  },
+  "optionalDependencies": {
+    "@microsoft/typescript-etw": "*"
   },
   "browser": {
     "fs": false,

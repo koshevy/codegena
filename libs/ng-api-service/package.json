@@ -41,6 +41,7 @@
     "@angular/common": ">= 6",
     "@angular/core": ">= 6",
     "@angular/platform-browser-dynamic": ">= 6",
+    "@microsoft/typescript-etw": "*",
     "rxjs": ">= 6",
     "core-js": "*",
     "zone.js": ">= 0"
