@@ -3,8 +3,19 @@
   "version": "independent",
   "command": {
     "publish": {
+      "ignoreChanges": [
+        "tslint.json",
+        "jest.config.js",
+        "*.md",
+        "*.spec.ts"
+      ],
       "conventionalCommits": true
+    },
+    "version": {
+      "allowBranch": "master"
     }
   },
+  "npmClient": "yarn",
+  "useWorkspaces": true,
   "packages": ["libs/*"]
 }
