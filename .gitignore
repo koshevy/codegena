@@ -42,6 +42,7 @@ speed-measure-plugin.json
 /libpeerconnection.log
 testem.log
 /typings
+.npmrc
 
 # System Files
 .DS_Store
