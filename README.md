@@ -65,10 +65,16 @@ Features of data type generation:
 
 #### oapi3ts-cli: using in NodeJS scripts
 
-Install packages of scope:
+Install (without optional dependencies):
 
 ```
-npm i @codegena/oapi3ts @codegena/ng-api-service @codegena/oapi3ts-cli
+npm i @codegena/oapi3ts-cli --no-optional
+```
+
+or
+
+```
+yarn add @codegena/oapi3ts-cli --ignore-optional
 ```
 
 So you can use `@codegena/oapi3ts-cli` in NodeJS scripts. For example, lets create `update-typings.js` script with code:
@@ -216,8 +222,8 @@ export interface AnotherType {
 |---------------------------------|-------------------------------------------------------------------------------|
 | `ng serve todo-app-backend` | Run demo backend application. |
 | `ng serve todo-app` | Run demo frontend application. |
-| `npm run build:all-libs`          | Build all valuable libs and turn applications to use prebuilt versions of libs (not TypeScript). It's necessary for running and testing applications and libraries in terms close to production.             |
-| `npm run clear:prebuilt-libs` | Clear prebuilt libs versions and return project to using live reloading TypeScript sources. |
-| `npm run test:libs` | Test libraries supposed to be published. |
-| `npm run docs:swagger-ui` | Runs `swagger-ui` for spec file at http://localhost:3001.  |
+| `yarn run build:all-libs`          | Build all valuable libs and turn applications to use prebuilt versions of libs (not TypeScript). It's necessary for running and testing applications and libraries in terms close to production.             |
+| `yarn run clear:prebuilt-libs` | Clear prebuilt libs versions and return project to using live reloading TypeScript sources. |
+| `yarn run test:libs` | Test libraries supposed to be published. |
+| `yarn run docs:swagger-ui` | Runs `swagger-ui` for spec file at http://localhost:3001.  |
 

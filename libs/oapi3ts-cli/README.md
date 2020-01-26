@@ -10,13 +10,19 @@ See in action: https://codegena-playground.stackblitz.io/ / https://stackblitz.c
 
 ## Using in NodeJS scripts
 
-Install packages of scope:
+Install (without optional dependencies):
 
 ```
-npm i @codegena/oapi3ts @codegena/ng-api-service @codegena/oapi3ts-cli
+npm i @codegena/oapi3ts-cli --no-optional
 ```
 
-So you can use `@codegena/oapi3ts-cli` in NodeJS scripts. For example, let create `update-typings.js` script with code:
+or
+
+```
+yarn add @codegena/oapi3ts-cli --ignore-optional
+```
+
+So you can use `@codegena/oapi3ts-cli` in NodeJS scripts. For example, lets create `update-typings.js` script with code:
 
 ```javascript
 "use strict";
@@ -31,7 +37,7 @@ cliApp.createServices('angular');
 Then launch:
 
 ```
-node ./update-typings.js --srcPath ./specs/todo-app-spec.json --destPath ./src/lib --separatedFiles true
+node ./update-typings.js --srcPath ./specs/todo-app-spec.json --destPath ./ --separatedFiles true
 ```
 
 Class `CliApplication` will get command line arguments `destPath`, `srcPath` and `separatedFiles` by itself.
