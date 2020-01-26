@@ -25,6 +25,9 @@
     "registry": "http://localhost:4873"
   },
   "license": "MIT",
+  "scripts": {
+    "build": "ng build oapi3ts-cli"
+  },
   "dependencies": {
     "@codegena/ng-api-service": "^2.1.7",
     "@codegena/oapi3ts": "^2.1.2",

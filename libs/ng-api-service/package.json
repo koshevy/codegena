@@ -25,7 +25,8 @@
   "scripts": {
     "lint": "ng lint",
     "check": "npm run prepare:ng-api-service && npm run lint && ng test --no-watch --no-progress --browsers=ChromeHeadlessCI",
-    "prepare": "tsc src/prepare.ts --outDir ./dist --allowSyntheticDefaultImports true --esModuleInterop true && node ./dist/prepare.js"
+    "prepare": "tsc src/prepare.ts --outDir ./dist --allowSyntheticDefaultImports true --esModuleInterop true && node ./dist/prepare.js",
+    "build": "ng build ng-api-service"
   },
   "dependencies": {
     "ajv": ">= 6",

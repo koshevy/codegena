@@ -21,6 +21,9 @@
     "url": "https://github.com/koshevy/codegena.git"
   },
   "license": "MIT",
+  "scripts": {
+    "build": "ng build oapi3ts"
+  },
   "dependencies": {
     "ajv": ">= 6",
     "lodash": ">= 4",
