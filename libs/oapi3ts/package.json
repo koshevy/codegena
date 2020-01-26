@@ -26,18 +26,20 @@
     "lodash": ">= 4",
     "prettier": ">= 1"
   },
+  "devDependencies": {
+    "jest-preset-angular": ">= 7"
+  },
   "optionalDependencies": {
+    "@angular/core": ">= 6",
     "@angular/animations": ">= 6",
     "@angular/cli": ">= 6",
     "@angular/common": ">= 6",
-    "@angular/core": ">= 6",
     "@angular/platform-browser-dynamic": ">= 6",
     "@angular/platform-server": ">= 6",
     "@microsoft/typescript-etw": "*",
     "@types/lodash": ">= 4",
     "@types/node": ">= 8",
     "core-js": "*",
-    "jest-preset-angular": ">= 7",
     "rxjs": ">= 6",
     "zone.js": "*"
   }

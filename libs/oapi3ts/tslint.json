@@ -1,7 +1,9 @@
 {
   "extends": "../../tslint.json",
   "rules": {
+    "component-selector": [true, "element", "codegena", "kebab-case"],
     "directive-selector": [true, "attribute", "codegena", "camelCase"],
-    "component-selector": [true, "element", "codegena", "kebab-case"]
+    "deprecation": false,
+    "no-implicit-dependencies": [true, "dev", "optional"]
   }
 }

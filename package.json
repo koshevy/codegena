@@ -30,7 +30,8 @@
     "workspace-schematic": "nx workspace-schematic",
     "dep-graph": "nx dep-graph",
     "help": "nx help",
-    "docs:swagger-ui": "yarn workspace @codegena/todo-app-scheme run docs:swagger-ui"
+    "docs:swagger-ui": "yarn workspace @codegena/todo-app-scheme run docs:swagger-ui",
+    "build-and-publish": "./build-and-publish.sh"
   },
   "private": true,
   "dependencies": {
@@ -57,6 +58,7 @@
     "bootstrap": "^4.4.1",
     "core-js": "^2.5.4",
     "froala-editor": "^3.0.6",
+    "lerna": "^3.20.2",
     "lodash": "^4.17.15",
     "nanoid": "^2.1.8",
     "reflect-metadata": "^0.1.13",
