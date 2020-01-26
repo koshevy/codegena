@@ -1,6 +1,6 @@
 {
   "name": "@codegena/todo-app-scheme",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "peerDependencies": {
     "@angular/common": ">= 8",
     "@angular/core": ">= 8"
@@ -18,7 +18,7 @@
     "build-scripts": "tsc scripts/update-typings.ts"
   },
   "devDependencies": {
-    "@codegena/oapi3ts-cli": "*",
+    "@codegena/oapi3ts-cli": "^2.1.2",
     "jest-preset-angular": ">= 7",
     "swagger-ui-express": "^4.1.2"
   }

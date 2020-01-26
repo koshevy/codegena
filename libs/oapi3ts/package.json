@@ -1,6 +1,6 @@
 {
   "name": "@codegena/oapi3ts",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Codegeneration from OAS3 to TypeScript",
   "author": "koshevy@gmail.com",
   "keywords": [
@@ -30,10 +30,10 @@
     "jest-preset-angular": ">= 7"
   },
   "optionalDependencies": {
-    "@angular/core": ">= 6",
     "@angular/animations": ">= 6",
     "@angular/cli": ">= 6",
     "@angular/common": ">= 6",
+    "@angular/core": ">= 6",
     "@angular/platform-browser-dynamic": ">= 6",
     "@angular/platform-server": ">= 6",
     "@microsoft/typescript-etw": "*",
