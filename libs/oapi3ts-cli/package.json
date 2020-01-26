@@ -21,9 +21,6 @@
     "type": "git",
     "url": "https://github.com/koshevy/codegena.git"
   },
-  "publishConfig": {
-    "registry": "http://localhost:4873"
-  },
   "license": "MIT",
   "scripts": {
     "build": "ng build oapi3ts-cli"

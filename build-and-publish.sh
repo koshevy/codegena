@@ -7,4 +7,8 @@ yarn run build:all-libs &&
 yarn run test:libs &&
 rm -rf dist/* && # second clearing before it builds changed libs
 ./node_modules/.bin/lerna run build --since $(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1)) &&
-./node_modules/.bin/lerna publish --yes --contents dist
+
+for D in `ls ./dist`
+do
+    cd ./dist/${D} && yarn publish --access public && cd ../../
+done

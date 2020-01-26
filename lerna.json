@@ -6,7 +6,6 @@
       "ignoreChanges": [
         "tslint.json",
         "jest.config.js",
-        "*.md",
         "*.spec.ts"
       ],
       "conventionalCommits": true
