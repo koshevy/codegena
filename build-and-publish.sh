@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 
 yarn lint &&
-rm -rf dist/* && # first clearing before tests
-./node_modules/.bin/lerna version --conventional-commits &&
+rm -rf dist/* &&
+# version update error ignoring because
+# there may be unpublished packages with updated version
+(./node_modules/.bin/lerna version --conventional-commits || true) &&
 yarn run build:all-libs &&
 yarn run test:libs &&
-rm -rf dist/* && # second clearing before it builds changed libs
-./node_modules/.bin/lerna run build --since $(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1)) &&
 
+# publish all built libs. errors are ignored
 for D in `ls ./dist`
 do
-    cd ./dist/${D} && yarn publish --access public && cd ../../
+    (cd ./dist/${D} && yarn publish --access public && cd ../../) || true
 done
