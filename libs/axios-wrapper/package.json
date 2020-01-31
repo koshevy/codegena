@@ -1,0 +1,15 @@
+{
+  "name": "@codegena/axios-wrapper",
+  "version": "0.0.1",
+  "devDependencies": {
+    "axios": "^0.19.2",
+    "jest-preset-angular": "^8.0.0",
+    "moxios": "^0.4.0"
+  },
+  "dependencies": {
+    "ajv": "^6.11.0",
+    "lodash": "^4.17.15",
+    "nanoid": "^2.1.11",
+    "prettier": "^1.19.1"
+  }
+}

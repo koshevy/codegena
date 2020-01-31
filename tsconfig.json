@@ -17,14 +17,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@codegena/oapi3ts": [
-        "dist/oapi3ts",
-        "libs/oapi3ts/src/index.ts"
-      ],
-      "@codegena/oapi3ts/*": [
-        "dist/oapi3ts/*",
-        "libs/oapi3ts/src/*"
-      ],
+      "@codegena/oapi3ts": ["dist/oapi3ts", "libs/oapi3ts/src/index.ts"],
+      "@codegena/oapi3ts/*": ["dist/oapi3ts/*", "libs/oapi3ts/src/*"],
       "@codegena/ng-api-service": [
         "dist/ng-api-service",
         "libs/ng-api-service/src/index.ts"
@@ -48,7 +42,8 @@
       "@codegena/todo-app-scheme/*": [
         "dist/todo-app-scheme/*",
         "libs/todo-app-scheme/src/*"
-      ]
+      ],
+      "@codegena/axios-wrapper": ["libs/axios-wrapper/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

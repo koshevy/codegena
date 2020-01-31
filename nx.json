@@ -25,6 +25,9 @@
     },
     "todo-app-scheme": {
       "tags": []
+    },
+    "axios-wrapper": {
+      "tags": []
     }
   }
 }

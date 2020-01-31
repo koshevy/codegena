@@ -311,6 +311,44 @@
           "styleext": "scss"
         }
       }
+    },
+    "axios-wrapper": {
+      "projectType": "library",
+      "root": "libs/axios-wrapper",
+      "sourceRoot": "libs/axios-wrapper/src",
+      "prefix": "codegena",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "libs/axios-wrapper/tsconfig.lib.json",
+            "project": "libs/axios-wrapper/ng-package.json"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/axios-wrapper/tsconfig.lib.json",
+              "libs/axios-wrapper/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/axios-wrapper/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/axios-wrapper/jest.config.js",
+            "tsConfig": "libs/axios-wrapper/tsconfig.spec.json",
+            "setupFile": "libs/axios-wrapper/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
     }
   },
   "cli": {
