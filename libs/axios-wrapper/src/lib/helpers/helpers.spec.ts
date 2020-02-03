@@ -1,7 +1,11 @@
 import * as generateUid from 'nanoid';
 import * as _ from 'lodash';
 
-import { createUrl, NoNecessaryPathParam } from './index';
+import {
+    createUrl,
+    getAxiosInstance,
+    NoNecessaryPathParam
+} from './index';
 
 describe('Working of helpers:', () => {
 
@@ -40,7 +44,7 @@ describe('Working of helpers:', () => {
             );
 
             expect(result).toEqual({
-                url: `/group/${groupId}/item/${itemId}`,
+                path: `/group/${groupId}/item/${itemId}`,
                 unusedParameters
             })
         });
@@ -52,6 +56,48 @@ describe('Working of helpers:', () => {
                 '/group/{groupId}/item/{itemId}',
                 { groupId }
             )).toThrowError(NoNecessaryPathParam);
+        });
+    });
+
+    describe('`getAxiosInstance` helper', () => {
+        it('should get the same Axios instance for the same config', () => {
+            const config = {
+                baseURL: 'https://some-domain.com/api/',
+                timeout: 1000,
+                headers: {'X-Custom-Header': 'foobar'}
+            };
+
+            const firstAppealing = getAxiosInstance(config);
+            const secondAppealing = getAxiosInstance(config);
+
+            expect(firstAppealing).toBe(secondAppealing);
+            // makes sure this is AxiosInstance with all specified methods
+            [
+                'delete',
+                'get',
+                'getUri',
+                'head',
+                'options',
+                'patch',
+                'post',
+                'put',
+                'request'
+            ].forEach(
+                (property) => expect(firstAppealing).toHaveProperty(property)
+            );
+        });
+
+        it('should get another Axios instance for the each config', () => {
+            const config = {
+                baseURL: 'https://some-domain.com/api/',
+                timeout: 1000,
+                headers: {'X-Custom-Header': 'foobar'}
+            };
+
+            const firstAppealing = getAxiosInstance({...config});
+            const secondAppealing = getAxiosInstance({...config});
+
+            expect(firstAppealing).not.toBe(secondAppealing);
         });
     });
 });
