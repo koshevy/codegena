@@ -31,9 +31,12 @@ describe('Working of validation helpers:', () => {
     });
 
     describe('validation of request', () => {
-        const {request, wrongRequest} = dataForValidating;
-        const contentType = 'application/json';
-        const wrongContentType = 'application/x-www-form-urlencoded';
+        const {
+            contentType,
+            request,
+            wrongContentType,
+            wrongRequest
+        } = dataForValidating;
 
         it('correct validation of request', async function(done) {
             await validateRequest(schemasBundle, contentType, request, externalSchema);

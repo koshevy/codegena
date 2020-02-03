@@ -40,3 +40,6 @@ export const errorResponse = {
     description: 'Server error was occur',
     message: 'Error 500'
 };
+
+export const contentType = 'application/json';
+export const wrongContentType = 'application/x-www-form-urlencoded';
