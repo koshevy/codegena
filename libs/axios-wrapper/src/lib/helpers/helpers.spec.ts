@@ -1,14 +1,15 @@
 import * as generateUid from 'nanoid';
-import * as _ from 'lodash';
 
 import {
     createUrl,
     getAxiosInstance,
-    NoNecessaryPathParam
+    getBaseUrl,
+
+    MissedNecessaryPathParamError,
+    NoBaseUrlRedefineMatchesError
 } from './index';
 
 describe('Working of helpers:', () => {
-
     describe('`createUrl` helper', () => {
         it.each([
             [
@@ -55,12 +56,12 @@ describe('Working of helpers:', () => {
             expect(() => createUrl(
                 '/group/{groupId}/item/{itemId}',
                 { groupId }
-            )).toThrowError(NoNecessaryPathParam);
+            )).toThrowError(MissedNecessaryPathParamError);
         });
     });
 
     describe('`getAxiosInstance` helper', () => {
-        it('should get the same Axios instance for the same config', () => {
+        it('should return the same Axios instance for the same config', () => {
             const config = {
                 baseURL: 'https://some-domain.com/api/',
                 timeout: 1000,
@@ -87,7 +88,7 @@ describe('Working of helpers:', () => {
             );
         });
 
-        it('should get another Axios instance for the each config', () => {
+        it('should return another Axios instance for the each config', () => {
             const config = {
                 baseURL: 'https://some-domain.com/api/',
                 timeout: 1000,
@@ -98,6 +99,57 @@ describe('Working of helpers:', () => {
             const secondAppealing = getAxiosInstance({...config});
 
             expect(firstAppealing).not.toBe(secondAppealing);
+        });
+    });
+
+    describe('`getBaseUrl` helper', () => {
+        const originalServerUrls = [
+            'http://localhost:3000',
+            'http://localhost:3001',
+            'http://localhost:3002',
+            'http://localhost:3003'
+        ];
+
+        it('should return coerced string when `redefineBaseUrl` is string', () => {
+            const newBaseUrl = 'http://localhost:4201';
+
+            expect(getBaseUrl([], newBaseUrl)).toBe(newBaseUrl);
+            expect(getBaseUrl(originalServerUrls, newBaseUrl)).toBe(newBaseUrl);
+        });
+
+        it('should return correct redefined base url when `redefineBaseUrl` is map', () => {
+            const newBaseUrl = 'http://localhost:4202';
+            const obtainedBaseUrl = getBaseUrl(originalServerUrls, {
+                [originalServerUrls[1]]: newBaseUrl
+            });
+
+            expect(obtainedBaseUrl).toBe(newBaseUrl);
+        });
+
+        it('should throw error when mapping has no matches with actual server urls', () => {
+            const newBaseUrl = 'http://localhost:4202';
+
+            // with empty "servers"
+            expect(() => getBaseUrl(
+                [],
+                { 'http://localhost:4200': newBaseUrl }
+            )).toThrowError(NoBaseUrlRedefineMatchesError);
+            // with filled "servers"
+            expect(() => getBaseUrl(
+                originalServerUrls,
+                { 'http://localhost:4200': newBaseUrl }
+            )).toThrowError(NoBaseUrlRedefineMatchesError);
+        });
+
+        it('should return first server path when there are no servers', () => {
+            expect(getBaseUrl(originalServerUrls, null)).toBe(originalServerUrls[0]);
+            expect(getBaseUrl(originalServerUrls, undefined)).toBe(originalServerUrls[0]);
+        });
+
+        it('should return `null` when there are not redefines and servers', () => {
+            expect(getBaseUrl([], null)).toBe(null);
+            expect(getBaseUrl([], undefined)).toBe(null);
+            expect(getBaseUrl(null, undefined)).toBe(null);
         });
     });
 });
