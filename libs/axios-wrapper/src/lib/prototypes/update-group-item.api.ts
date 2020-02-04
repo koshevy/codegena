@@ -1,8 +1,13 @@
-import { AxiosResponse, AxiosRequestConfig } from 'axios';
+import {
+    AxiosResponse,
+    AxiosRequestConfig,
+    AxiosInstance
+} from 'axios';
 
 // tslint:disable-next-line
 import { defaultAxiosConfig } from '@codegena/axios-wrapper/src/lib/configs/index';
 import {
+    AxiosSafeRequestConfig,
     createUrl,
     getAxiosInstance,
     getBaseUrl,
@@ -86,15 +91,31 @@ export const pathTemplate = '/group/{groupId}/item/{itemId}';
 export const envRedefineBaseUrl = environment.redefineBaseUrl;
 export const servers = ['http://localhost:3000'];
 
+interface ApiRequestOptions {
+    axiosRequestConfig?: AxiosSafeRequestConfig,
+    axiosInstance?: AxiosInstance
+};
+
 /**
+ * fixme test with axiosRequestConfig and axiosInstance
+ *
+ * @param request
+ * @param parameters
+ * @param axiosRequestConfig
+ * @param axiosInstance
  * @throws ApiUnexpectedContentTypeError
  * @throws ApiUnexpectedStatusCodeError
  * @throws ApiValidationError
+ * @return
+ * Promise-base response via `axios`
  */
 export default async function updateGroupItem(
     request: UpdateGroupItemRequest,
     parameters?: UpdateGroupItemParameters,
-    axiosConfig: AxiosRequestConfig = defaultAxiosConfig
+    {
+        axiosRequestConfig,
+        axiosInstance
+    }: ApiRequestOptions = {} as any
 ): Promise<AxiosResponse<UpdateGroupItemResponse>> {
 
     const {
@@ -103,7 +124,12 @@ export default async function updateGroupItem(
     } = createUrl(pathTemplate, parameters || {});
     const baseURL = getBaseUrl(servers, envRedefineBaseUrl);
 
-    return getAxiosInstance(axiosConfig).request({
+    if (!axiosInstance) {
+        axiosInstance = getAxiosInstance(defaultAxiosConfig);
+    }
+
+    return axiosInstance.request({
+        ... (axiosRequestConfig || {}),
         baseURL,
         method,
         params: unusedParameters,
