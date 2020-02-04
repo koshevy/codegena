@@ -4,10 +4,40 @@ import axios, {
     AxiosRequestConfig
 } from 'axios';
 
-// *** export classes
+import { defaultAxiosConfig } from '../configs'
+
+// *** export classes and interfaces
 
 export class MissedNecessaryPathParamError extends Error {}
 export class NoBaseUrlRedefineMatchesError extends Error {}
+
+/**
+ * Subset of {@link AxiosRequestConfig} with only properties that cant rewrite
+ * auto-properties have to be sent with auto-generated "wrappers".
+ */
+export type AxiosSafeRequestConfig = {
+    [P in  | 'adapter'
+           | 'auth'
+           | 'cancelToken'
+           | 'headers'
+           | 'httpAgent'
+           | 'httpsAgent'
+           | 'maxContentLength'
+           | 'maxRedirects'
+           | 'onDownloadProgress'
+           | 'onUploadProgress'
+           | 'paramsSerializer'
+           | 'proxy'
+           | 'socketPath'
+           | 'timeout'
+           | 'timeoutErrorMessage'
+           | 'transformRequest'
+           | 'transformResponse'
+           | 'withCredentials'
+           | 'xsrfCookieName'
+           | 'xsrfHeaderName'
+    ]?: AxiosRequestConfig[P];
+};
 
 // *** own variables
 
@@ -61,11 +91,12 @@ export function createUrl(
 
 /**
  * Do caching of axios instance by config instance.
+ * fixme make tests with default config
  *
  * @param config
  * @return
  */
-export function getAxiosInstance(config: AxiosRequestConfig): AxiosInstance {
+export function getAxiosInstance(config: AxiosRequestConfig = defaultAxiosConfig): AxiosInstance {
     let instance;
 
     if (!axiosInstances.has(config)) {
@@ -76,6 +107,19 @@ export function getAxiosInstance(config: AxiosRequestConfig): AxiosInstance {
     }
 
     return instance;
+}
+
+/**
+ * Rewrite (reassign) default config and update default axios instance.
+ * After calling of this function, default axios instance will be renewed,
+ * and all interceptors wil be broken.
+ *
+ * fixme make tests
+ * @param config
+ */
+export function assignDefaultConfig(config: AxiosRequestConfig): void {
+    _.assign(defaultAxiosConfig, config);
+    axiosInstances.set(config, axios.create(defaultAxiosConfig));
 }
 
 /**
