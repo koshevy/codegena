@@ -39,7 +39,7 @@ export type AxiosSafeRequestConfig = {
     ]?: AxiosRequestConfig[P];
 };
 
-// *** own variables
+// *** private variables
 
 const axiosInstances = new WeakMap();
 
@@ -165,6 +165,28 @@ export function getBaseUrl(
     return (serverUrls || []).length ? serverUrls[0] : null;
 }
 
+/**
+ * Getting a "Content-Type" header such also can be "content-type", "Content-type",
+ * "CONTENT-TYPE" and so on.
+ *
+ * @param headers
+ * @return
+ * "Content-Type" header value or `null` if not set
+ */
+export function getContentType(headers: {[key: string]: string}): string | null {
+    if (!headers) {
+        headers = {};
+    }
+
+    const contentTypeKey = _.findKey(
+        headers,
+        (value, key) => /^content-type$/i.test(key)
+    );
+
+    return contentTypeKey ? headers[contentTypeKey] : null;
+}
+
+// TODO do tests of environment
 export function getGlobalEnvironment(): CodegenaAxiosWrapperEnvironment {
     return ('undefined' === typeof environment)
         ? {}

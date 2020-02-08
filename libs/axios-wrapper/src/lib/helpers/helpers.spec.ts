@@ -4,6 +4,7 @@ import {
     createUrl,
     getAxiosInstance,
     getBaseUrl,
+    getContentType,
 
     MissedNecessaryPathParamError,
     NoBaseUrlRedefineMatchesError
@@ -152,4 +153,29 @@ describe('Working of helpers:', () => {
             expect(getBaseUrl(null, undefined)).toBe(null);
         });
     });
+
+    describe('`getContentType` helper', () => {
+        const otherHeaders = {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type-Custom-Param': 'anyvalue;'
+        };
+
+        it.each([
+            'Content-Type',
+            'Content-type',
+            'content-type',
+            'CONTENT-TYPE'
+        ])('should process "%s" header', (headerKey) => {
+            const contentType = 'application/json';
+            expect(getContentType({'Content-Type': contentType})).toBe(contentType);
+            expect(getContentType({
+                ...otherHeaders,
+                [headerKey]: contentType}
+            )).toBe(contentType);
+        });
+
+        it('should deny', () => {
+
+        });
+    })
 });
