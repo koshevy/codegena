@@ -13,7 +13,7 @@ export const request: UpdateGroupItemRequest = {
     groupUid: generateUid(),
     isDone: false,
     position: 0,
-    title: 'Sample group title'
+    title: 'Sample group item title'
 };
 
 export const wrongRequest = {
@@ -21,7 +21,7 @@ export const wrongRequest = {
     group_uid: generateUid(),
     is_done: false,
     _position: 0,
-    _title: 'Sample group title'
+    _title: 'Sample group item title'
 };
 
 export const parameters: UpdateGroupItemParameters = {

@@ -1,3 +1,4 @@
+import { compact } from 'lodash';
 import axios, { AxiosResponse } from 'axios';
 import * as moxios from 'moxios';
 
@@ -10,24 +11,39 @@ import {
 } from '../helpers/validate';
 
 // Designed axios-wrapper prototypes and their meta
+import createGroupApi,
+    * as createGroupApiMeta from './create-group.api';
 import updateGroupItem,
   * as updateGroupItemMeta from './update-group-item.api';
 
 // Auto-generated typings, used with axios-wrappers
+import * as createGroupApiMocks from './mocks/create-group.api';
 import * as updateGroupItemMocks from './mocks/update-group-item.api';
 
-describe('Wrapper for PATCH with request and parameters and response', () => {
+describe.each([
+    [
+        'Wrapper for PATCH with request and parameters and response',
+        updateGroupItem,
+        updateGroupItemMeta,
+        updateGroupItemMocks
+    ],
+    [
+        'Wrapper for POST with request and response and without params',
+        createGroupApi,
+        createGroupApiMeta,
+        createGroupApiMocks
+    ]
+])('%s', (testType, wrapperFunction, wrapperMeta, wrapperMocks) => {
     describe('correct response scenarios', () => {
-
-        const moxiosUrlReg = getRegFromPath(updateGroupItemMeta.pathTemplate);
+        const moxiosUrlReg = getRegFromPath(wrapperMeta.pathTemplate);
 
         beforeEach(function () {
             moxios.install();
             moxios.stubRequest(moxiosUrlReg, {
-                status: updateGroupItemMocks.expectedCode,
-                response: {...updateGroupItemMocks.response},
+                status: wrapperMocks.expectedCode,
+                response: {...wrapperMocks.response},
                 headers: {
-                    'Content-Type': updateGroupItemMocks.contentType
+                    'Content-Type': wrapperMocks.contentType
                 }
             });
         });
@@ -37,16 +53,16 @@ describe('Wrapper for PATCH with request and parameters and response', () => {
         });
 
         it('should pass parameters, request and successful response', function(done) {
-            const request = updateGroupItem(
-                updateGroupItemMocks.request,
-                updateGroupItemMocks.parameters
-            );
+            const request = wrapperFunction(...compact([
+                wrapperMocks.request,
+                wrapperMocks.parameters
+            ]));
 
             request.then((response: AxiosResponse) => {
-                expect(response.data).toEqual(updateGroupItemMocks.response);
-                expect(response.status).toBe(updateGroupItemMocks.expectedCode);
-                expect(response.config.method).toBe(updateGroupItemMeta.method.toLowerCase());
-                expect(response.request.url).toBe(updateGroupItemMocks.expectedUrl);
+                expect(response.data).toEqual(wrapperMocks.response);
+                expect(response.status).toBe(wrapperMocks.expectedCode);
+                expect(response.config.method).toBe(wrapperMeta.method.toLowerCase());
+                expect(response.request.url).toBe(wrapperMocks.expectedUrl);
                 done();
             }).catch(error => {
                 fail(error);
@@ -65,11 +81,11 @@ describe('Wrapper for PATCH with request and parameters and response', () => {
 
             axiosInstance.interceptors.request.use(interceptorRequestSpy);
 
-            const request = updateGroupItem(
-                updateGroupItemMocks.request,
-                updateGroupItemMocks.parameters,
+            const request = wrapperFunction(...compact([
+                wrapperMocks.request,
+                wrapperMocks.parameters,
                 { axiosInstance }
-            );
+            ]));
 
             request.then(() => {
                 expect(interceptorRequestCalled).toBeTruthy();
@@ -91,10 +107,10 @@ describe('Wrapper for PATCH with request and parameters and response', () => {
 
             axiosInstance.interceptors.request.use(interceptorRequestSpy);
 
-            const request = updateGroupItem(
-                updateGroupItemMocks.request,
-                updateGroupItemMocks.parameters
-            );
+            const request = wrapperFunction(...compact([
+                wrapperMocks.request,
+                wrapperMocks.parameters
+            ]));
 
             request.then(() => {
                 expect(interceptorRequestCalled).toBeTruthy();
@@ -109,15 +125,15 @@ describe('Wrapper for PATCH with request and parameters and response', () => {
             const cancelMessage = 'Request canceled as should';
             const cancelToken = axios.CancelToken.source();
 
-            const request = updateGroupItem(
-                updateGroupItemMocks.request,
-                updateGroupItemMocks.parameters,
+            const request = wrapperFunction(...compact([
+                wrapperMocks.request,
+                wrapperMocks.parameters,
                 {
                     axiosRequestConfig: {
                         cancelToken: cancelToken.token
                     }
                 }
-            );
+            ]));
 
             cancelToken.cancel(cancelMessage);
 
@@ -131,10 +147,17 @@ describe('Wrapper for PATCH with request and parameters and response', () => {
         });
 
         it('should throw error when params are wrong', function(done) {
-            const request = updateGroupItem(
-                updateGroupItemMocks.request,
-                updateGroupItemMocks.wrongParameters as any
-            );
+            // Skip this step when no parameters supposed to be passed
+            if (!wrapperMocks.wrongParameters) {
+                done();
+
+                return;
+            }
+
+            const request = wrapperFunction(...compact([
+                wrapperMocks.request,
+                wrapperMocks.wrongParameters as any
+            ]));
 
             request.then(() => {
                 fail('There no successful response expected!');
@@ -147,10 +170,10 @@ describe('Wrapper for PATCH with request and parameters and response', () => {
         });
 
         it('should throw error when request is wrong', function(done) {
-            const request = updateGroupItem(
-                updateGroupItemMocks.wrongRequest as any,
-                updateGroupItemMocks.parameters
-            );
+            const request = wrapperFunction(...compact([
+                wrapperMocks.wrongRequest as any,
+                wrapperMocks.parameters
+            ]));
 
             request.then(() => {
                 fail('There no successful response expected!');
@@ -163,22 +186,22 @@ describe('Wrapper for PATCH with request and parameters and response', () => {
         });
 
         it('should throw error when request Content-Type is wrong', function(done) {
-            const headers = { 'Content-Type': updateGroupItemMocks.wrongContentType };
-            const request = updateGroupItem(
-                updateGroupItemMocks.request,
-                updateGroupItemMocks.parameters,
+            const headers = { 'Content-Type': wrapperMocks.wrongContentType };
+            const request = wrapperFunction(...compact([
+                wrapperMocks.request,
+                wrapperMocks.parameters,
                 {
                     axiosRequestConfig: { headers }
                 }
-            );
+            ]));
 
             request.then(() => {
                 fail('There no successful response expected!');
                 done();
             }).catch((error: ApiUnexpectedContentTypeError) => {
                 expect(error).toBeInstanceOf(ApiUnexpectedContentTypeError);
-                expect(error.contentType).toBe(updateGroupItemMocks.wrongContentType);
-                expect(error.expected).toContain(updateGroupItemMocks.contentType);
+                expect(error.contentType).toBe(wrapperMocks.wrongContentType);
+                expect(error.expected).toContain(wrapperMocks.contentType);
                 expect(error.scope).toBe(ApiValidationScopes.Request);
                 done();
             });
@@ -186,7 +209,7 @@ describe('Wrapper for PATCH with request and parameters and response', () => {
     });
 
     describe('incorrect or error response scenarios', () => {
-        const moxiosUrlReg = getRegFromPath(updateGroupItemMeta.pathTemplate);
+        const moxiosUrlReg = getRegFromPath(wrapperMeta.pathTemplate);
 
         beforeEach(function () {
             moxios.install();
@@ -197,16 +220,16 @@ describe('Wrapper for PATCH with request and parameters and response', () => {
         });
 
         it('should throw error when response Content-Type is wrong', function(done) {
-            const request = updateGroupItem(
-                updateGroupItemMocks.request,
-                updateGroupItemMocks.parameters
-            );
+            const request = wrapperFunction(...compact([
+                wrapperMocks.request,
+                wrapperMocks.parameters
+            ]));
 
             moxios.stubRequest(moxiosUrlReg, {
-                status: updateGroupItemMocks.expectedCode,
-                response: {...updateGroupItemMocks.response},
+                status: wrapperMocks.expectedCode,
+                response: {...wrapperMocks.response},
                 headers: {
-                    'Content-Type': updateGroupItemMocks.wrongContentType
+                    'Content-Type': wrapperMocks.wrongContentType
                 }
             });
 
@@ -215,22 +238,22 @@ describe('Wrapper for PATCH with request and parameters and response', () => {
                 done();
             }).catch((error: ApiUnexpectedContentTypeError) => {
                 expect(error).toBeInstanceOf(ApiUnexpectedContentTypeError);
-                expect(error.contentType).toBe(updateGroupItemMocks.wrongContentType);
-                expect(error.expected).toContain(updateGroupItemMocks.contentType);
+                expect(error.contentType).toBe(wrapperMocks.wrongContentType);
+                expect(error.expected).toContain(wrapperMocks.contentType);
                 expect(error.scope).toBe(ApiValidationScopes.Response);
                 done();
             });
         });
 
         it('should throw error when response status is wrong', function(done) {
-            const request = updateGroupItem(
-                updateGroupItemMocks.request,
-                updateGroupItemMocks.parameters
-            );
+            const request = wrapperFunction(...compact([
+                wrapperMocks.request,
+                wrapperMocks.parameters
+            ]));
 
             moxios.stubRequest(moxiosUrlReg, {
-                status: updateGroupItemMocks.wrongCode,
-                response: {...updateGroupItemMocks.response}
+                status: wrapperMocks.wrongCode,
+                response: {...wrapperMocks.response}
             });
 
             request.then(() => {
@@ -238,24 +261,24 @@ describe('Wrapper for PATCH with request and parameters and response', () => {
                 done();
             }).catch((error: ApiUnexpectedStatusCodeError) => {
                 expect(error).toBeInstanceOf(ApiUnexpectedStatusCodeError);
-                expect(error.statusCode).toBe(String(updateGroupItemMocks.wrongCode));
-                expect(error.expected).toContain(String(updateGroupItemMocks.expectedCode));
+                expect(error.statusCode).toBe(String(wrapperMocks.wrongCode));
+                expect(error.expected).toContain(String(wrapperMocks.expectedCode));
                 done();
 
             });
         });
 
         it('should throw error when response is wrong', function(done) {
-            const request = updateGroupItem(
-                updateGroupItemMocks.request,
-                updateGroupItemMocks.parameters
-            );
+            const request = wrapperFunction(...compact([
+                wrapperMocks.request,
+                wrapperMocks.parameters
+            ]));
 
             moxios.stubRequest(moxiosUrlReg, {
-                status: updateGroupItemMocks.expectedCode,
-                response: {...updateGroupItemMocks.wrongResponse},
+                status: wrapperMocks.expectedCode,
+                response: {...wrapperMocks.wrongResponse},
                 headers: {
-                    'Content-Type': updateGroupItemMocks.contentType
+                    'Content-Type': wrapperMocks.contentType
                 }
             });
 
@@ -271,20 +294,22 @@ describe('Wrapper for PATCH with request and parameters and response', () => {
         });
 
         it('should pass correct error response', function(done) {
-            const request = updateGroupItem(
-                updateGroupItemMocks.request,
-                updateGroupItemMocks.parameters
-            );
+            const request = wrapperFunction(...compact([
+                wrapperMocks.request,
+                wrapperMocks.parameters
+            ]));
 
             moxios.stubRequest(moxiosUrlReg, {
-                status: updateGroupItemMocks.expectedErrorCode,
-                response: {...updateGroupItemMocks.errorResponse},
+                status: wrapperMocks.expectedErrorCode,
+                response: {...wrapperMocks.errorResponse},
                 headers: {
-                    'Content-Type': updateGroupItemMocks.contentType
+                    'Content-Type': wrapperMocks.contentType
                 }
             });
 
-            request.then((response) => {
+            request.then((response: AxiosResponse) => {
+                expect(response.data).toEqual(wrapperMocks.errorResponse);
+                expect(response.status).toBe(wrapperMocks.expectedErrorCode);
                 done();
             }).catch(error => {
                 fail(error);
@@ -293,6 +318,8 @@ describe('Wrapper for PATCH with request and parameters and response', () => {
         });
     });
 });
+
+// TODO add tests of evironment vars. see ../environment.d.ts
 
 /**
  * Prepares `RegExp` for `moxios` from OAS-path
