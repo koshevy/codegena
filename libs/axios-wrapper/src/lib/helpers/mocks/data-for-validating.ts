@@ -36,10 +36,21 @@ export const response = {
     uid: generateUid()
 };
 
+export const wrongResponse = {
+    ...wrongRequest,
+    date_created: (new Date()).toISOString(),
+    date_changed: (new Date()).toISOString(),
+    _position: 0,
+    _uid: generateUid()
+};
+
 export const errorResponse = {
     description: 'Server error was occur',
     message: 'Error 500'
 };
 
+export const statusCode = '200';
+export const errorStatusCode = '500';
+export const wrongStatusCode = '301';
 export const contentType = 'application/json';
 export const wrongContentType = 'application/x-www-form-urlencoded';

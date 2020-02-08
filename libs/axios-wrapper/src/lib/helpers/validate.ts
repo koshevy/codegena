@@ -24,17 +24,29 @@ export interface ValidationSchemasBundle {
 
 export class ApiUnexpectedContentTypeError extends Error {
     constructor(
+        public readonly scope: ApiValidationScopes.Request | ApiValidationScopes.Response,
         public readonly contentType: string,
         public readonly expected: string[]
     ) {
         super([
-            `Unexpected content type in request: "${contentType}".`,
+            `Unexpected content type in ${scope}: "${contentType}".`,
             `But expected: "${expected.join('", "')}".`
         ].join(' '));
     }
 }
 
-export class ApiUnexpectedStatusCodeError extends Error {}
+export class ApiUnexpectedStatusCodeError extends Error {
+    constructor(
+        public readonly statusCode: string,
+        public readonly expected: string[]
+    ) {
+        super([
+            `Unexpected status code in request: "${statusCode}".`,
+            `But expected: "${expected.join('", "')}".`
+        ].join(' '));
+    }
+}
+
 export class ApiValidationError extends Error {
     constructor(
         public readonly scope: ApiValidationScopes,
@@ -47,7 +59,7 @@ export class ApiValidationError extends Error {
     }
 }
 
-// *** own variables
+// *** private variables
 
 const ajvCompiler = new Ajv({
     allErrors: true,
@@ -79,13 +91,13 @@ export async function validateParams(
     data: any,
     externalSchema: any
 ): Promise<void> {
-    registerUniqueExternalSchema(externalSchema);
+    registerExternalSchemaIfDidnt(externalSchema);
 
     const validatorFn = await getAjvValidator(bundle.params);
 
     if (!validatorFn(data)) {
         throw new ApiValidationError(
-            ApiValidationScopes.Request,
+            ApiValidationScopes.Params,
             validatorFn.errors
         );
     }
@@ -106,10 +118,14 @@ export async function validateRequest(
     externalSchema: any
 ): Promise<void> {
     if (!bundle.request[contentType]) {
-        throw new ApiUnexpectedContentTypeError(contentType, _.keys(bundle.request));
+        throw new ApiUnexpectedContentTypeError(
+            ApiValidationScopes.Request,
+            contentType,
+            _.keys(bundle.request)
+        );
     }
 
-    registerUniqueExternalSchema(externalSchema);
+    registerExternalSchemaIfDidnt(externalSchema);
 
     const validatorFn = await getAjvValidator(bundle.request[contentType]);
 
@@ -121,7 +137,40 @@ export async function validateRequest(
     }
 }
 
-// *** own functions
+export async function validateResponse(
+    bundle: ValidationSchemasBundle,
+    statusCode: string,
+    contentType: string,
+    data: any,
+    externalSchema: any,
+): Promise<void> {
+    const contentTypes = bundle.response[statusCode];
+
+    if (!contentTypes) {
+        throw new ApiUnexpectedStatusCodeError(statusCode, _.keys(bundle.response));
+    }
+
+    if (!contentTypes[contentType]) {
+        throw new ApiUnexpectedContentTypeError(
+            ApiValidationScopes.Response,
+            contentType,
+            _.keys(contentTypes)
+        )
+    }
+
+    registerExternalSchemaIfDidnt(externalSchema);
+
+    const validatorFn = await getAjvValidator(contentTypes[contentType]);
+
+    if (!validatorFn(data)) {
+        throw new ApiValidationError(
+            ApiValidationScopes.Response,
+            validatorFn.errors
+        );
+    }
+}
+
+// *** private functions
 
 async function getAjvValidator(schema: object): Promise<ValidateFunction> {
     if (validateFunctions.has(schema)) {
@@ -138,7 +187,7 @@ async function getAjvValidator(schema: object): Promise<ValidateFunction> {
  * Add `externalSchema` to ajv's scope if it did't yet.
  * @param externalSchema
  */
-function registerUniqueExternalSchema(externalSchema) {
+function registerExternalSchemaIfDidnt(externalSchema) {
     if (!externalSchemas.has(externalSchema)) {
         externalSchemas.add(externalSchema);
         ajvCompiler.addSchema(externalSchema);
