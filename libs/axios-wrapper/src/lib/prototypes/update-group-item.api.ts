@@ -5,20 +5,24 @@ import {
 } from 'axios';
 
 // tslint:disable-next-line
-import { defaultAxiosConfig } from '@codegena/axios-wrapper/src/lib/configs/index';
+import { defaultAxiosConfig } from '@codegena/axios-wrapper/src/lib/configs';
 import {
     AxiosSafeRequestConfig,
     createUrl,
     getAxiosInstance,
     getBaseUrl,
+    getContentType,
     getGlobalEnvironment
     // tslint:disable-next-line
-} from '@codegena/axios-wrapper/src/lib/helpers/index';
+} from '@codegena/axios-wrapper/src/lib/helpers';
 import {
     ApiUnexpectedContentTypeError,
     ApiUnexpectedStatusCodeError,
     ApiValidationError,
-    ValidationSchemasBundle
+    ValidationSchemasBundle,
+    validateParams,
+    validateRequest,
+    validateResponse
     // tslint:disable-next-line
 } from '@codegena/axios-wrapper/src/lib/helpers/validate';
 
@@ -28,7 +32,7 @@ import {
     UpdateGroupItemRequest,
     UpdateGroupItemResponse,
 } from '../auto-generated/typings';
-import { schema as domainSchema } from './schema.b4c655ec1635af1be28bd6';
+import { schema as externalSchema } from './schema.b4c655ec1635af1be28bd6';
 
 export const schemasBundle: ValidationSchemasBundle = {
     params: {
@@ -42,6 +46,7 @@ export const schemasBundle: ValidationSchemasBundle = {
             forceSave: { type: ['boolean', 'null'], default: null }
         },
         required: ['groupId', 'itemId'],
+        additionalProperties: false,
         type: 'object'
     },
     request: {
@@ -86,6 +91,7 @@ export const schemasBundle: ValidationSchemasBundle = {
 const environment = getGlobalEnvironment();
 
 export const method = 'PATCH';
+export const defaultContentType = 'application/json';
 export const queryParams = [];
 export const pathTemplate = '/group/{groupId}/item/{itemId}';
 export const envRedefineBaseUrl = environment.redefineBaseUrl;
@@ -94,11 +100,9 @@ export const servers = ['http://localhost:3000'];
 interface ApiRequestOptions {
     axiosRequestConfig?: AxiosSafeRequestConfig,
     axiosInstance?: AxiosInstance
-};
+}
 
 /**
- * fixme test with axiosRequestConfig and axiosInstance
- *
  * @param request
  * @param parameters
  * @param axiosRequestConfig
@@ -110,30 +114,63 @@ interface ApiRequestOptions {
  * Promise-base response via `axios`
  */
 export default async function updateGroupItem(
-    request: UpdateGroupItemRequest,
+    request?: UpdateGroupItemRequest,
     parameters?: UpdateGroupItemParameters,
     {
         axiosRequestConfig,
         axiosInstance
-    }: ApiRequestOptions = {} as any
+    }: ApiRequestOptions = {}
 ): Promise<AxiosResponse<UpdateGroupItemResponse>> {
+
+    if (!axiosRequestConfig) {
+        axiosRequestConfig = {};
+    }
 
     const {
         path,
         unusedParameters
     } = createUrl(pathTemplate, parameters || {});
     const baseURL = getBaseUrl(servers, envRedefineBaseUrl);
+    const headers = { ...(axiosRequestConfig.headers || {}) };
+    let contentType = getContentType(headers);
 
     if (!axiosInstance) {
         axiosInstance = getAxiosInstance(defaultAxiosConfig);
     }
 
+    if (!contentType) {
+        contentType = defaultContentType;
+        if (!axiosRequestConfig.headers) {
+            axiosRequestConfig.headers = {};
+        }
+
+        headers['Content-Type'] = contentType;
+    }
+
+    await Promise.all([
+        validateParams(schemasBundle, parameters, externalSchema),
+        validateRequest(schemasBundle, contentType, request, externalSchema),
+    ]);
+
     return axiosInstance.request({
-        ... (axiosRequestConfig || {}),
+        ... axiosRequestConfig,
         baseURL,
+        headers,
         method,
         params: unusedParameters,
         url: path,
-        data: request
+        data: request,
+        validateStatus: () => true
+    }).then(async (response: AxiosResponse) => {
+        await validateResponse(
+            schemasBundle,
+            String(response.status),
+            getContentType(response.headers),
+            response.data,
+            externalSchema
+        );
+
+        return response;
     });
+
 }
