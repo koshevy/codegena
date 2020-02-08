@@ -1,29 +1,18 @@
-import {
-    AxiosResponse,
-    AxiosRequestConfig,
-    AxiosInstance
-} from 'axios';
+import { AxiosResponse } from 'axios';
 
-// tslint:disable-next-line
-import { defaultAxiosConfig } from '@codegena/axios-wrapper/src/lib/configs';
 import {
-    AxiosSafeRequestConfig,
-    createUrl,
-    getAxiosInstance,
-    getBaseUrl,
-    getContentType,
-    getGlobalEnvironment
-    // tslint:disable-next-line
-} from '@codegena/axios-wrapper/src/lib/helpers';
+    ApiRequestOptions,
+    doRequest
+// tslint:disable-next-line
+} from '@codegena/axios-wrapper/src/lib/helpers/do-request';
+// tslint:disable-next-line
+import { getGlobalEnvironment } from '@codegena/axios-wrapper/src/lib/helpers';
 import {
     ApiUnexpectedContentTypeError,
     ApiUnexpectedStatusCodeError,
     ApiValidationError,
-    ValidationSchemasBundle,
-    validateParams,
-    validateRequest,
-    validateResponse
-    // tslint:disable-next-line
+    ValidationSchemasBundle
+// tslint:disable-next-line
 } from '@codegena/axios-wrapper/src/lib/helpers/validate';
 
 // Schemas and types
@@ -32,6 +21,7 @@ import {
     UpdateGroupItemRequest,
     UpdateGroupItemResponse,
 } from '../auto-generated/typings';
+
 import { schema as externalSchema } from './schema.b4c655ec1635af1be28bd6';
 
 export const schemasBundle: ValidationSchemasBundle = {
@@ -97,11 +87,6 @@ export const pathTemplate = '/group/{groupId}/item/{itemId}';
 export const envRedefineBaseUrl = environment.redefineBaseUrl;
 export const servers = ['http://localhost:3000'];
 
-interface ApiRequestOptions {
-    axiosRequestConfig?: AxiosSafeRequestConfig,
-    axiosInstance?: AxiosInstance
-}
-
 /**
  * @param request
  * @param parameters
@@ -115,62 +100,25 @@ interface ApiRequestOptions {
  */
 export default async function updateGroupItem(
     request?: UpdateGroupItemRequest,
-    parameters?: UpdateGroupItemParameters,
+    params?: UpdateGroupItemParameters,
     {
         axiosRequestConfig,
         axiosInstance
     }: ApiRequestOptions = {}
 ): Promise<AxiosResponse<UpdateGroupItemResponse>> {
 
-    if (!axiosRequestConfig) {
-        axiosRequestConfig = {};
-    }
-
-    const {
-        path,
-        unusedParameters
-    } = createUrl(pathTemplate, parameters || {});
-    const baseURL = getBaseUrl(servers, envRedefineBaseUrl);
-    const headers = { ...(axiosRequestConfig.headers || {}) };
-    let contentType = getContentType(headers);
-
-    if (!axiosInstance) {
-        axiosInstance = getAxiosInstance(defaultAxiosConfig);
-    }
-
-    if (!contentType) {
-        contentType = defaultContentType;
-        if (!axiosRequestConfig.headers) {
-            axiosRequestConfig.headers = {};
-        }
-
-        headers['Content-Type'] = contentType;
-    }
-
-    await Promise.all([
-        validateParams(schemasBundle, parameters, externalSchema),
-        validateRequest(schemasBundle, contentType, request, externalSchema),
-    ]);
-
-    return axiosInstance.request({
-        ... axiosRequestConfig,
-        baseURL,
-        headers,
+    // logic of request moved to common helper
+    return doRequest({
+        axiosRequestConfig,
+        axiosInstance,
+        defaultContentType,
+        envRedefineBaseUrl,
+        externalSchema,
         method,
-        params: unusedParameters,
-        url: path,
-        data: request,
-        validateStatus: () => true
-    }).then(async (response: AxiosResponse) => {
-        await validateResponse(
-            schemasBundle,
-            String(response.status),
-            getContentType(response.headers),
-            response.data,
-            externalSchema
-        );
-
-        return response;
+        pathTemplate,
+        params,
+        request,
+        schemasBundle,
+        servers
     });
-
 }
