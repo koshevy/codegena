@@ -16,10 +16,10 @@ export interface ValidationContentTypesSchemas {
 
 export interface ValidationSchemasBundle {
     [ApiValidationScopes.Params]: any | null;
-    [ApiValidationScopes.Request]: ValidationContentTypesSchemas,
+    [ApiValidationScopes.Request]: ValidationContentTypesSchemas | null,
     [ApiValidationScopes.Response]: {
         [statusCode: string]: ValidationContentTypesSchemas;
-    };
+    } | null;
 }
 
 export class ApiUnexpectedContentTypeError extends Error {
@@ -91,6 +91,11 @@ export async function validateParams(
     data: any,
     externalSchema: any
 ): Promise<void> {
+    // TODO add test case when schema is null
+    if(bundle.params === null) {
+        return;
+    }
+
     registerExternalSchemaIfDidnt(externalSchema);
 
     const validatorFn = await getAjvValidator(bundle.params);
@@ -117,6 +122,11 @@ export async function validateRequest(
     data: any,
     externalSchema: any
 ): Promise<void> {
+    // TODO add test case when schema is null
+    if(bundle.request === null) {
+        return;
+    }
+
     if (!bundle.request[contentType]) {
         throw new ApiUnexpectedContentTypeError(
             ApiValidationScopes.Request,
@@ -144,6 +154,11 @@ export async function validateResponse(
     data: any,
     externalSchema: any,
 ): Promise<void> {
+    // TODO add test case when schema is null
+    if(bundle.response === null) {
+        return;
+    }
+
     const contentTypes = bundle.response[statusCode];
 
     if (!contentTypes) {
