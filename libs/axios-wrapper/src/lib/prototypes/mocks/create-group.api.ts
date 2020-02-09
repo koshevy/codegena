@@ -7,13 +7,13 @@ import {
 
 // TODO this mock should be replaced by auto mocks generation https://github.com/koshevy/codegena/issues/9
 
-export const request: CreateGroupRequest = {
+export const body: CreateGroupRequest = {
     title: 'Sample group title',
     description: 'Sample group description in few words',
     isComplete: false
 };
 
-export const wrongRequest = {
+export const wrongBody = {
     _title: 'Sample group title',
     _description: 'Sample group description in few words',
     isComplete: 100
@@ -23,7 +23,7 @@ export const parameters = null;
 export const wrongParameters = null;
 
 export const response: CreateGroupResponse<201> = {
-    ...request,
+    ...body,
     dateCreated: (new Date()).toISOString(),
     dateChanged: (new Date()).toISOString(),
     uid: generateUid(),

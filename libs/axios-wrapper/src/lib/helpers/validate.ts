@@ -50,7 +50,8 @@ export class ApiUnexpectedStatusCodeError extends Error {
 export class ApiValidationError extends Error {
     constructor(
         public readonly scope: ApiValidationScopes,
-        public readonly errors: ErrorObject[]
+        public readonly errors: ErrorObject[],
+        public readonly data: any
     ) {
         super([
             `Validation error thrown in ${scope} with messages:`,
@@ -103,7 +104,8 @@ export async function validateParams(
     if (!validatorFn(data)) {
         throw new ApiValidationError(
             ApiValidationScopes.Params,
-            validatorFn.errors
+            validatorFn.errors,
+            data
         );
     }
 }
@@ -142,7 +144,8 @@ export async function validateRequest(
     if (!validatorFn(data)) {
         throw new ApiValidationError(
             ApiValidationScopes.Request,
-            validatorFn.errors
+            validatorFn.errors,
+            data
         );
     }
 }
@@ -180,7 +183,8 @@ export async function validateResponse(
     if (!validatorFn(data)) {
         throw new ApiValidationError(
             ApiValidationScopes.Response,
-            validatorFn.errors
+            validatorFn.errors,
+            data
         );
     }
 }

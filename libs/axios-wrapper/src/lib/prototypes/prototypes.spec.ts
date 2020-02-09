@@ -1,4 +1,4 @@
-import { compact } from 'lodash';
+import { compact, clone } from 'lodash';
 import axios, { AxiosResponse } from 'axios';
 import * as moxios from 'moxios';
 
@@ -12,26 +12,35 @@ import {
 
 // Designed axios-wrapper prototypes and their meta
 import createGroupApi,
-    * as createGroupApiMeta from './create-group.api';
+  * as createGroupApiMeta from './create-group.api';
 import updateGroupItem,
   * as updateGroupItemMeta from './update-group-item.api';
+import getGroups,
+  * as getGroupsMeta from './get-groups.api';
 
 // Auto-generated typings, used with axios-wrappers
 import * as createGroupApiMocks from './mocks/create-group.api';
 import * as updateGroupItemMocks from './mocks/update-group-item.api';
+import * as getGroupsMocks from './mocks/get-groups.api';
 
 describe.each([
     [
-        'Wrapper for PATCH with request and parameters and response',
+        'Wrapper for PATCH with body and parameters and response',
         updateGroupItem,
         updateGroupItemMeta,
         updateGroupItemMocks
     ],
     [
-        'Wrapper for POST with request and response and without params',
+        'Wrapper for POST with body and response and without params',
         createGroupApi,
         createGroupApiMeta,
         createGroupApiMocks
+    ],
+    [
+        'Wrapper for GET with params and response and without body',
+        getGroups,
+        getGroupsMeta,
+        getGroupsMocks
     ]
 ])('%s', (testType, wrapperFunction, wrapperMeta, wrapperMocks) => {
     describe('correct response scenarios', () => {
@@ -41,7 +50,7 @@ describe.each([
             moxios.install();
             moxios.stubRequest(moxiosUrlReg, {
                 status: wrapperMocks.expectedCode,
-                response: {...wrapperMocks.response},
+                response: clone(wrapperMocks.response),
                 headers: {
                     'Content-Type': wrapperMocks.contentType
                 }
@@ -52,9 +61,9 @@ describe.each([
             moxios.uninstall();
         });
 
-        it('should pass parameters, request and successful response', function(done) {
+        it('should pass parameters, body and successful response', function(done) {
             const request = wrapperFunction(...compact([
-                wrapperMocks.request,
+                wrapperMocks.body,
                 wrapperMocks.parameters
             ]));
 
@@ -82,7 +91,7 @@ describe.each([
             axiosInstance.interceptors.request.use(interceptorRequestSpy);
 
             const request = wrapperFunction(...compact([
-                wrapperMocks.request,
+                wrapperMocks.body,
                 wrapperMocks.parameters,
                 { axiosInstance }
             ]));
@@ -108,7 +117,7 @@ describe.each([
             axiosInstance.interceptors.request.use(interceptorRequestSpy);
 
             const request = wrapperFunction(...compact([
-                wrapperMocks.request,
+                wrapperMocks.body,
                 wrapperMocks.parameters
             ]));
 
@@ -126,7 +135,7 @@ describe.each([
             const cancelToken = axios.CancelToken.source();
 
             const request = wrapperFunction(...compact([
-                wrapperMocks.request,
+                wrapperMocks.body,
                 wrapperMocks.parameters,
                 {
                     axiosRequestConfig: {
@@ -155,7 +164,7 @@ describe.each([
             }
 
             const request = wrapperFunction(...compact([
-                wrapperMocks.request,
+                wrapperMocks.body,
                 wrapperMocks.wrongParameters as any
             ]));
 
@@ -169,9 +178,16 @@ describe.each([
             });
         });
 
-        it('should throw error when request is wrong', function(done) {
+        it('should throw error when body is wrong', function(done) {
+            // Skip this step when no request supposed to be passed
+            if (!wrapperMocks.wrongBody) {
+                done();
+
+                return;
+            }
+
             const request = wrapperFunction(...compact([
-                wrapperMocks.wrongRequest as any,
+                wrapperMocks.wrongBody as any,
                 wrapperMocks.parameters
             ]));
 
@@ -186,9 +202,16 @@ describe.each([
         });
 
         it('should throw error when request Content-Type is wrong', function(done) {
+            // Skip this step when no request supposed to be passed
+            if (!wrapperMocks.wrongBody) {
+                done();
+
+                return;
+            }
+
             const headers = { 'Content-Type': wrapperMocks.wrongContentType };
             const request = wrapperFunction(...compact([
-                wrapperMocks.request,
+                wrapperMocks.body,
                 wrapperMocks.parameters,
                 {
                     axiosRequestConfig: { headers }
@@ -221,7 +244,7 @@ describe.each([
 
         it('should throw error when response Content-Type is wrong', function(done) {
             const request = wrapperFunction(...compact([
-                wrapperMocks.request,
+                wrapperMocks.body,
                 wrapperMocks.parameters
             ]));
 
@@ -247,7 +270,7 @@ describe.each([
 
         it('should throw error when response status is wrong', function(done) {
             const request = wrapperFunction(...compact([
-                wrapperMocks.request,
+                wrapperMocks.body,
                 wrapperMocks.parameters
             ]));
 
@@ -270,7 +293,7 @@ describe.each([
 
         it('should throw error when response is wrong', function(done) {
             const request = wrapperFunction(...compact([
-                wrapperMocks.request,
+                wrapperMocks.body,
                 wrapperMocks.parameters
             ]));
 
@@ -295,7 +318,7 @@ describe.each([
 
         it('should pass correct error response', function(done) {
             const request = wrapperFunction(...compact([
-                wrapperMocks.request,
+                wrapperMocks.body,
                 wrapperMocks.parameters
             ]));
 

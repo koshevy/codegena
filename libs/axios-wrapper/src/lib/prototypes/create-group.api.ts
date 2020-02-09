@@ -62,8 +62,7 @@ export const envRedefineBaseUrl = environment.redefineBaseUrl;
 export const servers = ['http://localhost:3000'];
 
 /**
- * @param request
- * @param parameters
+ * @param body
  * @param axiosRequestConfig
  * @param axiosInstance
  * @throws ApiUnexpectedContentTypeError
@@ -73,13 +72,12 @@ export const servers = ['http://localhost:3000'];
  * Promise-base response via `axios`
  */
 export default async function createGroupApi(
-    request?: CreateGroupRequest,
+    body?: CreateGroupRequest,
     {
         axiosRequestConfig,
         axiosInstance
     }: ApiRequestOptions = {}
 ): Promise<AxiosResponse<CreateGroupResponse>> {
-
     const params = null;
 
     // logic of request moved to common helper
@@ -92,7 +90,7 @@ export default async function createGroupApi(
         method,
         pathTemplate,
         params,
-        request,
+        body,
         schemasBundle,
         servers
     });

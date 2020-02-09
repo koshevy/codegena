@@ -8,7 +8,7 @@ import {
 
 // TODO this mock should be replaced by auto mocks generation https://github.com/koshevy/codegena/issues/9
 
-export const request: UpdateGroupItemRequest = {
+export const body: UpdateGroupItemRequest = {
     description: 'Sample group description in few words',
     groupUid: generateUid(),
     isDone: false,
@@ -16,7 +16,7 @@ export const request: UpdateGroupItemRequest = {
     title: 'Sample group item title'
 };
 
-export const wrongRequest = {
+export const wrongBody = {
     _description: 'Sample group description in few words',
     group_uid: generateUid(),
     is_done: false,
@@ -37,7 +37,7 @@ export const wrongParameters = {
 };
 
 export const response: UpdateGroupItemResponse<200> = {
-    ...request,
+    ...body,
     dateCreated: (new Date()).toISOString(),
     dateChanged: (new Date()).toISOString(),
     position: 0,
@@ -45,7 +45,7 @@ export const response: UpdateGroupItemResponse<200> = {
 };
 
 export const wrongResponse = {
-    ...wrongRequest,
+    ...wrongBody,
     date_created: (new Date()).toISOString(),
     date_changed: (new Date()).toISOString(),
     _position: 0,

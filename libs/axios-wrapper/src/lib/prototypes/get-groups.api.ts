@@ -17,9 +17,8 @@ import {
 
 // Schemas and types
 import {
-    UpdateGroupItemParameters,
-    UpdateGroupItemRequest,
-    UpdateGroupItemResponse,
+    GetGroupsParameters,
+    GetGroupsResponse
 } from '../auto-generated/typings';
 
 import { schema as externalSchema } from './schema.b4c655ec1635af1be28bd6';
@@ -27,46 +26,27 @@ import { schema as externalSchema } from './schema.b4c655ec1635af1be28bd6';
 export const schemasBundle: ValidationSchemasBundle = {
     params: {
         properties: {
-            groupId: {
-                $ref: 'schema.b4c655ec1635af1be28bd6#/components/schemas/Uid'
-            },
-            itemId: {
-                $ref: 'schema.b4c655ec1635af1be28bd6#/components/schemas/Uid'
-            },
-            forceSave: { type: ['boolean', 'null'], default: null }
+            isComplete: { type: ['boolean', 'null'], default: null },
+            withItems: { type: ['boolean', 'null'], default: false }
         },
-        required: ['groupId', 'itemId'],
-        additionalProperties: false,
+        required: [],
         type: 'object'
     },
-    request: {
-        'application/json': {
-            $ref:
-                'schema.b4c655ec1635af1be28bd6#/components/schemas/ToDoTaskBlank'
-        }
-    },
+    request: null,
     response: {
         '200': {
             'application/json': {
-                $ref: 'schema.b4c655ec1635af1be28bd6#/components/schemas/ToDoTask'
+                type: 'array',
+                items: {
+                    $ref:
+                        'schema.b4c655ec1635af1be28bd6#/components/schemas/ToDoGroup'
+                }
             }
         },
         '400': {
             'application/json': {
                 $ref:
                     'schema.b4c655ec1635af1be28bd6#/components/schemas/HttpErrorBadRequest'
-            }
-        },
-        '404': {
-            'application/json': {
-                $ref:
-                    'schema.b4c655ec1635af1be28bd6#/components/schemas/HttpErrorNotFound'
-            }
-        },
-        '409': {
-            'application/json': {
-                $ref:
-                    'schema.b4c655ec1635af1be28bd6#/components/schemas/HttpErrorConflict'
             }
         },
         '500': {
@@ -80,15 +60,14 @@ export const schemasBundle: ValidationSchemasBundle = {
 
 const environment = getGlobalEnvironment();
 
-export const method = 'PATCH';
+export const method = 'GET';
 export const defaultContentType = 'application/json';
-export const queryParams = [];
-export const pathTemplate = '/group/{groupId}/item/{itemId}';
+export const queryParams = ['isComplete', 'withItems'];
+export const pathTemplate = '/group';
 export const envRedefineBaseUrl = environment.redefineBaseUrl;
 export const servers = ['http://localhost:3000'];
 
 /**
- * @param body
  * @param params
  * @param axiosRequestConfig
  * @param axiosInstance
@@ -98,14 +77,15 @@ export const servers = ['http://localhost:3000'];
  * @return
  * Promise-base response via `axios`
  */
-export default async function updateGroupItem(
-    body?: UpdateGroupItemRequest,
-    params?: UpdateGroupItemParameters,
+export default async function getGroups(
+    params?: GetGroupsParameters,
     {
         axiosRequestConfig,
         axiosInstance
     }: ApiRequestOptions = {}
-): Promise<AxiosResponse<UpdateGroupItemResponse>> {
+): Promise<AxiosResponse<GetGroupsResponse>> {
+    const body = null;
+
     // logic of request moved to common helper
     return doRequest({
         axiosRequestConfig,

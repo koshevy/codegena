@@ -30,16 +30,16 @@ export interface ApiRequestOptions {
     axiosInstance?: AxiosInstance
 }
 
-export interface DoRequestArguments<Request, Params, Response> {
+export interface DoRequestArguments<Body, Params, Response> {
     axiosRequestConfig?: AxiosSafeRequestConfig;
     axiosInstance?: AxiosInstance;
+    body?: Body;
     defaultContentType: string;
     envRedefineBaseUrl: CodegenaAxiosWrapperEnvironment['redefineBaseUrl'];
     externalSchema: any;
     method: Method;
     params?: Params;
     pathTemplate: string;
-    request?: Request;
     schemasBundle: ValidationSchemasBundle;
     servers: string[];
 }
@@ -63,7 +63,7 @@ export async function doRequest<Request, Params, Response>(
         method,
         pathTemplate,
         params,
-        request,
+        body,
         schemasBundle,
         servers
     } = args;
@@ -99,7 +99,7 @@ export async function doRequest<Request, Params, Response>(
 
     await Promise.all([
         validateParams(schemasBundle, params, externalSchema),
-        validateRequest(schemasBundle, contentType, request, externalSchema),
+        validateRequest(schemasBundle, contentType, body, externalSchema),
     ]);
 
     return axiosInstance.request<Response>({
@@ -109,7 +109,7 @@ export async function doRequest<Request, Params, Response>(
         method,
         params: unusedParameters,
         url: path,
-        data: request,
+        data: body,
         validateStatus: () => true
     }).then(async (response: AxiosResponse<Response>) => {
         await validateResponse(
