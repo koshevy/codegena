@@ -111,9 +111,9 @@ function doSomething() {
   ).then(
     pickResponseBody(200)
   ).then((response: UpdateGroupItemAxiosResponse<200>) => {
-    .
-    .
-    .
+    // .
+    // .
+    // .
   }).catch((error: ApiUnexpectedContentTypeError | ApiUnexpectedStatusCodeError | ApiValidationError) => {
      // error catching
   });
