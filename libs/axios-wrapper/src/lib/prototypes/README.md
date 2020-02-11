@@ -51,9 +51,9 @@ function doSomething() {
     switch(response.status) {
       case 200:
         data = response.data as UpdateGroupItemResponse<200>;
-        .
-        .
-        .
+        // .
+        // .
+        // .
     }
   }).catch(error => {
      // error catching
