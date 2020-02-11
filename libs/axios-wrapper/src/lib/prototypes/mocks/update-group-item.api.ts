@@ -10,15 +10,12 @@ import {
 
 export const body: UpdateGroupItemRequest = {
     description: 'Sample group description in few words',
-    groupUid: generateUid(),
     isDone: false,
-    position: 0,
     title: 'Sample group item title'
 };
 
 export const wrongBody = {
     _description: 'Sample group description in few words',
-    group_uid: generateUid(),
     is_done: false,
     _position: 0,
     _title: 'Sample group item title'

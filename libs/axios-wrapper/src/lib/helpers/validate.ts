@@ -26,7 +26,8 @@ export class ApiUnexpectedContentTypeError extends Error {
     constructor(
         public readonly scope: ApiValidationScopes.Request | ApiValidationScopes.Response,
         public readonly contentType: string,
-        public readonly expected: string[]
+        public readonly expected: string[],
+        public readonly responseData?: any
     ) {
         super([
             `Unexpected content type in ${scope}: "${contentType}".`,
@@ -38,7 +39,8 @@ export class ApiUnexpectedContentTypeError extends Error {
 export class ApiUnexpectedStatusCodeError extends Error {
     constructor(
         public readonly statusCode: string,
-        public readonly expected: string[]
+        public readonly expected: string[],
+        public readonly responseData?: any
     ) {
         super([
             `Unexpected status code in request: "${statusCode}".`,

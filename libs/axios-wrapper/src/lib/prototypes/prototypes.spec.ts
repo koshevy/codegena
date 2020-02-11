@@ -3,6 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 import * as moxios from 'moxios';
 
 import { getAxiosInstance } from '../helpers';
+import { pickResponseBody } from '../helpers/selectors';
 import {
     ApiUnexpectedContentTypeError,
     ApiUnexpectedStatusCodeError,
@@ -339,6 +340,69 @@ describe.each([
                 done();
             });
         });
+    });
+});
+
+fdescribe('Testing with data selectors', () => {
+    const moxiosUrlReg = getRegFromPath(getGroupsMeta.pathTemplate);
+
+    beforeEach(function () {
+        moxios.install();
+        moxios.stubRequest(moxiosUrlReg, {
+            status: getGroupsMocks.expectedCode,
+            response: clone(getGroupsMocks.response),
+            headers: {
+                'Content-Type': getGroupsMocks.contentType
+            }
+        });
+    });
+
+    afterEach(function () {
+        moxios.uninstall();
+    });
+
+    it('should correct pick data from response supposed to have code 200', function(done) {
+        const request = getGroups(getGroupsMocks.parameters).then(
+            pickResponseBody(200)
+        );
+
+        request.then(responseData => {
+            expect(responseData).toEqual(getGroupsMocks.response);
+            done();
+        }).catch(error => {
+            fail(error);
+            done();
+        })
+    });
+
+    it('should correct pick data from response supposed to have codes 200 or 400 or 500', function(done) {
+        const request = getGroups(getGroupsMocks.parameters).then(
+            pickResponseBody([200, 400, 500])
+        );
+
+        request.then(responseData => {
+            expect(responseData).toEqual(getGroupsMocks.response);
+            done();
+        }).catch(error => {
+            fail(error);
+            done();
+        })
+    });
+
+    it('should throw error by when response code is not supposed to be picked', function(done) {
+        const request = getGroups(getGroupsMocks.parameters).then(
+            pickResponseBody(202)
+        );
+
+        request.then(responseData => {
+            fail('Should not pick response with code not supposed to be picked');
+            done();
+        }).catch((error: ApiUnexpectedStatusCodeError) => {
+            expect(error).toBeInstanceOf(ApiUnexpectedStatusCodeError);
+            expect(error.statusCode).toBe(String(getGroupsMocks.expectedCode));
+            expect(error.responseData).toEqual(getGroupsMocks.response);
+            done();
+        })
     });
 });
 
