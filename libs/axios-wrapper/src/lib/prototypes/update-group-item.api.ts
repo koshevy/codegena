@@ -87,6 +87,8 @@ export const pathTemplate = '/group/{groupId}/item/{itemId}';
 export const envRedefineBaseUrl = environment.redefineBaseUrl;
 export const servers = ['http://localhost:3000'];
 
+export type UpdateGroupItemAxiosResponse = AxiosResponse<UpdateGroupItemResponse>;
+
 /**
  * @param body
  * @param params
@@ -98,16 +100,20 @@ export const servers = ['http://localhost:3000'];
  * @return
  * Promise-base response via `axios`
  */
-export default async function updateGroupItem(
+export async function updateGroupItem(
     body?: UpdateGroupItemRequest,
     params?: UpdateGroupItemParameters,
     {
         axiosRequestConfig,
         axiosInstance
     }: ApiRequestOptions = {}
-): Promise<AxiosResponse<UpdateGroupItemResponse>> {
+): Promise<UpdateGroupItemAxiosResponse> {
     // logic of request moved to common helper
-    return doRequest({
+    return doRequest<
+        UpdateGroupItemRequest,
+        UpdateGroupItemParameters,
+        UpdateGroupItemResponse
+    >({
         axiosRequestConfig,
         axiosInstance,
         defaultContentType,
@@ -121,3 +127,5 @@ export default async function updateGroupItem(
         servers
     });
 }
+
+export default updateGroupItem;

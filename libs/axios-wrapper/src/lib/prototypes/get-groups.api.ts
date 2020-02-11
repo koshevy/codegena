@@ -67,6 +67,8 @@ export const pathTemplate = '/group';
 export const envRedefineBaseUrl = environment.redefineBaseUrl;
 export const servers = ['http://localhost:3000'];
 
+export type GetGroupsAxiosResponse = AxiosResponse<GetGroupsResponse>;
+
 /**
  * @param params
  * @param axiosRequestConfig
@@ -83,11 +85,15 @@ export default async function getGroups(
         axiosRequestConfig,
         axiosInstance
     }: ApiRequestOptions = {}
-): Promise<AxiosResponse<GetGroupsResponse>> {
+): Promise<GetGroupsAxiosResponse> {
     const body = null;
 
     // logic of request moved to common helper
-    return doRequest({
+    return doRequest<
+        null,
+        GetGroupsParameters,
+        GetGroupsResponse
+    >({
         axiosRequestConfig,
         axiosInstance,
         defaultContentType,
