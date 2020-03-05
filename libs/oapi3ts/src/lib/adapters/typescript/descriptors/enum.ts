@@ -131,23 +131,29 @@ export class EnumTypeScriptDescriptor
         const comment = this.getComments();
 
         return rootLevel ? `${comment}export enum ${this.modelName} {${
-                _.map(this.schema.enum, v => {
-                    return `${this._enumItemName(v)} = ${JSON.stringify(v)}`;
+                _.map(this.schema.enum, (v, i) => {
+                    return `${this._enumItemName(v, i)} = ${JSON.stringify(v)}`;
                 }).join(', ')
             }}` : this.modelName;
     }
 
-    private _enumItemName(name: string): string {
-        name = name.replace(/\-$/, 'Minus');
-        name = name.replace(/\+$/, 'Plus');
-        name = _.camelCase(name.replace(/[^\w]+/g, ''));
-        name = name.replace(
-            /^./,
-            name[0].match(/^\d+$/)
-                ? `_${name[0]}`
-                : name[0].toUpperCase()
-        );
+    private _enumItemName(enumItemValue: string, enumItemIndex: string): string {
+        if (!_.includes(['string', 'number'], typeof enumItemValue)) {
+            return `Case${enumItemIndex}`;
+        }
 
-        return name;
+        let enumItemName;
+
+        enumItemName = String(enumItemValue)
+            .replace(/\-$/, 'Minus')
+            .replace(/\+$/, 'Plus');
+
+        return _.camelCase(enumItemName.replace(/[^\w]+/g, ''))
+            .replace(
+                /^./,
+                enumItemName[0].match(/^\d+$/)
+                    ? `_${enumItemName[0]}`
+                    : enumItemName[0].toUpperCase()
+            );
     }
 }
