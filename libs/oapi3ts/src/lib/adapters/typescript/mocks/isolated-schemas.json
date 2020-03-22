@@ -76,6 +76,14 @@
           }
         }
       ]
+    },
+    "enumWithNumbers": {
+      "type": "number",
+      "enum": [
+        200,
+        201,
+        202
+      ]
     }
   },
   "complex": {

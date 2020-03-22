@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.4](https://github.com/koshevy/codegena/compare/@codegena/oapi3ts@2.1.3...@codegena/oapi3ts@2.1.4) (2020-03-05)
+
+
+### Bug Fixes
+
+* **oapi3ts:** hotfix for case with numeric enums ([ff2a21f](https://github.com/koshevy/codegena/commit/ff2a21f10697d0ebe6eb91cf2baf5377cd3d79ab)), closes [#10](https://github.com/koshevy/codegena/issues/10)
+
+
+
+
+
 ## [2.1.3](https://github.com/koshevy/codegena/compare/@codegena/oapi3ts@2.1.2...@codegena/oapi3ts@2.1.3) (2020-01-26)
 
 **Note:** Version bump only for package @codegena/oapi3ts

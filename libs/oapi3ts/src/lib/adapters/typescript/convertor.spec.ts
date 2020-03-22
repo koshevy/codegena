@@ -176,6 +176,21 @@ describe('Typescript convertor isolated schema\'s rendering', () => {
         ].join(' '));
     });
 
+    it('should convert enum with numbers as root', () => {
+        const cases = schemaCases.simple;
+        const container = convertor.convert(
+            cases.enumWithNumbers,
+            {},
+            'NumericEnum'
+        ) as [ArrayTypeScriptDescriptor];
+        const [descriptor] = container;
+        const renderedEnum = descriptor.render([], true);
+
+        expect(
+            renderedEnum.replace(/\s+/g, ' ').trim()
+        ).toBe('export enum NumericEnum {_200 = 200, _201 = 201, _202 = 202}');
+    });
+
     it('should convert complex `oneOf`-scheme as root', () => {
         const cases = schemaCases.complex;
         const container = convertor.convert(
@@ -288,15 +303,14 @@ describe('Typescript convertor isolated schema\'s rendering', () => {
     // TODO At same way do simple tests of enum
     // TODO At same way do simple tests of multitypes ['null', 'number', 'string']
 
-    // FIXME Important test! Array
-    // FIXME Important test! Object
-    // FIXME Important test! Enum
-    // FIXME Important test! Simple anyOf
-    // FIXME Important test! Array with object
-    // FIXME Important test! Array with array
-    // FIXME Important test! Array with enum
-    // FIXME Important test! Array with someof
-    // FIXME Important test! Object with array and enum and someof
+    // TODO Important test! Array
+    // TODO Important test! Object
+    // TODO Important test! Simple anyOf
+    // TODO Important test! Array with object
+    // TODO Important test! Array with array
+    // TODO Important test! Array with enum
+    // TODO Important test! Array with someof
+    // TODO Important test! Object with array and enum and someof
 });
 
 describe('Convert and rendering combined schema with $refs to local `#/components/schemas`', () => {
