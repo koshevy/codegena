@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.9](https://github.com/koshevy/codegena/compare/@codegena/ng-api-service@2.1.8...@codegena/ng-api-service@2.1.9) (2020-03-29)
+
+
+### Bug Fixes
+
+* **ng-api-service:** get rid of most of optionalDependencies and move them to devDependencies ([3999aa9](https://github.com/koshevy/codegena/commit/3999aa9eb9af206a5bdb720884b1a4de5d96960d))
+
+
+
+
+
 ## [2.1.8](https://github.com/koshevy/codegena/compare/@codegena/ng-api-service@2.1.7...@codegena/ng-api-service@2.1.8) (2020-01-26)
 
 **Note:** Version bump only for package @codegena/ng-api-service

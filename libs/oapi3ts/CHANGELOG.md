@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.5](https://github.com/koshevy/codegena/compare/@codegena/oapi3ts@2.1.4...@codegena/oapi3ts@2.1.5) (2020-03-29)
+
+
+### Bug Fixes
+
+* **oapi3ts:** get rid of most of optionalDependencies and move them to devDependencies ([83a0023](https://github.com/koshevy/codegena/commit/83a0023ad88b3f4e14545a2cd275b989cdc2b45e))
+
+
+
+
+
 ## [2.1.4](https://github.com/koshevy/codegena/compare/@codegena/oapi3ts@2.1.3...@codegena/oapi3ts@2.1.4) (2020-03-05)
 
 
