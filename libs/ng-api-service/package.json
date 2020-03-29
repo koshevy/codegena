@@ -34,17 +34,17 @@
     "prettier": ">= 1"
   },
   "devDependencies": {
-    "@types/lodash": ">= 4",
-    "@types/node": ">= 8",
-    "jest-preset-angular": ">= 7"
-  },
-  "optionalDependencies": {
     "@angular/common": ">= 6",
     "@angular/core": ">= 6",
     "@angular/platform-browser-dynamic": ">= 6",
-    "@microsoft/typescript-etw": "*",
+    "@types/lodash": ">= 4",
+    "@types/node": ">= 8",
     "core-js": "*",
+    "jest-preset-angular": ">= 7",
     "rxjs": ">= 6",
     "zone.js": ">= 0"
+  },
+  "optionalDependencies": {
+    "@microsoft/typescript-etw": "*"
   }
 }
