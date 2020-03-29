@@ -18,7 +18,7 @@ yarn lint &&
 rm -rf dist/* &&
 # version update error ignoring because
 # there may be unpublished packages with updated version
-(./node_modules/.bin/lerna version --conventional-commits --yes --allow-branch --exact master || true) &&
+(./node_modules/.bin/lerna version --conventional-commits --yes --allow-branch master --exact || true) &&
 yarn run build:all-libs &&
 yarn run test:libs &&
 
