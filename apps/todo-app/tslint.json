@@ -4,5 +4,8 @@
     "directive-selector": false,
     "component-selector": false,
     "no-input-rename": false
+  },
+  "linterOptions": {
+    "exclude": ["!**/*", "!**/*"]
   }
 }
