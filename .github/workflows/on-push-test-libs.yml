@@ -1,6 +1,6 @@
 # Test libraries on push
 
-name: Node.js CI
+name: Test libraries on push
 
 on: [push]
 
