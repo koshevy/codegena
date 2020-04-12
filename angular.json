@@ -25,7 +25,9 @@
               "apps/todo-app/src/favicon.ico",
               "apps/todo-app/src/assets"
             ],
-            "styles": ["apps/todo-app/src/styles.scss"],
+            "styles": [
+              "apps/todo-app/src/styles.scss"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -85,7 +87,10 @@
               "apps/todo-app/tsconfig.app.json",
               "apps/todo-app/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/todo-app/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/todo-app/**"
+            ]
           }
         },
         "test": {
@@ -111,7 +116,9 @@
             "outputPath": "dist/apps/todo-app-backend",
             "main": "apps/todo-app-backend/src/main.ts",
             "tsConfig": "apps/todo-app-backend/tsconfig.app.json",
-            "assets": ["apps/todo-app-backend/src/assets"],
+            "assets": [
+              "apps/todo-app-backend/src/assets"
+            ],
             "externalDependencies": [
               "@nestjs/core",
               "@nestjs/common",
@@ -148,7 +155,10 @@
               "apps/todo-app-backend/tsconfig.app.json",
               "apps/todo-app-backend/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/todo-app-backend/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/todo-app-backend/**"
+            ]
           }
         },
         "test": {
@@ -180,7 +190,10 @@
               "libs/oapi3ts/tsconfig.lib.json",
               "libs/oapi3ts/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/oapi3ts/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/oapi3ts/**"
+            ]
           }
         },
         "test": {
@@ -218,7 +231,10 @@
               "libs/ng-api-service/tsconfig.lib.json",
               "libs/ng-api-service/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/ng-api-service/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng-api-service/**"
+            ]
           }
         },
         "test": {
@@ -256,7 +272,10 @@
               "libs/oapi3ts-cli/tsconfig.lib.json",
               "libs/oapi3ts-cli/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/oapi3ts-cli/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/oapi3ts-cli/**"
+            ]
           }
         },
         "test": {
@@ -294,7 +313,10 @@
               "libs/todo-app-scheme/tsconfig.lib.json",
               "libs/todo-app-scheme/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/todo-app-scheme/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/todo-app-scheme/**"
+            ]
           }
         },
         "test": {
@@ -314,7 +336,8 @@
     }
   },
   "cli": {
-    "defaultCollection": "@nrwl/angular"
+    "defaultCollection": "@nrwl/angular",
+    "analytics": false
   },
   "schematics": {
     "@nrwl/angular:application": {

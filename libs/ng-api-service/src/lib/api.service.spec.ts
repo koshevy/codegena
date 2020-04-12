@@ -48,7 +48,7 @@ describe('Correct working of subclasses of `ApiService` in `@codegena/ng-api-ser
                 ]
             }).compileComponents();
 
-            httpTestingController = TestBed.get(HttpTestingController);
+            httpTestingController = TestBed.inject(HttpTestingController);
         }));
 
         // Check the API-services injected successfully
@@ -327,9 +327,9 @@ describe('Correct working of subclasses of `ApiService` in `@codegena/ng-api-ser
                 ]
             }).compileComponents();
 
-            httpTestingController = TestBed.get(HttpTestingController);
-            resetApiSubscribers$ = TestBed.get(RESET_API_SUBSCRIBERS);
-            virtualConnectionStatus$ = TestBed.get(VIRTUAL_CONNECTION_STATUS);
+            httpTestingController = TestBed.inject(HttpTestingController);
+            resetApiSubscribers$ = TestBed.inject(RESET_API_SUBSCRIBERS);
+            virtualConnectionStatus$ = TestBed.inject(VIRTUAL_CONNECTION_STATUS) as any;
         }));
 
         // request with wrong data (wrong params, wrong body, wrong response),
@@ -626,9 +626,9 @@ describe('Correct working of subclasses of `ApiService` in `@codegena/ng-api-ser
                 ]
             }).compileComponents();
 
-            httpTestingController = TestBed.get(HttpTestingController);
-            resetApiSubscribers$ = TestBed.get(RESET_API_SUBSCRIBERS);
-            serversInfo = TestBed.get(SERVERS_INFO);
+            httpTestingController = TestBed.inject(HttpTestingController);
+            resetApiSubscribers$ = TestBed.inject(RESET_API_SUBSCRIBERS);
+            serversInfo = TestBed.inject(SERVERS_INFO);
         }));
 
         it('should redefine common URL (localhost to www.some.example.url)', fakeAsync(() => {
@@ -742,7 +742,7 @@ describe('Correct working of subclasses of `ApiService` in `@codegena/ng-api-ser
                 ]
             }).compileComponents();
 
-            httpTestingController = TestBed.get(HttpTestingController);
+            httpTestingController = TestBed.inject(HttpTestingController);
         }));
 
         // request with wrong data (wrong params, wrong body, wrong response),
@@ -809,7 +809,7 @@ function eachApiService(iteratee: (
     serviceClass?: typeof ApiService
 ) => void) {
     _.each(apiServices as any, (service: typeof ApiService) => {
-        const serviceInstance: ApiService<any, any, any> = TestBed.get(service);
+        const serviceInstance: ApiService<any, any, any> = TestBed.inject(service);
         const requestMock: MockRequestData = requestData[serviceInstance.constructor.name];
 
         iteratee(serviceInstance, requestMock, service);

@@ -5,5 +5,8 @@
     "directive-selector": [true, "attribute", "codegena", "camelCase"],
     "deprecation": false,
     "no-implicit-dependencies": [true, "dev", "optional"]
+  },
+  "linterOptions": {
+    "exclude": ["!**/*", "!**/*"]
   }
 }
