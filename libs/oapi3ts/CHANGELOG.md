@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.1.6 (2020-04-13)
+
+**Note:** Version bump only for package @codegena/oapi3ts
+
+
+
+
+
 ## [2.1.5](https://github.com/koshevy/codegena/compare/@codegena/oapi3ts@2.1.4...@codegena/oapi3ts@2.1.5) (2020-03-29)
 
 
