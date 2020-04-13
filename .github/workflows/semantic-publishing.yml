@@ -15,10 +15,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Auth with repo for push
+      run: git remote add -f pub https://${GITHUB_TOKEN}@github.com/koshevy/codegena.git
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+        registry-url: https://registry.npmjs.org/
     - name: Install yarn
       run: npm install yarn -g
     - name: Install dependencies with yarn
@@ -28,4 +33,5 @@ jobs:
     - name: Run publishing script (powered by LernaVersion and AngularCLI)
       run: ./build-and-publish.sh
       env:
-        CI: true
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        NODE_AUTH_TOKEN: ${{secrets.npm_token}}

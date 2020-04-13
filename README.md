@@ -65,16 +65,16 @@ Features of data type generation:
 
 #### oapi3ts-cli: using in NodeJS scripts
 
-Install (without optional dependencies):
+Install:
 
 ```
-npm i @codegena/oapi3ts-cli --no-optional
+npm i @codegena/oapi3ts-cli
 ```
 
 or
 
 ```
-yarn add @codegena/oapi3ts-cli --ignore-optional
+yarn add @codegena/oapi3ts-cli
 ```
 
 So you can use `@codegena/oapi3ts-cli` in NodeJS scripts. For example, lets create `update-typings.js` script with code:
