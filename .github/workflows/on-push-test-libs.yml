@@ -31,5 +31,3 @@ jobs:
       run: yarn run build:all-libs
     - name: Test prebuilt libraries
       run: yarn run test:libs
-      env:
-        CI: true
