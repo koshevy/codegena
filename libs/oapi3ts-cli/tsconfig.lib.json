@@ -8,6 +8,7 @@
     "lib": ["dom", "es2018"]
   },
   "angularCompilerOptions": {
+    "enableIvy": false,
     "preserveSymlinks": true,
     "annotateForClosureCompiler": true,
     "skipTemplateCodegen": true,

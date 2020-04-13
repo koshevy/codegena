@@ -30,6 +30,8 @@ jobs:
       run: yarn install
     - name: Clear already built libs
       run: yarn run clear:prebuilt-libs
+    - name: Set git credentials
+      run: git config --global user.email "koshevy@gmail.com" && git config --global user.name "Alexander Koshevy"
     - name: Run publishing script (powered by LernaVersion and AngularCLI)
       run: ./build-and-publish.sh
       env:
