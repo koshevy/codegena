@@ -1,0 +1,35 @@
+# Test libraries on push
+
+name: Test libraries on push
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Install yarn
+      run: npm install yarn -g
+    - name: Install dependencies with yarn
+      run: yarn install
+    - name: Clear already built libs
+      run: yarn run clear:prebuilt-libs
+    - name: Test libraries in monorepo mode (without prebuilt libs)
+      run: yarn run test:libs
+    - name: Build libraries
+      run: yarn run build:all-libs
+    - name: Test prebuilt libraries
+      run: yarn run test:libs
+      env:
+        CI: true

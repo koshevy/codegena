@@ -1,9 +1,10 @@
 import _ from 'lodash';
+import { Options } from 'prettier';
 import prettier from 'prettier/standalone';
 import prettierParserMD from 'prettier/parser-markdown';
 import prettierParserTS from 'prettier/parser-typescript';
 
-const commonPrettierOptions = {
+const commonPrettierOptions: Options = {
     plugins: [prettierParserMD, prettierParserTS],
     proseWrap: 'always',
     singleQuote: true
@@ -127,7 +128,7 @@ export abstract class AbstractTypeScriptDescriptor implements DataTypeDescriptor
         codeType: 'typescript' | 'markdown' = 'typescript'
     ): string {
         const prettierOptions = {
-            parser: (codeType === 'markdown') ? 'remark' : codeType,
+            parser: codeType,
             ...commonPrettierOptions
         };
 

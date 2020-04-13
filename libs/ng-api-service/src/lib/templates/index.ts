@@ -1,10 +1,11 @@
 import _ from 'lodash';
 import { ApiServiceTemplateData } from './api-service.data';
 import { template as template_ } from './api-service.template';
+import { Options } from 'prettier';
 import * as prettier from 'prettier/standalone';
 import * as prettierParserTS from 'prettier/parser-typescript';
 
-const prettierOptions = {
+const prettierOptions: Options = {
     bracketSpacing: true,
     parser: 'typescript',
     plugins: [prettierParserTS],

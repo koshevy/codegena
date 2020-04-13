@@ -4,5 +4,8 @@
     "component-selector": [true, "element", "codegena", "kebab-case"],
     "directive-selector": [true, "attribute", "codegena", "camelCase"],
     "no-implicit-dependencies": [true, "dev", "optional"]
+  },
+  "linterOptions": {
+    "exclude": ["!**/*", "!**/*"]
   }
 }
