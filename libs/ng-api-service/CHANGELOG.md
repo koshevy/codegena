@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.1.10 (2020-04-13)
+
+**Note:** Version bump only for package @codegena/ng-api-service
+
+
+
+
+
 ## [2.1.9](https://github.com/koshevy/codegena/compare/@codegena/ng-api-service@2.1.8...@codegena/ng-api-service@2.1.9) (2020-03-29)
 
 

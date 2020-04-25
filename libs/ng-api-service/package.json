@@ -1,7 +1,7 @@
 {
   "name": "@codegena/ng-api-service",
   "description": "Extension for @codegena/oapi3ts: Angular services for work with REST API",
-  "version": "2.1.9",
+  "version": "2.1.10",
   "author": "koshevy@gmail.com",
   "keywords": [
     "swagger",
