@@ -6,12 +6,15 @@
       "ignoreChanges": [
         "tslint.json",
         "jest.config.js",
-        "*.spec.ts"
+        "*.spec.ts",
+        "*.sh",
+        "lerna.json",
+        ".github/workflows/*"
       ],
       "conventionalCommits": true
     },
     "version": {
-      "allowBranch": "master"
+      "allowBranch": ["master", "release"]
     }
   },
   "npmClient": "yarn",
