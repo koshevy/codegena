@@ -1,6 +1,6 @@
 # Test libraries on push
 
-name: Test libraries on push
+name: Test libraries on pull requests to master
 
 on:
   pull_request:
