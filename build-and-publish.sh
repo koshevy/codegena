@@ -5,13 +5,13 @@ releaseMode=''
 
 if [ "$branch" == "master" ]
 then
-    echo "Sterting pre-publishing..."
+    echo "Starting prerelease publishing..."
     releaseMode="--conventional-prerelease"
 else
     if ["$branch" == "release"]
     then
         releaseMode="--conventional-graduate --no-push"
-        echo "Sterting publishing..."
+        echo "Starting release publishing..."
     else
         echo -e "\033[0;31m";
         echo "╔════════════════════════════════════════════════╗"
