@@ -64,7 +64,7 @@ export abstract class AbstractApplication {
                 const fileName = this.getFilenameOf(descriptor);
                 const fileContents = [
                     ...this.cliConfig.separatedFiles
-                        ? [this.getImports(depencies).join('\n')]
+                        ? [this.getImports(depencies, fileName).join('\n')]
                         : [],
                     text
                 ].join('\n\n').trim();
@@ -220,9 +220,12 @@ export abstract class AbstractApplication {
         return `${_.kebabCase(descriptor.modelName)}`;
     }
 
-    private getImports(descriptors: DataTypeDescriptor[]): string[] {
+    private getImports(descriptors: DataTypeDescriptor[], currentFileName: string): string[] {
         return _(descriptors)
             .uniq()
+            .filter(descriptor =>
+                this.getFilenameOf(descriptor) !== currentFileName
+            )
             .sort()
             // todo here was <DataTypeDescriptor, string> but TS caused error
             .map<any>(
