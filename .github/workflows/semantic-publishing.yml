@@ -31,7 +31,7 @@ jobs:
     - name: Install yarn
       run: npm install yarn -g
     - name: Install dependencies with yarn
-      run: yarn install
+      run: yarn install --frozen-lockfile
     - name: Clear already built libs
       run: yarn run clear:prebuilt-libs
     - name: Set git credentials
