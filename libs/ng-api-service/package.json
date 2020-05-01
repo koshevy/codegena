@@ -34,8 +34,13 @@
     "prettier": ">= 1"
   },
   "devDependencies": {
-    "@types/lodash": "*",
-    "@types/node": "*"
+    "@angular/common": "9.1.1",
+    "@angular/core": "9.1.1",
+    "@angular/platform-browser-dynamic": "9.1.1",
+    "@types/lodash": ">= 4",
+    "@types/node": "*",
+    "jest-preset-angular": "*",
+    "rxjs": "6.5.5"
   },
   "optionalDependencies": {
     "@microsoft/typescript-etw": "*"

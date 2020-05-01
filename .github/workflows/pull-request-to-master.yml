@@ -26,7 +26,7 @@ jobs:
     - name: Install dependencies with yarn
       run: yarn install
     - name: Lint
-      run: ng lint
+      run: yarn lint
     - name: Clear already built libs
       run: yarn run clear:prebuilt-libs
     - name: Test libraries in monorepo mode (without prebuilt libs)
