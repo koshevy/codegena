@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.10-alpha.2](https://github.com/koshevy/codegena/compare/@codegena/oapi3ts-cli@2.1.10-alpha.1...@codegena/oapi3ts-cli@2.1.10-alpha.2) (2020-05-01)
+
+
+### Bug Fixes
+
+* **oapi3ts-cli:** fix adding self-import in files that contain recursive refs ([72bd094](https://github.com/koshevy/codegena/commit/72bd094792cdc28e87538245f763618148ed52dd))
+* **oapi3ts-cli:** remove self-import in files that contain recursive refs ([c6d516c](https://github.com/koshevy/codegena/commit/c6d516c1c613605c9fcf04e4bbc520bb0b9588a1)), closes [#25](https://github.com/koshevy/codegena/issues/25)
+
+
+
+
+
 ## 2.1.10-alpha.1 (2020-05-01)
 
 **Note:** Version bump only for package @codegena/oapi3ts-cli

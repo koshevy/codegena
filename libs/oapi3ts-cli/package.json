@@ -1,7 +1,7 @@
 {
   "name": "@codegena/oapi3ts-cli",
   "description": "CLI Application API for codegeneration from OAS3",
-  "version": "2.1.10-alpha.1",
+  "version": "2.1.10-alpha.2",
   "author": "koshevy@gmail.com",
   "keywords": [
     "swagger",
@@ -26,7 +26,7 @@
     "build": "ng build oapi3ts-cli"
   },
   "dependencies": {
-    "@codegena/ng-api-service": "^2.1.13-alpha.1",
+    "@codegena/ng-api-service": "2.1.13-alpha.2",
     "@codegena/oapi3ts": "^2.1.9-alpha.1",
     "ajv": ">= 6",
     "hash.js": ">= 1",
