@@ -15,7 +15,7 @@
     },
     "version": {
       "allowBranch": ["master", "release"],
-      "message": "chore(release): publish %s"
+      "message": "chore(release): publish %v"
     }
   },
   "npmClient": "yarn",
