@@ -1,7 +1,6 @@
 import { AbstractApplication } from './abstract-application';
 import { CliConfig, defaultCliConfig } from './cli-config';
 import { OApiStructure } from '@codegena/oapi3ts';
-import { ObjectTypeScriptDescriptor } from "@codegena/oapi3ts/lib/adapters/typescript/descriptors/object";
 
 export class TestApplication extends AbstractApplication {
 
@@ -32,14 +31,56 @@ export class TestApplication extends AbstractApplication {
 }
 
 describe('Abstract application test', () => {
-    it('should correct render "import"-statements in files with circular typings', () => {
-        const testApp = new TestApplication();
-        testApp.createTypings();
+    let testApp: TestApplication;
 
+    beforeAll(async () => {
+        testApp = new TestApplication();
+        testApp.createTypings();
+    });
+
+    it.each([
+        'simplest-get-01-parameters',
+        'non-circular-ref',
+        'circular-ref',
+        'simplest-get-01-response',
+        'index'
+    ])('should output file "%s"', (fileName) => {
+        expect(testApp.savedFilesContent).toHaveProperty(fileName);
+    });
+
+    it.each([
+        'simplest-get-01-parameters',
+        'non-circular-ref',
+        'circular-ref',
+        'simplest-get-01-response'
+    ])('should add export of "%s" in index', (fileName) => {
+        expect(testApp.savedFilesContent['index'])
+            .toContain(`export * from './${fileName}'`);
+    });
+
+
+    it.each([
+        'simplest-get-01-parameters',
+        'non-circular-ref',
+    ])('should not to add import in "%s"', (fileName) => {
+        expect(testApp.savedFilesContent[fileName]).not.toContain(
+            'import {'
+        );
+    });
+
+    it('should add import `CircularRef` in `simplest-get-01-response`', () => {
+        expect(testApp.savedFilesContent['simplest-get-01-response']).toContain(
+            'import { CircularRef } from \'./circular-ref\''
+        );
+    });
+
+    it('should add import of `NonCircularRef` in `circular-ref`', () => {
         expect(testApp.savedFilesContent['circular-ref']).toContain(
             'import { NonCircularRef } from \'./non-circular-ref\';'
         );
+    });
 
+    it('should not to add import of `CircularRef` in `circular-ref`', () => {
         expect(testApp.savedFilesContent['circular-ref']).not.toContain(
             'import { CircularRef } from \'./circular-ref\';'
         );
