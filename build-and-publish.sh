@@ -30,7 +30,7 @@ rm -rf dist/* &&
 yarn run test:libs &&
 # version update error ignoring because
 # there may be unpublished packages with updated version
-(sh -c "./node_modules/.bin/lerna version --conventional-commits --yes $releaseMode" || true) &&
+(sh -c "./node_modules/.bin/lerna version --conventional-commits --include-merged-tags --yes $releaseMode" || true) &&
 yarn run build:all-libs &&
 yarn run test:libs &&
 

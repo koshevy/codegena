@@ -15,6 +15,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
     - name: Auth with repo for push
       run: git remote add -f pub https://${GITHUB_TOKEN}@github.com/koshevy/codegena.git
       env:

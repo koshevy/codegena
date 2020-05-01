@@ -1,7 +1,7 @@
 {
   "name": "@codegena/ng-api-service",
   "description": "Extension for @codegena/oapi3ts: Angular services for work with REST API",
-  "version": "2.1.12",
+  "version": "2.1.13-alpha.1",
   "author": "koshevy@gmail.com",
   "keywords": [
     "swagger",
@@ -34,15 +34,8 @@
     "prettier": ">= 1"
   },
   "devDependencies": {
-    "@angular/common": "*",
-    "@angular/core": "*",
-    "@angular/platform-browser-dynamic": "*",
     "@types/lodash": "*",
-    "@types/node": "*",
-    "core-js": "*",
-    "jest-preset-angular": "*",
-    "rxjs": ">= 6",
-    "zone.js": "*"
+    "@types/node": "*"
   },
   "optionalDependencies": {
     "@microsoft/typescript-etw": "*"
