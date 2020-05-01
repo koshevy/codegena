@@ -34,15 +34,8 @@
     "prettier": ">= 1"
   },
   "devDependencies": {
-    "@angular/common": "*",
-    "@angular/core": "*",
-    "@angular/platform-browser-dynamic": "*",
     "@types/lodash": "*",
-    "@types/node": "*",
-    "core-js": "*",
-    "jest-preset-angular": "*",
-    "rxjs": ">= 6",
-    "zone.js": "*"
+    "@types/node": "*"
   },
   "optionalDependencies": {
     "@microsoft/typescript-etw": "*"
