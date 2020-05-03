@@ -3,13 +3,14 @@ import {
     DescriptorSchema,
     DescriptorContext
 } from './data-type-descriptor';
+import { SchemaGeneric } from './schema'
 import { OApiStructure } from './oapi-structure';
 
 export interface ParsingProblemMeta {
     context?: DescriptorContext,
     descriptors?: DataTypeDescriptor | DataTypeDescriptor[],
     oasStructure?: OApiStructure,
-    schema?: DescriptorSchema,
+    schema?: DescriptorSchema | SchemaGeneric,
     /**
      * Path of place in {@link oasStructure} was in parsing when the error occurred.
      * Using format [RFC-6901](https://tools.ietf.org/html/rfc6901).
