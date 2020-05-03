@@ -1,6 +1,7 @@
 import { Convertor } from './convertor';
 import { defaultConfig } from '../../core/config';
 import { ApiMetaInfo } from '../../core/api-meta-info';
+import { ParsingProblems } from '../../core/parsing-problems';
 
 import _ from 'lodash';
 
@@ -17,6 +18,7 @@ describe('Typescript convertor isolated schema\'s rendering', () => {
 
     beforeAll(() => {
         schemaCases = require('./mocks/isolated-schemas.json');
+        ParsingProblems.throwErrorOnWarning = true;
     });
 
     beforeEach(() => {
@@ -690,7 +692,9 @@ describe(
 
             expect(isPositionRequired).toBe(true);
         });
-    });
+    }
+);
+
 
 // TODO test extract server info by operationId
 // TODO do extract examples by operationId
