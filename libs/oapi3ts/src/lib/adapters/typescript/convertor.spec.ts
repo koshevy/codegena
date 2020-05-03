@@ -690,7 +690,32 @@ describe(
 
             expect(isPositionRequired).toBe(true);
         });
+    }
+);
+
+describe('Simple case with named enum', () => {
+    it('should create named enum in a simple complete schema', () => {
+        const oasSchema = require('../../core/mocks/oas3/07-case-simple-named-enum.json');
+        const convertor = new Convertor(defaultConfig);
+
+        const context = {};
+        const metainfo: ApiMetaInfo[] = [];
+
+        convertor.loadOAPI3Structure(oasSchema);
+        const entryPoints = convertor.getOAPI3EntryPoints(context, metainfo);
+        const affectedModelsRendered = {};
+
+        // collect extracted models
+        Convertor.renderRecursive(
+            entryPoints,
+            (desc, text) => {
+                const name = desc.modelName || desc.suggestedModelName;
+                affectedModelsRendered[name] = text;
+            },
+            []
+        );
     });
+});
 
 // TODO test extract server info by operationId
 // TODO do extract examples by operationId
