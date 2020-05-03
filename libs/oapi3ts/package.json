@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "ajv": ">= 6",
+    "json-pointer": "^0.6.0",
     "lodash": ">= 4",
     "prettier": ">= 1"
   },
