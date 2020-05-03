@@ -714,6 +714,8 @@ describe('Simple case with named enum', () => {
             },
             []
         );
+
+        expect(affectedModelsRendered).toHaveProperty('NamedEnum');
     });
 });
 
