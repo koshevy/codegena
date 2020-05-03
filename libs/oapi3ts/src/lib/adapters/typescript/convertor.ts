@@ -2,18 +2,19 @@ import _ from 'lodash';
 import Ajv from 'ajv';
 
 import {
+    defaultConfig,
     BaseConvertor,
     ConvertorConfig,
     DataTypeContainer,
     DataTypeDescriptor,
     DescriptorContext,
+    ParsingError,
     Schema,
-    defaultConfig, SchemaObject
+    SchemaObject
 } from '../../core';
 
 // rules that helps determine a type of descriptor
 import {
-    DescriptorRule,
     DescriptorRuleFn,
     DescriptorRuleSchema,
     rules
@@ -63,8 +64,8 @@ export class Convertor extends BaseConvertor {
         const result = [];
 
         _.each(typeContainer, (descr: DataTypeDescriptor) => {
-
             const childrenDependencies = [];
+            let renderResult;
 
             // если этот тип еще не рендерился
             if (_.findIndex(
@@ -78,13 +79,23 @@ export class Convertor extends BaseConvertor {
                 alreadyRendered.push(descr);
             }
 
-            /**
-             * Рендеринг очередного типа из очереди
-             */
-            const renderResult = descr.render(
-                childrenDependencies,
-                true
-            );
+            try {
+                renderResult = descr.render(
+                    childrenDependencies,
+                    true
+                );
+            } catch(error) {
+                const modelName = descr.modelName || descr.suggestedModelName || 'anonymous descriptor';
+
+                throw new ParsingError(
+                    `An error occured at rendering of ${modelName}`,
+                    {
+                        descriptors: [descr],
+                        originalError: error,
+                        schema: descr.schema
+                    }
+                )
+            }
 
             // далее, рекурсивно нужно просчитать зависимости
             this.renderRecursive(
@@ -153,71 +164,146 @@ export class Convertor extends BaseConvertor {
 
         // holding schema on in order to avoid infinity loop
         const holdSchema = this._holdSchemaBeforeConvert(schema);
+        const modelNameInErrorMsg = name || suggestedName || 'anonymous schema';
+        // common payload for ParsingError if it needed
+        const payloadPassedToError = {
+            oasStructure: this._structure,
+            context,
+            relatedRef: originalPathSchema,
+            schema
+        };
+
         if (holdSchema) {
             return holdSchema.bulk as any;
         }
 
         let result;
 
-        // получение по $ref
         if (schema.$ref) {
-
+            // Scenario with $ref in schema:
+            //
             // Here convertor has to decide: whether a schema with a $ref
             // equals with parent (pointed in the $ref) and, therefore,
             // should be replaced by parent, or not and should get a new model.
 
-            // исключаются элементы, которые не оказывают
-            // влияния на определение типа (title, nullable и т.д.)
+            // There are being excluded properties that does't make a difference on
+            // what the type fits this schema (title, nullable и т.д.)
             const valuableOptionsCount = _.values(
                 _.omit(schema, defaultConfig.excludeFromComparison),
             ).length;
 
-            if (valuableOptionsCount === 1) {
-                result = (name && !this.config.implicitTypesRefReplacement)
-                    // если неанонимный, то создает новый на основе предка
-                    ? this.convert(
-                        this.getSchemaByPath(schema.$ref),
+            if (valuableOptionsCount === 1) {   // no valuable difference with options
+                try {
+                    result = (name && !this.config.implicitTypesRefReplacement)
+                        // not anonymous type suppose to create new data type
+                        // based on referred
+                        ? this.convert(
+                            this.getSchemaByPath(schema.$ref),
+                            context,
+                            name,
+                            suggestedName,
+                            originalPathSchema,
+                            this.findTypeByPath(schema.$ref, context)
+                        )
+                        // anonymous type just replacing by referred type
+                        : this.findTypeByPath(schema.$ref, context);
+                } catch(error) {
+                    // Rethrows already handled errors
+                    if (error instanceof ParsingError) {
+                        throw error;
+                    }
+
+                    throw new ParsingError(
+                        [
+                            `An error occurred at trying to convert ${modelNameInErrorMsg},`,
+                            `based on sub referrence to ${schema.$ref}`
+                        ].join(' '),
+                        {
+                            ...payloadPassedToError,
+                            originalError: error
+                        }
+                    );
+                }
+            } else {
+                const refSchema = this.getSchemaByPath(schema.$ref);
+
+                if (!refSchema) {
+                    throw new ParsingError(
+                        [
+                            `Error when ${modelNameInErrorMsg} resolves sub reference:`,
+                            `$ref is not found: ${schema.$ref}`
+                        ].join('\n'),
+                        payloadPassedToError
+                    );
+                }
+
+                _.merge(refSchema, _.omit(schema, ['$ref']));
+
+                try {
+                    result = this.convert(
+                        refSchema,
                         context,
                         name,
                         suggestedName,
                         originalPathSchema,
                         this.findTypeByPath(schema.$ref, context)
-                    )
-                    // если это анонимный тип, он просто ссылается
-                    // на другой существующий
-                    : this.findTypeByPath(schema.$ref, context);
-            } else {
-                const refSchema = this.getSchemaByPath(schema.$ref);
+                    );
+                } catch (error) {
+                    // Rethrows already handled errors
+                    if (error instanceof ParsingError) {
+                        throw error;
+                    }
 
-                if (!refSchema) {
-                    throw new Error(`$ref is not found: ${schema.$ref}`);
+                    throw new ParsingError(
+                        [
+                            `An error occurred at trying to convert ${modelNameInErrorMsg},`,
+                            `based on sub referrence to ${schema.$ref}`
+                        ].join(' '),
+                        {
+                            ...payloadPassedToError,
+                            originalError: error
+                        }
+                    );
                 }
+            }
+        } else {    // Base scenario (no $ref in a schema)
+            let constructor;
 
-                result = this.convert(
-                    _.merge(refSchema, _.omit(schema, ['$ref'])),
-                    context,
-                    name,
-                    suggestedName,
-                    originalPathSchema,
-                    this.findTypeByPath(schema.$ref, context)
+            try {
+                constructor = this._findMatchedConstructor(schema);
+            } catch (error) {
+                throw new ParsingError(
+                    `Error at finding matched constructor for ${modelNameInErrorMsg}`,
+                    {
+                        ...payloadPassedToError,
+                        originalError: error
+                    }
                 );
             }
-        } else {
-            // основной сценарий
 
-            const constructor = this._findMatchedConstructor(schema);
-
-            result = constructor
-                ? [new constructor(
-                    schema,
-                    this,
-                    context,
-                    name,
-                    suggestedName,
-                    originalPathSchema,
-                    ancestors
-                )]
-                : null;
+            try {
+                result = constructor
+                    ? [new constructor(
+                        schema,
+                        this,
+                        context,
+                        name,
+                        suggestedName,
+                        originalPathSchema,
+                        ancestors
+                    )]
+                    : null;
+            } catch (error) {
+                throw new ParsingError(
+                    `Error at creating descriptor for ${modelNameInErrorMsg} with class ${
+                        constructor ? constructor.name : constructor
+                    }`,
+                    {
+                        ...payloadPassedToError,
+                        originalError: error,
+                    }
+                );
+            }
         }
 
         this._holdSchemaOf(schema, result);
