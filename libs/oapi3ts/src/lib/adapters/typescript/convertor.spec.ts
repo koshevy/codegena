@@ -190,7 +190,7 @@ describe('Typescript convertor isolated schema\'s rendering', () => {
 
         expect(
             renderedEnum.replace(/\s+/g, ' ').trim()
-        ).toBe('export enum NumericEnum {_200 = 200, _201 = 201, _202 = 202}');
+        ).toBe('export type NumericEnum = 200 | 201 | 202');
     });
 
     it('should convert complex `oneOf`-scheme as root', () => {
@@ -695,6 +695,38 @@ describe(
     }
 );
 
+describe('Simple case with named enum', () => {
+    it('should create named enum in a simple complete schema', () => {
+        const oasSchema = require('../../core/mocks/oas3/07-case-simple-named-enum.json');
+        const convertor = new Convertor(defaultConfig);
+
+        const context = {};
+        const metainfo: ApiMetaInfo[] = [];
+
+        convertor.loadOAPI3Structure(oasSchema);
+        const entryPoints = convertor.getOAPI3EntryPoints(context, metainfo);
+        const affectedModelsRendered = {};
+
+        // collect extracted models
+        Convertor.renderRecursive(
+            entryPoints,
+            (desc, text) => {
+                const name = desc.modelName || desc.suggestedModelName;
+                affectedModelsRendered[name] = text;
+            },
+            []
+        );
+
+        expect(affectedModelsRendered).toHaveProperty('NamedEnum');
+        expect(affectedModelsRendered['NamedEnum']).toContain('export enum NamedEnum');
+        expect(affectedModelsRendered['NamedEnum']).toContain('FirstValue');
+        expect(affectedModelsRendered['NamedEnum']).toContain('SecondValue');
+        expect(affectedModelsRendered['NamedEnum']).toContain('ThirdValue');
+        expect(affectedModelsRendered['NamedEnum']).toContain('first-value');
+        expect(affectedModelsRendered['NamedEnum']).toContain('second-value');
+        expect(affectedModelsRendered['NamedEnum']).toContain('third-value');
+    });
+});
 
 // TODO test extract server info by operationId
 // TODO do extract examples by operationId

@@ -93,12 +93,6 @@ export const rules: DescriptorRuleSchema[] = [
             additionalProperties: true,
             properties: {
                 enum: {
-                    items: {
-                        anyOf: [
-                            {type: 'string'},
-                            {type: 'number'}
-                        ]
-                    },
                     type: 'array'
                 }
             },
