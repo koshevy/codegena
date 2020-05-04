@@ -188,7 +188,7 @@ describe('Typescript convertor isolated schema\'s rendering', () => {
 
         expect(
             renderedEnum.replace(/\s+/g, ' ').trim()
-        ).toBe('export enum NumericEnum {_200 = 200, _201 = 201, _202 = 202}');
+        ).toBe('export type NumericEnum = 200 | 201 | 202');
     });
 
     it('should convert complex `oneOf`-scheme as root', () => {
@@ -716,6 +716,13 @@ describe('Simple case with named enum', () => {
         );
 
         expect(affectedModelsRendered).toHaveProperty('NamedEnum');
+        expect(affectedModelsRendered['NamedEnum']).toContain('export enum NamedEnum');
+        expect(affectedModelsRendered['NamedEnum']).toContain('FirstValue');
+        expect(affectedModelsRendered['NamedEnum']).toContain('SecondValue');
+        expect(affectedModelsRendered['NamedEnum']).toContain('ThirdValue');
+        expect(affectedModelsRendered['NamedEnum']).toContain('first-value');
+        expect(affectedModelsRendered['NamedEnum']).toContain('second-value');
+        expect(affectedModelsRendered['NamedEnum']).toContain('third-value');
     });
 });
 

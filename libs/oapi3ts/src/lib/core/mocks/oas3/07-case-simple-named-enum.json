@@ -12,18 +12,32 @@
         "summary": "GET with inline query parameters, inline successful response, no body request",
         "parameters": [
           {
-            "name": "importantProperty",
+            "name": "inlineEnumProperty",
             "in": "query",
-            "description": "Important query parameter",
+            "description": "Query parameter with inline enum-schema",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": ["#", "$", "^"]
             }
           },
           {
-            "name": "optionalProperty",
+            "name": "inlineObjectEnumProperty",
             "in": "query",
-            "description": "Optional query parameter",
+            "description": "Query parameter with inline enum-schema and object values",
+            "required": true,
+            "schema": {
+              "enum": [
+                {"id": 1, "group": 0},
+                {"id": 2, "group": 0},
+                {"id": 1, "groups": [0, 1]}
+              ]
+            }
+          },
+          {
+            "name": "namedEnumProperty",
+            "in": "query",
+            "description": "Query parameter refers to named enum",
             "required": false,
             "schema": {
               "$ref": "#/components/schemas/NamedEnum"
@@ -40,14 +54,14 @@
                   "description": "An object with abstract data, used in successful response",
                   "type": "object",
                   "properties": {
-                    "importantProperty": {
-                      "type": "string"
+                    "inlineEnumProperty": {
+                      "enum": [1, 2, 3]
                     },
-                    "optionalProperty": {
+                    "namedEnumProperty": {
                       "$ref": "#/components/schemas/NamedEnum"
                     }
                   },
-                  "required": ["importantProperty"]
+                  "required": ["inlineEnumProperty"]
                 }
               }
             }
