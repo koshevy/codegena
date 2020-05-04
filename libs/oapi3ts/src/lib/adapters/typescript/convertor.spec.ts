@@ -190,7 +190,7 @@ describe('Typescript convertor isolated schema\'s rendering', () => {
 
         expect(
             renderedEnum.replace(/\s+/g, ' ').trim()
-        ).toBe('export enum NumericEnum {_200 = 200, _201 = 201, _202 = 202}');
+        ).toBe('export type NumericEnum = 200 | 201 | 202');
     });
 
     it('should convert complex `oneOf`-scheme as root', () => {
