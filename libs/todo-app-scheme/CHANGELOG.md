@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.10-alpha.4](https://github.com/koshevy/codegena/compare/@codegena/todo-app-scheme@0.0.10-alpha.3...@codegena/todo-app-scheme@0.0.10-alpha.4) (2020-05-04)
+
+**Note:** Version bump only for package @codegena/todo-app-scheme
+
+
+
+
+
 ## [0.0.10-alpha.3](https://github.com/koshevy/codegena/compare/@codegena/todo-app-scheme@0.0.10-alpha.2...@codegena/todo-app-scheme@0.0.10-alpha.3) (2020-05-03)
 
 **Note:** Version bump only for package @codegena/todo-app-scheme

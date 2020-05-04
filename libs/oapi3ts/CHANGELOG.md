@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.9-alpha.3](https://github.com/koshevy/codegena/compare/@codegena/oapi3ts@2.1.9-alpha.2...@codegena/oapi3ts@2.1.9-alpha.3) (2020-05-04)
+
+
+### Bug Fixes
+
+* **oapi3ts:** wrong enums rendering ([b3feec5](https://github.com/koshevy/codegena/commit/b3feec5dfeb6d60e7eb6ff0a953a25b4fe9d9969)), closes [#29](https://github.com/koshevy/codegena/issues/29)
+
+
+
+
+
 ## 2.1.9-alpha.2 (2020-05-03)
 
 **Note:** Version bump only for package @codegena/oapi3ts
