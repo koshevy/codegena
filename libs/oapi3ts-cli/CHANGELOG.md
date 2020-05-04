@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.10-alpha.3](https://github.com/koshevy/codegena/compare/@codegena/oapi3ts-cli@2.1.10-alpha.2...@codegena/oapi3ts-cli@2.1.10-alpha.3) (2020-05-03)
+
+**Note:** Version bump only for package @codegena/oapi3ts-cli
+
+
+
+
+
 ## [2.1.10-alpha.2](https://github.com/koshevy/codegena/compare/@codegena/oapi3ts-cli@2.1.10-alpha.1...@codegena/oapi3ts-cli@2.1.10-alpha.2) (2020-05-01)
 
 

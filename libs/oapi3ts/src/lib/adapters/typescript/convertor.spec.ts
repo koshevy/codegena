@@ -1,6 +1,7 @@
 import { Convertor } from './convertor';
 import { defaultConfig } from '../../core/config';
 import { ApiMetaInfo } from '../../core/api-meta-info';
+import { ParsingProblems } from '../../core/parsing-problems';
 
 import _ from 'lodash';
 
@@ -17,6 +18,7 @@ describe('Typescript convertor isolated schema\'s rendering', () => {
 
     beforeAll(() => {
         schemaCases = require('./mocks/isolated-schemas.json');
+        ParsingProblems.throwErrorOnWarning = true;
     });
 
     beforeEach(() => {
@@ -188,7 +190,7 @@ describe('Typescript convertor isolated schema\'s rendering', () => {
 
         expect(
             renderedEnum.replace(/\s+/g, ' ').trim()
-        ).toBe('export type NumericEnum = 200 | 201 | 202');
+        ).toBe('export enum NumericEnum {_200 = 200, _201 = 201, _202 = 202}');
     });
 
     it('should convert complex `oneOf`-scheme as root', () => {

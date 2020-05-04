@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import * as jsonPointer from 'json-pointer';
 
 import {
     ApiMetaInfo,
@@ -33,6 +34,7 @@ import {
     OApiStructure
 } from './oapi-structure';
 
+import { ParsingError, ParsingProblems } from './parsing-problems';
 
 type ApiMethod = | 'CONNECT'
                  | 'DELETE'
@@ -44,11 +46,27 @@ type ApiMethod = | 'CONNECT'
                  | 'PUT'
                  | 'TRACE';
 
+const jsonPathRegex = /([\w:\/\\\.]+)?#(\/?[\w+\/?]+)/;
+
 /**
- * Регулярное выражение для JSON Path-путей.
- * todo вынести в конфиг. если конфига нет — учредить
+ * @param pieces
+ * @return
+ * JSON-Path according to [RFC-6901](https://tools.ietf.org/html/rfc6901)
+ * TODO refactor: move to common helper
  */
-const pathRegex = /([\w:\/\\\.]+)?#(\/?[\w+\/?]+)/;
+function makeJsonPath(...pieces: Array<string | number>): string {
+    return jsonPointer.compile(pieces);
+}
+
+/**
+ * Rethrow {@link ParsingError} if original error already handled at inner level
+ * @param {ParsingError | any} error
+ */
+function rethrowParsingError(error: ParsingError | any): void {
+    if (error instanceof ParsingError) {
+        throw error;
+    }
+}
 
 /**
  * Базовый класс загрузчика.
@@ -59,42 +77,54 @@ export abstract class BaseConvertor {
     protected _foreignSchemaFn: (resourcePath: string) => Schema;
 
     constructor(
-        /**
-         * Конфигурация для конвертора.
-         */
         protected config: ConvertorConfig = defaultConfig
     ) {}
 
-    /**
-     * Загрузка структуры OpenAPI3-документа в конвертор.
-     * @param structure
-     */
     public loadOAPI3Structure(structure: OApiStructure) {
+        if (!structure || !_.isObjectLike(structure)) {
+            throw new ParsingError([
+                `Expected structure to be object but got:`,
+                JSON.stringify(structure, null, ' ')
+            ].join('\n'));
+        }
+
         this._structure = structure;
     }
 
-    /**
-     * Метод для установки функции, с помощью которой происходит обращение
-     * к сторонней схеме (которая находится в другом файле).
-     * @param fn
-     */
-    public setForeignSchemeFn(fn: (resourcePath: string) => Schema): void {
-        this._foreignSchemaFn = fn;
+    public setForeignSchemeFn(fn: (jsonPath: string) => Schema): void {
+        if (!_.isFunction(fn)) {
+            throw new ParsingError('Error in `setForeignSchemeFn`: argument has to be function!');
+        }
+
+        this._foreignSchemaFn = (jsonPath) => {
+            try {
+                return fn(jsonPath);
+            } catch (e) {
+                throw new ParsingError(
+                    'Error when trying to resolve schema!',
+                    { jsonPath }
+                );
+            }
+        };
     }
 
     /**
-     * Получение "входных точек" OpenAPI3-структуры:
+     * Getting of "entry-points" from structure in {@link _structure} early
+     * loaded by {@link loadOAPI3Structure}.
      *
-     * - Модели параметров API-методов
-     * - Модели тел запросов API-методов
-     * - Модели ответов API-методов
+     * Entrypoints are:
      *
-     * С этих входных точек может быть начата "раскрутка" цепочки
-     * зависимостей для рендеринга с помощью метода
-     * [Convertor.renderRecursive]{@link Convertor.renderRecursive}.
+     * - Parameters
+     * - Requests
+     * - Responses
+     *
+     * ### Why it needed?
+     *
+     * Entrypoints is needed to use [Convertor.renderRecursive]{@link Convertor.renderRecursive}.
+     * It's like a pulling on thread where entrypoints are outstanding trheads.
      *
      * @param ApiMetaInfo metaInfo
-     * Place where meta-information accumulates during
+     * Mutable object where meta-information accumulates during
      * API-info extracting.
      */
     public getOAPI3EntryPoints(
@@ -128,8 +158,8 @@ export abstract class BaseConvertor {
                 // ссылаются ($ref) без изменения на другие, подменяются
                 // моделями из `schema`.
                 return _.map(container, (descr: DataTypeDescriptor) => {
-                    // исключение элементов, которые имеют общий
-                    // originalSchemaPath c элементами, на которые они сослались
+                    // Excluding of elements having common `originalSchemaPath`
+                    // and simultaneously already related with.
                     if (descr.originalSchemaPath) {
 
                         if (_.findIndex(
@@ -149,9 +179,11 @@ export abstract class BaseConvertor {
             }
         );
 
-        return _.compact(_.flattenDepth<DataTypeDescriptor>(
+        const dataTypeContainer = _.flattenDepth<DataTypeDescriptor>(
             dataTypeContainers
-        ));
+        );
+
+        return _.compact(dataTypeContainer);
     }
 
     /**
@@ -178,8 +210,14 @@ export abstract class BaseConvertor {
             : this._processSchema(path, context);
     }
 
-    public getSchemaByPath(path: string): Schema {
-        const pathMatches = path.match(pathRegex);
+    /**
+     * @deprecated will be renamed to `getSchemaByRef`
+     * @param ref
+     * @param pathWhereReferred
+     * @return
+     */
+    public getSchemaByPath(ref: string, pathWhereReferred?: string[]): Schema {
+        const pathMatches = ref.match(jsonPathRegex);
 
         if (pathMatches) {
             const filePath = pathMatches[1];
@@ -190,14 +228,35 @@ export abstract class BaseConvertor {
 
             const result = _.get(
                 src,
-                _.trim(schemaPath, '#/\\').replace(/[\\\/]/g, '.')
+                _.trim(schemaPath, '#/\\').replace(/[\\\/]/g, '.'),
+                undefined
             );
+
+            if (result === undefined) {
+                ParsingProblems.parsingWarning(
+                    `Cant resolve ${ref}!`,
+                    {
+                        oasStructure: this._structure,
+                        relatedRef: ref,
+                        jsonPath: pathWhereReferred
+                            ? makeJsonPath(...pathWhereReferred)
+                            : undefined
+                    }
+                );
+            }
 
             return result;
 
         } else {
-            throw new Error(
-                `JSON Path error: ${path} is not valid JSON path!`
+            throw new ParsingError(
+                `JSON Path error: ${ref} is not valid JSON path!`,
+                {
+                    oasStructure: this._structure,
+                    relatedRef: ref,
+                    jsonPath: pathWhereReferred
+                        ? makeJsonPath(...pathWhereReferred)
+                        : undefined
+                }
             );
         }
     }
@@ -246,28 +305,89 @@ export abstract class BaseConvertor {
         metaInfo: ApiMetaInfo[]
     ): {[className: string]: Schema} {
         const struct: OApiStructure = this._structure;
+
+        if (!struct) {
+            throw new ParsingError([
+                'There is no structure loaded!',
+                'Please, call method `loadOAPI3Structure` before!'
+            ].join(' '));
+        }
+
         const result: {[className: string]: Schema} = {};
-        const paths: OApiPaths = struct.paths || {};
+        const paths: OApiPaths = struct.paths;
+
+        if (!paths) {
+            throw new ParsingError(
+                'No paths presented in OAS structure!',
+                { oasStructure: struct }
+            );
+        }
 
         for (const path in paths) {
-
+            // skip proto's properties
             if (!paths.hasOwnProperty(path)) {
                 continue;
             }
 
-            const pathItem: OApiPathItem = struct.paths[path] || {};
+            const jsonPathToPath = ['path', path];
+
+            if (!path) {
+                ParsingProblems.parsingWarning(
+                    'Path key cant be empty. Skipped.',
+                    {
+                        oasStructure: struct,
+                        jsonPath: makeJsonPath(...jsonPathToPath)
+                    }
+                );
+
+                continue;
+            }
+
+            const pathItem: OApiPathItem = struct.paths[path];
+
+            if (!_.isObjectLike(pathItem)) {
+                ParsingProblems.parsingWarning(
+                    'Item of "paths" should be object like. Skipped.',
+                    {
+                        oasStructure: struct,
+                        jsonPath: makeJsonPath(...jsonPathToPath)
+                    }
+                );
+
+                continue;
+            }
 
             for (const methodName in OApiPathItemMethods) {
-
+                // skip proto's properties
                 if (!pathItem.hasOwnProperty(methodName)) {
                     continue;
                 }
 
                 const apiOperation: OApiOperation = pathItem[methodName];
+                const jsonPathToOperation = [...jsonPathToPath, methodName];
+
+                if (!_.isObjectLike(apiOperation)) {
+                    ParsingProblems.parsingWarning(
+                        'Operation should be object like. Skipped.',
+                        {
+                            oasStructure: struct,
+                            jsonPath: makeJsonPath(...jsonPathToOperation)
+                        }
+                    );
+
+                    continue;
+                }
+
                 const baseTypeName = this._getOperationBaseName(
                     apiOperation,
                     methodName as OApiPathItemMethods,
-                    path
+                    path,
+                    jsonPathToOperation
+                );
+
+                const servers = this._getOperationsServers(
+                    apiOperation,
+                    jsonPathToOperation
                 );
 
                 const metaInfoItem: ApiMetaInfo = {
@@ -286,35 +406,82 @@ export abstract class BaseConvertor {
                     requestSchema: null,
                     responseModelName: null,
                     responseSchema: null,
-                    servers: this._getOperationsServers(apiOperation),
+                    servers,
                     // default noname
                     typingsDependencies: [],
                     typingsDirectory: 'typings',
                 };
 
-                // pick Parameters schema
-                _.assign(result,
-                    this._pickApiMethodParameters(
-                        metaInfoItem,
-                        apiOperation.parameters
-                    )
-                );
+                let jsonSubPathToOperation: string[];
 
-                // pick Responses schema
-                _.assign(result,
-                    this._pickApiMethodResponses(
-                        metaInfoItem,
-                        apiOperation.responses || {} as any
-                    )
-                );
+                try{
+                    jsonSubPathToOperation = [...jsonPathToOperation, 'parameters'];
+                    // pick Parameters schema
+                    _.assign(result,
+                        this._pickApiMethodParameters(
+                            metaInfoItem,
+                            apiOperation.parameters,
+                            jsonSubPathToOperation
+                        )
+                    );
+                } catch(error) {
+                    rethrowParsingError(error);
 
-                // pick Request Body schema
-                _.assign(result,
-                    this._pickApiMethodRequest(
-                        apiOperation,
-                        metaInfoItem
-                    )
-                );
+                    throw new ParsingError(
+                        'An error occurred at method parameters fetching',
+                        {
+                            oasStructure: struct,
+                            jsonPath: makeJsonPath(...jsonSubPathToOperation),
+                            originalError: error
+                        }
+                    );
+                }
+
+                try {
+                    jsonSubPathToOperation = [...jsonPathToOperation, 'responses'];
+                    // pick Responses schema
+                    _.assign(result,
+                        this._pickApiMethodResponses(
+                            metaInfoItem,
+                            apiOperation.responses || {} as any,
+                            jsonSubPathToOperation
+                        )
+                    );
+                } catch(error) {
+                    rethrowParsingError(error);
+
+                    throw new ParsingError(
+                        'An error occurred at method responses fetching',
+                        {
+                            oasStructure: struct,
+                            jsonPath: makeJsonPath(...jsonSubPathToOperation),
+                            originalError: error
+                        }
+                    );
+                }
+
+                try {
+                    jsonSubPathToOperation = [...jsonPathToOperation, 'requestBody'];
+                    // pick Request Body schema
+                    _.assign(result,
+                        this._pickApiMethodRequest(
+                            apiOperation,
+                            metaInfoItem,
+                            [...jsonSubPathToOperation]
+                        )
+                    );
+                } catch(error) {
+                    rethrowParsingError(error);
+
+                    throw new ParsingError(
+                        'An error occurred at method request body fetching',
+                        {
+                            oasStructure: struct,
+                            jsonPath: makeJsonPath(...jsonSubPathToOperation),
+                            originalError: error
+                        }
+                    );
+                }
 
                 metaInfo.push(metaInfoItem);
             }
@@ -329,11 +496,11 @@ export abstract class BaseConvertor {
      */
     protected _pickApiMethodParameters(
         metaInfoItem: ApiMetaInfo,
-        parameters: OApiParameter[]
+        parameters: OApiParameter[],
+        jsonPathToOperation: string[]
     ): {[key: string]: Schema} {
 
         const result: {[key: string]: Schema} = {};
-
         const paramsModelName = this.config.parametersModelName(
             metaInfoItem.baseTypeName
         );
@@ -349,7 +516,10 @@ export abstract class BaseConvertor {
             if (parameter.$ref) {
                 parameter = _.merge(
                     _.omit<OApiParameter>(parameter, ['$ref']),
-                    this.getSchemaByPath(parameter.$ref)
+                    this.getSchemaByPath(
+                        parameter.$ref,
+                        [...jsonPathToOperation, String(index)]
+                    )
                 ) as OApiParameter;
             }
 
@@ -396,7 +566,8 @@ export abstract class BaseConvertor {
 
     protected _pickApiMethodResponses(
         metaInfoItem: ApiMetaInfo,
-        responses: OApiResponsesSet
+        responses: OApiResponsesSet,
+        jsonPathToOperation: string[]
     ): {[key: string]: Schema} {
 
         const result = {};
@@ -406,11 +577,14 @@ export abstract class BaseConvertor {
             code: string | number
         ) => {
 
-            // FIXME do tests when $ref to schema.responses
+            // todo do tests when $ref to schema.responses
             if (response.$ref) {
                 response = _.merge(
                     _.omit<OApiResponse>(response, ['$ref']),
-                    this.getSchemaByPath(response.$ref)
+                    this.getSchemaByPath(
+                        response.$ref,
+                        [...jsonPathToOperation, String(code)]
+                    )
                 ) as OApiResponse;
             }
 
@@ -428,7 +602,7 @@ export abstract class BaseConvertor {
                 mediaType: OApiMediaType,
                 contentTypeKey: string
             ) => {
-                // FIXME do fallback if no `schema property`
+                // todo do fallback if no `schema property`
                 const schema = _.get(mediaType, 'schema')
                     || {
                         description: 'Empty response',
@@ -487,7 +661,8 @@ export abstract class BaseConvertor {
 
     protected _pickApiMethodRequest(
         apiOperation: OApiOperation,
-        metaInfoItem: ApiMetaInfo
+        metaInfoItem: ApiMetaInfo,
+        jsonPathToOperation: string[]
     ): {
         [modelName: string]: SchemaGeneric
     } | null {
@@ -563,27 +738,48 @@ export abstract class BaseConvertor {
         return results;
     }
 
-    /**
-     * Получение сторонней схемы.
-     * @param resourcePath
-     * URL или путь до файла, содержащего стороннюю схему.
-     */
-    protected _getForeignSchema(resourcePath: string): Schema {
+    protected _getForeignSchema(ref: string): Schema {
         if (this._foreignSchemaFn) {
-            return this._foreignSchemaFn(resourcePath);
+            return this._foreignSchemaFn(ref);
         } else {
-            throw new Error(`
-                Function for getting foreign scheme not set.
-                Use setForeignSchemeFn(). Path: ${resourcePath}.
-            `);
+            throw new ParsingError(
+                [
+                    'Function for getting foreign scheme not set.',
+                    `Use setForeignSchemeFn(). Path: ${ref}.`
+                ].join('\n'),
+                {
+                    oasStructure: this._structure,
+                    relatedRef: ref
+                }
+            );
         }
     }
 
     private _getOperationBaseName(
         apiOperation: OApiOperation,
         methodName: OApiPathItemMethods,
-        path: string
+        path: string,
+        jsonPathToOperation: string[]
     ): string {
+        if (!apiOperation.operationId || !_.isString(apiOperation.operationId)) {
+            const baseNameFallback = _.upperFirst(_.camelCase(
+                jsonPathToOperation.join('-').replace(/[^\-\w]/g, '')
+            ));
+
+            ParsingProblems.parsingWarning(
+                [
+                    `Wrong operation id "${apiOperation.operationId}".`,
+                    `Fallback basename is: "${baseNameFallback}".`
+                ].join('\n'),
+                {
+                    oasStructure: this._structure,
+                    jsonPath: makeJsonPath(...jsonPathToOperation, 'operationId')
+                }
+            );
+
+            return baseNameFallback;
+        }
+
         const operationId = _.camelCase(
             apiOperation.operationId.trim().replace(/[^\w+]/g, '_')
         );
@@ -594,12 +790,34 @@ export abstract class BaseConvertor {
         ].join('');
     }
 
-    private _getOperationsServers(apiOperation: OApiOperation): string[] {
+    private _getOperationsServers(
+        apiOperation: OApiOperation,
+        jsonPathToOperation: string[]
+    ): string[] {
         let servers = apiOperation.servers || this._structure.servers;
+
+        if (servers !== undefined && !_.isArray(servers)) {
+            ParsingProblems.parsingWarning('Servers should be array. Skipped.', {
+                oasStructure: this._structure,
+                jsonPath: makeJsonPath(...jsonPathToOperation, 'servers')
+            });
+
+            servers = [];
+        }
+
         if (!servers || servers.length < 1) {
             servers = defaultConfig.defaultServerInfo;
         }
 
-        return _.map(servers, server => server.url);
+        return _.map(servers, (server, index) => {
+            if (!server.url || !_.isString(server.url)) {
+                throw new ParsingError('Server object should have url (string)', {
+                    oasStructure: this._structure,
+                    jsonPath: makeJsonPath(...jsonPathToOperation, 'servers', index, 'url')
+                })
+            }
+
+            return server.url
+        });
     }
 }
