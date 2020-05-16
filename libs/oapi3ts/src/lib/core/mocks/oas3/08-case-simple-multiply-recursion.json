@@ -1,0 +1,70 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "08 — Simple case"
+  },
+  "paths": {
+    "/": {
+      "summary": "Simplest operation with GET method support",
+      "get": {
+        "operationId": "simpleGet08",
+        "summary": "GET with inline response referred to to recursive model with few self-appealings",
+        "parameters": [
+          {
+            "name": "importantProperty",
+            "in": "query",
+            "description": "Important query parameter",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "optionalProperty",
+            "in": "query",
+            "description": "Optional query parameter",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecursiveModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RecursiveModel": {
+        "title": "RecursiveModel",
+        "type": "object",
+        "properties": {
+          "firstEntering": {
+            "$ref": "#/components/schemas/RecursiveModel"
+          },
+          "secondEntering": {
+            "$ref": "#/components/schemas/RecursiveModel"
+          },
+          "simpleProp": {
+            "type": "string"
+          },
+          "thirdEntering": {
+            "$ref": "#/components/schemas/RecursiveModel"
+          }
+        }
+      }
+    }
+  }
+}
