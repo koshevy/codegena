@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0-alpha.0](https://github.com/koshevy/codegena/compare/@codegena/oapi3ts@2.1.9-alpha.3...@codegena/oapi3ts@2.2.0-alpha.0) (2020-05-17)
+
+
+### Bug Fixes
+
+* **oapi3ts:** fix multiply recursive themself dependencies ([f204833](https://github.com/koshevy/codegena/commit/f204833be942d1bd720f2998d9da239ff6c1052a))
+
+
+### Features
+
+* **oapi3ts:** properties with $ref and title/description now have own comments ([4b8b89c](https://github.com/koshevy/codegena/commit/4b8b89c52df528d8ac9c6b2fd346f62b68877279))
+
+
+
+
+
 ## [2.1.9-alpha.3](https://github.com/koshevy/codegena/compare/@codegena/oapi3ts@2.1.9-alpha.2...@codegena/oapi3ts@2.1.9-alpha.3) (2020-05-04)
 
 
