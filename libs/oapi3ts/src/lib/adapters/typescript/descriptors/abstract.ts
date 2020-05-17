@@ -67,29 +67,13 @@ export abstract class AbstractTypeScriptDescriptor implements DataTypeDescriptor
     ) { }
 
     /**
-     * Получение комментариев для этого дескриптора.
+     * todo todo https://github.com/koshevy/codegena/issues/33
      */
     public getComments(): string {
-        const description = this.formatCode(
-            `${
-                this.schema.title
-                    ? `## ${this.schema.title}\n`
-                    : ''
-            }${ (this.schema.description || '').trim()}`,
-            'markdown'
+        return this.makeComment(
+            this.schema.title,
+            this.schema.description
         );
-
-        const commentLines = _.compact(description.split('\n'));
-        let comment = '';
-
-        if (commentLines.length) {
-            comment = `/**\n${_.map(
-                commentLines,
-                v => ` * ${v}`
-            ).join('\n')}\n */\n`;
-        }
-
-        return comment;
     }
 
     public toString(): string {
@@ -119,6 +103,7 @@ export abstract class AbstractTypeScriptDescriptor implements DataTypeDescriptor
 
     /**
      * Formatting code. Supports TypeScript and Markdown essences.
+     * todo https://github.com/koshevy/codegena/issues/33
      *
      * @param code
      * @param codeType
@@ -133,5 +118,30 @@ export abstract class AbstractTypeScriptDescriptor implements DataTypeDescriptor
         };
 
         return prettier.format(code, prettierOptions);
+    }
+
+    /**
+     * todo todo https://github.com/koshevy/codegena/issues/33
+     */
+    protected makeComment(title: string, description: string): string {
+        const markdownText = this.formatCode(
+            [
+                title ? `## ${title}` : '',
+                (description || '').trim()
+            ].join('\n'),
+            'markdown'
+        );
+
+        const commentLines = _.compact(markdownText.split('\n'));
+        let comment = '';
+
+        if (commentLines.length) {
+            comment = `/**\n${_.map(
+                commentLines,
+                v => ` * ${v}`
+            ).join('\n')}\n */\n`;
+        }
+
+        return comment;
     }
 }

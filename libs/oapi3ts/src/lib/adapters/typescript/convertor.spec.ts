@@ -695,7 +695,7 @@ describe(
     }
 );
 
-describe('Simple case with named enum', () => {
+describe('Simple case with named different schema types', () => {
     it('should create named enum in a simple complete schema', () => {
         const oasSchema = require('../../core/mocks/oas3/07-case-simple-named-enum.json');
         const convertor = new Convertor(defaultConfig);
@@ -725,6 +725,30 @@ describe('Simple case with named enum', () => {
         expect(affectedModelsRendered['NamedEnum']).toContain('first-value');
         expect(affectedModelsRendered['NamedEnum']).toContain('second-value');
         expect(affectedModelsRendered['NamedEnum']).toContain('third-value');
+    });
+
+    it('should create named object with few recursion items', () => {
+        const oasSchema = require('../../core/mocks/oas3/08-case-simple-multiply-recursion.json');
+        const convertor = new Convertor(defaultConfig);
+
+        const context = {};
+        const metainfo: ApiMetaInfo[] = [];
+        const affectedModelsRendered = {};
+
+        convertor.loadOAPI3Structure(oasSchema);
+        const entryPoints = convertor.getOAPI3EntryPoints(context, metainfo);
+
+        // collect extracted models
+        Convertor.renderRecursive(
+            entryPoints,
+            (desc, text) => {
+                const name = desc.modelName || desc.suggestedModelName;
+                affectedModelsRendered[name] = text;
+            },
+            []
+        );
+
+        expect(affectedModelsRendered).toHaveProperty('RecursiveModel');
     });
 });
 

@@ -109,22 +109,29 @@ export class ObjectTypeScriptDescriptor
                     suggestedName
                 );
 
+                let comment;
+                const isReadyDescriptor = !_.isEmpty(typeContainer) && !_.isEmpty(typeContainer[0]);
+
+                if (propSchema.title || propSchema.description) {
+                    comment = this.makeComment(propSchema.title, propSchema.description);
+                } else {
+                    comment = isReadyDescriptor
+                        ? typeContainer[0].getComments()
+                        : ''
+                }
+
                 const propDescr = {
                     required: _.findIndex(
                         schema.required || [],
                         v => v === propName
                     ) !== -1,
-
                     readOnly: propSchema.readOnly || propSchema['readonly'],
-
                     typeContainer,
-
-                    comment: typeContainer[0]
-                        ? typeContainer[0].getComments()
-                        : '',
-
+                    comment,
                     defaultValue: propSchema.default,
-                    exampleValue: this._findExampleInTypeContainer(typeContainer)
+                    exampleValue: isReadyDescriptor
+                        ? this._findExampleInTypeContainer(typeContainer)
+                        : undefined
                 };
 
                 this.propertiesSets[0][propName] = propDescr;
