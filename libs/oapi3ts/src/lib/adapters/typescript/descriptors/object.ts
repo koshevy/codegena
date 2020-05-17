@@ -109,6 +109,7 @@ export class ObjectTypeScriptDescriptor
                     suggestedName
                 );
 
+                const isReadyDescriptor = !_.isEmpty(typeContainer) && !_.isEmpty(typeContainer[0]);
                 const propDescr = {
                     required: _.findIndex(
                         schema.required || [],
@@ -119,12 +120,14 @@ export class ObjectTypeScriptDescriptor
 
                     typeContainer,
 
-                    comment: typeContainer[0]
+                    comment: isReadyDescriptor
                         ? typeContainer[0].getComments()
                         : '',
 
                     defaultValue: propSchema.default,
-                    exampleValue: this._findExampleInTypeContainer(typeContainer)
+                    exampleValue: isReadyDescriptor
+                        ? this._findExampleInTypeContainer(typeContainer)
+                        : undefined
                 };
 
                 this.propertiesSets[0][propName] = propDescr;
