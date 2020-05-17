@@ -10,26 +10,6 @@
       "get": {
         "operationId": "simpleGet08",
         "summary": "GET with inline response referred to to recursive model with few self-appealings",
-        "parameters": [
-          {
-            "name": "importantProperty",
-            "in": "query",
-            "description": "Important query parameter",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "optionalProperty",
-            "in": "query",
-            "description": "Optional query parameter",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Successful result",
@@ -55,6 +35,8 @@
             "$ref": "#/components/schemas/RecursiveModel"
           },
           "secondEntering": {
+            "title": "Second entering has title",
+            "description": "Second entering has description",
             "$ref": "#/components/schemas/RecursiveModel"
           },
           "simpleProp": {

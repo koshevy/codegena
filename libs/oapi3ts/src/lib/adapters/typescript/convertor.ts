@@ -27,7 +27,7 @@ import {
  */
 interface SchemaHold {
     schema: Schema;
-    bulk: object;
+    bulk: Partial<DataTypeDescriptor | DataTypeContainer>;
 }
 
 /**
@@ -174,7 +174,7 @@ export class Convertor extends BaseConvertor {
         };
 
         if (holdSchema) {
-            return holdSchema.bulk as any;
+            return holdSchema.bulk as DataTypeContainer;
         }
 
         let result;

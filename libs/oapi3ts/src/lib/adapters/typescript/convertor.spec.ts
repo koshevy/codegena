@@ -733,10 +733,10 @@ describe('Simple case with named different schema types', () => {
 
         const context = {};
         const metainfo: ApiMetaInfo[] = [];
+        const affectedModelsRendered = {};
 
         convertor.loadOAPI3Structure(oasSchema);
         const entryPoints = convertor.getOAPI3EntryPoints(context, metainfo);
-        const affectedModelsRendered = {};
 
         // collect extracted models
         Convertor.renderRecursive(
