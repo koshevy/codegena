@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 2.2.0-alpha.0 (2020-06-07)
+
+
+### Features
+
+* **ng-api-service:** temporary solution for issues/35 ([4289e32](https://github.com/koshevy/codegena/commit/4289e32ffddd6a9c17753357f3b6c9dc1617c955))
+
+
+
+
+
 ## [2.1.13-alpha.2](https://github.com/koshevy/codegena/compare/@codegena/ng-api-service@2.1.13-alpha.1...@codegena/ng-api-service@2.1.13-alpha.2) (2020-05-01)
 
 **Note:** Version bump only for package @codegena/ng-api-service
