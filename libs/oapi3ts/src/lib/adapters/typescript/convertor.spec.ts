@@ -85,7 +85,7 @@ describe('Typescript convertor isolated schema\'s rendering', () => {
             ) as [ObjectTypeScriptDescriptor];
             const [descriptor] = container;
             const renderedObject = descriptor.render([], false)
-                .replace(/\s+/g, ' ').trim()
+                .replace(/\s+/g, ' ').trim();
 
             expect(renderedObject).toBe([
                 '{ firstProperty: number; secondProperty: string; thirdProperty:',
