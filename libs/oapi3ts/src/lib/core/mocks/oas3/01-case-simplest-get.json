@@ -21,16 +21,6 @@
             }
           },
           {
-            "name": "nullableProperty",
-            "in": "query",
-            "description": "Important query parameter",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            }
-          },
-          {
             "name": "optionalProperty",
             "in": "query",
             "description": "Optional query parameter",

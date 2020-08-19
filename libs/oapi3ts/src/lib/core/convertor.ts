@@ -524,15 +524,6 @@ export abstract class BaseConvertor {
             }
 
             if (parameter.schema) {
-                if (parameter.schema.nullable && parameter.schema.type) {
-                    parameter.schema = {
-                        oneOf: [
-                            { type: 'null'},
-                            _.omit(parameter.schema, 'nullable')
-                        ]
-                    } as any; // todo describe oneOf for base schema
-                }
-
                 paramsSchema.properties[parameter.name] = parameter.schema;
 
                 if (parameter.description) {

@@ -57,7 +57,6 @@ describe('BaseConvertor entry points extracting', () => {
         expect(methodMeta.requestIsRequired).toBeFalsy();
         expect(methodMeta.queryParams).toEqual([
             'importantProperty',
-            "nullableProperty",
             'optionalProperty'
         ]);
         // Important! typingsDependencies should be empty
