@@ -102,6 +102,15 @@ export class ObjectTypeScriptDescriptor
                         /^./, propName[0].toUpperCase()
                     );
 
+                if (propSchema && propSchema.nullable && propSchema.type) {
+                    propSchema = {
+                        oneOf: [
+                            { type: 'null'},
+                            _.omit(propSchema, 'nullable')
+                        ]
+                    } as any; // todo describe oneOf for base schema
+                }
+
                 const typeContainer = convertor.convert(
                     propSchema,
                     context,

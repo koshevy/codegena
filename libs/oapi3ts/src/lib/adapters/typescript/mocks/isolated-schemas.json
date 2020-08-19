@@ -25,7 +25,8 @@
           "type": "string"
         },
         "thirdProperty": {
-          "type": "object"
+          "type": "object",
+          "nullable": true
         }
       },
       "required": [

@@ -88,8 +88,8 @@ describe('Typescript convertor isolated schema\'s rendering', () => {
                 .replace(/\s+/g, ' ').trim();
 
             expect(renderedObject).toBe([
-                '{ firstProperty: number; secondProperty: string; thirdProperty:',
-                '{ [key: string]: any }; /** * Auto filled property from `required`',
+                '{ firstProperty: number; secondProperty: string; thirdProperty: null |',
+                '{ [key: string]: any } ; /** * Auto filled property from `required`',
                 '*/ fourthProperty: any }'
             ].join(' '));
         }
