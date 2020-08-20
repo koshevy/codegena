@@ -1,8 +1,6 @@
 # Codegeneration from OAS3
 
-> This is an experimental library. Now supporting TypeScript data types and model. Also, generating experimental Angular services.
->
-> Supporting of other languages and frameworks might be possible in the future.
+> Actual Roadmap [is published](https://github.com/koshevy/codegena/blob/codegena-3.x/ROADMAP.md)!
 
 This project is a kit of tools for code generation from OpenAPI3 specification:
 
