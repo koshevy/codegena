@@ -7,9 +7,9 @@ import {
     HttpRequest,
     HttpErrorResponse,
     HttpResponse,
-    HttpEventType
+    HttpEventType,
+    HttpParams,
 } from '@angular/common/http';
-import { HttpParams } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
 import {
@@ -36,6 +36,7 @@ import {
     ValidationError
 } from './providers/event-manager.provider';
 import { RequestSender } from './providers/request-sender';
+import { serializeToParams } from './params-serializer';
 
 /**
  * Reg of localhost-based URLS
@@ -43,6 +44,7 @@ import { RequestSender } from './providers/request-sender';
 const localhostReg = /^(https?:)?\/\/(localhost|127\.0\.0\.1|0\.0\.0\.0|::1)/u;
 
 const defaultContentType = 'application/json';
+const formUrlencodedContentType = 'application/x-www-form-urlencoded';
 
 // переопределение глобальных настроек `Lodash template`
 _.templateSettings.interpolate = /{([\s\S]+?)}/g;
@@ -283,9 +285,24 @@ export abstract class ApiService<R, B, P = null> implements RequestSender<R, B> 
         // обработчиком запроса в компоненте, но при этом не
         // придется добавлять уровень в Observable.
 
+        const contentType = (requestOptions && requestOptions.headers)
+            ? requestOptions.headers.get('content-type') || defaultContentType
+            : defaultContentType;
+
+        if (requestOptions.headers) {
+            requestOptions.headers.set('content-type', contentType);
+        }
+
+        let rawPayload: B | string = payLoad;
+
+        // todo temporary solution. soon ng-api-service will be refactored entire
+        // todo without testings!
+        if ((contentType === formUrlencodedContentType) && _.isObjectLike(payLoad)) {
+            rawPayload = serializeToParams(payLoad).toString();
+        }
+
         const url = `${server || ''}${path}?${queryString}`;
-        const request = new HttpRequest<B>(this.method, url, payLoad, requestOptions);
-        const contentType = request.headers.get('content-type') || defaultContentType;
+        const request = new HttpRequest<B>(this.method, url, rawPayload as any, requestOptions);
 
         if (metadataResponse) {
             _.assign(metadataResponse, {
@@ -299,31 +316,35 @@ export abstract class ApiService<R, B, P = null> implements RequestSender<R, B> 
             // todo should validate headers
 
             // валидация входных параметров
-            // tslint:disable-next-line:no-unused-expression
-            (this._validate(
+            if (this._validate(
                 params,
                 ValidationType.ParamsValidation,
                 subscriber,
                 statusChanges,
                 null,
                 contentType
-            ) !== false)
+            ) === false) {
+
+                return;
+            }
 
             // валидация тела запроса
-            && (this._validate(
+            if (this._validate(
                 payLoad,
                 ValidationType.RequestValidation,
                 subscriber,
                 statusChanges,
                 null,
                 contentType
-            ) !== false)
+            ) === false) {
+                return;
+            }
 
             // Если ошибки валидации не прерывали запрос
             // (зависит от того, как реализован обработчик,
             // подробнее в описании ApiErrorHandler):
             // попытка отправить запрос.
-            && this.requestAttempt(request, subscriber, statusChanges);
+            this.requestAttempt(request, subscriber, statusChanges);
         }).pipe(
             takeUntil(this.resetApiSubscribers)
         );

@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0-alpha.2](https://github.com/koshevy/codegena/compare/@codegena/oapi3ts@2.2.0-alpha.1...@codegena/oapi3ts@2.2.0-alpha.2) (2020-08-19)
+
+
+### Bug Fixes
+
+* **oapi3ts:** update supporting `nullable` option ([2474b71](https://github.com/koshevy/codegena/commit/2474b71c0a3b22e0bcf34f13e672c2bc4522d9ab)), closes [#39](https://github.com/koshevy/codegena/issues/39)
+
+
+
+
+
+# [2.2.0-alpha.1](https://github.com/koshevy/codegena/compare/@codegena/oapi3ts@2.2.0-alpha.0...@codegena/oapi3ts@2.2.0-alpha.1) (2020-08-16)
+
+
+### Bug Fixes
+
+* **oapi3ts:** fix supporting `nullable` option ([620718f](https://github.com/koshevy/codegena/commit/620718f499253178606a5c7e80f4ef219fd11d99)), closes [#39](https://github.com/koshevy/codegena/issues/39)
+
+
+
+
+
 # [2.2.0-alpha.0](https://github.com/koshevy/codegena/compare/@codegena/oapi3ts@2.1.9-alpha.3...@codegena/oapi3ts@2.2.0-alpha.0) (2020-05-17)
 
 
