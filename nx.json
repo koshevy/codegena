@@ -3,27 +3,15 @@
   "implicitDependencies": {
     "angular.json": "*",
     "package.json": "*",
-    "tsconfig.json": "*",
     "tslint.json": "*",
-    "nx.json": "*"
+    "nx.json": "*",
+    "tsconfig.base.json": "*"
   },
   "projects": {
-    "todo-app": {
-      "tags": []
-    },
-    "todo-app-backend": {
-      "tags": []
-    },
     "oapi3ts": {
       "tags": []
     },
-    "ng-api-service": {
-      "tags": []
-    },
-    "oapi3ts-cli": {
-      "tags": []
-    },
-    "todo-app-scheme": {
+    "definitions": {
       "tags": []
     }
   },
@@ -34,5 +22,8 @@
         "cacheableOperations": ["build", "lint", "test", "e2e"]
       }
     }
+  },
+  "affected": {
+    "defaultBase": "master"
   }
 }

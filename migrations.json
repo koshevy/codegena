@@ -1,109 +1,123 @@
 {
   "migrations": [
     {
-      "version": "9.0.0-beta.1",
-      "description": "Update typescript to 3.6 and angular/cli to version 9",
-      "factory": "./src/migrations/update-9-0-0/update-9-0-0",
+      "version": "9.3.0-beta.1",
+      "description": "Update prettier to v2",
+      "factory": "./src/migrations/update-9-3-0/update-9-3-0",
       "package": "@nrwl/workspace",
-      "name": "update-9-0-0"
+      "name": "update-9-3-0"
     },
     {
-      "version": "9.1.0-beta.1",
-      "description": "Update prettier to 1.19.1 with support for typescript 3.7; Update eslint and tslint",
-      "factory": "./src/migrations/update-9-1-0/update-9-1-0",
+      "version": "9.4.0-beta.1",
+      "description": "Remove config builder option when using eslint to enable automatic detection",
+      "factory": "./src/migrations/update-9-4-0/update-eslint-config",
       "package": "@nrwl/workspace",
-      "name": "update-9-1-0"
+      "name": "update-eslint-config"
     },
     {
-      "version": "9.1.0-beta.1",
-      "description": "Update eslint and tslint config to provide better IDE support",
-      "factory": "./src/migrations/update-9-1-0/update-lint-config",
+      "version": "9.4.0-beta.1",
+      "description": "Fix exclude patterns in tslint and eslint to ensure it does not break linting when a files option is defined",
+      "factory": "./src/migrations/update-9-4-0/update-linters-exclude",
       "package": "@nrwl/workspace",
-      "name": "update-lint-config-9-1-0"
+      "name": "update-linters-exclude"
     },
     {
-      "version": "9.2.0-beta.1",
-      "description": "Add cacheable operations to nx.json",
-      "factory": "./src/migrations/update-9-2-0/update-9-2-0",
+      "version": "9.4.0-beta.1",
+      "description": "Decorate cli to enable computation caching",
+      "factory": "./src/migrations/update-9-4-0/add-decorate-cli",
       "package": "@nrwl/workspace",
-      "name": "update-9-2-0"
+      "name": "add-decorate-cli"
     },
     {
-      "version": "9.0.0-beta",
-      "description": "Renderer to Renderer2 migration. As of Angular 9, the Renderer class is no longer available. Renderer2 should be used instead. Read more about this here: https://v9.angular.io/guide/migration-renderer",
-      "factory": "./migrations/renderer-to-renderer2/index",
-      "package": "@angular/core",
-      "name": "migration-v9-renderer-to-renderer2"
+      "version": "10.0.0-beta.0",
+      "description": "Add default branch to nx.json",
+      "factory": "./src/migrations/update-10-0-0/update-10-0-0",
+      "package": "@nrwl/workspace",
+      "name": "add-default-branch-to-nx-json"
     },
     {
-      "version": "9.0.0-beta",
-      "description": "Missing @Injectable and incomplete provider definition migration. In Angular 9, enforcement of @Injectable decorators for DI is a bit stricter and incomplete provider definitions behave differently. Read more about this here: https://v9.angular.io/guide/migration-injectable",
+      "version": "10.0.0-beta.0",
+      "description": "Migrate tsconfigs to solution style tsconfigs",
+      "factory": "./src/migrations/update-10-0-0/solution-tsconfigs",
+      "package": "@nrwl/workspace",
+      "name": "solution-tsconfigs"
+    },
+    {
+      "version": "10.0.1-beta.0",
+      "description": "Migrate .eslintrc files to reference new tsconfig",
+      "factory": "./src/migrations/update-10-0-1/migrate-eslintrc",
+      "package": "@nrwl/workspace",
+      "name": "migrate-eslintrc-tsconfig"
+    },
+    {
+      "version": "10.1.0-beta.0",
+      "description": "Migrate .eslintrc files to use tsconfig with a wildcard",
+      "factory": "./src/migrations/update-10-1-0/migrate-eslintrc-tsconfig-wildcard",
+      "package": "@nrwl/workspace",
+      "name": "migrate-eslintrc-tsconfig-wildcard"
+    },
+    {
+      "version": "10.0.0-beta",
+      "description": "Missing @Injectable and incomplete provider definition migration. As of Angular 9, enforcement of @Injectable decorators for DI is a bit stricter and incomplete provider definitions behave differently. Read more about this here: https://v9.angular.io/guide/migration-injectable",
       "factory": "./migrations/missing-injectable/index",
       "package": "@angular/core",
-      "name": "migration-v9-missing-injectable"
+      "name": "migration-v10-missing-injectable"
     },
     {
-      "version": "9.0.0-beta",
-      "description": "Undecorated classes with DI migration. As of Angular 9, it is no longer supported to use Angular DI on a class that does not have an Angular decorator. Read more about this here: https://v9.angular.io/guide/migration-undecorated-classes",
-      "factory": "./migrations/undecorated-classes-with-di/index",
-      "package": "@angular/core",
-      "name": "migration-v9-undecorated-classes-with-di"
-    },
-    {
-      "version": "9.0.0-beta",
-      "description": "Undecorated classes with decorated fields migration. As of Angular 9, it is no longer supported to have Angular field decorators on a class that does not have an Angular decorator. Read more about this here: https://v9.angular.io/guide/migration-undecorated-classes",
-      "factory": "./migrations/undecorated-classes-with-decorated-fields/index",
-      "package": "@angular/core",
-      "name": "migration-v9-undecorated-classes-with-decorated-fields"
-    },
-    {
-      "version": "9-beta",
-      "description": "Static flag migration. Removes the `static` flag from dynamic queries. As of Angular 9, the \"static\" flag defaults to false and is no longer required for your view and content queries. Read more about this here: https://v9.angular.io/guide/migration-dynamic-flag",
-      "factory": "./migrations/dynamic-queries/index",
-      "package": "@angular/core",
-      "name": "migration-v9-dynamic-queries"
-    },
-    {
-      "version": "9.0.0-beta",
-      "description": "ModuleWithProviders migration. In Angular 9, the ModuleWithProviders type without a generic has been deprecated. This migration adds the generic where it is missing. Read more about this here: https://v9.angular.io/guide/migration-module-with-providers",
+      "version": "10.0.0-beta",
+      "description": "ModuleWithProviders migration. As of Angular 10, the ModuleWithProviders type requires a generic. This migration adds the generic where it is missing. Read more about this here: https://v10.angular.io/guide/migration-module-with-providers",
       "factory": "./migrations/module-with-providers/index",
       "package": "@angular/core",
-      "name": "migration-v9-module-with-providers"
+      "name": "migration-v10-module-with-providers"
     },
     {
-      "version": "9.0.0-beta.1",
-      "description": "Upgrades Angular and Angular CLI to 9.0.0",
-      "factory": "./src/migrations/update-9-0-0/update-9-0-0",
+      "version": "10.0.0-beta",
+      "description": "Undecorated classes with Angular features migration. In version 10, classes that use Angular features and do not have an Angular decorator are no longer supported. Read more about this here: https://v10.angular.io/guide/migration-undecorated-classes",
+      "factory": "./migrations/undecorated-classes-with-decorated-fields/index",
+      "package": "@angular/core",
+      "name": "migration-v10-undecorated-classes-with-decorated-fields"
+    },
+    {
+      "version": "10.0.0-beta.1",
+      "description": "Upgrades Angular and Angular CLI to 10.0.0",
+      "factory": "./src/migrations/update-10-0-0/update-10-0-0",
       "package": "@nrwl/angular",
-      "name": "update-9-0-0"
+      "name": "update-10-0-0"
     },
     {
-      "version": "9.0.0-beta.1",
-      "description": "Upgrades jest-preset-angular to 8.0.0",
-      "factory": "./src/migrations/update-9-0-0/update-9-0-0",
+      "version": "9.4.0-beta.1",
+      "description": "Add Cypress ESLint plugin",
+      "factory": "./src/migrations/update-9-4-0/add-cypress-eslint-plugin-9-4-0",
+      "package": "@nrwl/cypress",
+      "name": "add-cypress-eslint-plugin-9.4.0"
+    },
+    {
+      "version": "10.0.0-beta.2",
+      "description": "update jest configs to include setup env files",
+      "factory": "./src/migrations/update-10-0-0/update-jest-configs",
       "package": "@nrwl/jest",
-      "name": "update-9.0.0"
+      "name": "update-10.0.0"
     },
     {
-      "version": "9.0.1-beta.1",
-      "description": "Correctly sets passWithNoTests option",
-      "factory": "./src/migrations/update-9-0-1/update-9-0-1",
+      "version": "10.1.0-beta.4",
+      "description": "Update jest to v26",
+      "factory": "./src/migrations/update-10-1-0/update-10-1-0",
       "package": "@nrwl/jest",
-      "name": "update-9.0.1"
+      "name": "update-10.1.0"
     },
     {
-      "version": "9.2.0-beta.3",
-      "description": "Update jest to v25",
-      "factory": "./src/migrations/update-9-2-0/update-9-2-0",
-      "package": "@nrwl/jest",
-      "name": "update-9.2.0"
+      "version": "10.0.0-beta.1",
+      "description": "Update Nest.js libraries",
+      "factory": "./src/migrations/update-10-0-0/update-10-0-0",
+      "package": "@nrwl/nest",
+      "name": "update-10-0-0"
     },
     {
-      "version": "9.2.0-beta.1",
-      "description": "Set buildLibsFromSource property to true to not break existing projects.",
-      "factory": "./src/migrations/update-9-2-0/set-build-libs-from-source",
+      "version": "10.1.0-beta.1",
+      "description": "Removes rootDir from node libs' tsconfig",
+      "factory": "./src/migrations/update-10-1-0/remove-root-dir",
       "package": "@nrwl/node",
-      "name": "set-build-libs-from-source"
+      "name": "remove-root-dir"
     }
   ]
 }

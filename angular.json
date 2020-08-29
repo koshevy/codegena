@@ -1,175 +1,6 @@
 {
   "version": 1,
   "projects": {
-    "todo-app": {
-      "projectType": "application",
-      "schematics": {
-        "@nrwl/angular:component": {
-          "style": "scss"
-        }
-      },
-      "root": "apps/todo-app",
-      "sourceRoot": "apps/todo-app/src",
-      "prefix": "codegena",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/apps/todo-app",
-            "index": "apps/todo-app/src/index.html",
-            "main": "apps/todo-app/src/main.ts",
-            "polyfills": "apps/todo-app/src/polyfills.ts",
-            "tsConfig": "apps/todo-app/tsconfig.app.json",
-            "aot": false,
-            "assets": [
-              "apps/todo-app/src/favicon.ico",
-              "apps/todo-app/src/assets"
-            ],
-            "styles": [
-              "apps/todo-app/src/styles.scss"
-            ],
-            "scripts": []
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "apps/todo-app/src/environments/environment.ts",
-                  "with": "apps/todo-app/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "todo-app:build",
-            "proxyConfig": "apps/todo-app/proxy.conf.json"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "todo-app:build:production"
-            }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "todo-app:build"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "apps/todo-app/tsconfig.app.json",
-              "apps/todo-app/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**",
-              "!apps/todo-app/**"
-            ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "apps/todo-app/jest.config.js",
-            "tsConfig": "apps/todo-app/tsconfig.spec.json",
-            "setupFile": "apps/todo-app/src/test-setup.ts"
-          }
-        }
-      }
-    },
-    "todo-app-backend": {
-      "root": "apps/todo-app-backend",
-      "sourceRoot": "apps/todo-app-backend/src",
-      "projectType": "application",
-      "prefix": "todo-app-backend",
-      "schematics": {},
-      "architect": {
-        "build": {
-          "builder": "@nrwl/node:build",
-          "options": {
-            "outputPath": "dist/apps/todo-app-backend",
-            "main": "apps/todo-app-backend/src/main.ts",
-            "tsConfig": "apps/todo-app-backend/tsconfig.app.json",
-            "assets": [
-              "apps/todo-app-backend/src/assets"
-            ],
-            "externalDependencies": [
-              "@nestjs/core",
-              "@nestjs/common",
-              "@nestjs/microservices",
-              "@nestjs/websockets",
-              "@nestjs/microservices/microservices-module",
-              "@nestjs/websockets/socket-module"
-            ]
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "extractLicenses": true,
-              "inspect": false,
-              "fileReplacements": [
-                {
-                  "replace": "apps/todo-app-backend/src/environments/environment.ts",
-                  "with": "apps/todo-app-backend/src/environments/environment.prod.ts"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@nrwl/node:execute",
-          "options": {
-            "buildTarget": "todo-app-backend:build"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "apps/todo-app-backend/tsconfig.app.json",
-              "apps/todo-app-backend/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**",
-              "!apps/todo-app-backend/**"
-            ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "apps/todo-app-backend/jest.config.js",
-            "tsConfig": "apps/todo-app-backend/tsconfig.spec.json"
-          }
-        }
-      }
-    },
     "oapi3ts": {
       "projectType": "library",
       "root": "libs/oapi3ts",
@@ -190,18 +21,13 @@
               "libs/oapi3ts/tsconfig.lib.json",
               "libs/oapi3ts/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/oapi3ts/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/oapi3ts/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/oapi3ts/jest.config.js",
-            "tsConfig": "libs/oapi3ts/tsconfig.spec.json",
-            "setupFile": "libs/oapi3ts/src/test-setup.ts"
+            "jestConfig": "libs/oapi3ts/jest.config.js"
           }
         }
       },
@@ -211,128 +37,45 @@
         }
       }
     },
-    "ng-api-service": {
+    "definitions": {
       "projectType": "library",
-      "root": "libs/ng-api-service",
-      "sourceRoot": "libs/ng-api-service/src",
+      "root": "libs/definitions",
+      "sourceRoot": "libs/definitions/src",
       "prefix": "codegena",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@nrwl/angular:package",
           "options": {
-            "tsConfig": "libs/ng-api-service/tsconfig.lib.json",
-            "project": "libs/ng-api-service/ng-package.json"
+            "tsConfig": "libs/definitions/tsconfig.lib.json",
+            "project": "libs/definitions/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/definitions/tsconfig.lib.prod.json"
+            }
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "libs/ng-api-service/tsconfig.lib.json",
-              "libs/ng-api-service/tsconfig.spec.json"
+              "libs/definitions/tsconfig.lib.json",
+              "libs/definitions/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/ng-api-service/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/definitions/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/ng-api-service/jest.config.js",
-            "tsConfig": "libs/ng-api-service/tsconfig.spec.json",
-            "setupFile": "libs/ng-api-service/src/test-setup.ts"
+            "jestConfig": "libs/definitions/jest.config.js",
+            "tsConfig": "libs/definitions/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/definitions/src/test-setup.ts"
           }
         }
       },
-      "schematics": {
-        "@nrwl/angular:component": {
-          "styleext": "scss"
-        }
-      }
-    },
-    "oapi3ts-cli": {
-      "projectType": "library",
-      "root": "libs/oapi3ts-cli",
-      "sourceRoot": "libs/oapi3ts-cli/src",
-      "prefix": "codegena",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "libs/oapi3ts-cli/tsconfig.lib.json",
-            "project": "libs/oapi3ts-cli/ng-package.json"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/oapi3ts-cli/tsconfig.lib.json",
-              "libs/oapi3ts-cli/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/oapi3ts-cli/**"
-            ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/oapi3ts-cli/jest.config.js",
-            "tsConfig": "libs/oapi3ts-cli/tsconfig.spec.json",
-            "setupFile": "libs/oapi3ts-cli/src/test-setup.ts"
-          }
-        }
-      },
-      "schematics": {
-        "@nrwl/angular:component": {
-          "styleext": "scss"
-        }
-      }
-    },
-    "todo-app-scheme": {
-      "projectType": "library",
-      "root": "libs/todo-app-scheme",
-      "sourceRoot": "libs/todo-app-scheme/src",
-      "prefix": "codegena",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "libs/todo-app-scheme/tsconfig.lib.json",
-            "project": "libs/todo-app-scheme/ng-package.json"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/todo-app-scheme/tsconfig.lib.json",
-              "libs/todo-app-scheme/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/todo-app-scheme/**"
-            ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/todo-app-scheme/jest.config.js",
-            "tsConfig": "libs/todo-app-scheme/tsconfig.spec.json",
-            "setupFile": "libs/todo-app-scheme/src/test-setup.ts"
-          }
-        }
-      },
-      "schematics": {
-        "@nrwl/angular:component": {
-          "styleext": "scss"
-        }
-      }
+      "schematics": {}
     }
   },
   "cli": {
@@ -348,5 +91,5 @@
       "unitTestRunner": "jest"
     }
   },
-  "defaultProject": "todo-app"
+  "defaultProject": "oapi3ts"
 }
