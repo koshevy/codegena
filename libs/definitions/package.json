@@ -1,0 +1,14 @@
+{
+  "name": "@codegena/definitions",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^10.0.11",
+    "@angular/core": "^10.0.11"
+  },
+  "peerDependencies": {
+    "jest-preset-angular": "*"
+  },
+  "dependencies": {
+    "tslib": "^2.0.0"
+  }
+}
