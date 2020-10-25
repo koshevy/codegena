@@ -4,11 +4,17 @@
     "esModuleInterop": true,
     "lib": ["dom", "es2018"],
     "types": ["node", "lodash", "jest"],
-    "typeRoots": [
-      "node_modules/@types",
-      "../../node_modules/@types"
-    ]
+    "typeRoots": ["node_modules/@types", "../../node_modules/@types"]
   },
-  "extends": "../../tsconfig.json",
-  "include": ["**/*.ts"]
+  "extends": "../../tsconfig.base.json",
+  "include": [],
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
 }

@@ -6,12 +6,9 @@
     "declaration": true,
     "inlineSources": true
   },
-  "exclude": [
-    "node_modules",
-    "src/test-setup.ts",
-    "**/*.spec.ts"
-  ],
+  "exclude": ["node_modules", "src/test-setup.ts", "**/*.spec.ts"],
   "angularCompilerOptions": {
     "enableIvy": false
-  }
+  },
+  "include": ["**/*.ts"]
 }
