@@ -17,10 +17,34 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@codegena/oapi3ts": ["dist/oapi3ts", "libs/oapi3ts/src/index.ts"],
-      "@codegena/oapi3ts/*": ["dist/oapi3ts/*", "libs/oapi3ts/src/*"],
-      "@codegena/definitions": ["libs/definitions/src/index.ts"],
-      "@codegena/definitions/aspects": ["libs/definitions/aspects/src/index.ts"]
+      "@codegena/oapi3ts": [
+        "dist/oapi3ts",
+        "libs/oapi3ts/src/index.ts"
+      ],
+      "@codegena/oapi3ts/contract": [
+        "dist/oapi3ts/contract",
+        "libs/oapi3ts/contract/src/index.ts"
+      ],
+      "@codegena/oapi3ts/schematic-tools": [
+        "dist/oapi3ts/schematic-tools",
+        "libs/oapi3ts/schematic-tools/src/index.ts"
+      ],
+      "@codegena/definitions": [
+        "dist/definitions",
+        "libs/definitions/src/index.ts"
+      ],
+      "@codegena/definitions/aspects": [
+        "dist/definitions/aspects",
+        "libs/definitions/aspects/src/index.ts"
+      ],
+      "@codegena/definitions/json-schema": [
+        "dist/definitions/json-schema",
+        "libs/definitions/json-schema/src/index.ts"
+      ],
+      "@codegena/definitions/oas3": [
+        "dist/definitions/oas3",
+        "libs/definitions/oas3/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]
