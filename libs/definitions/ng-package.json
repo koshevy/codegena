@@ -3,5 +3,8 @@
   "dest": "../../dist/definitions",
   "lib": {
     "entryFile": "src/public_api.ts"
-  }
+  },
+  "whitelistedNonPeerDependencies": [
+    "@codegena/definitions"
+  ]
 }
