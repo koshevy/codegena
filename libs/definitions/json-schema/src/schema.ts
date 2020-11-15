@@ -7,6 +7,7 @@ import {
     HasDescription,
     HasEnumeration,
     HasExample,
+    HasId,
     HasItems,
     HasNumericValue,
     HasProperties,
@@ -14,20 +15,24 @@ import {
     HasStringValue,
 } from '@codegena/definitions/aspects';
 
-export type SchemaType = | 'string'
-                         | 'number'
-                         | 'integer'
-                         | 'boolean'
-                         | 'array'
-                         | 'object'
-                         | 'null';
+export type SchemaType =
+    | 'string'
+    | 'number'
+    | 'integer'
+    | 'boolean'
+    | 'array'
+    | 'object'
+    | 'null'
+    ;
 
 /**
  * Schema that contains only allowed `JSON Schema`-keywords in context
  * where these keywords are relevant. Also, requires to set `type` property.
  */
-export type SchemaStrict = | SchemaUnknown
-                           | SchemaConcrete;
+export type SchemaStrict =
+    | SchemaUnknown
+    | SchemaConcrete
+    ;
 
 /**
  * Schema can contain not only allowed `JSON Schema`-keywords,
@@ -59,13 +64,15 @@ export interface SchemaUnknown<
 /**
  * Schema with concrete type. Should have specified `type` field,
  */
-export type SchemaConcrete = | SchemaArray
-                             | SchemaBoolean
-                             | SchemaInteger
-                             | SchemaNull
-                             | SchemaNumber
-                             | SchemaObject
-                             | SchemaString;
+export type SchemaConcrete =
+    | SchemaArray
+    | SchemaBoolean
+    | SchemaInteger
+    | SchemaNull
+    | SchemaNumber
+    | SchemaObject
+    | SchemaString
+    ;
 
 export type SchemaArray<TItemValue = any, TItemsSchema = SchemaUnknown & Record<string, any>> =
     & SchemaUnknown<
@@ -96,6 +103,7 @@ interface SchemaCommonAspect<TValue = unknown>
             HasDefault<TValue>,
             HasDescription,
             HasEnumeration<TValue>,
+            HasId,
             HasExample<TValue>,
             HasRef {}
 
