@@ -1,7 +1,4 @@
-import {
-    Oas3ResponseMap,
-    SupportedContentTypeMap,
-} from '@codegena/definitions/oas3';
+import { HasContentType, HasResponses } from '@codegena/definitions/aspects';
 import { Schema } from '@codegena/definitions/json-schema';
 
 /**
@@ -21,7 +18,7 @@ export interface ApiMetaInfo {
     /**
      * JSON Schema of body request.
      */
-    headersSchema: SupportedContentTypeMap<any> | null;
+    headersSchema: HasContentType<any> | null;
 
     headersModelName: string;
 
@@ -61,7 +58,7 @@ export interface ApiMetaInfo {
     /**
      * JSON Schema of body request.
      */
-    requestSchema: SupportedContentTypeMap<any> | null;
+    requestSchema: HasContentType<any> | null;
 
     responseModelName: string;
 
@@ -71,11 +68,7 @@ export interface ApiMetaInfo {
      * Combined schema with sub-schema for every status code, or `default`,
      * and one more nested level of sub-scheme with content-types of `default`.
      */
-    responseSchema: {
-        [responseCode in keyof Oas3ResponseMap]?: {
-            [key in keyof SupportedContentTypeMap<Schema>]: Schema;
-        }
-    } | null;
+    responseSchema: HasResponses<HasContentType<Schema>> | null;
 
     /**
      * Name of related data types, such be included to file with API Service.

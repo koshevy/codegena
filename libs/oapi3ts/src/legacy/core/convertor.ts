@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import * as jsonPointer from 'json-pointer';
 
+import { HasResponses, HasContentType } from '@codegena/definitions/aspects';
 import {
     Generic as SchemaGeneric,
     Schema,
@@ -8,14 +9,12 @@ import {
 } from '@codegena/definitions/json-schema';
 import {
     Oas3MediaContent,
-    Oas3MediaContentMap,
     Oas3Operation,
     Oas3Parameter,
     Oas3ParameterTarget,
     Oas3PathItem,
     Oas3Paths,
     Oas3Response,
-    Oas3ResponseMap,
     Oas3Specification,
 } from '@codegena/definitions/oas3';
 
@@ -574,7 +573,7 @@ export abstract class BaseConvertor {
 
     protected _pickApiMethodResponses(
         metaInfoItem: ApiMetaInfo,
-        responses: Oas3ResponseMap,
+        responses: HasResponses<Oas3Response>,
         jsonPathToOperation: string[]
     ): {[key: string]: Schema} {
 
@@ -676,7 +675,7 @@ export abstract class BaseConvertor {
     } | null {
 
         const { requestBody } = apiOperation;
-        let responses: { [mediaType in keyof Oas3MediaContentMap]?: any } | null;
+        let responses: HasContentType<Schema> | null;
 
         if (!requestBody) {
             return null;

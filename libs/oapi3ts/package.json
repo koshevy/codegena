@@ -25,12 +25,12 @@
     "build": "ng build oapi3ts"
   },
   "dependencies": {
+    "@codegena/definitions": "*",
     "ajv": ">= 6",
     "json-pointer": "^0.6.0",
     "lodash": ">= 4",
     "prettier": ">= 1",
-    "@codegena/definitions": "*",
-    "typescript": "*"
+    "typescript": ">= 3.9.0"
   },
   "devDependencies": {
     "@types/lodash": ">= 4",

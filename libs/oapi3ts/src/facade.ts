@@ -8,7 +8,6 @@ import { Oas3Specification } from '@codegena/definitions/oas3';
 // tslint:disable:no-implicit-dependencies
 import {
     Dependency,
-    DependencyCollection,
     Facade as FacadeContract,
     FileSavingStrategy,
     Operation,
@@ -83,6 +82,18 @@ export class Facade implements FacadeContract {
                 const request = this.extractDependencies<Request>(apiMeta, apiMeta.requestModelName);
                 const response = this.extractDependencies<Response>(apiMeta, apiMeta.responseModelName);
 
+                if (parameters) {
+                    parameters.schema = apiMeta.paramsSchema;
+                }
+
+                if (request) {
+                    request.schema = apiMeta.requestSchema;
+                }
+
+                if (response) {
+                    response.schema = apiMeta.responseSchema;
+                }
+
                 return {
                     oas3OperationJsonPath,
                     oas3Operation,
@@ -103,6 +114,7 @@ export class Facade implements FacadeContract {
                         request?.dependencies || [],
                         response?.dependencies || [],
                     ),
+                    queryParameters: apiMeta.queryParams || null,
                 };
             },
         );
@@ -112,16 +124,16 @@ export class Facade implements FacadeContract {
         operationMeta: ApiMetaInfo,
         modelName: string,
     ): T {
-        const paramsEntrypoint = this.entryPoints.find(
+        const neededEntrypoint = this.entryPoints.find(
             entrypoint => entrypoint.modelName === modelName,
         );
 
-        if (!paramsEntrypoint) {
+        if (!neededEntrypoint) {
             return null;
         }
 
         const renderedDependencies = this.renderEntrypointWithDeps(
-            paramsEntrypoint,
+            neededEntrypoint,
             operationMeta.baseTypeName,
         );
 
@@ -130,7 +142,7 @@ export class Facade implements FacadeContract {
         return {
             source: parametersModelSource.source,
             dependencies: renderedDependencies,
-            schema: paramsEntrypoint.schema,
+            schema: neededEntrypoint.schema,
         } as T;
     }
 
@@ -212,7 +224,9 @@ export class Facade implements FacadeContract {
             return `import { ${dependencyIdentifiers} } from '${importPath}';`;
         });
         const importsBlock = imports.join('\n');
-        const textWithImports = [importsBlock, text].join('\n\n');
+        const textWithImports = importsBlock.length
+            ? [importsBlock, text].join('\n\n')
+            : text;
 
         return createSourceFile(fullpath, textWithImports, ScriptTarget.Latest);
     }

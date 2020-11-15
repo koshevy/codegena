@@ -1,8 +1,5 @@
-import {
-    Oas3Operation,
-    Oas3ResponseMap,
-    SupportedContentTypeMap,
-} from '@codegena/definitions/oas3';
+import { HasContentType, HasResponses } from '@codegena/definitions/aspects';
+import { Oas3Operation } from '@codegena/definitions/oas3';
 import { Schema as JsonSchema } from '@codegena/definitions/json-schema';
 import {
     Dependency,
@@ -10,13 +7,11 @@ import {
 } from './source';
 
 export interface Response extends Dependency {
-    schema: {
-        [code in keyof Oas3ResponseMap]: SupportedContentTypeMap<JsonSchema>;
-    }
+    schema: HasResponses<HasContentType<JsonSchema>>;
 }
 
 export interface Request extends Dependency {
-    schema: SupportedContentTypeMap<JsonSchema>;
+    schema: HasContentType<JsonSchema>;
 }
 
 export interface Parameters extends Dependency {
@@ -33,4 +28,5 @@ export interface Operation extends DependencyCollection {
     request: Request;
     response: Response;
     servers: string[];
+    queryParameters: string[] | null;
 }
