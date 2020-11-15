@@ -13,6 +13,15 @@
     },
     "definitions": {
       "tags": []
+    },
+    "schematics-example": {
+      "tags": []
+    },
+    "schematics-tools": {
+      "tags": []
+    },
+    "ng-http-tools": {
+      "tags": []
     }
   },
   "tasksRunnerOptions": {

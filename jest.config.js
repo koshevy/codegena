@@ -1,10 +1,8 @@
 module.exports = {
-  testMatch: ['**/+(*.)+(spec|test).+(ts|js)?(x)'],
-  transform: {
-    '^.+\\.(ts|js|html)$': 'ts-jest'
-  },
-  resolver: '@nrwl/jest/plugins/resolver',
-  moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageReporters: ['html'],
-  passWithNoTests: true
+  projects: [
+    '<rootDir>/libs/oapi3ts',
+    '<rootDir>/libs/definitions',
+    '<rootDir>/libs/schematics-example',
+    '<rootDir>/libs/ng-http-tools',
+  ],
 };

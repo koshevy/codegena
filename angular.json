@@ -44,7 +44,7 @@
       "prefix": "codegena",
       "architect": {
         "build": {
-          "builder": "@nrwl/angular:package",
+          "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
             "tsConfig": "libs/definitions/tsconfig.lib.json",
             "project": "libs/definitions/ng-package.json"
@@ -69,13 +69,127 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/definitions/jest.config.js",
-            "tsConfig": "libs/definitions/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/definitions/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
       "schematics": {}
+    },
+    "schematics-example": {
+      "projectType": "library",
+      "root": "libs/schematics-example",
+      "sourceRoot": "libs/schematics-example/src",
+      "prefix": "codegena",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "libs/schematics-example/tsconfig.lib.json",
+            "project": "libs/schematics-example/ng-package.json"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/schematics-example/tsconfig.lib.json",
+              "libs/schematics-example/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/schematics-example/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/schematics-example/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "schematics-tools": {
+      "projectType": "library",
+      "root": "libs/schematics-tools",
+      "sourceRoot": "libs/schematics-tools/src",
+      "prefix": "codegena",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "libs/schematics-tools/tsconfig.lib.json",
+            "project": "libs/schematics-tools/ng-package.json"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/schematics-tools/tsconfig.lib.json",
+              "libs/schematics-tools/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/schematics-tools/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/schematics-tools/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "ng-http-tools": {
+      "projectType": "library",
+      "root": "libs/ng-http-tools",
+      "sourceRoot": "libs/ng-http-tools/src",
+      "prefix": "codegena",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "libs/ng-http-tools/tsconfig.lib.json",
+            "project": "libs/ng-http-tools/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/ng-http-tools/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng-http-tools/tsconfig.lib.json",
+              "libs/ng-http-tools/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/ng-http-tools/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ng-http-tools/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {
