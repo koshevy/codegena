@@ -1,4 +1,4 @@
-export interface SupportedContentTypeMap<TContent> {
+export interface HasContentType<TContent = unknown> {
     'default'?: TContent;
     'application/javascript'?: TContent;
     'application/json'?: TContent;
@@ -16,4 +16,5 @@ export interface SupportedContentTypeMap<TContent> {
     'multipart/form-data'?: TContent;
     'multipart/mixed'?: TContent;
     'multipart/related'?: TContent;
+    [key: string]: TContent;
 }
