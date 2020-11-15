@@ -1,0 +1,56 @@
+import { from, Observable, of } from "rxjs";
+import { Injectable } from '@angular/core';
+import { HasContentType, HasResponses } from "@codegena/definitions/aspects";
+import { Schema as JsonSchema } from "@codegena/definitions/json-schema";
+import { EntrypointAbstract, HttpMethod } from '@codegena/ng-http-tools';
+<% if (parametersModelName) { %>
+import { <%= parametersModelName %> } from './<%= dasherize(parametersModelName) %>';<%
+} %><%
+if (requestBodyModelName) {%>
+import { <%= requestBodyModelName %> } from './<%= dasherize(requestBodyModelName) %>';<%
+} %><%
+if (responseModelName) { %>
+import { <%= responseModelName %> } from './<%= dasherize(responseModelName) %>';<%
+} %>
+
+@Injectable()
+export class <%= classify(operationId) %>BackendService extends EntrypointAbstract<
+    <%= JSON.stringify(method) %>,
+    <%= parametersModelName || 'never' %>,
+    <%= requestBodyModelName || 'never' %>,
+    <%= responseModelName || 'never' %>
+> {
+    protected getMethod(): HttpMethod {
+        return <%= JSON.stringify(method) %>;
+    }
+
+    protected getPathTemplate(): string {
+        return <%= JSON.stringify(pathTemplate) %>;
+    }
+
+    protected getQueryParameters(): string[] {
+        return <%= JSON.stringify(queryParameters) %>;
+    }
+
+    protected getServers(): string[] {
+        return <%= JSON.stringify(servers) %>;
+    }
+
+    protected getDomainSchema(): Observable<object> {
+        return from(
+            import('../domain-schema').then(({domainSchema}) => domainSchema),
+        );
+    }
+
+    protected getRequestBodySchema(): HasContentType<JsonSchema> | null {
+        return <%= serializeSchema(requestBodySchema, [operationId, 'request'].join('_')) %>;
+    }
+
+    protected getParametersSchema(): JsonSchema | null {
+        return <%= serializeSchema(parametersSchema, [operationId, 'parameters'].join('_'), true) %>;
+    }
+
+    protected getResponseValidationSchema(): HasResponses<HasContentType<JsonSchema>> | null {
+        return <%= serializeSchema(responseSchema, [operationId, 'response'].join('_')) %>;
+    }
+}
