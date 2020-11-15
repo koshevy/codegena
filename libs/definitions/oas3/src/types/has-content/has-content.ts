@@ -1,4 +1,5 @@
-import { MediaContentMap } from "./media-content-map";
+import { HasContentType } from '@codegena/definitions/aspects';
+import { MediaContent } from './media-content';
 
 export interface HasContent {
 
@@ -8,5 +9,5 @@ export interface HasContent {
      * and the value describes it. For requests that match multiple keys,
      * only the most specific key is applicable. e.g. `"text/plain"` overrides `"text/*"`
      */
-    content: MediaContentMap;
+    content: HasContentType<MediaContent>;
 }

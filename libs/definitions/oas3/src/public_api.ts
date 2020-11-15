@@ -1,7 +1,5 @@
 export * from './types/oas3-specification';
-export * from './types/has-content/supported-content-type-map';
 
-export { MediaContentMap as Oas3MediaContentMap } from './types/has-content/media-content-map';
 export { MediaContent as Oas3MediaContent } from './types/has-content/media-content';
 
 export { Contact as Oas3Contact } from './types/contact';
@@ -18,6 +16,5 @@ export { PathItem as Oas3PathItem } from './types/path-item';
 export { Paths as Oas3Paths } from './types/paths';
 export { Request as Oas3Request } from './types/request';
 export { Response as Oas3Response } from './types/response';
-export { ResponseMap as Oas3ResponseMap } from './types/response-map';
 export { ReusableComponents as Oas3ReusableComponents } from './types/reusable-components';
 export { Server as Oas3Server } from './types/server';

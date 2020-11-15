@@ -1,7 +1,8 @@
+import { HasResponses } from '@codegena/definitions/aspects';
 import { ExternalDocument } from './external-document';
 import { Parameter } from './parameter';
 import { Request } from './request';
-import { ResponseMap } from './response-map';
+import { Response } from './response';
 import { Server } from './server';
 
 /**
@@ -75,7 +76,7 @@ export interface Operation {
      * REQUIRED.
      * The list of possible responses as they are returned from executing this operation.
      */
-    responses: ResponseMap;
+    responses: HasResponses<Response>;
 
     /**
      * A declaration of which security mechanisms can be used for this operation.
