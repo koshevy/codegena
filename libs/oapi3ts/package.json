@@ -26,8 +26,10 @@
   },
   "dependencies": {
     "@codegena/definitions": "*",
+    "json-pointer": "^0.6.0"
+  },
+  "peerDependencies": {
     "ajv": ">= 6",
-    "json-pointer": "^0.6.0",
     "lodash": ">= 4",
     "prettier": ">= 1",
     "typescript": ">= 3.9.0"
@@ -35,7 +37,7 @@
   "devDependencies": {
     "@types/lodash": ">= 4",
     "@types/node": ">= 8",
-    "jest-preset-angular": ">= 7"
+    "jest-preset-angular": "8.3.1"
   },
   "optionalDependencies": {
     "@microsoft/typescript-etw": "*"
