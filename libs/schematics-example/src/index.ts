@@ -1,1 +1,1 @@
-export * from './lib/schematic-example.module';
+export const _default = {};
