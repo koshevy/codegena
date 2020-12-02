@@ -2,9 +2,9 @@
   "name": "@codegena/definitions",
   "version": "0.0.1",
   "devDependencies": {
-    "jest-preset-angular": "*"
+    "jest-preset-angular": "8.3.1"
   },
-  "dependencies": {
+  "peerDependencies": {
     "tslib": "^2.0.0"
   }
 }
