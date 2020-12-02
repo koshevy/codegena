@@ -1,0 +1,18 @@
+{
+  "name": "@codegena/todo-app-contract",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": ">=8",
+    "@angular/core": ">=8",
+    "rxjs": ">=6"
+  },
+  "dependencies": {
+    "@codegena/definitions": "*",
+    "@codegena/ng-http-tools": "*",
+    "tslib": "^2.0.0"
+  },
+  "devDependencies": {
+    "faker": "^5.1.0",
+    "@types/faker": "5.1.0"
+  }
+}

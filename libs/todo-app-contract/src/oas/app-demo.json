@@ -1,0 +1,957 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "TODO App Demo",
+    "description": "This is a complete API description of application for managing TODO-reminders. There are all functions of typical TODO notes manager. This description is a part of `@codegena` project."
+  },
+  "servers": [
+    {
+      "description": "Local simple",
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/group": {
+      "get": {
+        "tags": ["Groups of tasks"],
+        "summary": "Get all TODO's groups",
+        "operationId": "getGroups",
+        "description": "Returns all TODO's group with their items or without. By default skips items, suggesting you want to get top level meta-data. It could be filtered by `isComplete` status.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/isComplete"
+          },
+          {
+            "$ref": "#/components/parameters/withItems"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "TODO's groups",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ToDoGroup"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/errorBadRequest"
+          },
+          "500": {
+            "$ref": "#/components/responses/errorServer"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Groups of tasks"],
+        "operationId": "createGroup",
+        "summary": "Create a new TODO's group",
+        "description": "Creates new group with exists items, or without",
+        "requestBody": {
+          "description": "Required request body",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToDoGroupBlank"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/todoGroupSaved"
+          },
+          "400": {
+            "$ref": "#/components/responses/errorBadRequest"
+          },
+          "500": {
+            "$ref": "#/components/responses/errorServer"
+          }
+        }
+      }
+    },
+    "/group/{groupId}": {
+      "get": {
+        "tags": ["Groups of tasks"],
+        "operationId": "getGroup",
+        "summary": "Get TODO's group by id",
+        "description": "Returns specified group by `groupId`",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/groupId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "TODO's group",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToDoGroup"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/errorBadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/errorGroupNotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/errorServer"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Groups of tasks"],
+        "operationId": "rewriteGroup",
+        "summary": "Rewrite specified TODO's group",
+        "description": "Rewrites an entire todo's group",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/groupId"
+          },
+          {
+            "$ref": "#/components/parameters/forceSave"
+          }
+        ],
+        "requestBody": {
+          "description": "Required request body",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToDoGroupBlank"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/todoGroupSaved"
+          },
+          "204": {
+            "description": "No changes. Should no have a response!"
+          },
+          "400": {
+            "$ref": "#/components/responses/errorBadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/errorGroupNotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/errorConflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/errorServer"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Groups of tasks"],
+        "operationId": "updateGroup",
+        "summary": "Update specified TODO's group",
+        "description": "Partially update (patch) of group",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/groupId"
+          },
+          {
+            "$ref": "#/components/parameters/forceSave"
+          }
+        ],
+        "requestBody": {
+          "description": "Required request body",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ToDoGroupBlank"
+                  },
+                  {
+                    "required": []
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Todo group saved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToDoGroup"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/errorBadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/errorGroupNotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/errorConflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/errorServer"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Groups of tasks"],
+        "operationId": "deleteGroup",
+        "summary": "Delete specified TODO's group",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/groupId"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Todo group deleted"
+          },
+          "400": {
+            "$ref": "#/components/responses/errorBadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/errorGroupNotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/errorConflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/errorServer"
+          }
+        }
+      }
+    },
+    "/group/{groupId}/item": {
+      "summary": "Group item",
+      "get": {
+        "tags": ["Tasks"],
+        "operationId": "getGroupItems",
+        "summary": "Get items of specified TODO's group",
+        "description": "Returns array with items of specified TODO's group",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/groupId"
+          },
+          {
+            "$ref": "#/components/parameters/isComplete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Items of specified TODO's group",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ToDoTask"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/errorBadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/errorGroupNotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/errorServer"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Tasks"],
+        "operationId": "createGroupItem",
+        "summary": "Create new group item",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/groupId"
+          },
+          {
+            "$ref": "#/components/parameters/forceSave"
+          }
+        ],
+        "requestBody": {
+          "description": "Group item",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToDoTaskBlank"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToDoTask"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/errorBadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/errorGroupNotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/errorConflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/errorServer"
+          }
+        }
+      }
+    },
+    "/group/{groupId}/item/{itemId}": {
+      "put": {
+        "tags": ["Tasks"],
+        "operationId": "rewriteGroupItem",
+        "summary": "Rewrite group item",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/groupId"
+          },
+          {
+            "$ref": "#/components/parameters/itemId"
+          },
+          {
+            "$ref": "#/components/parameters/forceSave"
+          }
+        ],
+        "requestBody": {
+          "description": "Group item",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToDoTaskBlank"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/todoTaskSaved"
+          },
+          "400": {
+            "$ref": "#/components/responses/errorBadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/errorGroupItemNotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/errorConflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/errorServer"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Tasks"],
+        "operationId": "updateGroupItem",
+        "summary": "Update group item",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/groupId"
+          },
+          {
+            "$ref": "#/components/parameters/itemId"
+          },
+          {
+            "name": "forceSave",
+            "in": "query",
+            "description": "Force save group despite conflicts",
+            "required": false,
+            "schema": {
+              "type": ["boolean", "null"],
+              "default": null
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Group item",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToDoTaskBlank"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/todoTaskSaved"
+          },
+          "400": {
+            "$ref": "#/components/responses/errorBadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/errorGroupNotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/errorConflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/errorServer"
+          }
+        }
+      }
+    },
+    "/group/items": {
+      "post": {
+        "tags": ["Tasks"],
+        "operationId": "updateFewItems",
+        "summary": "Update few items whatever how much and what groups these belongs to.",
+        "description": "",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/forceSave"
+          }
+        ],
+        "requestBody": {
+          "description": "Collection of `ToDoTask` items. Tasks should be with UID's and should be exists.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ToDoTask"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "All items are updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ToDoTask"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/errorBadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/errorGroupItemNotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/errorConflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/errorServer"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "forceSave": {
+        "name": "forceSave",
+        "in": "query",
+        "description": "Force save group despite conflicts",
+        "required": false,
+        "schema": {
+          "type": ["boolean", "null"],
+          "default": null
+        }
+      },
+      "itemId": {
+        "name": "itemId",
+        "in": "path",
+        "description": "Uid of TODO group item",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/Uid"
+        }
+      },
+      "isComplete": {
+        "name": "isComplete",
+        "in": "query",
+        "description": "Filter groups by `complete` status",
+        "required": false,
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "groupId": {
+        "name": "groupId",
+        "in": "path",
+        "description": "Uid of TODO group",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/Uid"
+        }
+      },
+      "withItems": {
+        "name": "withItems",
+        "in": "query",
+        "description": "Set it `true` if you want to get all group items with group. Always returns empty `items` array when it's `false`.",
+        "required": false,
+        "schema": {
+          "type": "boolean"
+        }
+      }
+    },
+    "responses": {
+      "errorBadRequest": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/HttpErrorBadRequest"
+            }
+          }
+        }
+      },
+      "errorConflict": {
+        "description": "Conflict",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/HttpErrorConflict"
+            }
+          }
+        }
+      },
+      "errorGroupItemNotFound": {
+        "description": "Group item not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/HttpErrorNotFound"
+            }
+          }
+        }
+      },
+      "errorGroupNotFound": {
+        "description": "Group not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/HttpErrorNotFound"
+            }
+          }
+        }
+      },
+      "errorServer": {
+        "description": "Server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/HttpErrorServer"
+            }
+          }
+        }
+      },
+      "todoTaskSaved": {
+        "description": "Todos item saved",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ToDoTask"
+            }
+          }
+        }
+      },
+      "todoGroupSaved": {
+        "description": "Todo group saved",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ToDoGroup"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "AttachmentMeta": {
+        "description": "Common meta data model of any type of attachment",
+        "oneOf": [
+          { "$ref": "#/components/schemas/AttachmentMetaImage" },
+          { "$ref": "#/components/schemas/AttachmentMetaDocument" },
+          { "$ref": "#/components/schemas/ExternalResource" }
+        ]
+      },
+      "AttachmentMetaImage": {
+        "type": "object",
+        "description": "Meta data of image attached to task",
+        "properties": {
+          "mediaId": {
+            "type": "string",
+            "description": "An unique id of media. Metadata with unique get from server in return of uploaded image file.",
+            "pattern": "^[a-z0-9]{16}$"
+          },
+          "type": {
+            "type": "string",
+            "description": "Marks attachment as an image",
+            "enum": ["image"]
+          },
+          "url": {
+            "description": "Url of uploaded image",
+            "$ref": "#/components/schemas/Url"
+          },
+          "thumbs": {
+            "type": "object",
+            "description": "Possible thumbnails of uploaded image",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "description": "Url of cached thumb",
+                  "$ref": "#/components/schemas/Url"
+                },
+                "imageOptions": {
+                  "description": "Information of image",
+                  "$ref": "#/components/schemas/ImageOptions"
+                }
+              }
+            }
+          },
+          "format": {
+            "description": "Format of uploaded image",
+            "type": "string",
+            "enum": ["png", "jpeg", "gif", "svg", "tiff"]
+          },
+          "imageOptions": {
+            "description": "Url of cached thumb",
+            "$ref": "#/components/schemas/ImageOptions"
+          }
+        },
+        "required": ["mediaId", "type", "url", "format", "imageOptions"]
+      },
+      "AttachmentMetaDocument": {
+        "type": "object",
+        "description": "Meta data of document attached to task",
+        "properties": {
+          "docId": {
+            "type": "string",
+            "description": "An unique id of document. Metadata with unique get from server in return of uploaded image file.",
+            "pattern": "^[a-z0-9]{16}$"
+          },
+          "type": {
+            "type": "string",
+            "description": "Marks attachment as an document",
+            "enum": ["document"]
+          },
+          "url": {
+            "description": "Url of uploaded document",
+            "$ref": "#/components/schemas/Url"
+          },
+          "format": {
+            "type": "string",
+            "description": "Format of document",
+            "enum": ["doc", "docx", "pdf", "rtf", "xls", "xlsx", "txt"]
+          },
+          "size": {
+            "type": "number",
+            "description": "File size",
+            "min": 0,
+            "max": 8388607
+          }
+        },
+        "required": ["docId", "type", "url", "format", "size"]
+      },
+      "ExternalResource": {
+        "description": "Link to any external resource in attachment",
+        "$ref": "#/components/schemas/Url"
+      },
+      "HttpErrorBadRequest": {
+        "type": "object",
+        "required": ["message"],
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["syntax", "semantic"]
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JsonError"
+            }
+          }
+        }
+      },
+      "HttpErrorConflict": {
+        "type": "object",
+        "required": ["message"],
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "HttpErrorNotFound": {
+        "type": "object",
+        "required": ["message"],
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "HttpErrorServer": {
+        "type": "object",
+        "required": ["message"],
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "ImageOptions": {
+        "type": "object",
+        "properties": {
+          "width": {
+            "type": "number",
+            "min": 1,
+            "max": 3000
+          },
+          "height": {
+            "type": "number",
+            "min": 1,
+            "max": 3000
+          },
+          "size": {
+            "type": "number",
+            "min": 0,
+            "max": 8388607
+          }
+        },
+        "required": ["width", "height", "size"]
+      },
+      "JsonError": {
+        "type": "object",
+        "required": ["originalMessage", "jsonPointer"],
+        "properties": {
+          "originalMessage": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "jsonPointer": {
+            "type": "string"
+          }
+        }
+      },
+      "ToDoTaskBlank": {
+        "title": "Base part of data of item in todo's group",
+        "description": "Data about group item needed for creation of it",
+        "properties": {
+          "groupUid": {
+            "description": "An unique id of group that item belongs to",
+            "$ref": "#/components/schemas/Uid"
+          },
+          "title": {
+            "description": "Short brief of task to be done",
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 64
+          },
+          "description": {
+            "description": "Detailed description and context of the task. Allowed using of Common Markdown.",
+            "type": ["string", "null"],
+            "minLength": 10,
+            "maxLength": 1024
+          },
+          "isDone": {
+            "description": "Status of task: is done or not",
+            "type": "boolean",
+            "default": false,
+            "example": false
+          },
+          "position": {
+            "description": "Position of a task in group. Allows to track changing of state of a concrete item, including changing od position.",
+            "type": "number",
+            "min": 0,
+            "max": 4096,
+            "example": 0
+          },
+          "attachments": {
+            "type": "array",
+            "description": "Any material attached to the task: may be screenshots, photos, pdf- or doc- documents on something else",
+            "items": {
+              "$ref": "#/components/schemas/AttachmentMeta"
+            },
+            "maxItems": 16,
+            "example": []
+          }
+        },
+        "required": ["isDone", "title"],
+        "example": {
+          "isDone": false,
+          "title": "Book soccer field",
+          "description": "The complainant agreed and recruited more members to play soccer."
+        }
+      },
+      "ToDoTask": {
+        "title": "Item in todo's group",
+        "description": "Describe data structure of an item in group of tasks",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ToDoTaskBlank"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "uid": {
+                "description": "An unique id of task",
+                "$ref": "#/components/schemas/Uid",
+                "readOnly": true
+              },
+              "dateCreated": {
+                "description": "Date/time (ISO) when task was created",
+                "type": "string",
+                "format": "date-time",
+                "readOnly": true,
+                "example": "2019-11-17T11:20:51.555Z"
+              },
+              "dateChanged": {
+                "description": "Date/time (ISO) when task was changed last time",
+                "type": "string",
+                "format": "date-time",
+                "readOnly": true,
+                "example": "2019-11-17T11:20:51.555Z"
+              }
+            },
+            "required": ["dateChanged", "dateCreated", "position", "uid"]
+          }
+        ]
+      },
+      "ToDoGroupBlank": {
+        "title": "Base part of data of group",
+        "description": "Data needed for group creation",
+        "type": "object",
+        "properties": {
+          "title": {
+            "description": "Title of a group",
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 32,
+            "example": "Other activities"
+          },
+          "description": {
+            "description": "Detailed description of a group in one/two sequences.",
+            "type": "string",
+            "minLength": 16,
+            "maxLength": 1024,
+            "example": "Other tasks and issues with low priority"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ToDoTaskBlank"
+            }
+          },
+          "isComplete": {
+            "description": "Whether all tasks in group are complete",
+            "oneOf": [
+              {"type": "boolean"},
+              {"type": "null"}
+            ],
+            "default": null
+          }
+        },
+        "required": ["title"]
+      },
+      "ToDoGroupExtendedData": {
+        "title": "Extended data of group",
+        "description": "Extended data has to be obtained after first save",
+        "type": "object",
+        "properties": {
+          "uid": {
+            "description": "An unique id of task",
+            "$ref": "#/components/schemas/Uid"
+          },
+          "dateCreated": {
+            "description": "Date/time (ISO) when task was created",
+            "type": "string",
+            "format": "date-time",
+            "example": "2019-11-17T11:20:51.555Z"
+          },
+          "dateChanged": {
+            "description": "Date/time (ISO) when task was changed last time",
+            "type": "string",
+            "format": "date-time",
+            "example": "2019-11-17T11:20:51.555Z"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ToDoTask"
+            }
+          }
+        },
+        "required": ["dateChanged", "dateCreated", "uid", "items"]
+      },
+      "ToDoGroup": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ToDoGroupBlank"
+          },
+          {
+            "$ref": "#/components/schemas/ToDoGroupExtendedData"
+          }
+        ]
+      },
+      "Uid": {
+        "title": "UID of element",
+        "type": "string",
+        "minLength": 16,
+        "maxLength": 22,
+        "pattern": "^[\\w\\-]+$",
+        "example": "hB6BjVfbe5pBrJiT0kFzu"
+      },
+      "Url": {
+        "description": "Link to any external resource",
+        "type": "string",
+        "pattern": "^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?",
+        "example": "http://example.com"
+      }
+    }
+  }
+}
