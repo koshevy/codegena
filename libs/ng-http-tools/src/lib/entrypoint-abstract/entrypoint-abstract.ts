@@ -18,10 +18,7 @@ import {
     parseRequestArguments,
     prepareRequestOptions,
 } from './utils';
-import {
-    RequestOptions,
-    RequestOptionsRaw,
-} from './request-options';
+import { RequestOptionsRaw } from './request-options';
 import { EntrypointValidationService } from './validation';
 
 type HttpClientResponse<TResponse> = HttpResponse<TResponse> | HttpEvent<TResponse>;
@@ -48,7 +45,11 @@ export abstract class EntrypointAbstract<
     protected abstract getResponseValidationSchema(): HasResponses<HasContentType<JsonSchema>> | null;
 
     public createUrl(parameters?: TParameters): string {
-        return createUrl(this.getPathTemplate(), parameters || {});
+        return createUrl(
+            this.getServers(),
+            this.getPathTemplate(),
+            parameters || {},
+        );
     }
 
     public request(params: TParameters): EntrypointResponse<TResponse>;

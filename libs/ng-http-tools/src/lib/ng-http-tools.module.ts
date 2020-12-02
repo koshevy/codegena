@@ -7,6 +7,9 @@ import {
 import {
     EntrypointValidationService,
 } from './entrypoint-abstract/validation/entrypoint-validation.service';
+import {
+    EntrypointAbstract,
+} from './entrypoint-abstract/entrypoint-abstract';
 
 @NgModule({
     imports: [

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpResponse, HttpEvent } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
+import { EMPTY, Observable, of, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HasResponses, HasContentType } from '@codegena/definitions/aspects';
 import { Schema as JsonSchema } from '@codegena/definitions/json-schema';
@@ -18,7 +18,7 @@ export class EntrypointValidationService {
         domainSchemas$: Observable<object>,
     ): Observable<void> {
         if (!schema) {
-            return of<void>();
+            return of<void>(undefined);
         }
 
         const contentType = options.headers.get('content-type');
@@ -36,7 +36,7 @@ export class EntrypointValidationService {
 
         // FormData does't get validated yet
         if (value instanceof FormData) {
-            return of<void>();
+            return of<void>(undefined);
         }
 
         return this.validate(value, schemaByContentType, domainSchemas$);
@@ -48,7 +48,7 @@ export class EntrypointValidationService {
         domainSchemas$: Observable<object>,
     ): Observable<void> {
         if (!schema) {
-            return of<void>();
+            return of<void>(undefined);
         }
 
         return this.validate(params, schema, domainSchemas$);
@@ -60,10 +60,13 @@ export class EntrypointValidationService {
         domainSchemas$: Observable<object>,
     ): Observable<void> {
         if (!schema) {
-            return of<void>();
+            return of<void>(undefined);
         }
 
-        const contentType = response.headers.get('content-type');
+        const contentType = response.headers
+            .get('content-type')
+            .split(';')
+            [0];
 
         if (!contentType) {
             return throwError(new ValidationError(
