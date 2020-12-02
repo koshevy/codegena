@@ -1,0 +1,50 @@
+{
+  "name": "@codegena/todo-app-backend",
+  "version": "0.1.8-alpha.1",
+  "description": "",
+  "author": "",
+  "license": "MIT",
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "nest build",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
+    "start:prod": "node dist/main",
+    "lint": "tslint -p tsconfig.json -c tslint.json",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:e2e": "jest --config ./test/jest-e2e.json"
+  },
+  "dependencies": {
+    "express-session": "^1.17.0",
+    "nanoid": "^2.1.7"
+  },
+  "peerDependencies": {
+    "@nestjs/common": ">= 7",
+    "@nestjs/core": ">= 7",
+    "@nestjs/platform-express": ">= 7.0.0",
+    "lodash": "*",
+    "reflect-metadata": ">= 0",
+    "rimraf": ">= 3.0.0",
+    "rxjs": ">= 6.0.0",
+    "typescript": ">= 3.6"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".spec.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "coverageDirectory": "./coverage",
+    "testEnvironment": "node"
+  }
+}
