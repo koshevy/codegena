@@ -9,15 +9,15 @@
   },
   "license": "MIT",
   "dependencies": {
-    "fs-extra": "^9.0.1",
     "@codegena/definitions": "*",
-    "@codegena/oapi3ts": "*"
+    "@codegena/oapi3ts": "*",
+    "fs-extra": ">= 4"
   },
   "peerDependencies": {
-    "@angular-devkit/schematics": ">",
+    "@angular-devkit/schematics": "*",
     "@angular/common": "*",
-    "typescript": ">= 3.9.0",
     "lodash": ">= 4",
-    "rxjs": ">= 6"
+    "rxjs": ">= 6",
+    "typescript": ">= 3.9.0"
   }
 }

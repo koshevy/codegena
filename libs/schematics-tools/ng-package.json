@@ -7,9 +7,6 @@
   "whitelistedNonPeerDependencies": [
     "@codegena/definitions",
     "@codegena/oapi3ts",
-    "fs-extra",
-    "lodash",
-    "rxjs",
-    "rxjs/operators"
+    "fs-extra"
   ]
 }
