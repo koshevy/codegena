@@ -12,58 +12,50 @@
     "target": "es2015",
     "module": "esnext",
     "typeRoots": ["node_modules/@types"],
-    "lib": [
-      "es5",
-      "es2017",
-      "dom"
-    ],
-    "types": [
-      "node"
-    ],
+    "lib": ["es5", "es2017", "dom"],
+    "types": ["node"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@codegena/oapi3ts": ["dist/oapi3ts", "libs/oapi3ts/src/index.ts"],
+      "@codegena/oapi3ts": [
+        "libs/oapi3ts/src/index.ts"
+      ],
       "@codegena/oapi3ts/contract": [
-        "dist/oapi3ts/contract",
         "libs/oapi3ts/contract/src/index.ts"
       ],
       "@codegena/oapi3ts/schematic-tools": [
-        "dist/oapi3ts/schematic-tools",
         "libs/oapi3ts/schematic-tools/src/index.ts"
       ],
       "@codegena/definitions": [
-        "dist/definitions",
         "libs/definitions/src/index.ts"
       ],
       "@codegena/definitions/aspects": [
-        "dist/definitions/aspects",
         "libs/definitions/aspects/src/index.ts"
       ],
       "@codegena/definitions/json-schema": [
-        "dist/definitions/json-schema",
         "libs/definitions/json-schema/src/index.ts"
       ],
       "@codegena/definitions/oas3": [
-        "dist/definitions/oas3",
         "libs/definitions/oas3/src/index.ts"
       ],
       "@codegena/schematics-example": [
-        "dist/schematics-example",
         "libs/schematics-example/src/index.ts"
       ],
       "@codegena/schematics-tools": [
-        "dist/schematics-tools",
         "libs/schematics-tools/src/index.ts"
       ],
       "@codegena/ng-http-tools": [
-        "dist/ng-http-tools",
         "libs/ng-http-tools/src/index.ts"
       ],
       "@codegena/ng-http-tools/rx-operators": [
-        "dist/ng-http-tools/rx-operators",
         "libs/ng-http-tools/rx-operators/src/index.ts"
+      ],
+      "@codegena/todo-app-contract": [
+        "libs/todo-app-contract/src/index.ts"
+      ],
+      "@codegena/todo-app-contract/*": [
+        "libs/todo-app-contract/src/*"
       ]
     }
   },

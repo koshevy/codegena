@@ -1,0 +1,43 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      "@codegena/oapi3ts": [
+        "dist/oapi3ts"
+      ],
+      "@codegena/oapi3ts/contract": [
+        "dist/oapi3ts/contract"
+      ],
+      "@codegena/oapi3ts/schematic-tools": [
+        "dist/oapi3ts/schematic-tools"
+      ],
+      "@codegena/definitions": [
+        "dist/definitions"
+      ],
+      "@codegena/definitions/aspects": [
+        "dist/definitions/aspects"
+      ],
+      "@codegena/definitions/json-schema": [
+        "dist/definitions/json-schema"
+      ],
+      "@codegena/definitions/oas3": [
+        "dist/definitions/oas3"
+      ],
+      "@codegena/schematics-example": [
+        "dist/schematics-example"
+      ],
+      "@codegena/schematics-tools": [
+        "dist/schematics-tools"
+      ],
+      "@codegena/ng-http-tools": [
+        "dist/ng-http-tools"
+      ],
+      "@codegena/ng-http-tools/rx-operators": [
+        "dist/ng-http-tools/rx-operators"
+      ],
+      "@codegena/todo-app-contract": [
+        "dist/todo-app-contract"
+      ]
+    }
+  }
+}

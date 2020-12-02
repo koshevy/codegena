@@ -7,7 +7,6 @@
     "nx": "nx",
     "start": "ng serve",
     "build": "ng build",
-    "preinstall": "node ./scripts/prevent-npm-install.js",
     "//": "Prebuilt libs help to control and test result of building before publication, but not usuable when you developing",
     "build:all-libs": "ng build oapi3ts && ng build ng-api-service && ng build oapi3ts-cli",
     "clear:prebuilt-libs": "rm -rf dist/*",
@@ -15,11 +14,11 @@
     "lint": "nx workspace-lint && ng lint",
     "e2e": "ng e2e",
     "build-and-publish": "./build-and-publish.sh",
-    "schematics-example:update": "nx build schematics-example --with-deps && yarn run schematics-example:build-schematics:dev && yarn run schematics-example:link-dist && yarn run schematics-example:clear-result && yarn run schematics-example:generate && yarn",
-    "schematics-example:clear-result": "rm -rf libs/schematics-example/src/lib/shop/*",
-    "schematics-example:build-schematics:dev": "yarn workspace @codegena/schematics-example run build",
-    "schematics-example:link-dist": "yarn workspace @codegena/schematics-example run link:libs:built",
-    "schematics-example:generate": "ng g @codegena/schematics-example:backend-services --uri=/DATA/application_projects/codegena/libs/oapi3ts/src/schemas/complex.json --domain=shop --project=schematics-example --secondaryEntrypoint=\"\" --hostModule=\"\" --moduleName=\"shop\""
+    "todo-app-contract:update": "nx build schematics-example --with-deps && npm run todo-app-contract:build-schematics:dev && npm run todo-app-contract:link-dist && npm run todo-app-contract:clear-result && npm run todo-app-contract:generate && npm i",
+    "todo-app-contract:clear-result": "rm -rf ./libs/todo-app-contract/src/lib/todo-app",
+    "todo-app-contract:build-schematics:dev": "npm run --prefix libs/schematics-example build",
+    "todo-app-contract:link-dist": "npm run --prefix libs/schematics-example link:libs:built",
+    "todo-app-contract:generate": "ng g @codegena/schematics-example:backend-services --uri=$(pwd)/libs/todo-app-contract/src/oas/app-demo.json --domain=todo-app --project=todo-app-contract --secondaryEntrypoint=\"\" --hostModule=\"\" --moduleName=\"todo-app\""
   },
   "private": true,
   "dependencies": {
@@ -31,7 +30,8 @@
     "@angular/platform-browser": "10.2.0",
     "@angular/platform-browser-dynamic": "10.2.0",
     "@angular/router": "10.2.0",
-    "@nrwl/angular": "10.3.1",
+    "@codegena/oapi3ts": "file:dist/oapi3ts",
+    "@nrwl/angular": "10.3.3",
     "ajv": "^6.10.2",
     "core-js": "^2.5.4",
     "lerna": "^3.20.2",
@@ -47,13 +47,17 @@
     "@angular/cli": "10.1.7",
     "@angular/compiler-cli": "10.2.0",
     "@angular/language-service": "10.2.0",
-    "@nrwl/cli": "10.3.1",
-    "@nrwl/cypress": "10.3.1",
-    "@nrwl/jest": "10.3.1",
-    "@nrwl/workspace": "10.3.1",
+    "@nestjs/schematics": "^7.0.0",
+    "@nestjs/testing": "^7.0.0",
+    "@nrwl/cli": "10.3.3",
+    "@nrwl/cypress": "10.3.3",
+    "@nrwl/jest": "10.3.3",
+    "@nrwl/nest": "10.3.3",
+    "@nrwl/node": "10.3.3",
+    "@nrwl/workspace": "10.3.3",
     "@types/jest": "26.0.8",
-    "@types/node": "~8.9.4",
-    "codelyzer": "~5.0.1",
+    "@types/node": "12.19.4",
+    "codelyzer": "^6.0.1",
     "dotenv": "6.2.0",
     "eslint": "^7.7.0",
     "eslint-plugin-cypress": "^2.10.3",
@@ -62,13 +66,17 @@
     "ng-packagr": "10.0.4",
     "prettier": "2.0.4",
     "ts-jest": "26.4.0",
-    "ts-node": "~7.0.0",
-    "tsickle": "^0.38.1",
+    "ts-node": "9.0.0",
+    "tsickle": "0.39.1",
     "tslint": "6.0.0",
-    "typescript": "4.0.3"
+    "typescript": "3.9.7"
   },
   "workspaces": [
-    "apps/todo-app-backend",
+    "apps/*",
     "libs/*"
-  ]
+  ],
+  "engines": {
+    "node": ">= 10",
+    "npm": ">= 7"
+  }
 }
