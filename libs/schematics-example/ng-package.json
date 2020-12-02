@@ -7,9 +7,9 @@
   "whitelistedNonPeerDependencies": [
     "@codegena/definitions",
     "@codegena/ng-http-tools",
+    "@codegena/oapi3ts",
+    "@codegena/schematics-tools",
     "fs-extra",
-    "lodash",
-    "rxjs",
-    "rxjs/operators"
+    "nanoid"
   ]
 }
