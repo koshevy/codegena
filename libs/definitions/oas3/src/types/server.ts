@@ -1,3 +1,5 @@
+import { ServerVariable } from './server-variable';
+
 /**
  * @see https://swagger.io/specification/#serverObject
  */
@@ -7,6 +9,12 @@ export interface Server {
      * CommonMark syntax MAY be used for rich text representation.
      */
     description?: string;
+
+    /**
+     * Extended non-standard option which describes what the
+     * type of environment should be associated with this server
+     */
+    environment?: string;
 
     /**
      * REQUIRED. A URL to the target host. This URL supports Server Variables and MAY be relative,
@@ -22,5 +30,5 @@ export interface Server {
      * TODO support variables in server. now is not
      * @see https://swagger.io/specification/#serverVariableObject
      */
-    variables?: any;
+    variables?: Record<string, ServerVariable>;
 }

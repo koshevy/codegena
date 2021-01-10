@@ -18,3 +18,4 @@ export { Request as Oas3Request } from './types/request';
 export { Response as Oas3Response } from './types/response';
 export { ReusableComponents as Oas3ReusableComponents } from './types/reusable-components';
 export { Server as Oas3Server } from './types/server';
+export { ServerVariable as Oas3ServerVariable } from './types/server-variable';
