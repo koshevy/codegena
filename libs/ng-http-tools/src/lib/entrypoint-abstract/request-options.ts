@@ -1,4 +1,5 @@
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { ServerEnvironment } from './server-environment';
 
 /**
  * Type of `options` parameter in {@link HttpClient.request}
@@ -10,6 +11,7 @@ type HttpClientsRequestParameters = Parameters<HttpClient['request']>['2'];
  */
 export interface RequestOptionsRaw extends HttpClientsRequestParameters {
     headers?: HttpHeaders;
+    serverEnvironment?: ServerEnvironment,
 }
 
 export interface RequestOptions<TRequestBody> {

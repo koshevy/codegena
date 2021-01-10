@@ -1,7 +1,7 @@
 // tslint:disable:unified-signatures
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, tap, switchMap } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
     HttpClient,
     HttpErrorResponse,
@@ -11,6 +11,7 @@ import {
 import { HasContentType } from '@codegena/definitions/aspects';
 import { HasResponses } from '@codegena/definitions/aspects';
 import { Schema as JsonSchema } from '@codegena/definitions/json-schema';
+import { Oas3Server } from '@codegena/definitions/oas3';
 import { HttpMethod } from "./http-method";
 import { EntrypointResponse } from "./entrypoint-response";
 import {
@@ -20,6 +21,10 @@ import {
 } from './utils';
 import { RequestOptionsRaw } from './request-options';
 import { EntrypointValidationService } from './validation';
+import {
+    ServerEnvironment,
+    SERVER_ENVIRONMENT,
+} from './server-environment';
 
 type HttpClientResponse<TResponse> = HttpResponse<TResponse> | HttpEvent<TResponse>;
 
@@ -33,23 +38,38 @@ export abstract class EntrypointAbstract<
     constructor(
         private httpClient: HttpClient,
         private validationService: EntrypointValidationService,
+        @Inject(SERVER_ENVIRONMENT)
+            private serverEnvironment: ServerEnvironment,
     ) {}
 
     protected abstract getMethod(): HttpMethod;
     protected abstract getPathTemplate(): string;
     protected abstract getQueryParameters(): string[];
-    protected abstract getServers(): string[];
+    protected abstract getServers(): Oas3Server[];
     protected abstract getDomainSchema(): Observable<object>;
     protected abstract getRequestBodySchema(): HasContentType<JsonSchema> | null;
     protected abstract getParametersSchema(): JsonSchema | null;
     protected abstract getResponseValidationSchema(): HasResponses<HasContentType<JsonSchema>> | null;
 
-    public createUrl(parameters?: TParameters): string {
-        return createUrl(
-            this.getServers(),
-            this.getPathTemplate(),
-            parameters || {},
-        );
+    public createUrl(
+        parameters?: TParameters,
+        serverEnvironment: ServerEnvironment = {},
+    ): string {
+        const {
+            environment,
+            serverParams,
+        } = {
+            ...this.serverEnvironment,
+            ...serverEnvironment,
+        };
+
+        return createUrl({
+            servers: this.getServers(),
+            pathTemplate: this.getPathTemplate(),
+            pathParams: parameters || {},
+            environment,
+            serverParams,
+        });
     }
 
     public request(params: TParameters): EntrypointResponse<TResponse>;
@@ -91,7 +111,7 @@ export abstract class EntrypointAbstract<
 
         const pathTemplate = this.getPathTemplate();
         const queryParameters = this.getQueryParameters();
-        const url = this.createUrl(parameters);
+        const url = this.createUrl(parameters, options.serverEnvironment || {});
         const preparedOptions = prepareRequestOptions<TRequestBody>(
             url,
             parameters,

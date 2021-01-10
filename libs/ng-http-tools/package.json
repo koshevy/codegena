@@ -11,5 +11,8 @@
   },
   "dependencies": {
     "@codegena/definitions": "*"
+  },
+  "devDependencies": {
+    "jest-preset-angular": "^8.3.1"
   }
 }

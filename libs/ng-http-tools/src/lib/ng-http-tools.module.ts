@@ -8,8 +8,8 @@ import {
     EntrypointValidationService,
 } from './entrypoint-abstract/validation/entrypoint-validation.service';
 import {
-    EntrypointAbstract,
-} from './entrypoint-abstract/entrypoint-abstract';
+    SERVER_ENVIRONMENT,
+} from './entrypoint-abstract/server-environment';
 
 @NgModule({
     imports: [
@@ -33,6 +33,10 @@ export class NgHttpToolsModule {
                         options.formats || {},
                         options.unknownFormats || [],
                     ),
+                },
+                {
+                    provide: SERVER_ENVIRONMENT,
+                    useValue: {},
                 },
                 EntrypointValidationService,
             ],
