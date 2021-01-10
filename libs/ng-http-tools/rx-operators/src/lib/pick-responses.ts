@@ -94,7 +94,7 @@ function doNextEvent<TSubResponse>(
         errorMessage = [
             `Unexpected content-type: ${contentType}`,
             `original status: ${response.statusText}`,
-        ].join('. ')
+        ].join('. ');
     }
 
     if (errorMessage && throwIfOther) {
