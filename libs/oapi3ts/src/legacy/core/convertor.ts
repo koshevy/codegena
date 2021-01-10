@@ -16,6 +16,7 @@ import {
     Oas3Paths,
     Oas3Response,
     Oas3Specification,
+    Oas3Server,
 } from '@codegena/definitions/oas3';
 
 import { ConvertorConfig, defaultConfig } from './config';
@@ -388,7 +389,7 @@ export abstract class BaseConvertor {
                     jsonPathToOperation
                 );
 
-                const servers = this._getOperationsServers(
+                const servers = this._getOperationServers(
                     apiOperation,
                     jsonPathToOperation
                 );
@@ -797,10 +798,10 @@ export abstract class BaseConvertor {
         ].join('');
     }
 
-    private _getOperationsServers(
+    private _getOperationServers(
         apiOperation: Oas3Operation,
         jsonPathToOperation: string[]
-    ): string[] {
+    ): Oas3Server[] {
         let servers = apiOperation.servers || this._structure.servers;
 
         if (servers !== undefined && !_.isArray(servers)) {
@@ -816,15 +817,6 @@ export abstract class BaseConvertor {
             servers = defaultConfig.defaultServerInfo;
         }
 
-        return _.map(servers, (server, index) => {
-            if (!server.url || !_.isString(server.url)) {
-                throw new ParsingError('Server object should have url (string)', {
-                    oasStructure: this._structure,
-                    jsonPath: makeJsonPath(...jsonPathToOperation, 'servers', index, 'url')
-                })
-            }
-
-            return server.url
-        });
+        return servers;
     }
 }

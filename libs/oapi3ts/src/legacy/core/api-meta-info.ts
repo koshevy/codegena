@@ -1,4 +1,5 @@
 import { HasContentType, HasResponses } from '@codegena/definitions/aspects';
+import { Oas3Server } from '@codegena/definitions/oas3';
 import { Schema } from '@codegena/definitions/json-schema';
 
 /**
@@ -81,5 +82,5 @@ export interface ApiMetaInfo {
      */
     typingsDirectory: string;
 
-    servers: string[];
+    servers: Oas3Server[];
 }

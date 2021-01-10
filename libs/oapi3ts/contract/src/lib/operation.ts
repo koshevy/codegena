@@ -1,5 +1,8 @@
 import { HasContentType, HasResponses } from '@codegena/definitions/aspects';
-import { Oas3Operation } from '@codegena/definitions/oas3';
+import {
+    Oas3Operation,
+    Oas3Server,
+} from '@codegena/definitions/oas3';
 import { Schema as JsonSchema } from '@codegena/definitions/json-schema';
 import {
     Dependency,
@@ -27,6 +30,6 @@ export interface Operation extends DependencyCollection {
     parameters: Parameters,
     request: Request;
     response: Response;
-    servers: string[];
+    servers: Oas3Server[];
     queryParameters: string[] | null;
 }
