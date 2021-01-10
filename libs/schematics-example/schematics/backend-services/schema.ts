@@ -1,4 +1,4 @@
-import { Oas3Specification } from "@codegena/definitions/oas3";
+import { Oas3Specification } from '@codegena/definitions/oas3';
 
 export interface Schema {
     domain: string;

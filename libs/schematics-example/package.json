@@ -26,8 +26,9 @@
     "typescript": ">= 3.9.0"
   },
   "devDependencies": {
+    "copyfiles": ">= 2",
     "faker": "^5.1.0",
-    "copyfiles": ">= 2"
+    "jest-preset-angular": "^8.3.1"
   },
   "scripts": {
     "build": "../../node_modules/.bin/tsc -p tsconfig.schematics.json",

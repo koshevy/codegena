@@ -19,6 +19,7 @@ import { strings, normalize } from '@angular-devkit/core';
 import { Facade } from '@codegena/oapi3ts';
 import { Operation } from '@codegena/oapi3ts/contract';
 import { Schema as JsonSchema } from '@codegena/definitions/json-schema';
+import { Oas3Server } from '@codegena/definitions/oas3';
 import { SchematicHostSavingStrategy } from '@codegena/schematics-tools';
 import { Schema } from './schema'
 import { getPreparedOptions } from './utilities/get-prepared-options';
@@ -31,7 +32,7 @@ interface ServiceTemplateParams {
     responseModelName: string | null;
     pathTemplate: string;
     queryParameters: string[] | null;
-    servers: string[];
+    servers: Oas3Server[];
     parametersSchema: JsonSchema | null;
     requestBodySchema: JsonSchema | null;
     responseSchema: JsonSchema | null;
@@ -149,9 +150,7 @@ function getTemplateParameters(
     let parametersSchema: JsonSchema | null = null;
     let requestBodySchema: JsonSchema | null = null;
     let responseSchema : JsonSchema | null = null;
-    const servers = facade.specification?.servers?.map(
-        server => (typeof server === 'string') ? server : server.url,
-    ) || [];
+    const servers = operation.servers || facade.specification?.servers || [];
 
     if (operation.parameters) {
         parametersModelName = findRootIdentifier(operation.parameters.source);

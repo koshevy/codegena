@@ -1,7 +1,8 @@
 import { from, Observable, of } from "rxjs";
 import { Injectable } from '@angular/core';
-import { HasContentType, HasResponses } from "@codegena/definitions/aspects";
-import { Schema as JsonSchema } from "@codegena/definitions/json-schema";
+import { HasContentType, HasResponses } from '@codegena/definitions/aspects';
+import { Schema as JsonSchema } from '@codegena/definitions/json-schema';
+import { Oas3Server } from '@codegena/definitions/oas3';
 import { EntrypointAbstract, HttpMethod } from '@codegena/ng-http-tools';
 <% if (parametersModelName) { %>
 import { <%= parametersModelName %> } from './<%= dasherize(parametersModelName) %>';<%
@@ -32,7 +33,7 @@ export class <%= classify(operationId) %>BackendService extends EntrypointAbstra
         return <%= JSON.stringify(queryParameters) %>;
     }
 
-    protected getServers(): string[] {
+    protected getServers(): Oas3Server[] {
         return <%= JSON.stringify(servers) %>;
     }
 
