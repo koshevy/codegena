@@ -3,5 +3,9 @@
   "dest": "../../dist/todo-app-contract",
   "lib": {
     "entryFile": "src/index.ts"
-  }
+  },
+  "whitelistedNonPeerDependencies": [
+    "@codegena/definitions",
+    "@codegena/ng-http-tools"
+  ]
 }

@@ -7,8 +7,9 @@
   },
   "servers": [
     {
-      "description": "Local simple",
-      "url": "http://localhost:3000"
+      "environment": "local",
+      "description": "Base local server",
+      "url": "http://local.todo-app-example.com"
     }
   ],
   "paths": {
@@ -430,10 +431,16 @@
         "tags": ["Tasks"],
         "operationId": "updateFewItems",
         "summary": "Update few items whatever how much and what groups these belongs to.",
-        "description": "",
         "parameters": [
           {
             "$ref": "#/components/parameters/forceSave"
+          }
+        ],
+        "servers": [
+          {
+            "environment": "local",
+            "description": "Local server for tasks writing",
+            "url": "http://local.write.todo-app-example.com"
           }
         ],
         "requestBody": {
@@ -889,10 +896,7 @@
           },
           "isComplete": {
             "description": "Whether all tasks in group are complete",
-            "oneOf": [
-              {"type": "boolean"},
-              {"type": "null"}
-            ],
+            "oneOf": [{ "type": "boolean" }, { "type": "null" }],
             "default": null
           }
         },

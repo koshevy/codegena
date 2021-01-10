@@ -2,6 +2,7 @@ import { from, Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HasContentType, HasResponses } from '@codegena/definitions/aspects';
 import { Schema as JsonSchema } from '@codegena/definitions/json-schema';
+import { Oas3Server } from '@codegena/definitions/oas3';
 import { EntrypointAbstract, HttpMethod } from '@codegena/ng-http-tools';
 
 import { UpdateFewItemsParameters } from './update-few-items-parameters';
@@ -27,8 +28,14 @@ export class UpdateFewItemsBackendService extends EntrypointAbstract<
         return ['forceSave'];
     }
 
-    protected getServers(): string[] {
-        return ['http://localhost:3000'];
+    protected getServers(): Oas3Server[] {
+        return [
+            {
+                environment: 'local',
+                description: 'Local server for tasks writing',
+                url: 'http://local.write.todo-app-example.com',
+            },
+        ];
     }
 
     protected getDomainSchema(): Observable<object> {

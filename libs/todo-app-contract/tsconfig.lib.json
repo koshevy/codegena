@@ -3,6 +3,7 @@
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "target": "es2015",
+    "module": "commonjs",
     "declaration": true,
     "inlineSources": true
   },

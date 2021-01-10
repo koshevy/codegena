@@ -1,5 +1,6 @@
 {
   "name": "@codegena/todo-app-contract",
+  "private": true,
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": ">=8",
@@ -12,7 +13,8 @@
     "tslib": "^2.0.0"
   },
   "devDependencies": {
+    "@types/faker": "5.1.0",
     "faker": "^5.1.0",
-    "@types/faker": "5.1.0"
+    "jest-preset-angular": "^8.3.1"
   }
 }
