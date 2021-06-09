@@ -1,13 +1,14 @@
 import * as _ from 'lodash';
-import * as generateUid from 'nanoid';
+import nanoid from 'nanoid';
 import {
     ToDoGroup,
     ToDoGroupBlank,
     ToDoTask,
     ToDoTaskBlank,
-} from '@codegena/todo-app-scheme/src/lib/typings';
+} from '@codegena/todo-app-contract';
 import { BadRequestException } from "@nestjs/common";
 
+const generateUid = nanoid;
 export function getNowISO(): string {
     const date = new Date();
     return date.toISOString();

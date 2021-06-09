@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "SchematicsBackendServices",
+  "title": "Schema for argument of BackendServices schematics",
+  "type": "object",
+  "properties": {
+    "uri": {
+      "x-prompt": "URL of path (with `file://` protocol) to your OpenAPI source file",
+      "type": "string"
+    },
+    "domain": {
+      "x-prompt": "Business-domain (i.e. `shop`)",
+      "description": "Business-domain using as a name of grouping directory and Ng-module",
+      "type": "string"
+    },
+    "project": {
+      "x-prompt": "Name of project in Angular workspace",
+      "type": "string"
+    },
+    "secondaryEntrypoint": {
+      "x-prompt": "Secondary entrypoint in a project directory (only for libraries!)",
+      "type": "string"
+    },
+    "moduleName": {
+      "x-prompt": "Name o main module (i.e. 'shop')",
+      "type": "string"
+    },
+    "hostModule": {
+      "x-prompt": "Path of existing Ng-module has to import generated services",
+      "type": "string"
+    }
+  },
+  "required": [
+    "uri",
+    "domain",
+    "project"
+  ]
+}

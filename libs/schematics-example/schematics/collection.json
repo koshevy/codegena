@@ -1,0 +1,10 @@
+{
+  "$schema": "../../../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "backend-services": {
+      "description": "Example of schematic for backend service",
+      "factory": "./backend-services/index#backendServices",
+      "schema": "./backend-services/schema.json"
+    }
+  }
+}

@@ -13,25 +13,29 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [16.x]
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Fetch origin branches for nx:affected
+      run: git fetch --no-tags --prune --depth=5 origin master
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: Install yarn
-      run: npm install yarn -g
-    - name: Install dependencies with yarn
-      run: yarn install --frozen-lockfile
+    - name: Install dependencies (npm ci)
+      run: npm ci
     - name: Lint
-      run: yarn lint
-    - name: Clear already built libs
-      run: yarn run clear:prebuilt-libs
+      run: npx nx affected:lint --base=origin/master --head=HEAD
     - name: Test libraries in monorepo mode (without prebuilt libs)
-      run: yarn run test:libs
-    - name: Build libraries
-      run: yarn run build:all-libs
+      run: npx nx affected:test --base=origin/master --head=HEAD
+    - name: Clear already built libs
+      run: npm run clear:prebuilt-libs
+    - name: Build libraries and update example generated lib (todo-app-contract)
+      run: npm run todo-app-contract:update
+    - name: Build updated example generated lib (todo-app-contract)
+      run: npx ng build todo-app-contract
     - name: Test prebuilt libraries
-      run: yarn run test:libs
+      run: npx nx affected:test --base=origin/master --head=HEAD --configuration=ci

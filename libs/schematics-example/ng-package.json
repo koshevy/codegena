@@ -1,0 +1,15 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/schematics-example",
+  "lib": {
+    "entryFile": "src/index.ts"
+  },
+  "whitelistedNonPeerDependencies": [
+    "@codegena/definitions",
+    "@codegena/ng-http-tools",
+    "@codegena/oapi3ts",
+    "@codegena/schematics-tools",
+    "fs-extra",
+    "nanoid"
+  ]
+}

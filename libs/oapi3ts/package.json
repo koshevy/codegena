@@ -25,24 +25,19 @@
     "build": "ng build oapi3ts"
   },
   "dependencies": {
+    "@codegena/definitions": "*",
+    "json-pointer": "^0.6.0"
+  },
+  "peerDependencies": {
     "ajv": ">= 6",
-    "json-pointer": "^0.6.0",
     "lodash": ">= 4",
-    "prettier": ">= 1"
+    "prettier": ">= 1",
+    "typescript": ">= 3.9.0"
   },
   "devDependencies": {
-    "@angular/animations": ">= 6",
-    "@angular/cli": ">= 6",
-    "@angular/common": ">= 6",
-    "@angular/core": ">= 6",
-    "@angular/platform-browser-dynamic": ">= 6",
-    "@angular/platform-server": ">= 6",
     "@types/lodash": ">= 4",
     "@types/node": ">= 8",
-    "core-js": "*",
-    "jest-preset-angular": ">= 7",
-    "rxjs": ">= 6",
-    "zone.js": "*"
+    "jest-preset-angular": "8.3.1"
   },
   "optionalDependencies": {
     "@microsoft/typescript-etw": "*"

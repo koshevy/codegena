@@ -1,0 +1,20 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NgHttpToolsModule } from '@codegena/ng-http-tools';
+// Backend services
+<%=
+    operationIds.map(operationId =>
+        `import { ${classify(operationId)}BackendService } from './${dasherize(operationId)}/${dasherize(operationId)}-backend.service';`
+    ).join('\n')
+%>
+
+@NgModule({
+    imports: [
+        CommonModule,
+        NgHttpToolsModule,
+    ],
+    providers: [
+        <%= operationIds.map(operationId => `${classify(operationId)}BackendService`).join(',\n') %>
+    ],
+})
+export class <%= classify(moduleName) %>Module {}

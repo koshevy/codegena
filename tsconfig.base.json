@@ -1,0 +1,69 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es5", "es2017", "dom"],
+    "types": ["node"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@codegena/oapi3ts": [
+        "libs/oapi3ts/src/index.ts"
+      ],
+      "@codegena/oapi3ts/contract": [
+        "libs/oapi3ts/contract/src/index.ts"
+      ],
+      "@codegena/oapi3ts/schematic-tools": [
+        "libs/oapi3ts/schematic-tools/src/index.ts"
+      ],
+      "@codegena/definitions": [
+        "libs/definitions/src/index.ts"
+      ],
+      "@codegena/definitions/aspects": [
+        "libs/definitions/aspects/src/index.ts"
+      ],
+      "@codegena/definitions/json-schema": [
+        "libs/definitions/json-schema/src/index.ts"
+      ],
+      "@codegena/definitions/oas3": [
+        "libs/definitions/oas3/src/index.ts"
+      ],
+      "@codegena/schematics-example": [
+        "libs/schematics-example/src/index.ts"
+      ],
+      "@codegena/schematics-tools": [
+        "libs/schematics-tools/src/index.ts"
+      ],
+      "@codegena/ng-http-tools": [
+        "libs/ng-http-tools/src/index.ts"
+      ],
+      "@codegena/ng-http-tools/rx-operators": [
+        "libs/ng-http-tools/rx-operators/src/index.ts"
+      ],
+      "@codegena/todo-app-contract": [
+        "libs/todo-app-contract/src/index.ts"
+      ],
+      "@codegena/todo-app-contract/*": [
+        "libs/todo-app-contract/src/*"
+      ]
+    }
+  },
+  "exclude": ["node_modules", "tmp"],
+  "angularCompilerOptions": {
+    "skipTemplateCodegen": true,
+    "strictMetadataEmit": false,
+    "enableResourceInlining": true,
+    "enableIvy": false
+  }
+}

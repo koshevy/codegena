@@ -1,9 +1,9 @@
 import { getNowISO } from './helpers';
 import _ from 'lodash';
-import * as generateUid from 'nanoid';
+import nanoid from 'nanoid';
+import { ToDoGroup, ToDoTask } from '@codegena/todo-app-contract';
 
-import { ToDoGroup, ToDoTask } from '@codegena/todo-app-scheme/src/lib/typings';
-
+const generateUid = nanoid;
 const nowISO = getNowISO();
 let lastGeneratedGroupUid: string;
 let autoIncrementPosition = 1;

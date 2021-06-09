@@ -8,11 +8,14 @@
     }
   },
   "whitelistedNonPeerDependencies": [
+    "@codegena/oapi3ts",
+    "@codegena/definitions",
     "@types/lodash",
     "@types/node",
     "ajv",
     "json-pointer",
     "lodash",
-    "prettier"
+    "prettier",
+    "typescript"
   ]
 }

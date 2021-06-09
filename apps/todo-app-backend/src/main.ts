@@ -18,9 +18,7 @@ async function bootstrap() {
       credentials: true,
       maxAge: 600000,
       methods: ['DELETE', 'GET', 'PATCH', 'POST', 'PUT', 'OPTIONS'].join(','),
-      origin: [
-          'http://localhost:4200'
-      ].join(','),
+      origin: '*',
       preflightContinue: false,
       optionsSuccessStatus: 200
   });

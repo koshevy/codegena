@@ -1,17 +1,14 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "../../tsconfig.lib.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "target": "es2015",
     "declaration": true,
     "inlineSources": true
   },
-  "exclude": [
-    "node_modules",
-    "src/test-setup.ts",
-    "**/*.spec.ts"
-  ],
+  "exclude": ["node_modules", "src/test-setup.ts", "**/*.spec.ts"],
   "angularCompilerOptions": {
     "enableIvy": false
-  }
+  },
+  "include": ["**/*.ts"]
 }

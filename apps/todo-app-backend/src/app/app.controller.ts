@@ -19,7 +19,6 @@ import { Partial } from './lib/partial';
 import { ParseQueryPipe } from './lib/parse-query.pipe';
 import {
     ToDoTask,
-
     CreateGroupRequest,
     CreateGroupResponse,
     CreateGroupItemParameters,
@@ -45,7 +44,7 @@ import {
     UpdateGroupParameters,
     UpdateGroupRequest,
     UpdateGroupResponse
-} from "@codegena/todo-app-scheme/src/lib/typings";
+} from '@codegena/todo-app-contract';
 
 import { TodoStorageService } from './todo-storage.service';
 

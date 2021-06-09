@@ -1,0 +1,46 @@
+{
+  "name": "@codegena/schematics-example",
+  "version": "0.0.0",
+  "description": "Examples of using oapi3ts in schematics",
+  "author": "koshevy@gmail.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/koshevy/codegena.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@codegena/definitions": "*",
+    "@codegena/ng-http-tools": "*",
+    "@codegena/oapi3ts": "*",
+    "@codegena/schematics-tools": "*",
+    "fs-extra": ">= 4",
+    "nanoid": "^3.1.16"
+  },
+  "peerDependencies": {
+    "@angular-devkit/core": ">=8",
+    "@angular-devkit/schematics": ">=8",
+    "@angular/common": ">= 8",
+    "@angular/core": ">= 8",
+    "lodash": ">= 4",
+    "rxjs": ">= 6",
+    "typescript": ">= 3.9.0"
+  },
+  "devDependencies": {
+    "copyfiles": ">= 2",
+    "faker": "^5.1.0",
+    "jest-preset-angular": "^8.3.1"
+  },
+  "scripts": {
+    "build": "../../node_modules/.bin/tsc -p tsconfig.schematics.json",
+    "copy:schemas": "copyfiles schematics/**/schema.json ../../dist/schematics-example",
+    "copy:files": "copyfiles schematics/**/files/** ../../dist/schematics-example",
+    "copy:collection": "cp schematics/collection.json ../../dist/schematics-example/schematics/collection.json",
+    "postbuild": "npm run copy:schemas && npm run copy:files && npm run copy:collection",
+    "link:definitions:built": "rm -rf ../../node_modules/@codegena/definitions && mkdir -p ../../node_modules/@codegena && ln -sf $(pwd)/../../dist/definitions ../../node_modules/@codegena/definitions",
+    "link:oapi3ts:built": "rm -rf ../../node_modules/@codegena/oapi3ts && mkdir -p ../../node_modules/@codegena && ln -sf $(pwd)/../../dist/oapi3ts ../../node_modules/@codegena/oapi3ts",
+    "link:schematics-tools:built": "rm -rf ../../node_modules/@codegena/schematics-tools && mkdir -p ../../node_modules/@codegena && ln -sf $(pwd)/../../dist/schematics-tools ../../node_modules/@codegena/schematics-tools",
+    "link:schematics-example:built": "rm -rf ../../node_modules/@codegena/schematics-example && mkdir -p ../../node_modules/@codegena && ln -sf $(pwd)/../../dist/schematics-example ../../node_modules/@codegena/schematics-example",
+    "link:libs:built": "npm run link:definitions:built && npm run link:oapi3ts:built && npm run link:schematics-tools:built && npm run link:schematics-example:built"
+  },
+  "schematics": "./schematics/collection.json"
+}

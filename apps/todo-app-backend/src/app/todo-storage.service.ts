@@ -22,7 +22,7 @@ import {
     ToDoGroupBlank,
     ToDoTask,
     ToDoTaskBlank
-} from '@codegena/todo-app-scheme/src/lib/typings';
+} from '@codegena/todo-app-contract';
 
 import { defaultGroups } from './defaults';
 

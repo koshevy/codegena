@@ -1,0 +1,26 @@
+{
+  "name": "@codegena/schematics-tools",
+  "version": "0.0.0",
+  "description": "Examples of using oapi3ts in schematics",
+  "author": "koshevy@gmail.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/koshevy/codegena.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@codegena/definitions": "*",
+    "@codegena/oapi3ts": "*",
+    "fs-extra": ">= 4"
+  },
+  "peerDependencies": {
+    "@angular-devkit/schematics": "*",
+    "@angular/common": "*",
+    "lodash": ">= 4",
+    "rxjs": ">= 6",
+    "typescript": ">= 3.9.0"
+  },
+  "devDependencies": {
+    "jest-preset-angular": "^8.3.1"
+  }
+}

@@ -18,7 +18,8 @@
       "message": "chore(release): publish changed libraries"
     }
   },
-  "npmClient": "yarn",
-  "useWorkspaces": true,
-  "packages": ["libs/*"]
+  "npmClient": "npm",
+  "packages": [
+    "libs/*"
+  ]
 }
