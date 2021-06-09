@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-alpha.0](https://github.com/koshevy/codegena/compare/@codegena/oapi3ts@2.2.0-alpha.2...@codegena/oapi3ts@3.0.0-alpha.0) (2021-06-09)
+
+
+### Code Refactoring
+
+* **oapi3ts:** applying new public contract for oapi3ts ([ea8877d](https://github.com/koshevy/codegena/commit/ea8877d80145191b1b65ea6698eefcd4dba15b81))
+
+
+### Features
+
+* **oapi3ts:** support Oas3Server interface for servers list ([3ae0e58](https://github.com/koshevy/codegena/commit/3ae0e5883121e47f317276bd1d4fbd006ec3d966))
+
+
+### BREAKING CHANGES
+
+* **oapi3ts:** signature of `Operation` changed
+* **oapi3ts:** No more support legacy `BaseConvertor`, `Convertor` and `DataTypeDescriptor`! Use `Facade` instead.
+
+
+
+
+
 # [2.2.0-alpha.2](https://github.com/koshevy/codegena/compare/@codegena/oapi3ts@2.2.0-alpha.1...@codegena/oapi3ts@2.2.0-alpha.2) (2020-08-19)
 
 

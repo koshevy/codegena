@@ -1,6 +1,6 @@
 {
   "name": "@codegena/schematics-tools",
-  "version": "0.0.0",
+  "version": "0.1.0-alpha.0",
   "description": "Examples of using oapi3ts in schematics",
   "author": "koshevy@gmail.com",
   "repository": {
@@ -9,7 +9,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@codegena/definitions": "*",
+    "@codegena/definitions": "0.1.0-alpha.0",
     "@codegena/oapi3ts": "*",
     "fs-extra": ">= 4"
   },
