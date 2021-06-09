@@ -58,6 +58,8 @@ export interface HasResponses<TResponse = unknown> {
     431?: TResponse;
     449?: TResponse;
     451?: TResponse;
+    481?: TResponse;
+    489?: TResponse;
     499?: TResponse;
     500?: TResponse;
     501?: TResponse;

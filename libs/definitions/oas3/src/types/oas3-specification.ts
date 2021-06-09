@@ -15,7 +15,7 @@ export interface Oas3Specification {
      * to interpret the OpenAPI document. This is not related to the API
      * {@link https://swagger.io/specification/#infoVersion | info.version string}.
      */
-    openapi: '3.0.1' | '3.0.0' | '2.0.0';
+    openapi: '3.0.3' | '3.0.2' | '3.0.1' | '3.0.0' | '2.0.0';
 
     /**
      * REQUIRED. Provides metadata about the API.
