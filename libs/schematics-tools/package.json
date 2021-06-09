@@ -10,12 +10,12 @@
   "license": "MIT",
   "dependencies": {
     "@codegena/definitions": "0.1.0-alpha.0",
-    "@codegena/oapi3ts": "*",
+    "@codegena/oapi3ts": "3.0.0-alpha.0",
     "fs-extra": ">= 4"
   },
   "peerDependencies": {
-    "@angular-devkit/schematics": "*",
-    "@angular/common": "*",
+    "@angular-devkit/schematics": ">= 8",
+    "@angular/common": ">= 8",
     "lodash": ">= 4",
     "rxjs": ">= 6",
     "typescript": ">= 3.9.0"
