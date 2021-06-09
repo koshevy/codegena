@@ -19,7 +19,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    - name: Fetch origin tags for Lerna (see https://bit.ly/2KNS172)
+    - name: Fetch origin branches for nx:affected
       run: git fetch --no-tags --prune --depth=5 origin master
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
@@ -30,7 +30,7 @@ jobs:
     - name: Lint
       run: npx nx affected:lint --base=origin/master --head=HEAD
     - name: Test libraries in monorepo mode (without prebuilt libs)
-      run: npx nx affected:test
+      run: npx nx affected:test --base=origin/master --head=HEAD
     - name: Clear already built libs
       run: npm run clear:prebuilt-libs
     - name: Build libraries and update example generated lib (todo-app-contract)
@@ -38,4 +38,4 @@ jobs:
     - name: Build updated example generated lib (todo-app-contract)
       run: npx ng build todo-app-contract
     - name: Test prebuilt libraries
-      run: npx nx affected:test --configuration=ci
+      run: npx nx affected:test --base=origin/master --head=HEAD --configuration=ci
