@@ -123,7 +123,11 @@ function applyGeneralTemplates(
     moduleName: string,
 ): Rule {
     return chain([
-        mergeWith(apply(url('./files/general-files'), [
+        mergeWith(apply(url('./files'), [
+            filter(templatePath =>
+                (templatePath.indexOf('index.ts') !== -1)
+                || (templatePath.indexOf('module.ts') !== -1)
+            ),
             applyTemplates({
                 ...strings,
                 moduleName,
