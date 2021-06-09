@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.1](https://github.com/koshevy/codegena/compare/@codegena/schematics-example@1.0.0-alpha.0...@codegena/schematics-example@1.0.0-alpha.1) (2021-06-09)
+
+
+### Features
+
+* remove unused npm dependencies ([01b8090](https://github.com/koshevy/codegena/commit/01b8090273656e65d8dcb7d861356aa16279b3bc))
+
+
+
+
+
 # 1.0.0-alpha.0 (2021-06-09)
 
 
