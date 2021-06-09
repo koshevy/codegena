@@ -12,7 +12,7 @@ type ContentType = keyof HasContentType;
 export function pickResponse<
     TSubResponse extends TCommonResponse,
     TCommonResponse
-    >(
+>(
     status: ResponseCode,
     contentType?: ContentType,
     throwIfOther = true

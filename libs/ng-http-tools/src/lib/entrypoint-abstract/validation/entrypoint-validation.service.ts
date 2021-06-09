@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpErrorResponse, HttpResponse, HttpEvent } from '@angular/common/http';
-import { EMPTY, Observable, of, throwError } from 'rxjs';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { Observable, of, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HasResponses, HasContentType } from '@codegena/definitions/aspects';
 import { Schema as JsonSchema } from '@codegena/definitions/json-schema';
@@ -63,27 +63,31 @@ export class EntrypointValidationService {
             return of<void>(undefined);
         }
 
-        const contentType = response.headers
-            .get('content-type')
-            .split(';')
-            [0];
+        const { status } = response;
 
-        if (!contentType) {
+        // "no connection" errors have not to be validated
+        if (!status) {
+            return of<void>(undefined);
+        }
+
+        const schemaByResponse: HasContentType<JsonSchema> | null = schema?.[status]
+            ?? schema?.['default']
+
+        if (!schemaByResponse) {
             return throwError(new ValidationError(
-                `Content-type must be set!`,
+                `No request schema for response: ${status}!`,
                 response,
                 schema,
                 [],
             ));
         }
 
-        const { status } = response;
-        const schemaByResponse: HasContentType<JsonSchema> | null = schema?.[status]
-            || schema?.['default']
+        const contentType = response.headers.get('content-type')?.split(';')?.[0]
+            ?? Object.keys(schemaByResponse || {})?.[0]
 
-        if (!schemaByResponse) {
+        if (!contentType) {
             return throwError(new ValidationError(
-                `No request schema for response: ${status}!`,
+                `Can't get Content-type!`,
                 response,
                 schema,
                 [],

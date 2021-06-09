@@ -9,7 +9,7 @@ const defaultEncoder = new HttpUrlEncodingCodec();
 
 export function serializeFormData(
     dataToBeSerialized: any,
-    encoder: HttpParameterCodec = new HttpUrlEncodingCodec(),
+    encoder: HttpParameterCodec = defaultEncoder,
 ): HttpParams | null {
     const fromSource = isObjectLike(dataToBeSerialized)
         ? { fromObject: dataToBeSerialized }

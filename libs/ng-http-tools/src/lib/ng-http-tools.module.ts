@@ -1,6 +1,5 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import {
     AjvWrapperService,
 } from './entrypoint-abstract/validation/ajv-wrapper.service';
@@ -9,19 +8,20 @@ import {
 } from './entrypoint-abstract/validation/entrypoint-validation.service';
 import {
     SERVER_ENVIRONMENT,
+    ServerEnvironment,
 } from './entrypoint-abstract/server-environment';
 
 @NgModule({
     imports: [
         CommonModule,
-        HttpClientModule,
     ],
 })
 export class NgHttpToolsModule {
     public static forModule(options: {
-        shouldThrowOnFails: boolean,
-        formats: Record<string, any>,
-        unknownFormats: string[],
+        shouldThrowOnFails?: boolean,
+        formats?: Record<string, any>,
+        unknownFormats?: string[],
+        serverEnvironment?: ServerEnvironment,
     }): ModuleWithProviders<NgHttpToolsModule> {
         return {
             ngModule: NgHttpToolsModule,
@@ -29,17 +29,17 @@ export class NgHttpToolsModule {
                 {
                     provide: AjvWrapperService,
                     useFactory: () => new AjvWrapperService(
-                        options.shouldThrowOnFails || true,
-                        options.formats || {},
-                        options.unknownFormats || [],
+                        options.shouldThrowOnFails ?? true,
+                        options.formats ?? {},
+                        options.unknownFormats ?? [],
                     ),
                 },
                 {
                     provide: SERVER_ENVIRONMENT,
-                    useValue: {},
+                    useValue: options.serverEnvironment ?? {},
                 },
                 EntrypointValidationService,
             ],
-        }
+        };
     }
 }

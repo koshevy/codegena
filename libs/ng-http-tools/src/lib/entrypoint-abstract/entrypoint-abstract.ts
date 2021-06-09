@@ -18,13 +18,15 @@ import {
     createUrl,
     parseRequestArguments,
     prepareRequestOptions,
+    serializeFormData,
 } from './utils';
-import { RequestOptionsRaw } from './request-options';
+import { RequestOptions, RequestOptionsRaw } from './request-options';
 import { EntrypointValidationService } from './validation';
 import {
     ServerEnvironment,
     SERVER_ENVIRONMENT,
 } from './server-environment';
+import { pick } from 'lodash';
 
 type HttpClientResponse<TResponse> = HttpResponse<TResponse> | HttpEvent<TResponse>;
 
@@ -54,6 +56,7 @@ export abstract class EntrypointAbstract<
     public createUrl(
         parameters?: TParameters,
         serverEnvironment: ServerEnvironment = {},
+        serializeParams = false,
     ): string {
         const {
             environment,
@@ -63,13 +66,25 @@ export abstract class EntrypointAbstract<
             ...serverEnvironment,
         };
 
-        return createUrl({
+        const baseUrl = createUrl({
             servers: this.getServers(),
             pathTemplate: this.getPathTemplate(),
             pathParams: parameters || {},
             environment,
             serverParams,
         });
+
+        if (!serializeParams) {
+            return baseUrl;
+        }
+
+        const queryParams = pick(parameters, ...(this.getQueryParameters() ?? []));
+
+        if (!Object.keys(queryParams ?? {}).length) {
+            return baseUrl;
+        }
+
+        return `${baseUrl}?${serializeFormData(queryParams)}`;
     }
 
     public request(params: TParameters): EntrypointResponse<TResponse>;
@@ -109,25 +124,31 @@ export abstract class EntrypointAbstract<
             TResponse
         >(this.getMethod(), ...args);
 
-        const pathTemplate = this.getPathTemplate();
-        const queryParameters = this.getQueryParameters();
-        const url = this.createUrl(parameters, options.serverEnvironment || {});
-        const preparedOptions = prepareRequestOptions<TRequestBody>(
-            url,
-            parameters,
-            requestBody,
-            queryParameters,
-            options,
-        );
-        preparedOptions.params = null;
+        let queryParameters: string[];
+        let url: string;
+        let preparedOptions: RequestOptions<TRequestBody>;
 
-        return this.validationService.validateRequestBody(
-            preparedOptions,
-            this.getRequestBodySchema(),
-            this.getDomainSchema(),
+        return this.validationService.validateParams(
+            parameters, this.getParametersSchema(), this.getDomainSchema(),
         ).pipe(
-            switchMap(() => this.validationService.validateParams(
-                parameters, this.getParametersSchema(), this.getDomainSchema(),
+            // Moved to side effect after `validateParams`
+            // because validation of params should go before using
+            tap(() => {
+                queryParameters = this.getQueryParameters();
+                url = this.createUrl(parameters, options.serverEnvironment || {});
+                preparedOptions = prepareRequestOptions<TRequestBody>(
+                    url,
+                    parameters,
+                    requestBody,
+                    queryParameters,
+                    options,
+                );
+                // preparedOptions.params = null;
+            }),
+            switchMap(() => this.validationService.validateRequestBody(
+                preparedOptions,
+                this.getRequestBodySchema(),
+                this.getDomainSchema(),
             )),
             switchMap<void, Observable<HttpClientResponse<TResponse>>>(() =>
                 this.httpClient.request<TResponse>(
