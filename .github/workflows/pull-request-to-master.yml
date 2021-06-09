@@ -24,9 +24,9 @@ jobs:
     - name: Install dependencies (npm ci)
       run: npm ci
     - name: Lint
-      run: npx nx affected:lint
-    - name: Test libraries in monorepo mode (without prebuilt libs)
       run: npx nx affected:lint --base=origin/master --head=HEAD
+    - name: Test libraries in monorepo mode (without prebuilt libs)
+      run: npx nx affected:test
     - name: Clear already built libs
       run: npm run clear:prebuilt-libs
     - name: Build libraries and update example generated lib (todo-app-contract)
@@ -34,4 +34,4 @@ jobs:
     - name: Build updated example generated lib (todo-app-contract)
       run: npx ng build todo-app-contract
     - name: Test prebuilt libraries
-      run: npx nx affected:lint --base=origin/master --head=HEAD --configuration=ci
+      run: npx nx affected:test --configuration=ci
