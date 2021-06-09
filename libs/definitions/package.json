@@ -1,6 +1,6 @@
 {
   "name": "@codegena/definitions",
-  "version": "0.0.1",
+  "version": "0.1.0-alpha.0",
   "devDependencies": {
     "jest-preset-angular": "8.3.1"
   },

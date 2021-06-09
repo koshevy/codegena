@@ -1,6 +1,6 @@
 {
   "name": "@codegena/ng-http-tools",
-  "version": "0.0.1",
+  "version": "1.0.0-alpha.0",
   "peerDependencies": {
     "@angular/common": ">= 8",
     "@angular/core": ">= 8",
@@ -10,7 +10,7 @@
     "tslib": ">= 2"
   },
   "dependencies": {
-    "@codegena/definitions": "*"
+    "@codegena/definitions": "0.1.0-alpha.0"
   },
   "devDependencies": {
     "jest-preset-angular": "^8.3.1"
