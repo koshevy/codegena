@@ -32,7 +32,17 @@ export class GetGroupsBackendService extends EntrypointAbstract<
             {
                 environment: 'local',
                 description: 'Base local server',
-                url: 'http://local.todo-app-example.com',
+                url: 'https://local.todo-codegena-example.com',
+            },
+            {
+                environment: 'dev',
+                description: 'Development server',
+                url: 'https://dev.todo-codegena-example.com',
+            },
+            {
+                environment: 'prod',
+                description: 'Development server',
+                url: 'https://todo-codegena-example.com',
             },
         ];
     }

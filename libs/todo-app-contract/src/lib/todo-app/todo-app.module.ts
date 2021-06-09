@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { NgHttpToolsModule } from '@codegena/ng-http-tools';
 // Backend services
 import { GetGroupsBackendService } from './get-groups/get-groups-backend.service';
@@ -16,7 +15,7 @@ import { RewriteGroupItemBackendService } from './rewrite-group-item/rewrite-gro
 import { UpdateFewItemsBackendService } from './update-few-items/update-few-items-backend.service';
 
 @NgModule({
-    imports: [CommonModule, HttpClientModule, NgHttpToolsModule],
+    imports: [CommonModule, NgHttpToolsModule],
     providers: [
         GetGroupsBackendService,
         CreateGroupBackendService,
