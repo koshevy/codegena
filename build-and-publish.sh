@@ -31,6 +31,8 @@ rm -rf dist/* &&
 # there may be unpublished packages with updated version
 (sh -c "./node_modules/.bin/lerna version --conventional-commits --include-merged-tags --exact --yes $releaseMode" || true) &&
 npm run build:all-libs &&
+# build schematics (temporary solution)
+npm run schematics-example:build-schematics:dev
 
 # publish all built libs. errors are ignored
 for D in `ls ./dist`
