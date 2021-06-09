@@ -1,70 +1,6 @@
 {
   "version": 1,
   "projects": {
-    "todo-app-backend": {
-      "root": "apps/todo-app-backend",
-      "sourceRoot": "apps/todo-app-backend/src",
-      "projectType": "application",
-      "prefix": "codegena",
-      "schematics": {},
-      "architect": {
-        "build": {
-          "builder": "@nrwl/node:build",
-          "options": {
-            "outputPath": "dist/apps/todo-app-backend",
-            "main": "apps/todo-app-backend/src/main.ts",
-            "tsConfig": "apps/todo-app-backend/tsconfig.app.json",
-            "assets": ["apps/todo-app-backend/src/assets"],
-            "externalDependencies": [
-              "@nestjs/core",
-              "@nestjs/common",
-              "@nestjs/microservices",
-              "@nestjs/websockets",
-              "@nestjs/microservices/microservices-module",
-              "@nestjs/websockets/socket-module"
-            ],
-            "buildLibsFromSource": true
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "extractLicenses": true,
-              "inspect": false,
-              "fileReplacements": [
-                {
-                  "replace": "apps/todo-app-backend/src/environments/environment.ts",
-                  "with": "apps/todo-app-backend/src/environments/environment.prod.ts"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@nrwl/node:execute",
-          "options": {
-            "buildTarget": "todo-app-backend:build"
-          },
-          "port": "3000"
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "apps/todo-app-backend/tsconfig.app.json",
-              "apps/todo-app-backend/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!apps/todo-app-backend/**"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "apps/todo-app-backend/jest.config.js",
-            "tsConfig": "apps/todo-app-backend/tsconfig.spec.json"
-          }
-        }
-      }
-    },
     "oapi3ts": {
       "projectType": "library",
       "root": "libs/oapi3ts",
@@ -288,6 +224,12 @@
           "options": {
             "jestConfig": "libs/todo-app-contract/jest.config.js",
             "passWithNoTests": true
+          },
+          "configurations": {
+            "ci": {
+              "jestConfig": "libs/todo-app-contract/jest.config.prod.js",
+              "ci": true
+            }
           }
         }
       },

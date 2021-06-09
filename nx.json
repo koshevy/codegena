@@ -8,9 +8,6 @@
     "tsconfig.base.json": "*"
   },
   "projects": {
-    "todo-app-backend": {
-      "tags": []
-    },
     "oapi3ts": {
       "tags": []
     },

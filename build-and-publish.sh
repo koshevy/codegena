@@ -27,15 +27,13 @@ else
 fi
 
 rm -rf dist/* &&
-yarn run test:libs &&
 # version update error ignoring because
 # there may be unpublished packages with updated version
 (sh -c "./node_modules/.bin/lerna version --conventional-commits --include-merged-tags --exact --yes $releaseMode" || true) &&
-yarn run build:all-libs &&
-yarn run test:libs &&
+npm run build:all-libs &&
 
 # publish all built libs. errors are ignored
 for D in `ls ./dist`
 do
-    (cd ./dist/${D} && yarn publish --access public && cd ../../) || true
+    (cd ./dist/${D} && npm run publish --access public && cd ../../) || true
 done
