@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [16.x]
 
     steps:
     - uses: actions/checkout@v2
@@ -28,12 +28,14 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         registry-url: https://registry.npmjs.org/
-    - name: Install yarn
-      run: npm install yarn -g
-    - name: Install dependencies with yarn
-      run: yarn install --frozen-lockfile
+    - name: Install dependencies with
+      run: npm ci
     - name: Clear already built libs
-      run: yarn run clear:prebuilt-libs
+      run: npm run clear:prebuilt-libs
+    - name: Build libraries and update example generated lib (todo-app-contract)
+      run: npm run todo-app-contract:update
+    - name: Build updated example generated lib (todo-app-contract)
+      run: npx ng build todo-app-contract
     - name: Set git credentials
       run: git config --global user.email "koshevy@gmail.com" && git config --global user.name "Alexander Koshevy"
     - name: Run publishing script (powered by LernaVersion and AngularCLI)
