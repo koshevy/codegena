@@ -35,5 +35,5 @@ npm run build:all-libs &&
 # publish all built libs. errors are ignored
 for D in `ls ./dist`
 do
-    (cd ./dist/${D} && npm run publish --access public && cd ../../) || true
+    (cd ./dist/${D} && npm publish --access public && cd ../../) || true
 done
