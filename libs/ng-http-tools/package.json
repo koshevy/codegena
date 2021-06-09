@@ -6,8 +6,7 @@
     "@angular/core": ">= 8",
     "ajv": ">= 6.0.0",
     "lodash": ">= 4",
-    "rxjs": ">= 5.0.0",
-    "tslib": ">= 2"
+    "rxjs": ">= 5.0.0"
   },
   "dependencies": {
     "@codegena/definitions": "0.1.0-alpha.0"

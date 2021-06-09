@@ -11,7 +11,7 @@
   "dependencies": {
     "@codegena/definitions": "0.1.0-alpha.0",
     "@codegena/ng-http-tools": "1.0.0-alpha.0",
-    "@codegena/oapi3ts": "*",
+    "@codegena/oapi3ts": "3.0.0-alpha.0",
     "@codegena/schematics-tools": "0.1.0-alpha.0",
     "fs-extra": ">= 4",
     "nanoid": "^3.1.16"
