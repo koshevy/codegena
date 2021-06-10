@@ -18,7 +18,7 @@
     "schematics-example:build-schematics:dev": "npm run --prefix libs/schematics-example build",
     "schematics-example:link-dist": "npm run --prefix libs/schematics-example link:libs:built",
     "todo-app-contract:generate": "ng g @codegena/schematics-example:backend-services --uri=$(pwd)/libs/todo-app-contract/src/oas/app-demo.json --domain=todo-app --project=todo-app-contract --secondaryEntrypoint=\"\" --hostModule=\"\" --moduleName=\"todo-app\"",
-    "todo-app-contract:prettier": "./node_modules/.bin/prettier --write libs/todo-app-contract/src/lib"
+    "todo-app-contract:prettier": "./node_modules/.bin/prettier --write libs/todo-app-contract/src/lib/todo-app"
   },
   "private": true,
   "dependencies": {
