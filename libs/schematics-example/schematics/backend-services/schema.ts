@@ -7,6 +7,7 @@ export interface Schema {
     secondaryEntrypoint?: string;
     uri: string;
     moduleName: string;
+    createSubdir: boolean;
 }
 
 export interface PreparedSchema {

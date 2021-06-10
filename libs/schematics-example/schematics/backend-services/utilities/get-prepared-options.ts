@@ -8,7 +8,7 @@ type WorkspaceSchema = experimental.workspace.WorkspaceSchema;
 
 export function getPreparedOptions(tree: Tree, rawOptions: Schema): Promise<PreparedSchema> {
     const workspaceFile = tree.read('/angular.json');
-    const { domain, hostModule, moduleName } = rawOptions;
+    const { createSubdir, domain, hostModule, moduleName } = rawOptions;
 
     if (!workspaceFile) {
         throw new SchematicsException(`Can't find Angular workspace file!`);
@@ -34,7 +34,7 @@ export function getPreparedOptions(tree: Tree, rawOptions: Schema): Promise<Prep
     }
 
     const rootPatLength = tree.getDir('/').path.length;
-    const path = join(rawPath, domain)
+    const path = (createSubdir ? join(rawPath, domain) : rawPath)
         .substr(rootPatLength ? rootPatLength - 1 : 0);
 
     return readJson(rawOptions.uri)
