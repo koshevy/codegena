@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.2](https://github.com/koshevy/codegena/compare/@codegena/ng-http-tools@1.0.0-alpha.1...@codegena/ng-http-tools@1.0.0-alpha.2) (2021-06-10)
+
+
+### Features
+
+* **ng-http-tools:** add VALIDATION_ERROR_STREAM dependency for logging validation errors ([e9f217d](https://github.com/koshevy/codegena/commit/e9f217d919cee15873eb3f2d19231fe04d7e0d1a))
+
+
+
+
+
 # [1.0.0-alpha.1](https://github.com/koshevy/codegena/compare/@codegena/ng-http-tools@1.0.0-alpha.0...@codegena/ng-http-tools@1.0.0-alpha.1) (2021-06-09)
 
 

@@ -1,7 +1,7 @@
 {
   "name": "@codegena/todo-app-contract",
   "private": true,
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.2",
   "peerDependencies": {
     "@angular/common": ">=8",
     "@angular/core": ">=8",
@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@codegena/definitions": "0.1.0-alpha.1",
-    "@codegena/ng-http-tools": "1.0.0-alpha.1",
+    "@codegena/ng-http-tools": "1.0.0-alpha.2",
     "tslib": "^2.0.0"
   },
   "devDependencies": {
