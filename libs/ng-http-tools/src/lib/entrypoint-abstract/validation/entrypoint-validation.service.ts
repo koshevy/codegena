@@ -10,7 +10,9 @@ import { RequestOptions } from '../request-options';
 
 @Injectable()
 export class EntrypointValidationService {
-    constructor(private ajvWrapper: AjvWrapperService) {}
+    constructor(
+        private ajvWrapper: AjvWrapperService,
+    ) {}
 
     public validateRequestBody(
         options: RequestOptions<unknown>,
@@ -34,7 +36,7 @@ export class EntrypointValidationService {
             ));
         }
 
-        // FormData does't get validated yet
+        // FormData doesn't get validated yet
         if (value instanceof FormData) {
             return of<void>(undefined);
         }

@@ -7,3 +7,4 @@ export * from './lib/entrypoint-abstract/request-options';
 export * from './lib/entrypoint-abstract/validation/entrypoint-validation.service';
 export * from './lib/entrypoint-abstract/validation/ajv-wrapper.service';
 export * from './lib/entrypoint-abstract/validation/validation-error';
+export * from './lib/entrypoint-abstract/validation/validation-error-stream';
