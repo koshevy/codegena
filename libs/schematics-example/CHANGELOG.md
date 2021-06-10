@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.3](https://github.com/koshevy/codegena/compare/@codegena/schematics-example@1.0.0-alpha.2...@codegena/schematics-example@1.0.0-alpha.3) (2021-06-10)
+
+
+### Features
+
+* add `createSubdir` option for ng g `@codegena/schematics-example:backend-services` schematic ([acfa6e3](https://github.com/koshevy/codegena/commit/acfa6e32115967631e01fb24798ac5aa4a5ab85b))
+
+
+
+
+
 # [1.0.0-alpha.2](https://github.com/koshevy/codegena/compare/@codegena/schematics-example@1.0.0-alpha.1...@codegena/schematics-example@1.0.0-alpha.2) (2021-06-10)
 
 **Note:** Version bump only for package @codegena/schematics-example
