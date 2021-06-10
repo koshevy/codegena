@@ -21,6 +21,10 @@
       "x-prompt": "Secondary entrypoint in a project directory (only for libraries!)",
       "type": "string"
     },
+    "createSubdir": {
+      "x-prompt": "Whether should schematic create subdirectory (with `domain` name)",
+      "type": "boolean"
+    },
     "moduleName": {
       "x-prompt": "Name o main module (i.e. 'shop')",
       "type": "string"
