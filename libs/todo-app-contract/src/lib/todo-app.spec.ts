@@ -1,3 +1,4 @@
+import { EventEmitter, Provider } from '@angular/core';
 import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import {
     HttpClientTestingModule,
@@ -5,7 +6,11 @@ import {
 } from '@angular/common/http/testing';
 import { tap } from 'rxjs/operators';
 import { pickResponse } from '@codegena/ng-http-tools/rx-operators';
-import { NgHttpToolsModule, ValidationError } from '@codegena/ng-http-tools';
+import {
+    NgHttpToolsModule,
+    VALIDATION_ERROR_STREAM,
+    ValidationError,
+} from '@codegena/ng-http-tools';
 import * as faker from 'faker';
 import { TodoAppModule } from './todo-app/todo-app.module';
 import {
@@ -31,7 +36,7 @@ let getGroupsBackend: GetGroupsBackendService;
 let updateGroupItemBackend: UpdateGroupItemBackendService;
 let httpController: HttpTestingController;
 
-describe('Create url for default server environmen', () => {
+describe('Create url for default server environment', () => {
     beforeEach(() => {
         configureTestBed({
             shouldThrowOnFails: true,
@@ -240,6 +245,7 @@ describe('Do requests for default server environment', () => {
         httpController.expectOne(createGroupBackend.createUrl()).flush(
             {
                 ...createMockGroup(),
+                // wrong uid
                 uid: faker.random.number(),
             },
             {
@@ -286,6 +292,54 @@ describe('Do requests for default server environment', () => {
     }));
 });
 
+describe('Validation error broadcast', () => {
+    const validationErrorStream = new EventEmitter<any>();
+
+    beforeEach(() => {
+        configureTestBed(
+            { shouldThrowOnFails: false },
+            [
+                {
+                    provide: VALIDATION_ERROR_STREAM,
+                    useValue: validationErrorStream,
+                },
+            ],
+        );
+
+        httpController = TestBed.inject(HttpTestingController);
+    });
+
+    it('should emit ValidationError in validation errors stream', fakeAsync(() => {
+        createGroupBackend
+            .request({ wrongProp: 'Another thing to do' } as any)
+            .pipe(pickResponse(201))
+            .subscribe();
+
+        tick();
+
+        const expectation = expect(validationErrorStream.toPromise())
+            .resolves
+            .toBeInstanceOf(ValidationError);
+
+        httpController.expectOne(createGroupBackend.createUrl()).flush(
+            {
+                ...createMockGroup(),
+                // wrong uid
+                uid: faker.random.number(),
+            },
+            {
+                status: 201,
+                statusText: 'Created',
+            },
+        );
+
+        tick();
+        validationErrorStream.complete();
+
+        return expectation;
+    }));
+});
+
 describe('Create URL for dev environment', () => {
     beforeEach(() => {
         configureTestBed({
@@ -300,13 +354,17 @@ describe('Create URL for dev environment', () => {
     });
 });
 
-function configureTestBed(ngHttpToolsModuleParams: any): void {
+function configureTestBed(
+    ngHttpToolsModuleParams: any,
+    providers: Provider[] = [],
+): void {
     TestBed.configureTestingModule({
         imports: [
             TodoAppModule,
             HttpClientTestingModule,
             NgHttpToolsModule.forModule(ngHttpToolsModuleParams),
         ],
+        providers,
     });
 
     createGroupBackend = TestBed.inject(CreateGroupBackendService);

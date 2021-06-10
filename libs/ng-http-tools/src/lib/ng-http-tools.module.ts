@@ -1,5 +1,9 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
+import { inject, NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Options as AjvOptions } from 'ajv';
+import {
+    VALIDATION_ERROR_STREAM,
+} from './entrypoint-abstract/validation/validation-error-stream';
 import {
     AjvWrapperService,
 } from './entrypoint-abstract/validation/ajv-wrapper.service';
@@ -22,6 +26,7 @@ export class NgHttpToolsModule {
         formats?: Record<string, any>,
         unknownFormats?: string[],
         serverEnvironment?: ServerEnvironment,
+        ajvOptions?: AjvOptions,
     }): ModuleWithProviders<NgHttpToolsModule> {
         return {
             ngModule: NgHttpToolsModule,
@@ -29,9 +34,11 @@ export class NgHttpToolsModule {
                 {
                     provide: AjvWrapperService,
                     useFactory: () => new AjvWrapperService(
+                        inject(VALIDATION_ERROR_STREAM),
                         options.shouldThrowOnFails ?? true,
                         options.formats ?? {},
                         options.unknownFormats ?? [],
+                        options.ajvOptions ?? {},
                     ),
                 },
                 {

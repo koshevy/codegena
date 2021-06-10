@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Schema } from '@codegena/definitions/json-schema';
 import * as Ajv from 'ajv';
 import { ValidationError } from './validation-error';
@@ -12,16 +12,18 @@ export class AjvWrapperService {
     protected validators: Record<string, any> = {};
 
     constructor(
-        private shouldThrowOnFails: boolean,
+        private validationErrorStream: EventEmitter<ValidationError> = null,
+        private shouldThrowOnFails: boolean = true,
         private formats: Record<string, any> = {},
         private unknownFormats: string[] = [],
+        private ajvOptions: Ajv.Options = {},
     ) {}
 
     /**
      * @throws ValidationError if fails and `shouldThrowOnFails` is true
      * @param value value should be validated
      * @param schema schema should be used for validation
-     * @param domainSchema Library of schemas used for that business domain
+     * @param domainSchemas Library of schemas used for that business domain
      */
     public validate(value: unknown, schema: SchemaWithId, domainSchemas: object): void {
         const validate = this.getValidator(schema, domainSchemas);
@@ -30,13 +32,19 @@ export class AjvWrapperService {
             return;
         }
 
+        const validationError = new ValidationError(
+            `Validation failed, schema id: ${schema.$id}`,
+            value,
+            schema,
+            validate.errors,
+        );
+
+        if (this.validationErrorStream) {
+            this.validationErrorStream.emit(validationError);
+        }
+
         if (this.shouldThrowOnFails) {
-            throw new ValidationError(
-                `Validation failed, schema id: ${schema.$id}`,
-                value,
-                schema,
-                validate.errors,
-            );
+            throw validationError;
         }
     }
 
@@ -76,6 +84,7 @@ export class AjvWrapperService {
             unknownFormats: this.unknownFormats,
             useDefaults: true,
             verbose: true,
+            ...this.ajvOptions,
         });
     }
 }
