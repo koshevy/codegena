@@ -19,7 +19,6 @@ export function getPreparedOptions(tree: Tree, rawOptions: Schema): Promise<Prep
     );
     const project = workspace.projects[rawOptions.project];
     const packageJsonPath = join(project.root, 'package.json');
-    console.log('—————', packageJsonPath);
     const packageJson = JSON.parse(tree.read(packageJsonPath)?.toString() ?? '{}');
     const libraryName = packageJson?.['name'] ?? rawOptions.project;
 
