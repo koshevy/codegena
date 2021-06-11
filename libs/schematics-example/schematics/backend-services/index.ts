@@ -26,6 +26,7 @@ import { getPreparedOptions } from './utilities/get-prepared-options';
 
 interface ServiceTemplateParams {
     operationId: string;
+    libraryName: string;
     method: string;
     parametersModelName: string | null;
     requestBodyModelName: string | null;
@@ -43,7 +44,7 @@ interface ServiceTemplateParams {
 export function backendServices(options: Schema): Rule {
     return (tree: Tree) =>
         fromPromise(getPreparedOptions(tree, options)).pipe(map(
-            ({oas3Specification, path}) => {
+            ({oas3Specification, libraryName, path, projectRoot}) => {
                 const savingStrategy = new SchematicHostSavingStrategy(
                     tree,
                     path,
@@ -52,32 +53,48 @@ export function backendServices(options: Schema): Rule {
                 const { moduleName } = options;
 
                 return chain([
-                    createDomainSchema(tree, path, facade, moduleName),
+                    createDomainSchemaSecondaryEntrypoint(tree, join(projectRoot, 'domain-schema'), facade, moduleName),
                     createTypings(tree, facade),
-                    applyBackendServiceTemplates(tree, path, facade, moduleName),
+                    applyBackendServiceTemplates(tree, path, facade, moduleName, libraryName),
                     applyGeneralTemplates(tree, path, facade, moduleName),
                 ]);
             },
         )).toPromise();
 }
 
-function createDomainSchema(
+function createDomainSchemaSecondaryEntrypoint(
     tree: Tree,
     path: string,
     facade: Facade,
     moduleName: string,
 ): Rule {
     return () => {
+        const indexFile = join(path, 'src', 'index.ts');
+        const ngPackageFile = join(path, 'ng-package.json');
         const domainSchema = {
             $id: moduleName,
             components: facade.specification.components,
-        }
+        };
+        const ngPackageJson = {
+            lib: { entryFile: "src/index.ts" },
+        };
+        const writeIndexFn = tree.exists(indexFile)
+            ? tree.overwrite.bind(tree)
+            : tree.create.bind(tree);
+        const writeNgPackageFn = tree.exists(ngPackageFile)
+            ? tree.overwrite.bind(tree)
+            : tree.create.bind(tree);
 
-        tree.create(
-            join(path, 'domain-schema.ts'),
+        writeIndexFn(
+            indexFile,
             `export const domainSchema = ${
                 JSON.stringify(domainSchema, null, '  ')
             }`,
+        );
+
+        writeNgPackageFn(
+            join(path, 'ng-package.json'),
+            JSON.stringify(ngPackageJson, null, '  '),
         );
 
         return tree;
@@ -97,9 +114,12 @@ function applyBackendServiceTemplates(
     path: string,
     facade: Facade,
     moduleName: string,
+    libraryName: string,
 ): Rule {
     const templates = facade.operations.map(operation => {
-        const templateOptions = getTemplateParameters(operation, facade, moduleName);
+        const templateOptions = getTemplateParameters(
+            operation, facade, moduleName, libraryName,
+        );
         const filterServiceTemplate = () => filter(templatePath =>
             templatePath.indexOf('backend.service.ts') !== -1,
         );
@@ -147,6 +167,7 @@ function getTemplateParameters(
     operation: Operation,
     facade: Facade,
     moduleName: string,
+    libraryName: string,
 ): ServiceTemplateParams {
     let parametersModelName: string | null = null;
     let requestBodyModelName: string | null = null;
@@ -203,6 +224,7 @@ function getTemplateParameters(
 
     return {
         operationId,
+        libraryName,
         method: operation.method,
         parametersModelName,
         requestBodyModelName,

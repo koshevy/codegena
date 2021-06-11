@@ -13,7 +13,9 @@ export interface Schema {
 export interface PreparedSchema {
     domain: string;
     hostModule?: string;
+    libraryName: string;
+    moduleName: string;
     oas3Specification: Oas3Specification;
     path: string;
-    moduleName: string;
+    projectRoot: string;
 }
