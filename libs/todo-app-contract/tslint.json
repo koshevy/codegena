@@ -2,7 +2,8 @@
   "extends": "../../tslint.json",
   "rules": {
     "directive-selector": [true, "attribute", "codegena", "camelCase"],
-    "component-selector": [true, "element", "codegena", "kebab-case"]
+    "component-selector": [true, "element", "codegena", "kebab-case"],
+    "no-implicit-dependencies": [true, "dev", ["@codegena/todo-app-contract"]]
   },
   "linterOptions": {
     "exclude": ["!**/*"]

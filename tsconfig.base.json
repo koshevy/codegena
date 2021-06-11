@@ -54,8 +54,8 @@
       "@codegena/todo-app-contract": [
         "libs/todo-app-contract/src/index.ts"
       ],
-      "@codegena/todo-app-contract/*": [
-        "libs/todo-app-contract/src/*"
+      "@codegena/todo-app-contract/domain-schema": [
+        "libs/todo-app-contract/domain-schema/src/index.ts"
       ]
     }
   },

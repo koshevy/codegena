@@ -37,6 +37,9 @@
       ],
       "@codegena/todo-app-contract": [
         "dist/todo-app-contract"
+      ],
+      "@codegena/todo-app-contract/domain-schema": [
+        "dist/todo-app-contract/domain-schema"
       ]
     }
   }
