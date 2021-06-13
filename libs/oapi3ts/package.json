@@ -1,6 +1,6 @@
 {
   "name": "@codegena/oapi3ts",
-  "version": "3.0.0-alpha.1",
+  "version": "3.0.0-alpha.2",
   "description": "Codegeneration from OAS3 to TypeScript",
   "author": "koshevy@gmail.com",
   "keywords": [
@@ -25,7 +25,7 @@
     "build": "ng build oapi3ts"
   },
   "dependencies": {
-    "@codegena/definitions": "0.1.0-alpha.1",
+    "@codegena/definitions": "0.1.0-alpha.2",
     "json-pointer": "^0.6.0"
   },
   "peerDependencies": {

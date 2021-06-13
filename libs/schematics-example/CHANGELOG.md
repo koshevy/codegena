@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.4](https://github.com/koshevy/codegena/compare/@codegena/schematics-example@1.0.0-alpha.3...@codegena/schematics-example@1.0.0-alpha.4) (2021-06-13)
+
+
+### Features
+
+* **schematics-example:** domain schema will be created with a secondary entrypoint ([a81f516](https://github.com/koshevy/codegena/commit/a81f516895826022b1f696e1d109b9af011ee14f))
+
+
+
+
+
 # [1.0.0-alpha.3](https://github.com/koshevy/codegena/compare/@codegena/schematics-example@1.0.0-alpha.2...@codegena/schematics-example@1.0.0-alpha.3) (2021-06-10)
 
 

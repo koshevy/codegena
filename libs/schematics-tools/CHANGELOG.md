@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.1.0-alpha.2 (2021-06-13)
+
+**Note:** Version bump only for package @codegena/schematics-tools
+
+
+
+
+
 # [0.1.0-alpha.1](https://github.com/koshevy/codegena/compare/@codegena/schematics-tools@0.1.0-alpha.0...@codegena/schematics-tools@0.1.0-alpha.1) (2021-06-09)
 
 
