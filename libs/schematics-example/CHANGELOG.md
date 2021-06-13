@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.5](https://github.com/koshevy/codegena/compare/@codegena/schematics-example@1.0.0-alpha.4...@codegena/schematics-example@1.0.0-alpha.5) (2021-06-13)
+
+
+### Bug Fixes
+
+* **schematics-example:** add export of created ng-module to generated `index.ts` file ([f02e30b](https://github.com/koshevy/codegena/commit/f02e30b8c51e81d49dd9711e8421083e22cdc9fe))
+
+
+
+
+
 # [1.0.0-alpha.4](https://github.com/koshevy/codegena/compare/@codegena/schematics-example@1.0.0-alpha.3...@codegena/schematics-example@1.0.0-alpha.4) (2021-06-13)
 
 
