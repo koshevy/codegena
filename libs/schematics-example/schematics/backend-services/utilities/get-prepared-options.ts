@@ -1,10 +1,10 @@
 import { join } from 'path';
 import { SchematicsException, Tree } from '@angular-devkit/schematics';
-import { experimental } from '@angular-devkit/core';
+import { workspaces } from '@angular-devkit/core';
 import { readJson } from 'fs-extra';
 import { PreparedSchema, Schema } from '../schema';
 
-type WorkspaceSchema = experimental.workspace.WorkspaceSchema;
+type WorkspaceSchema = workspaces.WorkspaceDefinition;
 
 export function getPreparedOptions(tree: Tree, rawOptions: Schema): Promise<PreparedSchema> {
     const workspaceFile = tree.read('/angular.json');

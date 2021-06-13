@@ -8,7 +8,7 @@
       "prefix": "codegena",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "libs/oapi3ts/tsconfig.lib.json",
             "project": "libs/oapi3ts/ng-package.json"
@@ -21,14 +21,20 @@
               "libs/oapi3ts/tsconfig.lib.json",
               "libs/oapi3ts/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/oapi3ts/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/oapi3ts/**/*"
+            ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/oapi3ts/jest.config.js"
-          }
+          },
+          "outputs": [
+            "coverage/libs/oapi3ts"
+          ]
         }
       },
       "schematics": {
@@ -44,7 +50,7 @@
       "prefix": "codegena",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "libs/definitions/tsconfig.lib.json",
             "project": "libs/definitions/ng-package.json"
@@ -62,7 +68,10 @@
               "libs/definitions/tsconfig.lib.json",
               "libs/definitions/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/definitions/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/definitions/**/*"
+            ]
           }
         },
         "test": {
@@ -70,7 +79,10 @@
           "options": {
             "jestConfig": "libs/definitions/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/definitions"
+          ]
         }
       },
       "schematics": {}
@@ -82,7 +94,7 @@
       "prefix": "codegena",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "libs/schematics-example/tsconfig.lib.json",
             "project": "libs/schematics-example/ng-package.json"
@@ -95,7 +107,10 @@
               "libs/schematics-example/tsconfig.lib.json",
               "libs/schematics-example/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/schematics-example/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/schematics-example/**/*"
+            ]
           }
         },
         "test": {
@@ -103,7 +118,10 @@
           "options": {
             "jestConfig": "libs/schematics-example/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/schematics-example"
+          ]
         }
       },
       "schematics": {
@@ -119,7 +137,7 @@
       "prefix": "codegena",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "libs/schematics-tools/tsconfig.lib.json",
             "project": "libs/schematics-tools/ng-package.json"
@@ -132,7 +150,10 @@
               "libs/schematics-tools/tsconfig.lib.json",
               "libs/schematics-tools/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/schematics-tools/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/schematics-tools/**/*"
+            ]
           }
         },
         "test": {
@@ -140,7 +161,10 @@
           "options": {
             "jestConfig": "libs/schematics-tools/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/schematics-tools"
+          ]
         }
       },
       "schematics": {
@@ -156,7 +180,7 @@
       "prefix": "codegena",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "libs/ng-http-tools/tsconfig.lib.json",
             "project": "libs/ng-http-tools/ng-package.json"
@@ -174,7 +198,10 @@
               "libs/ng-http-tools/tsconfig.lib.json",
               "libs/ng-http-tools/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/ng-http-tools/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ng-http-tools/**/*"
+            ]
           }
         },
         "test": {
@@ -182,7 +209,10 @@
           "options": {
             "jestConfig": "libs/ng-http-tools/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/ng-http-tools"
+          ]
         }
       },
       "schematics": {
@@ -198,7 +228,7 @@
       "prefix": "codegena",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "libs/todo-app-contract/tsconfig.lib.json",
             "project": "libs/todo-app-contract/ng-package.json"
@@ -216,7 +246,10 @@
               "libs/todo-app-contract/tsconfig.lib.json",
               "libs/todo-app-contract/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/todo-app-contract/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/todo-app-contract/**/*"
+            ]
           }
         },
         "test": {
@@ -230,7 +263,10 @@
               "jestConfig": "libs/todo-app-contract/jest.config.prod.js",
               "ci": true
             }
-          }
+          },
+          "outputs": [
+            "coverage/libs/todo-app-contract"
+          ]
         }
       },
       "schematics": {
