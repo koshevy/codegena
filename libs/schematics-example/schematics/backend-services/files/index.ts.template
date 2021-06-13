@@ -6,3 +6,5 @@
 %>
 // Typings
 <%= typingFiles.map(typingFile => `export * from '.${typingFile.replace(/\.ts$/, '')}';`).join('\n') %>
+
+export * from './<%= dasherize(moduleName) %>.module';
