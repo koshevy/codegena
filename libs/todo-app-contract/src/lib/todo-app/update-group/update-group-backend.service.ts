@@ -1,4 +1,4 @@
-import { from, Observable, of } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HasContentType, HasResponses } from '@codegena/definitions/aspects';
 import { Schema as JsonSchema } from '@codegena/definitions/json-schema';
@@ -50,7 +50,9 @@ export class UpdateGroupBackendService extends EntrypointAbstract<
 
     protected getDomainSchema(): Observable<object> {
         return from(
-            import('../domain-schema').then(({ domainSchema }) => domainSchema)
+            import('@codegena/todo-app-contract/domain-schema').then(
+                ({ domainSchema }) => domainSchema
+            )
         );
     }
 

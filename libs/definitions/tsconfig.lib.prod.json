@@ -1,4 +1,7 @@
 /* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
+  "compilerOptions": {
+    "declarationMap": false
+  },
   "extends": "./tsconfig.lib.json"
 }
