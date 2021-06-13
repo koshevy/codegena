@@ -52,3 +52,5 @@ export * from './update-group-item/update-group-item-response';
 export * from './update-group/update-group-parameters';
 export * from './update-group/update-group-request';
 export * from './update-group/update-group-response';
+
+export * from './todo-app.module';
