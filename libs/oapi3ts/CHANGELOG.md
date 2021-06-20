@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 3.0.0-alpha.3 (2021-06-20)
+
+
+### Features
+
+* **oapi3ts:** support `nullable` in `additionalProperties` ([ac0b119](https://github.com/koshevy/codegena/commit/ac0b1191c1d7721a01989295520201b92e5bfdbc))
+
+
+
+
+
 # 3.0.0-alpha.2 (2021-06-13)
 
 **Note:** Version bump only for package @codegena/oapi3ts

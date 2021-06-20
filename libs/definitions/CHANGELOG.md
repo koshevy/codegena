@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.1.0-alpha.3 (2021-06-20)
+
+
+### Features
+
+* **definitions:** support `nullable` in JsonSchema definitions ([7afc5b9](https://github.com/koshevy/codegena/commit/7afc5b9b916f659a6857f1b4aeb42e4c77208d02))
+
+
+
+
+
 # 0.1.0-alpha.2 (2021-06-13)
 
 **Note:** Version bump only for package @codegena/definitions

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.0.0-alpha.4 (2021-06-20)
+
+
+### Features
+
+* **ng-http-tools:** make `nullable` option of Ajv enabled by default ([b88b00f](https://github.com/koshevy/codegena/commit/b88b00f956feebbdb1b34953282f3dcf0a19fc3a))
+
+
+
+
+
 # 1.0.0-alpha.3 (2021-06-13)
 
 **Note:** Version bump only for package @codegena/ng-http-tools
