@@ -1,5 +1,5 @@
 export interface JsonError {
     originalMessage: string;
-    message?: string;
+    message?: null | string;
     jsonPointer: string;
 }

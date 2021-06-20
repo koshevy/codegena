@@ -21,7 +21,7 @@ export interface AttachmentMetaImage {
      * Possible thumbnails of uploaded image
      */
     thumbs?: {
-        [key: string]: {
+        [key: string]: null | {
             /**
              * Url of cached thumb
              */
@@ -29,7 +29,7 @@ export interface AttachmentMetaImage {
             /**
              * Information of image
              */
-            imageOptions?: ImageOptions;
+            imageOptions?: null | ImageOptions;
         };
     };
     /**

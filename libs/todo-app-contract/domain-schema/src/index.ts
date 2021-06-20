@@ -171,9 +171,11 @@ export const domainSchema = {
                 },
                 "imageOptions": {
                   "description": "Information of image",
-                  "$ref": "#/components/schemas/ImageOptions"
+                  "$ref": "#/components/schemas/ImageOptions",
+                  "nullable": true
                 }
-              }
+              },
+              "nullable": true
             }
           },
           "format": {
@@ -348,7 +350,8 @@ export const domainSchema = {
             "type": "string"
           },
           "message": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "jsonPointer": {
             "type": "string"
@@ -389,7 +392,8 @@ export const domainSchema = {
             "type": "number",
             "min": 0,
             "max": 4096,
-            "example": 0
+            "example": 0,
+            "nullable": true
           },
           "attachments": {
             "type": "array",
@@ -398,7 +402,8 @@ export const domainSchema = {
               "$ref": "#/components/schemas/AttachmentMeta"
             },
             "maxItems": 16,
-            "example": []
+            "example": [],
+            "nullable": true
           }
         },
         "required": [

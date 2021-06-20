@@ -23,7 +23,7 @@ export interface ToDoTask extends ToDoTaskBlank {
      * Position of a task in group. Allows to track changing of state of a concrete
      * item, including changing od position.
      */
-    position: number;
+    position: null | number;
     /**
      * An unique id of group that item belongs to
      */
@@ -44,7 +44,7 @@ export interface ToDoTask extends ToDoTaskBlank {
      * Any material attached to the task: may be screenshots, photos, pdf- or doc-
      * documents on something else
      */
-    attachments?: Array<
+    attachments?: null | Array<
         | AttachmentMetaImage // Meta data of image attached to task
         | AttachmentMetaDocument // Meta data of document attached to task
         | string // Link to any external resource
