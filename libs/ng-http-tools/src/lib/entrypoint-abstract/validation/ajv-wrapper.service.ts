@@ -84,6 +84,7 @@ export class AjvWrapperService {
             unknownFormats: this.unknownFormats,
             useDefaults: true,
             verbose: true,
+            nullable: true,
             ...this.ajvOptions,
         });
     }
