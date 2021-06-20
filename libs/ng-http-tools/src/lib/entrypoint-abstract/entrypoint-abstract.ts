@@ -138,7 +138,7 @@ export abstract class EntrypointAbstract<
                 url = this.createUrl(parameters, options.serverEnvironment || {});
                 preparedOptions = prepareRequestOptions<TRequestBody>(
                     url,
-                    parameters,
+                    parameters || {},
                     requestBody,
                     queryParameters,
                     options,
@@ -168,7 +168,7 @@ export abstract class EntrypointAbstract<
         if (response instanceof HttpResponse) {
             return this.validationService.validateResponse(
                 response,
-                this.getResponseValidationSchema(),
+                this.getResponseValidationSchema() || {},
                 this.getDomainSchema(),
             ).pipe(
                 map(() => response),
@@ -185,7 +185,7 @@ export abstract class EntrypointAbstract<
             return this.validationService
                 .validateResponse(
                     error,
-                    this.getResponseValidationSchema(),
+                    this.getResponseValidationSchema() || {},
                     this.getDomainSchema(),
                 )
                 .pipe(switchMap(() => of(error)))

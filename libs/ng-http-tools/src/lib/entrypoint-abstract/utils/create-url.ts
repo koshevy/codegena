@@ -2,7 +2,6 @@ import {
     findKey,
     isEmpty,
     isEqual,
-    pick,
     template,
     transform,
     trim,
@@ -100,8 +99,12 @@ function getAppropriateServerPath(
 }
 
 function getDefaultVarsValues(
-    variables: Record<string, Oas3ServerVariable>,
+    variables?: Record<string, Oas3ServerVariable>,
 ): Record<string, string> {
+    if (!variables) {
+        return {};
+    }
+
     return transform(variables, (acc, v, k) => {
         if (v.default) {
             acc[k] = v.default;

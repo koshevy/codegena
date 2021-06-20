@@ -24,7 +24,9 @@ export class EntrypointValidationService {
         }
 
         const contentType = options.headers.get('content-type');
-        const schemaByContentType = schema?.[contentType] || schema?.['default'];
+        const [contentTypeKey] = (contentType || 'application/json').split(';');
+
+        const schemaByContentType = schema?.[contentTypeKey] || schema?.['default'];
         const value = options.body;
 
         if (!schemaByContentType) {
@@ -45,8 +47,8 @@ export class EntrypointValidationService {
     }
 
     public validateParams(
-        params: object | undefined,
-        schema: JsonSchema,
+        params: object | undefined | null,
+        schema: JsonSchema | null,
         domainSchemas$: Observable<object>,
     ): Observable<void> {
         if (!schema) {

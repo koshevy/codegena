@@ -57,13 +57,13 @@ export function pickResponses<
 
 function doNextEvent<TSubResponse>(
     event: HttpEvent<TSubResponse> | HttpErrorResponse,
-    observer: Observer<TSubResponse>,
+    observer: Observer<TSubResponse | null>,
     statuses: ResponseCode[],
-    contentType: ContentType,
-    throwIfOther: boolean,
+    contentType?: ContentType,
+    throwIfOther: boolean = true,
 ): void {
-    let response: HttpResponse<TSubResponse> | HttpErrorResponse;
-    let responseBody: TSubResponse;
+    let response: HttpResponse<TSubResponse> | HttpErrorResponse | null = null;
+    let responseBody: TSubResponse | null = null;
 
     if (event instanceof HttpErrorResponse) {
         response = event;
@@ -80,7 +80,7 @@ function doNextEvent<TSubResponse>(
     }
 
     const receivedContentType = response.headers.get('content-type');
-    let errorMessage: string;
+    let errorMessage: string | null = null;
 
     if (!statuses.includes(response.status as ResponseCode)) {
         errorMessage = [
@@ -103,7 +103,7 @@ function doNextEvent<TSubResponse>(
             headers: response.headers,
             status: response.status,
             statusText: errorMessage,
-            url: response.url,
+            url: response.url || undefined,
         }));
 
         return;
