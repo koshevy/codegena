@@ -180,6 +180,8 @@ describe('Do requests for default server environment', () => {
         const body: UpdateGroupItemRequest = {
             title: faker.company.catchPhraseAdjective(),
             isDone: true,
+            position: null,
+            attachments: null,
         };
         const request = updateGroupItemBackend
             .request(params, body)

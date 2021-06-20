@@ -62,7 +62,7 @@ function actualizeParameters(
         pick(parameters, queryParameters),
     );
 
-    return {...options, params: serializedParameters};
+    return {...options, params: serializedParameters || {}};
 }
 
 function actualizeRequestBody(

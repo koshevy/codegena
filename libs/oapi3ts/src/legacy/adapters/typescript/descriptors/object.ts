@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { SchemaObject } from '@codegena/definitions/json-schema';
+import { Schema, SchemaObject } from '@codegena/definitions/json-schema';
 import {
     DataTypeDescriptor,
     DataTypeContainer
@@ -33,41 +33,11 @@ export class ObjectTypeScriptDescriptor
     constructor(
 
         public schema: any,
-
-        /**
-         * Родительский конвертор, который используется
-         * чтобы создавать вложенные дескрипторы.
-         */
         protected convertor: BaseConvertor,
-
-        /**
-         * Рабочий контекст
-         */
         public readonly context: {[name: string]: DataTypeDescriptor},
-
-        /**
-         * Название этой модели (может быть string
-         * или null).
-         */
         public readonly modelName: string,
-
-        /*
-         * Предлагаемое имя для типа данных: может
-         * применяться, если тип данных анонимный, но
-         * необходимо вынести его за пределы родительской
-         * модели по-ситуации (например, в случае с Enum).
-         */
         public readonly suggestedModelName: string,
-
-        /**
-         * Путь до оригинальной схемы, на основе
-         * которой было создано описание этого типа данных.
-         */
         public readonly originalSchemaPath: string,
-
-        /**
-         * Родительские модели.
-         */
         public readonly ancestors?: ObjectTypeScriptDescriptor[]
 
     ) {
@@ -99,17 +69,8 @@ export class ObjectTypeScriptDescriptor
                         /^./, propName[0].toUpperCase()
                     );
 
-                if (propSchema && propSchema.nullable && propSchema.type) {
-                    propSchema = {
-                        oneOf: [
-                            { type: 'null'},
-                            _.omit(propSchema, 'nullable')
-                        ]
-                    } as any; // todo describe oneOf for base schema
-                }
-
                 const typeContainer = convertor.convert(
-                    propSchema,
+                    this._applyNullableInProp(propSchema),
                     context,
                     null,
                     suggestedName
@@ -126,7 +87,7 @@ export class ObjectTypeScriptDescriptor
                         : ''
                 }
 
-                const propDescr = {
+                this.propertiesSets[0][propName] = {
                     required: _.findIndex(
                         schema.required || [],
                         v => v === propName
@@ -139,8 +100,6 @@ export class ObjectTypeScriptDescriptor
                         ? this._findExampleInTypeContainer(typeContainer)
                         : undefined
                 };
-
-                this.propertiesSets[0][propName] = propDescr;
             });
         }
 
@@ -170,11 +129,12 @@ export class ObjectTypeScriptDescriptor
             const typeContainer = ('object' === typeof addProp)
                 ? convertor.convert(
                     // these properties does not affect a schema
-                    _.omit(
-                        addProp,
-                        defaultConfig.excludeFromComparison
-                    ) as SchemaObject,
-
+                    this._applyNullableInProp(
+                        _.omit(
+                            addProp,
+                            defaultConfig.excludeFromComparison
+                        ),
+                    ),
                     context,
                     null,
                     `${modelName}Properties`
@@ -283,7 +243,7 @@ export class ObjectTypeScriptDescriptor
         if (this.ancestors && this.ancestors.length) {
             filteredAncestors = _.filter(
                 this.ancestors,
-                ancestor => ancestor.modelName ? true : false
+                ancestor => !!ancestor.modelName,
             );
         }
 
@@ -313,5 +273,23 @@ export class ObjectTypeScriptDescriptor
         }
 
         return;
+    }
+
+    private _applyNullableInProp(propSchema: Schema): Schema {
+        if (!propSchema.nullable || (propSchema.type === 'null')) {
+            return propSchema;
+        }
+
+        return  {
+            ..._.pick(propSchema, ['title', 'description']),
+            oneOf: [
+                { type: 'null'},
+                _.omit(propSchema, [
+                    'description',
+                    'nullable',
+                    'title',
+                ]),
+            ],
+        };
     }
 }

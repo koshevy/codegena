@@ -8,6 +8,7 @@ export * from './types/has-enumeration';
 export * from './types/has-example';
 export * from './types/has-id';
 export * from './types/has-items';
+export * from './types/has-nullable';
 export * from './types/has-numeric-value';
 export * from './types/has-properties';
 export * from './types/has-ref';

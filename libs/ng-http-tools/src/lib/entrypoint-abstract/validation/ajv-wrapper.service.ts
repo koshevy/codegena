@@ -12,7 +12,7 @@ export class AjvWrapperService {
     protected validators: Record<string, any> = {};
 
     constructor(
-        private validationErrorStream: EventEmitter<ValidationError> = null,
+        private validationErrorStream: EventEmitter<ValidationError> | null = null,
         private shouldThrowOnFails: boolean = true,
         private formats: Record<string, any> = {},
         private unknownFormats: string[] = [],
@@ -36,7 +36,7 @@ export class AjvWrapperService {
             `Validation failed, schema id: ${schema.$id}`,
             value,
             schema,
-            validate.errors,
+            validate.errors || null,
         );
 
         if (this.validationErrorStream) {
@@ -48,13 +48,17 @@ export class AjvWrapperService {
         }
     }
 
-    private getValidator(schema: SchemaWithId, domainSchemas: object) {
+    private getValidator(schema: SchemaWithId, domainSchemas: object): Ajv.ValidateFunction {
         if (schema.$id && this.validators[schema.$id]) {
             return this.validators[schema.$id];
         }
 
         const compiler = this.getCompiler(domainSchemas);
-        const validator = compiler.compile(schema);
+        const validator = compiler?.compile(schema);
+
+        if (!validator) {
+            throw new Error(`Can't compile validator!`);
+        }
 
         if (schema.$id) {
             this.validators[schema.$id] = validator;
@@ -63,12 +67,12 @@ export class AjvWrapperService {
         return validator;
     }
 
-    private getCompiler(domainSchemas: object): AjvCompiler {
+    private getCompiler(domainSchemas: object): AjvCompiler | null {
         if (!this.ajvs.has(domainSchemas)) {
             this.ajvs.set(domainSchemas, this.createCompiler(domainSchemas));
         }
 
-        return this.ajvs.get(domainSchemas);
+        return this.ajvs.get(domainSchemas) || null;
     }
 
     private createCompiler(domainSchemas: object): AjvCompiler {
@@ -84,6 +88,7 @@ export class AjvWrapperService {
             unknownFormats: this.unknownFormats,
             useDefaults: true,
             verbose: true,
+            nullable: true,
             ...this.ajvOptions,
         });
     }

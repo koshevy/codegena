@@ -6,7 +6,8 @@
     "target": "es2015",
     "module": "commonjs",
     "declaration": true,
-    "inlineSources": true
+    "inlineSources": true,
+    "strictNullChecks": true
   },
   "angularCompilerOptions": {
     "enableIvy": false

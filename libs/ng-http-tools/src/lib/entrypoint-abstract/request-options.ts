@@ -9,7 +9,7 @@ type HttpClientsRequestParameters = Parameters<HttpClient['request']>['2'];
 /**
  * Expected options for {@link HttpClient.request}
  */
-export interface RequestOptionsRaw extends HttpClientsRequestParameters {
+export type RequestOptionsRaw = HttpClientsRequestParameters & {
     headers?: HttpHeaders;
     serverEnvironment?: ServerEnvironment,
 }
