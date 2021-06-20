@@ -28,6 +28,7 @@ export type AspectKeyword =
     | 'minLength'
     | 'minProperties'
     | 'multipleOf'
+    | 'nullable'
     | 'oneOf'
     | 'pattern'
     | 'properties'

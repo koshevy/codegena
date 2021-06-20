@@ -9,6 +9,7 @@ import {
     HasExample,
     HasId,
     HasItems,
+    HasNullable,
     HasNumericValue,
     HasProperties,
     HasRef,
@@ -103,8 +104,9 @@ interface SchemaCommonAspect<TValue = unknown>
             HasDefault<TValue>,
             HasDescription,
             HasEnumeration<TValue>,
-            HasId,
             HasExample<TValue>,
+            HasId,
+            HasNullable,
             HasRef {}
 
 interface SchemaTypedAspect<TSchemaType extends SchemaType = SchemaType> {
