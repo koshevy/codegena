@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-alpha.4](https://github.com/koshevy/codegena/compare/@codegena/oapi3ts@3.0.0-alpha.3...@codegena/oapi3ts@3.0.0-alpha.4) (2022-05-11)
+
+
+### Bug Fixes
+
+* throws error when object schema has required, but without properties ([fa33f2c](https://github.com/koshevy/codegena/commit/fa33f2c5d2d594cfd5e44f4e98dc35e8db5375f5)), closes [#71](https://github.com/koshevy/codegena/issues/71)
+
+
+
+
+
 # 3.0.0-alpha.3 (2021-06-20)
 
 

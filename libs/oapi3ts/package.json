@@ -1,6 +1,6 @@
 {
   "name": "@codegena/oapi3ts",
-  "version": "3.0.0-alpha.3",
+  "version": "3.0.0-alpha.4",
   "description": "Codegeneration from OAS3 to TypeScript",
   "author": "koshevy@gmail.com",
   "keywords": [
