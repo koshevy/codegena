@@ -54,6 +54,10 @@ export class ObjectTypeScriptDescriptor
         // autofill properties from `required` not presented in `properties`
         // with default options
         _.each(schema.required || [], propertyName => {
+            if (!schema.properties) {
+                schema.properties = {};
+            }
+
             if (!schema.properties[propertyName]) {
                 schema.properties[propertyName] = {
                     description: "Auto filled property from `required`"
