@@ -14,8 +14,8 @@
     "fs-extra": ">= 4"
   },
   "peerDependencies": {
-    "@angular-devkit/schematics": ">= 8",
-    "@angular/common": ">= 8",
+    "@angular-devkit/schematics": ">= 8, < 13",
+    "@angular/common": ">= 8, < 13",
     "lodash": ">= 4",
     "rxjs": ">= 6",
     "typescript": ">= 3.9.0"
