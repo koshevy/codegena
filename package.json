@@ -34,7 +34,7 @@
     "@nrwl/angular": "12.3.6",
     "ajv": "^6.10.2",
     "core-js": "^2.5.4",
-    "lerna": "^3.20.2",
+    "lerna": "^6.4.1",
     "lodash": "^4.17.15",
     "reflect-metadata": "^0.1.13",
     "rxjs": "6.6.2",
