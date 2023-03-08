@@ -47,7 +47,7 @@
     "@angular/compiler-cli": "12.0.4",
     "@angular/language-service": "12.0.4",
     "@nestjs/schematics": "^7.0.0",
-    "@nestjs/testing": "^7.0.0",
+    "@nestjs/testing": "^9.3.9",
     "@nrwl/cli": "12.3.6",
     "@nrwl/cypress": "12.3.6",
     "@nrwl/jest": "12.3.6",
