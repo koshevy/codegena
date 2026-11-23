@@ -1,0 +1,26 @@
+---
+title: Core features
+slug: /core-features
+---
+
+Codegena resolves related JSON Schema parts together and generates TypeScript declarations that preserve their relationships.
+
+## Schema interpretation
+
+Object composition, property patterns, circular references, and conditional schemas affect how declarations are named, shared, and placed in files.
+
+```typescript
+export interface ApiRequest {
+  requestId?: `${string}-${string}-${string}-${string}-${string}`;
+  action?: 'READ' | 'CREATE' | 'UPDATE' | 'DELETE';
+}
+```
+
+## Generated output
+
+Related declarations can share a file or be placed in domain directories.
+Shared types and barrel exports keep those directories usable independently.
+
+## Graph and search
+
+The graph index connects generated files, directories, declarations, source locations, and warnings. Playground uses it for navigation and browser-based search.

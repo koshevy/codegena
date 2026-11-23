@@ -1,0 +1,12 @@
+import type { BasicError as BarrelBasicError } from './generated/_common';
+import type { BasicError } from './generated/_common/basic-error';
+
+export const repositoryError: BasicError = {
+  status: '404',
+  message: 'Repository not found',
+};
+
+export const repositoryErrorFromBarrel: BarrelBasicError = {
+  status: '404',
+  message: 'Repository not found',
+};

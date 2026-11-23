@@ -1,0 +1,38 @@
+{
+  "$id": "object-with-properties-and-patterns",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": {
+    "type": "object"
+  },
+  "propertyNames": {
+    "pattern": "^TOP_LEVEL_PREFIX_"
+  },
+  "patternProperties": {
+    "^FIRST_LEVEL_PREFIX_A_": {
+      "propertyNames": {
+        "pattern": "^SUB_LEVEL_PREFIX_A_"
+      }
+    },
+    "^FIRST_LEVEL_PREFIX_A_[0-9]+": {
+    },
+    "^FIRST_LEVEL_PREFIX_B_": {
+      "propertyNames": {
+        "pattern": "^SUB_LEVEL_B_"
+      }
+    },
+    "^FIRST_LEVEL_PREFIX_B_[0-9]+": {
+      "patternProperties": {
+        "^SUB_LEVEL_B_": {
+          "additionalProperties": true
+        },
+        "^SUB_LEVEL_C_": {
+          "propertyNames": {
+            "pattern": "^DEEP_LEVEL_C_"
+          }
+        },
+        "WRONG_REGEX_TO_BE_IGNORED[a-z": {}
+      }
+    }
+  }
+}

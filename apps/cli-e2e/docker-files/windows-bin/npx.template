@@ -1,0 +1,3 @@
+#!/bin/sh
+exec wine cmd /c "set PATH=${WIN_NODE_DIR};%PATH% && cd /d ${WIN_WORKDIR} && ${WIN_NODE_DIR}\\node.exe" \
+  "${WIN_NODE_DIR}\\node_modules\\npm\\bin\\npx-cli.js" "$@"

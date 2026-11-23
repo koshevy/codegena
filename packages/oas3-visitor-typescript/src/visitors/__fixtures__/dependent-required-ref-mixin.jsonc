@@ -1,0 +1,30 @@
+{
+  "$defs": {
+    "Customer": {
+      "type": "object",
+      "properties": {
+        "customerId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "customerId"
+      ]
+    }
+  },
+  "$ref": "#/$defs/Customer",
+  "type": "object",
+  "properties": {
+    "cardToken": {
+      "type": "string"
+    },
+    "billingAddress": {
+      "type": "string"
+    }
+  },
+  "dependentRequired": {
+    "cardToken": [
+      "billingAddress"
+    ]
+  }
+}

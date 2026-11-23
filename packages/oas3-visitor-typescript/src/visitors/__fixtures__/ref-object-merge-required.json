@@ -1,0 +1,39 @@
+{
+  "$id": "ref-object-merge-required",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/PartiallyRequiredBaseInterface",
+  "properties": {
+    "requiredInDerived": {
+      "$ref": "#/$defs/AnotherSimpleObjectType"
+    }
+  },
+  "required": [
+    "requiredInDerived",
+    "shouldBeRequiredInDerivedInterface"
+  ],
+  "$defs": {
+    "PartiallyRequiredBaseInterface": {
+      "type": "object",
+      "properties": {
+        "shouldNotBeRequired": {
+          "$ref": "#/$defs/SimpleObjectType"
+        },
+        "requiredInBaseInterface": {
+          "$ref": "#/$defs/SimpleObjectType"
+        },
+        "shouldBeRequiredInDerivedInterface": {
+          "$ref": "#/$defs/SimpleObjectType"
+        }
+      },
+      "required": [
+        "requiredInBaseInterface"
+      ]
+    },
+    "SimpleObjectType": {
+      "type": "object"
+    },
+    "AnotherSimpleObjectType": {
+      "type": "object"
+    }
+  }
+}

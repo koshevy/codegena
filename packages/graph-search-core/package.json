@@ -1,0 +1,75 @@
+{
+  "name": "@codegena/graph-search-core",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./dist/index.esm.js",
+  "module": "./dist/index.esm.js",
+  "types": "./dist/index.esm.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.esm.js"
+    },
+    "./react": {
+      "types": "./react-adapter.d.ts",
+      "default": "./react-adapter.esm.js"
+    },
+    "./api": {
+      "types": "./api.d.ts",
+      "default": "./api.esm.js"
+    }
+  },
+  "files": [
+    "**/*.js",
+    "**/*.d.ts",
+    "!**/*.tsbuildinfo"
+  ],
+  "nx": {
+    "tags": [
+      "pure:publishable"
+    ],
+    "targets": {
+      "build": {
+        "outputs": [
+          "{workspaceRoot}/dist/graph-search-core"
+        ]
+      }
+    }
+  },
+  "dependencies": {
+    "@codegena/graph-core": "*",
+    "@codegena/oas3-core": "*",
+    "@codegena/pwa": "*",
+    "dexie": "^4.4.7",
+    "minisearch": "^7.2.0"
+  },
+  "devDependencies": {
+    "@codegena/infr-nx": "*",
+    "@nx/jest": "23.3.2",
+    "@swc/core": "1.15.8",
+    "@swc/jest": "~0.2.38",
+    "@testing-library/react": "16.1.0",
+    "@types/jest": "~30.0.0",
+    "@types/node": "^24.0.0",
+    "@types/react": "19.0.0",
+    "@types/react-dom": "19.0.0",
+    "eslint": "^10.13.0",
+    "jest": "~30.3.0",
+    "jest-environment-jsdom": "~30.3.0",
+    "jest-environment-node": "~30.3.0",
+    "nx": "23.3.2",
+    "rollup": "^4.14.0",
+    "ts-jest": "^29.4.7",
+    "typescript": "6.0.3"
+  },
+  "peerDependencies": {
+    "jsonc-parser": "3.x",
+    "react": "19.x",
+    "zod": "4.x"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  }
+}

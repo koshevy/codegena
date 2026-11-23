@@ -1,0 +1,32 @@
+diff --git a/node_modules/prettier-plugin-jsdoc/dist/parser.js b/node_modules/prettier-plugin-jsdoc/dist/parser.js
+--- a/node_modules/prettier-plugin-jsdoc/dist/parser.js
++++ b/node_modules/prettier-plugin-jsdoc/dist/parser.js
+@@ -249,11 +249,11 @@
+     return comment.type === "CommentBlock" || comment.type === "Block";
+ }
+ function getIndentationWidth(comment, text, options) {
+-    const line = text.split(/\r\n?|\n/g)[comment.loc.start.line - 1];
++    const commentStart = comment.range?.[0] ?? comment.start;
+     let spaces = 0;
+     let tabs = 0;
+-    for (let i = comment.loc.start.column - 1; i >= 0; i--) {
+-        const c = line[i];
++    for (let i = commentStart - 1; i >= 0; i--) {
++        const c = text[i];
+         if (c === " ") {
+             spaces++;
+         }
+@@ -336,12 +336,7 @@
+ }
+ function getParamsOrders(text, comment) {
+     try {
+-        const lines = text.split("\n");
+-        let commentEnd = 0;
+-        for (let i = 0; i < comment.loc.end.line - 1; i++) {
+-            commentEnd += lines[i].length + 1;
+-        }
+-        commentEnd += comment.loc.end.column;
++        const commentEnd = comment.range?.[1] ?? comment.end;
+         const textAfterComment = text.slice(commentEnd);
+         const functionMatch = textAfterComment.match(/^\s*function\s+\w*\s*\(([^)]*)\)/);
+         if (functionMatch) {

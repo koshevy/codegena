@@ -1,0 +1,25 @@
+diff --git a/node_modules/@docusaurus/theme-classic/lib/nprogress.js b/node_modules/@docusaurus/theme-classic/lib/nprogress.js
+--- a/node_modules/@docusaurus/theme-classic/lib/nprogress.js
++++ b/node_modules/@docusaurus/theme-classic/lib/nprogress.js
+@@ -8,10 +8,12 @@
+ import './nprogress.css';
+ nprogress.configure({ showSpinner: false });
+ const delay = 200;
++let progressBarTimeout;
+ const clientModule = {
+     onRouteUpdate({ location, previousLocation }) {
++        window.clearTimeout(progressBarTimeout);
+         if (previousLocation && location.pathname !== previousLocation.pathname) {
+-            const progressBarTimeout = window.setTimeout(() => {
++            progressBarTimeout = window.setTimeout(() => {
+                 nprogress.start();
+             }, delay);
+             return () => window.clearTimeout(progressBarTimeout);
+@@ -19,6 +21,7 @@
+         return undefined;
+     },
+     onRouteDidUpdate() {
++        window.clearTimeout(progressBarTimeout);
+         nprogress.done();
+     },
+ };

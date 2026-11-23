@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "const": "archived",
+  "enum": ["archived", "draft", "draft"]
+}

@@ -1,0 +1,407 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[` 1`] = `
+{
+  "$defs": {
+    "customerProfile": {
+      "properties": {
+        "email": {
+          "format": "email",
+          "type": "string",
+        },
+        "id": {
+          "minimum": 1,
+          "type": "integer",
+        },
+        "shippingAddress": {
+          "properties": {
+            "city": {
+              "type": "string",
+            },
+            "country": {
+              "maxLength": 3,
+              "type": "string",
+            },
+            "postalCode": {
+              "type": "string",
+            },
+            "street": {
+              "minLength": 5,
+              "type": "string",
+            },
+          },
+          "required": [
+            "street",
+            "city",
+            "country",
+            "postalCode",
+          ],
+          "type": "object",
+        },
+      },
+      "required": [
+        "id",
+        "email",
+        "shippingAddress",
+      ],
+      "type": "object",
+    },
+    "orderItem": {
+      "properties": {
+        "price": {
+          "exclusiveMinimum": 0,
+          "type": "number",
+        },
+        "quantity": {
+          "maximum": 99,
+          "minimum": 1,
+          "type": "integer",
+        },
+        "sku": {
+          "pattern": "^[A-Z]{3}-[0-9]{5}$",
+          "type": "string",
+        },
+      },
+      "required": [
+        "sku",
+        "quantity",
+        "price",
+      ],
+      "type": "object",
+    },
+    "paymentDetails": {
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "method": {
+                "const": "credit_card",
+              },
+            },
+          },
+          "then": {
+            "properties": {
+              "cardToken": {
+                "pattern": "^tok_[a-z0-9]{24}$",
+                "type": "string",
+              },
+            },
+            "required": [
+              "cardToken",
+            ],
+          },
+        },
+        {
+          "if": {
+            "properties": {
+              "method": {
+                "const": "crypto",
+              },
+            },
+          },
+          "then": {
+            "properties": {
+              "currency": {
+                "enum": [
+                  "BTC",
+                  "ETH",
+                  "USDC",
+                ],
+              },
+              "walletAddress": {
+                "minLength": 26,
+                "type": "string",
+              },
+            },
+            "required": [
+              "walletAddress",
+              "currency",
+            ],
+          },
+        },
+      ],
+      "properties": {
+        "amount": {
+          "minimum": 0.01,
+          "type": "number",
+        },
+        "method": {
+          "enum": [
+            "credit_card",
+            "paypal",
+            "crypto",
+          ],
+          "type": "string",
+        },
+      },
+      "required": [
+        "method",
+        "amount",
+      ],
+      "type": "object",
+    },
+  },
+  "$id": "https://example.com",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "description": "Conditional Rule: If country is US, require a 5-digit zip code.",
+      "if": {
+        "properties": {
+          "customer": {
+            "properties": {
+              "shippingAddress": {
+                "properties": {
+                  "country": {
+                    "const": "US",
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      "then": {
+        "properties": {
+          "customer": {
+            "properties": {
+              "shippingAddress": {
+                "properties": {
+                  "postalCode": {
+                    "pattern": "^[0-9]{5}$",
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  ],
+  "description": "A complex e-commerce order validation schema.",
+  "properties": {
+    "customer": {
+      "$ref": "#/$defs/customerProfile",
+    },
+    "items": {
+      "items": {
+        "$ref": "#/$defs/orderItem",
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true,
+    },
+    "metadata": {
+      "additionalProperties": {
+        "type": "string",
+      },
+      "type": "object",
+    },
+    "orderId": {
+      "description": "Unique order tracking ID matching format ORD-YYYY-XXXXXX.",
+      "pattern": "^ORD-[0-9]{4}-[A-Z0-9]{6}$",
+      "type": "string",
+    },
+    "payment": {
+      "$ref": "#/$defs/paymentDetails",
+    },
+  },
+  "required": [
+    "orderId",
+    "customer",
+    "items",
+    "payment",
+  ],
+  "title": "ComplexOrderSchema",
+  "type": "object",
+}
+`;
+
+exports[` 2`] = `
+[
+  "$schema",
+  "$id",
+  "title",
+  "description",
+  "type",
+  "required",
+  "required.0",
+  "required.1",
+  "required.2",
+  "required.3",
+  "properties",
+  "properties.orderId",
+  "properties.orderId.type",
+  "properties.orderId.pattern",
+  "properties.orderId.description",
+  "properties.customer",
+  "properties.customer.$ref",
+  "properties.items",
+  "properties.items.type",
+  "properties.items.minItems",
+  "properties.items.uniqueItems",
+  "properties.items.items",
+  "properties.items.items.$ref",
+  "properties.payment",
+  "properties.payment.$ref",
+  "properties.metadata",
+  "properties.metadata.type",
+  "properties.metadata.additionalProperties",
+  "properties.metadata.additionalProperties.type",
+  "additionalProperties",
+  "allOf",
+  "allOf.0",
+  "allOf.0.description",
+  "allOf.0.if",
+  "allOf.0.if.properties",
+  "allOf.0.if.properties.customer",
+  "allOf.0.if.properties.customer.properties",
+  "allOf.0.if.properties.customer.properties.shippingAddress",
+  "allOf.0.if.properties.customer.properties.shippingAddress.properties",
+  "allOf.0.if.properties.customer.properties.shippingAddress.properties.country",
+  "allOf.0.if.properties.customer.properties.shippingAddress.properties.country.const",
+  "allOf.0.then",
+  "allOf.0.then.properties",
+  "allOf.0.then.properties.customer",
+  "allOf.0.then.properties.customer.properties",
+  "allOf.0.then.properties.customer.properties.shippingAddress",
+  "allOf.0.then.properties.customer.properties.shippingAddress.properties",
+  "allOf.0.then.properties.customer.properties.shippingAddress.properties.postalCode",
+  "allOf.0.then.properties.customer.properties.shippingAddress.properties.postalCode.pattern",
+  "$defs",
+  "$defs.customerProfile",
+  "$defs.customerProfile.type",
+  "$defs.customerProfile.required",
+  "$defs.customerProfile.required.0",
+  "$defs.customerProfile.required.1",
+  "$defs.customerProfile.required.2",
+  "$defs.customerProfile.properties",
+  "$defs.customerProfile.properties.id",
+  "$defs.customerProfile.properties.id.type",
+  "$defs.customerProfile.properties.id.minimum",
+  "$defs.customerProfile.properties.email",
+  "$defs.customerProfile.properties.email.type",
+  "$defs.customerProfile.properties.email.format",
+  "$defs.customerProfile.properties.shippingAddress",
+  "$defs.customerProfile.properties.shippingAddress.type",
+  "$defs.customerProfile.properties.shippingAddress.required",
+  "$defs.customerProfile.properties.shippingAddress.required.0",
+  "$defs.customerProfile.properties.shippingAddress.required.1",
+  "$defs.customerProfile.properties.shippingAddress.required.2",
+  "$defs.customerProfile.properties.shippingAddress.required.3",
+  "$defs.customerProfile.properties.shippingAddress.properties",
+  "$defs.customerProfile.properties.shippingAddress.properties.street",
+  "$defs.customerProfile.properties.shippingAddress.properties.street.type",
+  "$defs.customerProfile.properties.shippingAddress.properties.street.minLength",
+  "$defs.customerProfile.properties.shippingAddress.properties.city",
+  "$defs.customerProfile.properties.shippingAddress.properties.city.type",
+  "$defs.customerProfile.properties.shippingAddress.properties.country",
+  "$defs.customerProfile.properties.shippingAddress.properties.country.type",
+  "$defs.customerProfile.properties.shippingAddress.properties.country.maxLength",
+  "$defs.customerProfile.properties.shippingAddress.properties.postalCode",
+  "$defs.customerProfile.properties.shippingAddress.properties.postalCode.type",
+  "$defs.orderItem",
+  "$defs.orderItem.type",
+  "$defs.orderItem.required",
+  "$defs.orderItem.required.0",
+  "$defs.orderItem.required.1",
+  "$defs.orderItem.required.2",
+  "$defs.orderItem.properties",
+  "$defs.orderItem.properties.sku",
+  "$defs.orderItem.properties.sku.type",
+  "$defs.orderItem.properties.sku.pattern",
+  "$defs.orderItem.properties.quantity",
+  "$defs.orderItem.properties.quantity.type",
+  "$defs.orderItem.properties.quantity.minimum",
+  "$defs.orderItem.properties.quantity.maximum",
+  "$defs.orderItem.properties.price",
+  "$defs.orderItem.properties.price.type",
+  "$defs.orderItem.properties.price.exclusiveMinimum",
+  "$defs.paymentDetails",
+  "$defs.paymentDetails.type",
+  "$defs.paymentDetails.required",
+  "$defs.paymentDetails.required.0",
+  "$defs.paymentDetails.required.1",
+  "$defs.paymentDetails.properties",
+  "$defs.paymentDetails.properties.method",
+  "$defs.paymentDetails.properties.method.type",
+  "$defs.paymentDetails.properties.method.enum",
+  "$defs.paymentDetails.properties.method.enum.0",
+  "$defs.paymentDetails.properties.method.enum.1",
+  "$defs.paymentDetails.properties.method.enum.2",
+  "$defs.paymentDetails.properties.amount",
+  "$defs.paymentDetails.properties.amount.type",
+  "$defs.paymentDetails.properties.amount.minimum",
+  "$defs.paymentDetails.allOf",
+  "$defs.paymentDetails.allOf.0",
+  "$defs.paymentDetails.allOf.0.if",
+  "$defs.paymentDetails.allOf.0.if.properties",
+  "$defs.paymentDetails.allOf.0.if.properties.method",
+  "$defs.paymentDetails.allOf.0.if.properties.method.const",
+  "$defs.paymentDetails.allOf.0.then",
+  "$defs.paymentDetails.allOf.0.then.required",
+  "$defs.paymentDetails.allOf.0.then.required.0",
+  "$defs.paymentDetails.allOf.0.then.properties",
+  "$defs.paymentDetails.allOf.0.then.properties.cardToken",
+  "$defs.paymentDetails.allOf.0.then.properties.cardToken.type",
+  "$defs.paymentDetails.allOf.0.then.properties.cardToken.pattern",
+  "$defs.paymentDetails.allOf.1",
+  "$defs.paymentDetails.allOf.1.if",
+  "$defs.paymentDetails.allOf.1.if.properties",
+  "$defs.paymentDetails.allOf.1.if.properties.method",
+  "$defs.paymentDetails.allOf.1.if.properties.method.const",
+  "$defs.paymentDetails.allOf.1.then",
+  "$defs.paymentDetails.allOf.1.then.required",
+  "$defs.paymentDetails.allOf.1.then.required.0",
+  "$defs.paymentDetails.allOf.1.then.required.1",
+  "$defs.paymentDetails.allOf.1.then.properties",
+  "$defs.paymentDetails.allOf.1.then.properties.walletAddress",
+  "$defs.paymentDetails.allOf.1.then.properties.walletAddress.type",
+  "$defs.paymentDetails.allOf.1.then.properties.walletAddress.minLength",
+  "$defs.paymentDetails.allOf.1.then.properties.currency",
+  "$defs.paymentDetails.allOf.1.then.properties.currency.enum",
+  "$defs.paymentDetails.allOf.1.then.properties.currency.enum.0",
+  "$defs.paymentDetails.allOf.1.then.properties.currency.enum.1",
+  "$defs.paymentDetails.allOf.1.then.properties.currency.enum.2",
+]
+`;
+
+exports[`reconstructJsonc should correctly reconstruct nested array 1`] = `
+[
+  [
+    "String value",
+  ],
+  [
+    true,
+    [
+      false,
+    ],
+  ],
+  [
+    0,
+    1,
+    0.1,
+    [
+      null,
+    ],
+  ],
+]
+`;
+
+exports[`reconstructJsonc should correctly reconstruct nested array 2`] = `
+[
+  "0",
+  "0.0",
+  "1",
+  "1.0",
+  "1.1",
+  "1.1.0",
+  "2",
+  "2.0",
+  "2.1",
+  "2.2",
+  "2.3",
+  "2.3.0",
+]
+`;

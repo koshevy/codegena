@@ -1,0 +1,11 @@
+/**
+ * A JSON RPC 2.0 request
+ */
+export type JsonSchemaFromInternetJsonrpcRequest20 = Request | Request[];
+
+export interface Request {
+  jsonrpc: '2.0';
+  method: string;
+  id?: number | null | string;
+  params?: unknown[] | Record<string, unknown>;
+}

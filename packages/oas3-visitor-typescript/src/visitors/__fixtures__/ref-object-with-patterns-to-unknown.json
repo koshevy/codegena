@@ -1,0 +1,11 @@
+{
+  "$id": "ref-object-with-patterns-to-unknown",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/FirstLevelDepthUnknownType",
+  "propertyNames": {
+    "pattern": "^(l|r|c)_[A-Z0-9]+"
+  },
+  "$defs": {
+    "FirstLevelDepthUnknownType": {}
+  }
+}

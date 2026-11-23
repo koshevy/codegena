@@ -1,0 +1,16 @@
+{
+  "$defs": {
+    "ContactDetails": {
+      "type": "object",
+      "properties": {
+        "contactId": {}
+      },
+      "required": ["contactId"]
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "#/$defs/ContactDetails"
+    }
+  ]
+}

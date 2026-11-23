@@ -1,0 +1,25 @@
+{
+  "$id": "strict-one-of-contact",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "email": {
+        }
+      },
+      "required": [
+        "email"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "phone": {
+        }
+      },
+      "required": [
+        "phone"
+      ]
+    }
+  ]
+}

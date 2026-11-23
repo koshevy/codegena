@@ -1,0 +1,17 @@
+{
+  "$id": "object-with-pattern-properties",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Both patternProperties have to be combined into single Record<`RANGE.${string}.${string}`, ...>",
+  "type": "object",
+  "patternProperties": {
+    "^RANGE\\.[A-C]\\.": {
+      "^SUB_PROPERTY_": {}
+    },
+    "^RANGE\\.[D-F]\\.": {
+      "type": "object",
+      "patternProperties": {
+        "^SUB_PROPERTY_": {}
+      }
+    }
+  }
+}

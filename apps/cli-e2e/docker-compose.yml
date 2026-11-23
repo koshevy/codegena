@@ -1,0 +1,70 @@
+x-build: &image-build
+  context: ../..
+  dockerfile: apps/cli-e2e/Dockerfile
+  args:
+    VERDACCIO_IMAGE: verdaccio/verdaccio:${VERDACCIO_VERSION:?}
+    NODE_IMAGE: node:${NODE_VERSION:?}-alpine${ALPINE_VERSION:?}
+    NPM_VERSION: ${NPM_VERSION:?}
+
+services:
+  registry:
+    image: codegena/publication-e2e-registry
+    pull_policy: never
+    build:
+      <<: *image-build
+      target: registry
+    environment:
+      VERDACCIO_PORT: ${VERDACCIO_PORT:?}
+    volumes:
+      - ./verdaccio/config.yaml:/verdaccio/conf/config.yaml:ro
+    healthcheck:
+      test: [CMD, wget, -q, -O, /dev/null, 'http://127.0.0.1:${VERDACCIO_PORT:?}/-/ping']
+      interval: 1s
+      timeout: 3s
+      retries: 15
+  workspace:
+    image: codegena/cli-e2e
+    init: true
+    pull_policy: never
+    build:
+      <<: *image-build
+      target: workspace
+    environment:
+      VERDACCIO_PORT: ${VERDACCIO_PORT:?}
+      INIT_COMPLETE_FILE: ${INIT_COMPLETE_FILE:?}
+    depends_on:
+      registry:
+        condition: service_healthy
+    healthcheck:
+      test: [CMD, test, -f, '${INIT_COMPLETE_FILE:?}']
+      interval: 1s
+      timeout: 3s
+      retries: 60
+  workspace-windows:
+    profiles: [windows]
+    image: codegena/cli-e2e-windows
+    platform: linux/amd64
+    init: true
+    tty: true
+    pull_policy: never
+    build:
+      <<: *image-build
+      target: workspace-windows
+      args:
+        WIN_NODE_VERSION: ${NODE_VERSION:?}
+        WINE_NODE_DIST_DIR: ${WINE_NODE_DIST_DIR:?}
+    environment:
+      NPM_CONFIG_REGISTRY: "http://registry:${VERDACCIO_PORT:?}/"
+      WIN_INIT_COMPLETE_FILE: ${WIN_INIT_COMPLETE_FILE:?}
+      WIN_NODE_DIR: ${WIN_NODE_DIR:?}
+      WIN_NODE_FROM_DIR: ${WIN_NODE_FROM_DIR:?}
+      WIN_WORKDIR: ${WIN_WORKDIR:?}
+      WINEPREFIX: ${WINEPREFIX:?}
+    depends_on:
+      workspace:
+        condition: service_healthy
+    healthcheck:
+      test: [CMD, test, -f, '${WIN_INIT_COMPLETE_FILE:?}']
+      interval: 1s
+      timeout: 3s
+      retries: 60

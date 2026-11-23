@@ -1,0 +1,396 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`ActiveJsoncTree should successfully create ActiveJsoncTree by filename 1`] = `
+[
+  "$id",
+  "$schema",
+  "title",
+  "description",
+  "required",
+  "required.0",
+  "required.1",
+  "type",
+  "properties",
+  "properties.latitude",
+  "properties.latitude.type",
+  "properties.latitude.minimum",
+  "properties.latitude.maximum",
+  "properties.longitude",
+  "properties.longitude.type",
+  "properties.longitude.minimum",
+  "properties.longitude.maximum",
+]
+`;
+
+exports[`ActiveJsoncTree should successfully create ActiveJsoncTree by filename 2`] = `
+{
+  "children": [
+    {
+      "children": [
+        {
+          "length": 5,
+          "offset": 80,
+          "parent": [Circular],
+          "type": "string",
+          "value": "$id",
+        },
+        {
+          "length": 55,
+          "offset": 87,
+          "parent": [Circular],
+          "type": "string",
+          "value": "https://example.com/geographical-location.schema.json",
+        },
+      ],
+      "colonOffset": 85,
+      "length": 62,
+      "offset": 80,
+      "parent": [Circular],
+      "type": "property",
+    },
+    {
+      "children": [
+        {
+          "length": 9,
+          "offset": 146,
+          "parent": [Circular],
+          "type": "string",
+          "value": "$schema",
+        },
+        {
+          "length": 46,
+          "offset": 157,
+          "parent": [Circular],
+          "type": "string",
+          "value": "https://json-schema.org/draft/2020-12/schema",
+        },
+      ],
+      "colonOffset": 155,
+      "length": 57,
+      "offset": 146,
+      "parent": [Circular],
+      "type": "property",
+    },
+    {
+      "children": [
+        {
+          "length": 7,
+          "offset": 207,
+          "parent": [Circular],
+          "type": "string",
+          "value": "title",
+        },
+        {
+          "length": 31,
+          "offset": 216,
+          "parent": [Circular],
+          "type": "string",
+          "value": "Longitude and Latitude Values",
+        },
+      ],
+      "colonOffset": 214,
+      "length": 40,
+      "offset": 207,
+      "parent": [Circular],
+      "type": "property",
+    },
+    {
+      "children": [
+        {
+          "length": 13,
+          "offset": 251,
+          "parent": [Circular],
+          "type": "string",
+          "value": "description",
+        },
+        {
+          "length": 28,
+          "offset": 266,
+          "parent": [Circular],
+          "type": "string",
+          "value": "A geographical coordinate.",
+        },
+      ],
+      "colonOffset": 264,
+      "length": 43,
+      "offset": 251,
+      "parent": [Circular],
+      "type": "property",
+    },
+    {
+      "children": [
+        {
+          "length": 10,
+          "offset": 298,
+          "parent": [Circular],
+          "type": "string",
+          "value": "required",
+        },
+        {
+          "children": [
+            {
+              "length": 10,
+              "offset": 312,
+              "parent": [Circular],
+              "type": "string",
+              "value": "latitude",
+            },
+            {
+              "length": 11,
+              "offset": 324,
+              "parent": [Circular],
+              "type": "string",
+              "value": "longitude",
+            },
+          ],
+          "length": 27,
+          "offset": 310,
+          "parent": [Circular],
+          "type": "array",
+        },
+      ],
+      "colonOffset": 308,
+      "length": 39,
+      "offset": 298,
+      "parent": [Circular],
+      "type": "property",
+    },
+    {
+      "children": [
+        {
+          "length": 6,
+          "offset": 341,
+          "parent": [Circular],
+          "type": "string",
+          "value": "type",
+        },
+        {
+          "length": 8,
+          "offset": 349,
+          "parent": [Circular],
+          "type": "string",
+          "value": "object",
+        },
+      ],
+      "colonOffset": 347,
+      "length": 16,
+      "offset": 341,
+      "parent": [Circular],
+      "type": "property",
+    },
+    {
+      "children": [
+        {
+          "length": 12,
+          "offset": 361,
+          "parent": [Circular],
+          "type": "string",
+          "value": "properties",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "length": 10,
+                  "offset": 381,
+                  "parent": [Circular],
+                  "type": "string",
+                  "value": "latitude",
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "length": 6,
+                          "offset": 401,
+                          "parent": [Circular],
+                          "type": "string",
+                          "value": "type",
+                        },
+                        {
+                          "length": 8,
+                          "offset": 409,
+                          "parent": [Circular],
+                          "type": "string",
+                          "value": "number",
+                        },
+                      ],
+                      "colonOffset": 407,
+                      "length": 16,
+                      "offset": 401,
+                      "parent": [Circular],
+                      "type": "property",
+                    },
+                    {
+                      "children": [
+                        {
+                          "length": 9,
+                          "offset": 425,
+                          "parent": [Circular],
+                          "type": "string",
+                          "value": "minimum",
+                        },
+                        {
+                          "length": 3,
+                          "offset": 436,
+                          "parent": [Circular],
+                          "type": "number",
+                          "value": -90,
+                        },
+                      ],
+                      "colonOffset": 434,
+                      "length": 14,
+                      "offset": 425,
+                      "parent": [Circular],
+                      "type": "property",
+                    },
+                    {
+                      "children": [
+                        {
+                          "length": 9,
+                          "offset": 447,
+                          "parent": [Circular],
+                          "type": "string",
+                          "value": "maximum",
+                        },
+                        {
+                          "length": 2,
+                          "offset": 458,
+                          "parent": [Circular],
+                          "type": "number",
+                          "value": 90,
+                        },
+                      ],
+                      "colonOffset": 456,
+                      "length": 13,
+                      "offset": 447,
+                      "parent": [Circular],
+                      "type": "property",
+                    },
+                  ],
+                  "length": 73,
+                  "offset": 393,
+                  "parent": [Circular],
+                  "type": "object",
+                },
+              ],
+              "colonOffset": 391,
+              "length": 85,
+              "offset": 381,
+              "parent": [Circular],
+              "type": "property",
+            },
+            {
+              "children": [
+                {
+                  "length": 11,
+                  "offset": 472,
+                  "parent": [Circular],
+                  "type": "string",
+                  "value": "longitude",
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "length": 6,
+                          "offset": 493,
+                          "parent": [Circular],
+                          "type": "string",
+                          "value": "type",
+                        },
+                        {
+                          "length": 8,
+                          "offset": 501,
+                          "parent": [Circular],
+                          "type": "string",
+                          "value": "number",
+                        },
+                      ],
+                      "colonOffset": 499,
+                      "length": 16,
+                      "offset": 493,
+                      "parent": [Circular],
+                      "type": "property",
+                    },
+                    {
+                      "children": [
+                        {
+                          "length": 9,
+                          "offset": 517,
+                          "parent": [Circular],
+                          "type": "string",
+                          "value": "minimum",
+                        },
+                        {
+                          "length": 4,
+                          "offset": 528,
+                          "parent": [Circular],
+                          "type": "number",
+                          "value": -180,
+                        },
+                      ],
+                      "colonOffset": 526,
+                      "length": 15,
+                      "offset": 517,
+                      "parent": [Circular],
+                      "type": "property",
+                    },
+                    {
+                      "children": [
+                        {
+                          "length": 9,
+                          "offset": 540,
+                          "parent": [Circular],
+                          "type": "string",
+                          "value": "maximum",
+                        },
+                        {
+                          "length": 3,
+                          "offset": 551,
+                          "parent": [Circular],
+                          "type": "number",
+                          "value": 180,
+                        },
+                      ],
+                      "colonOffset": 549,
+                      "length": 14,
+                      "offset": 540,
+                      "parent": [Circular],
+                      "type": "property",
+                    },
+                  ],
+                  "length": 75,
+                  "offset": 485,
+                  "parent": [Circular],
+                  "type": "object",
+                },
+              ],
+              "colonOffset": 483,
+              "length": 88,
+              "offset": 472,
+              "parent": [Circular],
+              "type": "property",
+            },
+          ],
+          "length": 189,
+          "offset": 375,
+          "parent": [Circular],
+          "type": "object",
+        },
+      ],
+      "colonOffset": 373,
+      "length": 203,
+      "offset": 361,
+      "parent": [Circular],
+      "type": "property",
+    },
+  ],
+  "length": 490,
+  "offset": 76,
+  "type": "object",
+}
+`;

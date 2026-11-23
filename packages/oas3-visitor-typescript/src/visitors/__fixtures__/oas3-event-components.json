@@ -1,0 +1,62 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Activity API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/events": {
+      "get": {
+        "operationId": "listEvents",
+        "tags": ["Activity"],
+        "responses": {
+          "200": {
+            "description": "Events listed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Event" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Event": {
+        "type": "object",
+        "properties": {
+          "actor": { "$ref": "#/components/schemas/Actor" },
+          "payload": {
+            "oneOf": [
+              { "$ref": "#/components/schemas/CommitCommentEvent" },
+              { "$ref": "#/components/schemas/ForkEvent" }
+            ]
+          }
+        }
+      },
+      "Actor": {
+        "type": "object",
+        "properties": {
+          "login": { "type": "string" }
+        }
+      },
+      "CommitCommentEvent": {
+        "type": "object",
+        "properties": {
+          "commentId": { "type": "integer" }
+        }
+      },
+      "ForkEvent": {
+        "type": "object",
+        "properties": {
+          "forkId": { "type": "integer" }
+        }
+      }
+    }
+  }
+}

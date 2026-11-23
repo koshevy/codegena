@@ -1,0 +1,21 @@
+{
+  "type": "object",
+  "patternProperties": {
+    "^OPTION_[A-Z]+$": {
+      "$ref": "#/$defs/Base",
+      "properties": {
+        "payload": {}
+      }
+    }
+  },
+  "additionalProperties": {
+    "$ref": "#/$defs/Base"
+  },
+  "$defs": {
+    "Base": {
+      "properties": {
+        "meta": {}
+      }
+    }
+  }
+}

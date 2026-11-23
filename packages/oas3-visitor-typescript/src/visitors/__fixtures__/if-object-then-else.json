@@ -1,0 +1,45 @@
+{
+  "$id": "if-object-then-else",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "deliveryMethod": {
+      "default": "courier",
+      "enum": [
+        "courier",
+        "pickup"
+      ]
+    }
+  },
+  "required": [
+    "deliveryMethod"
+  ],
+  "if": {
+    "properties": {
+      "deliveryMethod": {
+        "const": "courier"
+      }
+    },
+    "required": [
+      "deliveryMethod"
+    ]
+  },
+  "then": {
+    "properties": {
+      "shippingAddress": {},
+      "recipientPhone": {}
+    },
+    "required": [
+      "shippingAddress",
+      "recipientPhone"
+    ]
+  },
+  "else": {
+    "properties": {
+      "pickupStore": {}
+    },
+    "required": [
+      "pickupStore"
+    ]
+  }
+}

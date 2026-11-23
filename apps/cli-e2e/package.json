@@ -1,0 +1,26 @@
+{
+  "name": "cli-e2e",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@codegena/infr-nx": "^0.0.1",
+    "@nx/jest": "23.3.2",
+    "@types/fs-extra": "^11.0.4",
+    "@types/jest": "~30.0.0",
+    "@types/node": "^24.0.0",
+    "@types/semver": "7.7.1",
+    "@types/yargs-parser": "21.0.3",
+    "babel-plugin-add-module-exports": "1.0.4",
+    "cli-testing-library": "3.0.1",
+    "eslint": "^10.13.0",
+    "fs-extra": "^11.4.0",
+    "jest": "~30.3.0",
+    "jest-environment-node": "~30.3.0",
+    "semver": "6.3.2",
+    "ts-jest": "29.4.15",
+    "ts-node": "10.9.1",
+    "typescript": "6.0.3",
+    "yargs-parser": "21.1.1"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "types": ["node", "@nx/react/typings/cssmodule.d.ts"]
+  },
+  "include": [
+    "src/**/*.stories.ts",
+    "src/**/*.stories.tsx",
+    "src/**/story-utils/**/*.ts",
+    "src/**/story-utils/**/*.tsx",
+    ".storybook/*.ts"
+  ]
+}

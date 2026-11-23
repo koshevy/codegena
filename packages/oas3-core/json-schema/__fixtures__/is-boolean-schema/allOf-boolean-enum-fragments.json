@@ -1,0 +1,11 @@
+{
+  "title": "Boolean enum split across allOf fragments",
+  "allOf": [
+    {
+      "enum": [true]
+    },
+    {
+      "enum": [false]
+    }
+  ]
+}

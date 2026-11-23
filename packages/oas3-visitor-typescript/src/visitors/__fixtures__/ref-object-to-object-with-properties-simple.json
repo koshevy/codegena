@@ -1,0 +1,19 @@
+{
+  "$id": "ref-object-to-object-with-properties-simple",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/FirstLevelDepthObjectType",
+  "properties": {
+    "mixinProperty": {}
+  },
+  "required": ["mixinProperty"],
+  "$defs": {
+    "FirstLevelDepthObjectType": {
+      "type": "object",
+      "properties": {
+        "login": {},
+        "email": {},
+        "phoneNumber": {}
+      }
+    }
+  }
+}

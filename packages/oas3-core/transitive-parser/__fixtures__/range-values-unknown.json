@@ -1,0 +1,8 @@
+{
+  "enum": [
+    { "kind": "manual" },
+    { "kind": "manual" },
+    ["legacy"],
+    ["legacy"]
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc/pwa-e2e",
+    "rootDir": ".",
+    "composite": true,
+    "declaration": true,
+    "moduleResolution": "bundler",
+    "target": "es2022",
+    "types": ["node"]
+  },
+  "include": ["playwright.config.mts", "e2e/**/*.ts"],
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    }
+  ]
+}

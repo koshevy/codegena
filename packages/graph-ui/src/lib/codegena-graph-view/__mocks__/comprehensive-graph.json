@@ -1,0 +1,2303 @@
+{
+  "nodes": [
+    {
+      "data": {
+        "fileName": "simple-dynamic-ref.ts",
+        "kind": "group",
+        "label": "simple-dynamic-ref.ts",
+        "text": "import type { SimpleDynamicAnchor } from './simple-dynamic-anchor';\nexport type SimpleDynamicRef = SimpleDynamicAnchor;"
+      },
+      "id": "simple-dynamic-ref.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "SimpleDynamicRef",
+        "kind": "item",
+        "label": "SimpleDynamicRef",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "simple-dynamic-ref.ts",
+        "sourceLocation": {
+          "col": 27,
+          "fileName": "comprehensive.jsonc",
+          "line": 902
+        },
+        "text": "export type SimpleDynamicRef = SimpleDynamicAnchor;",
+        "declarationType": "Alias",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "simple-dynamic-ref.ts::SimpleDynamicRef",
+      "parentId": "simple-dynamic-ref.ts"
+    },
+    {
+      "data": {
+        "fileName": "simple-dynamic-anchor.ts",
+        "kind": "group",
+        "label": "simple-dynamic-anchor.ts",
+        "text": "export type SimpleDynamicAnchor = Record<\n  `PROP_${string}`,\n  {\n    id: string;\n  }\n>;"
+      },
+      "id": "simple-dynamic-anchor.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "SimpleDynamicAnchor",
+        "kind": "item",
+        "label": "SimpleDynamicAnchor",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "simple-dynamic-anchor.ts",
+        "sourceLocation": {
+          "col": 30,
+          "fileName": "comprehensive.jsonc",
+          "line": 888
+        },
+        "text": "export type SimpleDynamicAnchor = Record<\n  `PROP_${string}`,\n  {\n    id: string;\n  }\n>;",
+        "declarationType": "Record",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "simple-dynamic-anchor.ts::SimpleDynamicAnchor",
+      "parentId": "simple-dynamic-anchor.ts"
+    },
+    {
+      "data": {
+        "fileName": "simplest-string-pattern-case.ts",
+        "kind": "group",
+        "label": "simplest-string-pattern-case.ts",
+        "text": "export type SimplestStringPatternCase = string;"
+      },
+      "id": "simplest-string-pattern-case.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "SimplestStringPatternCase",
+        "kind": "item",
+        "label": "SimplestStringPatternCase",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "simplest-string-pattern-case.ts",
+        "sourceLocation": {
+          "col": 36,
+          "fileName": "comprehensive.jsonc",
+          "line": 944
+        },
+        "text": "export type SimplestStringPatternCase = string;",
+        "declarationType": "Scalar",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "simplest-string-pattern-case.ts::SimplestStringPatternCase",
+      "parentId": "simplest-string-pattern-case.ts"
+    },
+    {
+      "data": {
+        "fileName": "pattern-string.ts",
+        "kind": "group",
+        "label": "pattern-string.ts",
+        "text": "export type PatternString = `${'property' | 'event'}.${'invoke' | 'assign'}.${string}`;"
+      },
+      "id": "pattern-string.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "PatternString",
+        "kind": "item",
+        "label": "PatternString",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "pattern-string.ts",
+        "sourceLocation": {
+          "col": 24,
+          "fileName": "comprehensive.jsonc",
+          "line": 954
+        },
+        "text": "export type PatternString = `${'property' | 'event'}.${'invoke' | 'assign'}.${string}`;",
+        "declarationType": "Literal",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "pattern-string.ts::PatternString",
+      "parentId": "pattern-string.ts"
+    },
+    {
+      "data": {
+        "fileName": "first-level.ts",
+        "kind": "group",
+        "label": "first-level.ts",
+        "text": "import type { ZeroLevel } from './zero-level';\nimport type { EighthLevel } from './eighth-level';\nexport interface FirstLevel extends ZeroLevel {\n  id: string;\n  children?: SecondLevel;\n}\nexport interface SecondLevel {\n  relatedItem?: FirstLevel | SecondLevel | ThirdLevel;\n}\nexport interface ThirdLevel extends SecondLevel {\n  relatedItem: FirstLevel | SecondLevel | ThirdLevel;\n  anotherRelatedItem?: FirstLevel | SecondLevel | ThirdLevel | FourthLevel;\n}\nexport interface FourthLevel extends ThirdLevel {\n  anotherRelatedItem: FirstLevel | SecondLevel | ThirdLevel | FourthLevel;\n  abstractProperty: Record<`abstract-${string}`, unknown>;\n  extendedRelatedItem?: FirstLevel | SecondLevel | ThirdLevel | FourthLevel | FifthLevel;\n}\nexport interface FifthLevel {\n  extendedRelatedItem?:\n    | FirstLevel\n    | SecondLevel\n    | ThirdLevel\n    | FourthLevel\n    | FifthLevel\n    | SixthLevel;\n}\nexport interface SixthLevel {\n  extendedRelatedItem?: FirstLevel | SeventhLevel;\n}\nexport interface SeventhLevel {\n  extendedRelatedItem?:\n    | FirstLevel\n    | SecondLevel\n    | ThirdLevel\n    | FourthLevel\n    | FifthLevel\n    | SixthLevel\n    | SeventhLevel\n    | EighthLevel;\n}"
+      },
+      "id": "first-level.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 265
+        },
+        "identifierName": "FirstLevel",
+        "kind": "item",
+        "label": "FirstLevel",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "first-level.ts",
+        "sourceLocation": {
+          "col": 21,
+          "fileName": "comprehensive.jsonc",
+          "line": 773
+        },
+        "text": "export interface FirstLevel extends ZeroLevel {\n  id: string;\n  children?: SecondLevel;\n}",
+        "declarationType": "Interface",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "first-level.ts::FirstLevel",
+      "parentId": "first-level.ts"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 265
+        },
+        "identifierName": "SecondLevel",
+        "kind": "item",
+        "label": "SecondLevel",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "second-level.ts",
+        "sourceLocation": {
+          "col": 22,
+          "fileName": "comprehensive.jsonc",
+          "line": 782
+        },
+        "text": "export interface SecondLevel {\n  relatedItem?: FirstLevel | SecondLevel | ThirdLevel;\n}",
+        "declarationType": "Interface",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "first-level.ts::SecondLevel",
+      "parentId": "first-level.ts"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 265
+        },
+        "identifierName": "ThirdLevel",
+        "kind": "item",
+        "label": "ThirdLevel",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "third-level.ts",
+        "sourceLocation": {
+          "col": 21,
+          "fileName": "comprehensive.jsonc",
+          "line": 793
+        },
+        "text": "export interface ThirdLevel extends SecondLevel {\n  relatedItem: FirstLevel | SecondLevel | ThirdLevel;\n  anotherRelatedItem?: FirstLevel | SecondLevel | ThirdLevel | FourthLevel;\n}",
+        "declarationType": "Interface",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "first-level.ts::ThirdLevel",
+      "parentId": "first-level.ts"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 265
+        },
+        "identifierName": "FourthLevel",
+        "kind": "item",
+        "label": "FourthLevel",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "fourth-level.ts",
+        "sourceLocation": {
+          "col": 22,
+          "fileName": "comprehensive.jsonc",
+          "line": 811
+        },
+        "text": "export interface FourthLevel extends ThirdLevel {\n  anotherRelatedItem: FirstLevel | SecondLevel | ThirdLevel | FourthLevel;\n  abstractProperty: Record<`abstract-${string}`, unknown>;\n  extendedRelatedItem?: FirstLevel | SecondLevel | ThirdLevel | FourthLevel | FifthLevel;\n}",
+        "declarationType": "Interface",
+        "logs": [
+          {
+            "jsoncNode": {
+              "col": 31,
+              "fileName": "comprehensive.jsonc",
+              "line": 815
+            },
+            "level": "warn",
+            "message": "Schema forcedly marked as having additional properties.\nBecause the schema has parsed property patterns.\nEncountered at:\ncomprehensive.jsonc:815:31\n  814 |         \"properties\": {                             \n> 815 |           \"abstractProperty\": {                     \n      |                               ^\n  816 |             \"propertyNames\": {                      "
+          }
+        ]
+      },
+      "extent": "parent",
+      "id": "first-level.ts::FourthLevel",
+      "parentId": "first-level.ts"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 265
+        },
+        "identifierName": "FifthLevel",
+        "kind": "item",
+        "label": "FifthLevel",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "fifth-level.ts",
+        "sourceLocation": {
+          "col": 21,
+          "fileName": "comprehensive.jsonc",
+          "line": 838
+        },
+        "text": "export interface FifthLevel {\n  extendedRelatedItem?:\n    | FirstLevel\n    | SecondLevel\n    | ThirdLevel\n    | FourthLevel\n    | FifthLevel\n    | SixthLevel;\n}",
+        "declarationType": "Interface",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "first-level.ts::FifthLevel",
+      "parentId": "first-level.ts"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 265
+        },
+        "identifierName": "SixthLevel",
+        "kind": "item",
+        "label": "SixthLevel",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "sixth-level.ts",
+        "sourceLocation": {
+          "col": 21,
+          "fileName": "comprehensive.jsonc",
+          "line": 853
+        },
+        "text": "export interface SixthLevel {\n  extendedRelatedItem?: FirstLevel | SeventhLevel;\n}",
+        "declarationType": "Interface",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "first-level.ts::SixthLevel",
+      "parentId": "first-level.ts"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 265
+        },
+        "identifierName": "SeventhLevel",
+        "kind": "item",
+        "label": "SeventhLevel",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "seventh-level.ts",
+        "sourceLocation": {
+          "col": 23,
+          "fileName": "comprehensive.jsonc",
+          "line": 863
+        },
+        "text": "export interface SeventhLevel {\n  extendedRelatedItem?:\n    | FirstLevel\n    | SecondLevel\n    | ThirdLevel\n    | FourthLevel\n    | FifthLevel\n    | SixthLevel\n    | SeventhLevel\n    | EighthLevel;\n}",
+        "declarationType": "Interface",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "first-level.ts::SeventhLevel",
+      "parentId": "first-level.ts"
+    },
+    {
+      "data": {
+        "fileName": "eighth-level.ts",
+        "kind": "group",
+        "label": "eighth-level.ts",
+        "text": "import type { NinthLevel } from './ninth-level';\nexport type EighthLevel = NinthLevel;"
+      },
+      "id": "eighth-level.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "EighthLevel",
+        "kind": "item",
+        "label": "EighthLevel",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "eighth-level.ts",
+        "sourceLocation": {
+          "col": 22,
+          "fileName": "comprehensive.jsonc",
+          "line": 880
+        },
+        "text": "export type EighthLevel = NinthLevel;",
+        "declarationType": "Alias",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "eighth-level.ts::EighthLevel",
+      "parentId": "eighth-level.ts"
+    },
+    {
+      "data": {
+        "fileName": "ninth-level.ts",
+        "kind": "group",
+        "label": "ninth-level.ts",
+        "text": "import type { ZeroLevel } from './zero-level';\nexport type NinthLevel = ZeroLevel;"
+      },
+      "id": "ninth-level.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "NinthLevel",
+        "kind": "item",
+        "label": "NinthLevel",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "ninth-level.ts",
+        "sourceLocation": {
+          "col": 21,
+          "fileName": "comprehensive.jsonc",
+          "line": 883
+        },
+        "text": "export type NinthLevel = ZeroLevel;",
+        "declarationType": "Alias",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "ninth-level.ts::NinthLevel",
+      "parentId": "ninth-level.ts"
+    },
+    {
+      "data": {
+        "fileName": "zero-level.ts",
+        "kind": "group",
+        "label": "zero-level.ts",
+        "text": "export interface ZeroLevel {\n  id?: string;\n  abstractProperty?: Record<`abstract-${string}`, unknown>;\n}"
+      },
+      "id": "zero-level.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 265
+        },
+        "identifierName": "ZeroLevel",
+        "kind": "item",
+        "label": "ZeroLevel",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "zero-level.ts",
+        "sourceLocation": {
+          "col": 20,
+          "fileName": "comprehensive.jsonc",
+          "line": 760
+        },
+        "text": "export interface ZeroLevel {\n  id?: string;\n  abstractProperty?: Record<`abstract-${string}`, unknown>;\n}",
+        "declarationType": "Interface",
+        "logs": [
+          {
+            "jsoncNode": {
+              "col": 31,
+              "fileName": "comprehensive.jsonc",
+              "line": 766
+            },
+            "level": "warn",
+            "message": "Schema forcedly marked as having additional properties.\nBecause the schema has parsed property patterns.\nEncountered at:\ncomprehensive.jsonc:766:31\n  765 |           },                                        \n> 766 |           \"abstractProperty\": {                     \n      |                               ^\n  767 |             \"propertyNames\": {                      "
+          }
+        ]
+      },
+      "extent": "parent",
+      "id": "zero-level.ts::ZeroLevel",
+      "parentId": "zero-level.ts"
+    },
+    {
+      "data": {
+        "fileName": "simple-one-of-union-with-mixed-types.ts",
+        "kind": "group",
+        "label": "simple-one-of-union-with-mixed-types.ts",
+        "text": "import type { SimpleObjectWithPattern } from './simple-object-with-pattern';\nexport type SimpleOneOfUnionWithMixedTypes =\n  | {\n      id?: string;\n      content?: Blob;\n    }\n  | SimpleObjectWithPattern[]\n  | (null | string);"
+      },
+      "id": "simple-one-of-union-with-mixed-types.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "SimpleOneOfUnionWithMixedTypes",
+        "kind": "item",
+        "label": "SimpleOneOfUnionWithMixedTypes",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "simple-one-of-union-with-mixed-types.ts",
+        "sourceLocation": {
+          "col": 41,
+          "fileName": "comprehensive.jsonc",
+          "line": 732
+        },
+        "text": "export type SimpleOneOfUnionWithMixedTypes =\n  | {\n      id?: string;\n      content?: Blob;\n    }\n  | SimpleObjectWithPattern[]\n  | (null | string);",
+        "declarationType": "Union",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "simple-one-of-union-with-mixed-types.ts::SimpleOneOfUnionWithMixedTypes",
+      "parentId": "simple-one-of-union-with-mixed-types.ts"
+    },
+    {
+      "data": {
+        "fileName": "simple-one-of-union-with-objects.ts",
+        "kind": "group",
+        "label": "simple-one-of-union-with-objects.ts",
+        "text": "export type SimpleOneOfUnionWithObjects =\n  | {\n      id?: string;\n      content?: Blob;\n      title?: never;\n    }\n  | {\n      id: unknown;\n      content: unknown;\n      title?: never;\n    }\n  | {\n      content?: string;\n      id?: never;\n      title?: never;\n    }\n  | {\n      title?: string;\n      id?: never;\n      content?: never;\n    };"
+      },
+      "id": "simple-one-of-union-with-objects.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "SimpleOneOfUnionWithObjects",
+        "kind": "item",
+        "label": "SimpleOneOfUnionWithObjects",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "simple-one-of-union-with-objects.ts",
+        "sourceLocation": {
+          "col": 38,
+          "fileName": "comprehensive.jsonc",
+          "line": 697
+        },
+        "text": "export type SimpleOneOfUnionWithObjects =\n  | {\n      id?: string;\n      content?: Blob;\n      title?: never;\n    }\n  | {\n      id: unknown;\n      content: unknown;\n      title?: never;\n    }\n  | {\n      content?: string;\n      id?: never;\n      title?: never;\n    }\n  | {\n      title?: string;\n      id?: never;\n      content?: never;\n    };",
+        "declarationType": "Union",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "simple-one-of-union-with-objects.ts::SimpleOneOfUnionWithObjects",
+      "parentId": "simple-one-of-union-with-objects.ts"
+    },
+    {
+      "data": {
+        "fileName": "simple-one-of-union-with-refs-to-objects.ts",
+        "kind": "group",
+        "label": "simple-one-of-union-with-refs-to-objects.ts",
+        "text": "import type { SimpleObjectWithPattern } from './simple-object-with-pattern';\nimport type { SimpleObjectWithProperties } from './simple-object-with-properties';\nimport type { AnotherSimpleObjectWithProperties } from './another-simple-object-with-properties';\nexport type SimpleOneOfUnionWithRefsToObjects =\n  | SimpleObjectWithPattern\n  | SimpleObjectWithProperties\n  | AnotherSimpleObjectWithProperties;"
+      },
+      "id": "simple-one-of-union-with-refs-to-objects.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "SimpleOneOfUnionWithRefsToObjects",
+        "kind": "item",
+        "label": "SimpleOneOfUnionWithRefsToObjects",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "simple-one-of-union-with-refs-to-objects.ts",
+        "sourceLocation": {
+          "col": 44,
+          "fileName": "comprehensive.jsonc",
+          "line": 684
+        },
+        "text": "export type SimpleOneOfUnionWithRefsToObjects =\n  | SimpleObjectWithPattern\n  | SimpleObjectWithProperties\n  | AnotherSimpleObjectWithProperties;",
+        "declarationType": "Union",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "simple-one-of-union-with-refs-to-objects.ts::SimpleOneOfUnionWithRefsToObjects",
+      "parentId": "simple-one-of-union-with-refs-to-objects.ts"
+    },
+    {
+      "data": {
+        "fileName": "another-simple-object-with-properties.ts",
+        "kind": "group",
+        "label": "another-simple-object-with-properties.ts",
+        "text": "export interface AnotherSimpleObjectWithProperties {\n  content: Record<string, unknown>;\n  title?: string;\n}"
+      },
+      "id": "another-simple-object-with-properties.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 265
+        },
+        "identifierName": "AnotherSimpleObjectWithProperties",
+        "kind": "item",
+        "label": "AnotherSimpleObjectWithProperties",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "another-simple-object-with-properties.ts",
+        "sourceLocation": {
+          "col": 44,
+          "fileName": "comprehensive.jsonc",
+          "line": 929
+        },
+        "text": "export interface AnotherSimpleObjectWithProperties {\n  content: Record<string, unknown>;\n  title?: string;\n}",
+        "declarationType": "Interface",
+        "logs": [
+          {
+            "jsoncNode": {
+              "col": 22,
+              "fileName": "comprehensive.jsonc",
+              "line": 934
+            },
+            "level": "warn",
+            "message": "Unable to correctly parse object at $defs.SimplestObjectCases.AnotherSimpleObjectWithProperties.properties.content\nUsed Record<string, unknown> as a fallback.\nEncountered at:\ncomprehensive.jsonc:934:22\n  933 |           },                                        \n> 934 |           \"content\": {                              \n      |                      ^\n  935 |             \"type\": \"object\"                        "
+          }
+        ]
+      },
+      "extent": "parent",
+      "id": "another-simple-object-with-properties.ts::AnotherSimpleObjectWithProperties",
+      "parentId": "another-simple-object-with-properties.ts"
+    },
+    {
+      "data": {
+        "fileName": "simple-one-of-union-with-refs-to-array.ts",
+        "kind": "group",
+        "label": "simple-one-of-union-with-refs-to-array.ts",
+        "text": "import type { ArrayMinMaxWithRefs } from './array-min-max-with-refs';\nimport type { ArrayMinScalar } from './array-min-scalar';\nimport type { ArrayScalar } from './array-scalar';\nexport type SimpleOneOfUnionWithRefsToArray =\n  | ArrayMinMaxWithRefs\n  | ArrayMinScalar\n  | ArrayScalar;"
+      },
+      "id": "simple-one-of-union-with-refs-to-array.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "SimpleOneOfUnionWithRefsToArray",
+        "kind": "item",
+        "label": "SimpleOneOfUnionWithRefsToArray",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "simple-one-of-union-with-refs-to-array.ts",
+        "sourceLocation": {
+          "col": 42,
+          "fileName": "comprehensive.jsonc",
+          "line": 671
+        },
+        "text": "export type SimpleOneOfUnionWithRefsToArray =\n  | ArrayMinMaxWithRefs\n  | ArrayMinScalar\n  | ArrayScalar;",
+        "declarationType": "Union",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "simple-one-of-union-with-refs-to-array.ts::SimpleOneOfUnionWithRefsToArray",
+      "parentId": "simple-one-of-union-with-refs-to-array.ts"
+    },
+    {
+      "data": {
+        "fileName": "object-if-then-else-enum-with-mixin.ts",
+        "kind": "group",
+        "label": "object-if-then-else-enum-with-mixin.ts",
+        "text": "export type ObjectIfThenElseEnumWithMixin = Record<string, unknown> &\n  (\n    | {\n        type?: 'plants';\n        angiosperms?: 'monocots' | 'eudicots';\n      }\n    | {\n        type?: 'animals';\n        iEumetazoa?: boolean;\n      }\n  );"
+      },
+      "id": "object-if-then-else-enum-with-mixin.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "ObjectIfThenElseEnumWithMixin",
+        "kind": "item",
+        "label": "ObjectIfThenElseEnumWithMixin",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "object-if-then-else-enum-with-mixin.ts",
+        "sourceLocation": {
+          "col": 40,
+          "fileName": "comprehensive.jsonc",
+          "line": 634
+        },
+        "text": "export type ObjectIfThenElseEnumWithMixin = Record<string, unknown> &\n  (\n    | {\n        type?: 'plants';\n        angiosperms?: 'monocots' | 'eudicots';\n      }\n    | {\n        type?: 'animals';\n        iEumetazoa?: boolean;\n      }\n  );",
+        "declarationType": "Intersection",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "object-if-then-else-enum-with-mixin.ts::ObjectIfThenElseEnumWithMixin",
+      "parentId": "object-if-then-else-enum-with-mixin.ts"
+    },
+    {
+      "data": {
+        "fileName": "non-working-exclusion-from-union-by-any-of.ts",
+        "kind": "group",
+        "label": "non-working-exclusion-from-union-by-any-of.ts",
+        "text": "import type { SimpleUnionWithRefs } from './simple-union-with-refs';\n/**\n * @privateRemarks\n *\n * The 'not' will be ignored in current implementation\n */\nexport type NonWorkingExclusionFromUnionByAnyOf = SimpleUnionWithRefs;"
+      },
+      "id": "non-working-exclusion-from-union-by-any-of.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "NonWorkingExclusionFromUnionByAnyOf",
+        "kind": "item",
+        "label": "NonWorkingExclusionFromUnionByAnyOf",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "non-working-exclusion-from-union-by-any-of.ts",
+        "sourceLocation": {
+          "col": 46,
+          "fileName": "comprehensive.jsonc",
+          "line": 621
+        },
+        "text": "/**\n * @privateRemarks\n *\n * The 'not' will be ignored in current implementation\n */\nexport type NonWorkingExclusionFromUnionByAnyOf = SimpleUnionWithRefs;",
+        "declarationType": "Alias",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "non-working-exclusion-from-union-by-any-of.ts::NonWorkingExclusionFromUnionByAnyOf",
+      "parentId": "non-working-exclusion-from-union-by-any-of.ts"
+    },
+    {
+      "data": {
+        "fileName": "exclusion-from-union.ts",
+        "kind": "group",
+        "label": "exclusion-from-union.ts",
+        "text": "import type { ArrayMinMaxWithRefs } from './array-min-max-with-refs';\nimport type { ArrayScalar } from './array-scalar';\nexport type ExclusionFromUnion = ArrayMinMaxWithRefs | ArrayScalar;"
+      },
+      "id": "exclusion-from-union.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "ExclusionFromUnion",
+        "kind": "item",
+        "label": "ExclusionFromUnion",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "exclusion-from-union.ts",
+        "sourceLocation": {
+          "col": 30,
+          "fileName": "comprehensive.jsonc",
+          "line": 614
+        },
+        "text": "export type ExclusionFromUnion = ArrayMinMaxWithRefs | ArrayScalar;",
+        "declarationType": "Union",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "exclusion-from-union.ts::ExclusionFromUnion",
+      "parentId": "exclusion-from-union.ts"
+    },
+    {
+      "data": {
+        "fileName": "simple-union-with-refs.ts",
+        "kind": "group",
+        "label": "simple-union-with-refs.ts",
+        "text": "import type { ArrayMinMaxWithRefs } from './array-min-max-with-refs';\nimport type { ArrayMinScalar } from './array-min-scalar';\nimport type { ArrayScalar } from './array-scalar';\nexport type SimpleUnionWithRefs = ArrayMinMaxWithRefs | ArrayMinScalar | ArrayScalar;"
+      },
+      "id": "simple-union-with-refs.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "SimpleUnionWithRefs",
+        "kind": "item",
+        "label": "SimpleUnionWithRefs",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "simple-union-with-refs.ts",
+        "sourceLocation": {
+          "col": 30,
+          "fileName": "comprehensive.jsonc",
+          "line": 614
+        },
+        "text": "export type SimpleUnionWithRefs = ArrayMinMaxWithRefs | ArrayMinScalar | ArrayScalar;",
+        "declarationType": "Union",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "simple-union-with-refs.ts::SimpleUnionWithRefs",
+      "parentId": "simple-union-with-refs.ts"
+    },
+    {
+      "data": {
+        "fileName": "array-scalar.ts",
+        "kind": "group",
+        "label": "array-scalar.ts",
+        "text": "export type ArrayScalar = number[];"
+      },
+      "id": "array-scalar.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "ArrayScalar",
+        "kind": "item",
+        "label": "ArrayScalar",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "array-scalar.ts",
+        "sourceLocation": {
+          "col": 22,
+          "fileName": "comprehensive.jsonc",
+          "line": 960
+        },
+        "text": "export type ArrayScalar = number[];",
+        "declarationType": "Array",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "array-scalar.ts::ArrayScalar",
+      "parentId": "array-scalar.ts"
+    },
+    {
+      "data": {
+        "fileName": "array-min-scalar.ts",
+        "kind": "group",
+        "label": "array-min-scalar.ts",
+        "text": "export type ArrayMinScalar = [string, string, ...string[]];"
+      },
+      "id": "array-min-scalar.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "ArrayMinScalar",
+        "kind": "item",
+        "label": "ArrayMinScalar",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "array-min-scalar.ts",
+        "sourceLocation": {
+          "col": 25,
+          "fileName": "comprehensive.jsonc",
+          "line": 963
+        },
+        "text": "export type ArrayMinScalar = [string, string, ...string[]];",
+        "declarationType": "Array",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "array-min-scalar.ts::ArrayMinScalar",
+      "parentId": "array-min-scalar.ts"
+    },
+    {
+      "data": {
+        "fileName": "array-min-max-with-refs.ts",
+        "kind": "group",
+        "label": "array-min-max-with-refs.ts",
+        "text": "import type { SimpleObjectWithPattern } from './simple-object-with-pattern';\nexport type ArrayMinMaxWithRefs =\n  | [SimpleObjectWithPattern, SimpleObjectWithPattern]\n  | [SimpleObjectWithPattern, SimpleObjectWithPattern, SimpleObjectWithPattern]\n  | [\n      SimpleObjectWithPattern,\n      SimpleObjectWithPattern,\n      SimpleObjectWithPattern,\n      SimpleObjectWithPattern,\n    ]\n  | [\n      SimpleObjectWithPattern,\n      SimpleObjectWithPattern,\n      SimpleObjectWithPattern,\n      SimpleObjectWithPattern,\n      SimpleObjectWithPattern,\n    ];"
+      },
+      "id": "array-min-max-with-refs.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "ArrayMinMaxWithRefs",
+        "kind": "item",
+        "label": "ArrayMinMaxWithRefs",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "array-min-max-with-refs.ts",
+        "sourceLocation": {
+          "col": 30,
+          "fileName": "comprehensive.jsonc",
+          "line": 967
+        },
+        "text": "export type ArrayMinMaxWithRefs =\n  | [SimpleObjectWithPattern, SimpleObjectWithPattern]\n  | [SimpleObjectWithPattern, SimpleObjectWithPattern, SimpleObjectWithPattern]\n  | [\n      SimpleObjectWithPattern,\n      SimpleObjectWithPattern,\n      SimpleObjectWithPattern,\n      SimpleObjectWithPattern,\n    ]\n  | [\n      SimpleObjectWithPattern,\n      SimpleObjectWithPattern,\n      SimpleObjectWithPattern,\n      SimpleObjectWithPattern,\n      SimpleObjectWithPattern,\n    ];",
+        "declarationType": "Union",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "array-min-max-with-refs.ts::ArrayMinMaxWithRefs",
+      "parentId": "array-min-max-with-refs.ts"
+    },
+    {
+      "data": {
+        "fileName": "inline-object-nested-composition.ts",
+        "kind": "group",
+        "label": "inline-object-nested-composition.ts",
+        "text": "export type InlineObjectNestedComposition = Record<`prop-${string}`, unknown> & {\n  id: string;\n  payload: Blob;\n};"
+      },
+      "id": "inline-object-nested-composition.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "InlineObjectNestedComposition",
+        "kind": "item",
+        "label": "InlineObjectNestedComposition",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "inline-object-nested-composition.ts",
+        "sourceLocation": {
+          "col": 40,
+          "fileName": "comprehensive.jsonc",
+          "line": 376
+        },
+        "text": "export type InlineObjectNestedComposition = Record<`prop-${string}`, unknown> & {\n  id: string;\n  payload: Blob;\n};",
+        "declarationType": "Intersection",
+        "logs": [
+          {
+            "jsoncNode": {
+              "col": 19,
+              "fileName": "comprehensive.jsonc",
+              "line": 409
+            },
+            "level": "warn",
+            "message": "Schema forcedly marked as having additional properties.\nBecause the schema has parsed property patterns.\nEncountered at:\ncomprehensive.jsonc:409:19\n  408 |                   },                                \n> 409 |                   {                                 \n      |                   ^\n  410 |                     \"propertyNames\": {              "
+          }
+        ]
+      },
+      "extent": "parent",
+      "id": "inline-object-nested-composition.ts::InlineObjectNestedComposition",
+      "parentId": "inline-object-nested-composition.ts"
+    },
+    {
+      "data": {
+        "fileName": "inline-array-nested-composition.ts",
+        "kind": "group",
+        "label": "inline-array-nested-composition.ts",
+        "text": "export type InlineArrayNestedComposition = [boolean, 0 | 1, ...(0 | 1)[]];"
+      },
+      "id": "inline-array-nested-composition.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "InlineArrayNestedComposition",
+        "kind": "item",
+        "label": "InlineArrayNestedComposition",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "inline-array-nested-composition.ts",
+        "sourceLocation": {
+          "col": 39,
+          "fileName": "comprehensive.jsonc",
+          "line": 474
+        },
+        "text": "export type InlineArrayNestedComposition = [boolean, 0 | 1, ...(0 | 1)[]];",
+        "declarationType": "Array",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "inline-array-nested-composition.ts::InlineArrayNestedComposition",
+      "parentId": "inline-array-nested-composition.ts"
+    },
+    {
+      "data": {
+        "fileName": "inline-array-min-max-items-prefix-items-composition.ts",
+        "kind": "group",
+        "label": "inline-array-min-max-items-prefix-items-composition.ts",
+        "text": "export type InlineArrayMinMaxItemsPrefixItemsComposition =\n  | [boolean, boolean]\n  | [\n      boolean,\n      boolean,\n      {\n        id: string;\n        payload: unknown;\n      },\n    ]\n  | [\n      boolean,\n      boolean,\n      {\n        id: string;\n        payload: unknown;\n      },\n      {\n        id: string;\n        payload: unknown;\n      },\n    ];"
+      },
+      "id": "inline-array-min-max-items-prefix-items-composition.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "InlineArrayMinMaxItemsPrefixItemsComposition",
+        "kind": "item",
+        "label": "InlineArrayMinMaxItemsPrefixItemsComposition",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "inline-array-min-max-items-prefix-items-composition.ts",
+        "sourceLocation": {
+          "col": 55,
+          "fileName": "comprehensive.jsonc",
+          "line": 446
+        },
+        "text": "export type InlineArrayMinMaxItemsPrefixItemsComposition =\n  | [boolean, boolean]\n  | [\n      boolean,\n      boolean,\n      {\n        id: string;\n        payload: unknown;\n      },\n    ]\n  | [\n      boolean,\n      boolean,\n      {\n        id: string;\n        payload: unknown;\n      },\n      {\n        id: string;\n        payload: unknown;\n      },\n    ];",
+        "declarationType": "Union",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "inline-array-min-max-items-prefix-items-composition.ts::InlineArrayMinMaxItemsPrefixItemsComposition",
+      "parentId": "inline-array-min-max-items-prefix-items-composition.ts"
+    },
+    {
+      "data": {
+        "fileName": "inline-array-min-items-prefix-items-composition.ts",
+        "kind": "group",
+        "label": "inline-array-min-items-prefix-items-composition.ts",
+        "text": "export type InlineArrayMinItemsPrefixItemsComposition = [\n  boolean,\n  {\n    id: number;\n    payload: unknown;\n  },\n  ...{\n    id: number;\n    payload: unknown;\n  }[],\n];"
+      },
+      "id": "inline-array-min-items-prefix-items-composition.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "InlineArrayMinItemsPrefixItemsComposition",
+        "kind": "item",
+        "label": "InlineArrayMinItemsPrefixItemsComposition",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "inline-array-min-items-prefix-items-composition.ts",
+        "sourceLocation": {
+          "col": 52,
+          "fileName": "comprehensive.jsonc",
+          "line": 420
+        },
+        "text": "export type InlineArrayMinItemsPrefixItemsComposition = [\n  boolean,\n  {\n    id: number;\n    payload: unknown;\n  },\n  ...{\n    id: number;\n    payload: unknown;\n  }[],\n];",
+        "declarationType": "Array",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "inline-array-min-items-prefix-items-composition.ts::InlineArrayMinItemsPrefixItemsComposition",
+      "parentId": "inline-array-min-items-prefix-items-composition.ts"
+    },
+    {
+      "data": {
+        "fileName": "referred-types-composition-and-inline.ts",
+        "kind": "group",
+        "label": "referred-types-composition-and-inline.ts",
+        "text": "import type { InlineObjectCompositionProperties } from './inline-object-composition-properties';\nimport type { InlineObjectCompositionPropertiesWithNot } from './inline-object-composition-properties-with-not';\nimport type { InlineObjectCompositionPatterns } from './inline-object-composition-patterns';\nimport type { InlineObjectCompositionPropertiesAndPatterns } from './inline-object-composition-properties-and-patterns';\nimport type { InlineMixedComposition } from './inline-mixed-composition';\n/**\n * ## Intersection of `null` type\n *\n * Demonstrates composition of references, inline types and inappropriate types for intersection.\n *\n * @privateRemarks\n *\n * ###### allOf.1\n * It has to be combined with `properties`-section from previous part to get `{  id: string; }`.\n *\n * ###### Intersection of `null` type\n * This is inappropriate type for this intersection. But there is ready solution for this case. It leaves up to you at designing time.\n */\nexport type ReferredTypesCompositionAndInline = {\n  id: string;\n} & null &\n  InlineObjectCompositionProperties &\n  InlineObjectCompositionPropertiesWithNot &\n  InlineObjectCompositionPatterns &\n  InlineObjectCompositionPropertiesAndPatterns &\n  InlineMixedComposition;"
+      },
+      "id": "referred-types-composition-and-inline.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "ReferredTypesCompositionAndInline",
+        "kind": "item",
+        "label": "ReferredTypesCompositionAndInline",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "referred-types-composition-and-inline.ts",
+        "sourceLocation": {
+          "col": 44,
+          "fileName": "comprehensive.jsonc",
+          "line": 566
+        },
+        "text": "/**\n * ## Intersection of `null` type\n *\n * Demonstrates composition of references, inline types and inappropriate types for intersection.\n *\n * @privateRemarks\n *\n * ###### allOf.1\n * It has to be combined with `properties`-section from previous part to get `{  id: string; }`.\n *\n * ###### Intersection of `null` type\n * This is inappropriate type for this intersection. But there is ready solution for this case. It leaves up to you at designing time.\n */\nexport type ReferredTypesCompositionAndInline = {\n  id: string;\n} & null &\n  InlineObjectCompositionProperties &\n  InlineObjectCompositionPropertiesWithNot &\n  InlineObjectCompositionPatterns &\n  InlineObjectCompositionPropertiesAndPatterns &\n  InlineMixedComposition;",
+        "declarationType": "Intersection",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "referred-types-composition-and-inline.ts::ReferredTypesCompositionAndInline",
+      "parentId": "referred-types-composition-and-inline.ts"
+    },
+    {
+      "data": {
+        "fileName": "referred-types-composition.ts",
+        "kind": "group",
+        "label": "referred-types-composition.ts",
+        "text": "import type { InlineObjectCompositionProperties } from './inline-object-composition-properties';\nimport type { InlineObjectCompositionPropertiesWithNot } from './inline-object-composition-properties-with-not';\nimport type { InlineObjectCompositionPatterns } from './inline-object-composition-patterns';\nimport type { InlineObjectCompositionPropertiesAndPatterns } from './inline-object-composition-properties-and-patterns';\nimport type { InlineMixedComposition } from './inline-mixed-composition';\nexport type ReferredTypesComposition = InlineObjectCompositionProperties &\n  InlineObjectCompositionPropertiesWithNot &\n  InlineObjectCompositionPatterns &\n  InlineObjectCompositionPropertiesAndPatterns &\n  InlineMixedComposition;"
+      },
+      "id": "referred-types-composition.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "ReferredTypesComposition",
+        "kind": "item",
+        "label": "ReferredTypesComposition",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "referred-types-composition.ts",
+        "sourceLocation": {
+          "col": 35,
+          "fileName": "comprehensive.jsonc",
+          "line": 547
+        },
+        "text": "export type ReferredTypesComposition = InlineObjectCompositionProperties &\n  InlineObjectCompositionPropertiesWithNot &\n  InlineObjectCompositionPatterns &\n  InlineObjectCompositionPropertiesAndPatterns &\n  InlineMixedComposition;",
+        "declarationType": "Intersection",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "referred-types-composition.ts::ReferredTypesComposition",
+      "parentId": "referred-types-composition.ts"
+    },
+    {
+      "data": {
+        "fileName": "inline-mixed-composition.ts",
+        "kind": "group",
+        "label": "inline-mixed-composition.ts",
+        "text": "/**\n * This case has issue. We can't provide any suggestion how to mix non-compatible types.\n */\nexport type InlineMixedComposition = (Record<`X_${string}`, string> & {\n  id: string;\n}) &\n  `X-VALUE-${string}` &\n  {\n    itemTitle: string;\n    itemDescription?: string;\n  }[];"
+      },
+      "id": "inline-mixed-composition.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "InlineMixedComposition",
+        "kind": "item",
+        "label": "InlineMixedComposition",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "inline-mixed-composition.ts",
+        "sourceLocation": {
+          "col": 33,
+          "fileName": "comprehensive.jsonc",
+          "line": 499
+        },
+        "text": "/**\n * This case has issue. We can't provide any suggestion how to mix non-compatible types.\n */\nexport type InlineMixedComposition = (Record<`X_${string}`, string> & {\n  id: string;\n}) &\n  `X-VALUE-${string}` &\n  {\n    itemTitle: string;\n    itemDescription?: string;\n  }[];",
+        "declarationType": "Intersection",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "inline-mixed-composition.ts::InlineMixedComposition",
+      "parentId": "inline-mixed-composition.ts"
+    },
+    {
+      "data": {
+        "fileName": "inline-object-composition-properties-and-patterns.ts",
+        "kind": "group",
+        "label": "inline-object-composition-properties-and-patterns.ts",
+        "text": "export type InlineObjectCompositionPropertiesAndPatterns = Record<\n  `X_${string}`,\n  string | number\n> & {\n  id: string;\n  isActive: boolean;\n  description?: string;\n  title?: string;\n};"
+      },
+      "id": "inline-object-composition-properties-and-patterns.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "InlineObjectCompositionPropertiesAndPatterns",
+        "kind": "item",
+        "label": "InlineObjectCompositionPropertiesAndPatterns",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "inline-object-composition-properties-and-patterns.ts",
+        "sourceLocation": {
+          "col": 55,
+          "fileName": "comprehensive.jsonc",
+          "line": 338
+        },
+        "text": "export type InlineObjectCompositionPropertiesAndPatterns = Record<\n  `X_${string}`,\n  string | number\n> & {\n  id: string;\n  isActive: boolean;\n  description?: string;\n  title?: string;\n};",
+        "declarationType": "Intersection",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "inline-object-composition-properties-and-patterns.ts::InlineObjectCompositionPropertiesAndPatterns",
+      "parentId": "inline-object-composition-properties-and-patterns.ts"
+    },
+    {
+      "data": {
+        "fileName": "inline-object-composition-patterns.ts",
+        "kind": "group",
+        "label": "inline-object-composition-patterns.ts",
+        "text": "export type InlineObjectCompositionPatterns = Record<\n  string,\n  {\n    isActivated: boolean;\n    forbiddenProperty?: never;\n    anotherForbiddenProperty?: never;\n    description: string;\n  }\n> &\n  Record<\n    `CORE_PROP_${string}`,\n    {\n      name: string;\n      isActivated?: boolean;\n      extendedOptions?: Record<string, unknown>;\n    }\n  > &\n  Record<\n    `EXTENDED_PROP_${string}`,\n    {\n      corePropertyRef: string;\n      isActivated?: boolean;\n    }\n  >;"
+      },
+      "id": "inline-object-composition-patterns.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "InlineObjectCompositionPatterns",
+        "kind": "item",
+        "label": "InlineObjectCompositionPatterns",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "inline-object-composition-patterns.ts",
+        "sourceLocation": {
+          "col": 42,
+          "fileName": "comprehensive.jsonc",
+          "line": 233
+        },
+        "text": "export type InlineObjectCompositionPatterns = Record<\n  string,\n  {\n    isActivated: boolean;\n    forbiddenProperty?: never;\n    anotherForbiddenProperty?: never;\n    description: string;\n  }\n> &\n  Record<\n    `CORE_PROP_${string}`,\n    {\n      name: string;\n      isActivated?: boolean;\n      extendedOptions?: Record<string, unknown>;\n    }\n  > &\n  Record<\n    `EXTENDED_PROP_${string}`,\n    {\n      corePropertyRef: string;\n      isActivated?: boolean;\n    }\n  >;",
+        "declarationType": "Intersection",
+        "logs": [
+          {
+            "jsoncNode": {
+              "col": 47,
+              "fileName": "comprehensive.jsonc",
+              "line": 271
+            },
+            "level": "warn",
+            "message": "Property at \"$defs.AllOfCases.InlineObjectCompositionPatterns.allOf.3.not.additionalProperties.properties.anotherForbiddenProperty\" was processed as `unknown`.\nEncountered at:\ncomprehensive.jsonc:271:47\n  270 |                 \"properties\": {                     \n> 271 |                   \"anotherForbiddenProperty\": {}    \n      |                                               ^\n  272 |                 }                                   "
+          },
+          {
+            "jsoncNode": {
+              "col": 45,
+              "fileName": "comprehensive.jsonc",
+              "line": 309
+            },
+            "level": "warn",
+            "message": "Property at \"$defs.AllOfCases.InlineObjectCompositionPatterns.allOf.6.patternProperties.^CORE_PROP_[A-Z0-9_]+$.not.properties.exampleForbiddenProp\" was processed as `unknown`.\nEncountered at:\ncomprehensive.jsonc:309:45\n  308 |                   \"properties\": {                   \n> 309 |                     \"exampleForbiddenProp\": {}      \n      |                                             ^\n  310 |                   },                                "
+          },
+          {
+            "jsoncNode": {
+              "col": 38,
+              "fileName": "comprehensive.jsonc",
+              "line": 297
+            },
+            "level": "warn",
+            "message": "Unable to correctly parse object at $defs.AllOfCases.InlineObjectCompositionPatterns.allOf.5.patternProperties.^CORE_PROP_[A-Z0-9_]+$.properties.extendedOptions\nUsed Record<string, unknown> as a fallback.\nEncountered at:\ncomprehensive.jsonc:297:38\n  296 |                 \"properties\": {                     \n> 297 |                   \"extendedOptions\": {              \n      |                                      ^\n  298 |                     \"type\": \"object\"                "
+          }
+        ]
+      },
+      "extent": "parent",
+      "id": "inline-object-composition-patterns.ts::InlineObjectCompositionPatterns",
+      "parentId": "inline-object-composition-patterns.ts"
+    },
+    {
+      "data": {
+        "fileName": "inline-object-composition-properties-with-not.ts",
+        "kind": "group",
+        "label": "inline-object-composition-properties-with-not.ts",
+        "text": "export interface InlineObjectCompositionPropertiesWithNot {\n  id?: string;\n  unprotectedProp?: never;\n  nonRequiredUnprotectedProp?: never;\n}"
+      },
+      "id": "inline-object-composition-properties-with-not.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 265
+        },
+        "identifierName": "InlineObjectCompositionPropertiesWithNot",
+        "kind": "item",
+        "label": "InlineObjectCompositionPropertiesWithNot",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "inline-object-composition-properties-with-not.ts",
+        "sourceLocation": {
+          "col": 11,
+          "fileName": "comprehensive.jsonc",
+          "line": 202
+        },
+        "text": "/**\n * Similar to the `InlineObjectCompositionProperties` case, but containing 'not' condition. All allOf-items has to be merged into one object type to be rendered as a TypeScript interface.\n */\nexport interface InlineObjectCompositionPropertiesWithNot {\n  id?: string;\n  unprotectedProp?: never;\n  nonRequiredUnprotectedProp?: never;\n}",
+        "declarationType": "Interface",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "inline-object-composition-properties-with-not.ts::InlineObjectCompositionPropertiesWithNot",
+      "parentId": "inline-object-composition-properties-with-not.ts"
+    },
+    {
+      "data": {
+        "fileName": "inline-object-composition-properties.ts",
+        "kind": "group",
+        "label": "inline-object-composition-properties.ts",
+        "text": "import type { SimpleObjectWithPattern } from './simple-object-with-pattern';\nimport type { SimpleObjectWithProperties } from './simple-object-with-properties';\nimport type { UserRoleEnum } from './user-role-enum';\n/**\n * An allOf-composition of object type aspects has to be merged into one and rendered as a TypeScript interface.\n *\n * @privateRemarks\n *\n * Required `type` and `unknownProperty` MUST NOT be unknown in th resulting schema!\n *\n * ###### allOf.1\n * Enum type of the `type` extended by `'inherited'`\n */\nexport interface InlineObjectCompositionProperties {\n  type: ['inherited', 'hasOnlyProperties', 'emptyObject'];\n  unknownProperty: unknown;\n  payload: SimpleObjectWithPattern | SimpleObjectWithProperties;\n  group?: ['CoreProperty', 'BusinessProperty', 'TechnicalProperty'];\n  tags?: ('Application' | 'Component' | 'Extension' | 'Legacy')[];\n  role: UserRoleEnum | null;\n}"
+      },
+      "id": "inline-object-composition-properties.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 265
+        },
+        "identifierName": "InlineObjectCompositionProperties",
+        "kind": "item",
+        "label": "InlineObjectCompositionProperties",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "inline-object-composition-properties.ts",
+        "sourceLocation": {
+          "col": 44,
+          "fileName": "comprehensive.jsonc",
+          "line": 105
+        },
+        "text": "/**\n * An allOf-composition of object type aspects has to be merged into one and rendered as a TypeScript interface.\n *\n * @privateRemarks\n *\n * Required `type` and `unknownProperty` MUST NOT be unknown in th resulting schema!\n *\n * ###### allOf.1\n * Enum type of the `type` extended by `'inherited'`\n */\nexport interface InlineObjectCompositionProperties {\n  type: ['inherited', 'hasOnlyProperties', 'emptyObject'];\n  unknownProperty: unknown;\n  payload: SimpleObjectWithPattern | SimpleObjectWithProperties;\n  group?: ['CoreProperty', 'BusinessProperty', 'TechnicalProperty'];\n  tags?: ('Application' | 'Component' | 'Extension' | 'Legacy')[];\n  role: UserRoleEnum | null;\n}",
+        "declarationType": "Interface",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "inline-object-composition-properties.ts::InlineObjectCompositionProperties",
+      "parentId": "inline-object-composition-properties.ts"
+    },
+    {
+      "data": {
+        "fileName": "user-role-enum.ts",
+        "kind": "group",
+        "label": "user-role-enum.ts",
+        "text": "export type UserRoleEnum = 'admin' | 'user' | 'guest';"
+      },
+      "id": "user-role-enum.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "UserRoleEnum",
+        "kind": "item",
+        "label": "UserRoleEnum",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "user-role-enum.ts",
+        "sourceLocation": {
+          "col": 23,
+          "fileName": "comprehensive.jsonc",
+          "line": 947
+        },
+        "text": "export type UserRoleEnum = 'admin' | 'user' | 'guest';",
+        "declarationType": "Union",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "user-role-enum.ts::UserRoleEnum",
+      "parentId": "user-role-enum.ts"
+    },
+    {
+      "data": {
+        "fileName": "simple-object-with-properties.ts",
+        "kind": "group",
+        "label": "simple-object-with-properties.ts",
+        "text": "export interface SimpleObjectWithProperties {\n  content: SimpleObjectWithProperties[] | null;\n  id?: string;\n}"
+      },
+      "id": "simple-object-with-properties.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 265
+        },
+        "identifierName": "SimpleObjectWithProperties",
+        "kind": "item",
+        "label": "SimpleObjectWithProperties",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "simple-object-with-properties.ts",
+        "sourceLocation": {
+          "col": 37,
+          "fileName": "comprehensive.jsonc",
+          "line": 912
+        },
+        "text": "export interface SimpleObjectWithProperties {\n  content: SimpleObjectWithProperties[] | null;\n  id?: string;\n}",
+        "declarationType": "Interface",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "simple-object-with-properties.ts::SimpleObjectWithProperties",
+      "parentId": "simple-object-with-properties.ts"
+    },
+    {
+      "data": {
+        "fileName": "simple-object-with-pattern.ts",
+        "kind": "group",
+        "label": "simple-object-with-pattern.ts",
+        "text": "export type SimpleObjectWithPattern = Record<\n  `${'int' | 'str' | 'bool'}_${string}`,\n  unknown\n>;"
+      },
+      "id": "simple-object-with-pattern.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "SimpleObjectWithPattern",
+        "kind": "item",
+        "label": "SimpleObjectWithPattern",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "simple-object-with-pattern.ts",
+        "sourceLocation": {
+          "col": 34,
+          "fileName": "comprehensive.jsonc",
+          "line": 907
+        },
+        "text": "export type SimpleObjectWithPattern = Record<\n  `${'int' | 'str' | 'bool'}_${string}`,\n  unknown\n>;",
+        "declarationType": "Record",
+        "logs": [
+          {
+            "jsoncNode": {
+              "col": 34,
+              "fileName": "comprehensive.jsonc",
+              "line": 907
+            },
+            "level": "warn",
+            "message": "Schema forcedly marked as having additional properties.\nBecause the schema has parsed property patterns.\nEncountered at:\ncomprehensive.jsonc:907:34\n  906 |     \"SimplestObjectCases\": {                        \n> 907 |       \"SimpleObjectWithPattern\": {                  \n      |                                  ^\n  908 |         \"propertyNames\": {                          "
+          }
+        ]
+      },
+      "extent": "parent",
+      "id": "simple-object-with-pattern.ts::SimpleObjectWithPattern",
+      "parentId": "simple-object-with-pattern.ts"
+    },
+    {
+      "data": {
+        "fileName": "comprehensive-schema.ts",
+        "kind": "group",
+        "label": "comprehensive-schema.ts",
+        "text": "import type { InlineObjectCompositionProperties } from './inline-object-composition-properties';\nimport type { InlineObjectCompositionPropertiesWithNot } from './inline-object-composition-properties-with-not';\nimport type { InlineObjectCompositionPatterns } from './inline-object-composition-patterns';\nimport type { InlineObjectCompositionPropertiesAndPatterns } from './inline-object-composition-properties-and-patterns';\nimport type { InlineMixedComposition } from './inline-mixed-composition';\nimport type { ReferredTypesComposition } from './referred-types-composition';\nimport type { ReferredTypesCompositionAndInline } from './referred-types-composition-and-inline';\nimport type { InlineArrayMinItemsPrefixItemsComposition } from './inline-array-min-items-prefix-items-composition';\nimport type { InlineArrayMinMaxItemsPrefixItemsComposition } from './inline-array-min-max-items-prefix-items-composition';\nimport type { InlineArrayNestedComposition } from './inline-array-nested-composition';\nimport type { InlineObjectNestedComposition } from './inline-object-nested-composition';\nimport type { ExclusionFromUnion } from './exclusion-from-union';\nimport type { ArrayMinScalar } from './array-min-scalar';\nimport type { SimpleUnionWithRefs } from './simple-union-with-refs';\nimport type { NonWorkingExclusionFromUnionByAnyOf } from './non-working-exclusion-from-union-by-any-of';\nimport type { ObjectIfThenElseEnumWithMixin } from './object-if-then-else-enum-with-mixin';\nimport type { SimpleOneOfUnionWithRefsToArray } from './simple-one-of-union-with-refs-to-array';\nimport type { SimpleOneOfUnionWithRefsToObjects } from './simple-one-of-union-with-refs-to-objects';\nimport type { SimpleOneOfUnionWithObjects } from './simple-one-of-union-with-objects';\nimport type { SimpleOneOfUnionWithMixedTypes } from './simple-one-of-union-with-mixed-types';\nimport type { FirstLevel } from './first-level';\nimport type { PatternString } from './pattern-string';\nimport type { SimplestStringPatternCase } from './simplest-string-pattern-case';\nimport type { SimpleDynamicRef } from './simple-dynamic-ref';\n/**\n * ## comprehensive-schema\n *\n * Complex schema with all possible types\n *\n * @privateRemarks\n *\n * todo: add comments for all entries\n *\n * ###### InlineObjectCompositionProperties\n * Use case: inline composition of objects with properties\n *\n * ###### InlineObjectCompositionPropertiesWithNot\n * Use case: inline composition of object with a NOT-construction\n *\n * ###### ExclusionFromUnionInline\n * `allOf` with combination of a reference to `SimpleUnionWithRefs` and `not` to `ArrayMinScalar` has to be: `Exclude<SimpleUnionWithRefs, ArrayMinScalar>`\n */\nexport type ComprehensiveSchema =\n  | {\n      delegatedFrom?: ComprehensiveSchema;\n      delegatedTo?: ComprehensiveSchema;\n    }\n  | InlineObjectCompositionProperties\n  | InlineObjectCompositionPropertiesWithNot\n  | InlineObjectCompositionPatterns\n  | InlineObjectCompositionPropertiesAndPatterns\n  | InlineMixedComposition\n  | ReferredTypesComposition\n  | ReferredTypesCompositionAndInline\n  | InlineArrayMinItemsPrefixItemsComposition\n  | InlineArrayMinMaxItemsPrefixItemsComposition\n  | InlineArrayNestedComposition\n  | InlineObjectNestedComposition\n  | ExclusionFromUnion\n  | Exclude<SimpleUnionWithRefs, ArrayMinScalar>\n  | SimpleUnionWithRefs\n  | NonWorkingExclusionFromUnionByAnyOf\n  | ObjectIfThenElseEnumWithMixin\n  | SimpleOneOfUnionWithRefsToArray\n  | SimpleOneOfUnionWithRefsToObjects\n  | SimpleOneOfUnionWithObjects\n  | SimpleOneOfUnionWithMixedTypes\n  | FirstLevel\n  | PatternString\n  | SimplestStringPatternCase\n  | SimpleDynamicRef;"
+      },
+      "id": "comprehensive-schema.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "ast": {
+          "kind": 266
+        },
+        "identifierName": "ComprehensiveSchema",
+        "kind": "item",
+        "label": "ComprehensiveSchema",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "comprehensive-schema.ts",
+        "sourceLocation": {
+          "col": 1,
+          "fileName": "comprehensive.jsonc",
+          "line": 2
+        },
+        "text": "/**\n * ## comprehensive-schema\n *\n * Complex schema with all possible types\n *\n * @privateRemarks\n *\n * todo: add comments for all entries\n *\n * ###### InlineObjectCompositionProperties\n * Use case: inline composition of objects with properties\n *\n * ###### InlineObjectCompositionPropertiesWithNot\n * Use case: inline composition of object with a NOT-construction\n *\n * ###### ExclusionFromUnionInline\n * `allOf` with combination of a reference to `SimpleUnionWithRefs` and `not` to `ArrayMinScalar` has to be: `Exclude<SimpleUnionWithRefs, ArrayMinScalar>`\n */\nexport type ComprehensiveSchema =\n  | {\n      delegatedFrom?: ComprehensiveSchema;\n      delegatedTo?: ComprehensiveSchema;\n    }\n  | InlineObjectCompositionProperties\n  | InlineObjectCompositionPropertiesWithNot\n  | InlineObjectCompositionPatterns\n  | InlineObjectCompositionPropertiesAndPatterns\n  | InlineMixedComposition\n  | ReferredTypesComposition\n  | ReferredTypesCompositionAndInline\n  | InlineArrayMinItemsPrefixItemsComposition\n  | InlineArrayMinMaxItemsPrefixItemsComposition\n  | InlineArrayNestedComposition\n  | InlineObjectNestedComposition\n  | ExclusionFromUnion\n  | Exclude<SimpleUnionWithRefs, ArrayMinScalar>\n  | SimpleUnionWithRefs\n  | NonWorkingExclusionFromUnionByAnyOf\n  | ObjectIfThenElseEnumWithMixin\n  | SimpleOneOfUnionWithRefsToArray\n  | SimpleOneOfUnionWithRefsToObjects\n  | SimpleOneOfUnionWithObjects\n  | SimpleOneOfUnionWithMixedTypes\n  | FirstLevel\n  | PatternString\n  | SimplestStringPatternCase\n  | SimpleDynamicRef;",
+        "declarationType": "Union",
+        "logs": [
+          {
+            "jsoncNode": {
+              "col": 34,
+              "fileName": "comprehensive.jsonc",
+              "line": 907
+            },
+            "level": "warn",
+            "message": "Schema forcedly marked as having additional properties.\nBecause the schema has parsed property patterns.\nEncountered at:\ncomprehensive.jsonc:907:34\n  906 |     \"SimplestObjectCases\": {                        \n> 907 |       \"SimpleObjectWithPattern\": {                  \n      |                                  ^\n  908 |         \"propertyNames\": {                          "
+          },
+          {
+            "jsoncNode": {
+              "col": 47,
+              "fileName": "comprehensive.jsonc",
+              "line": 271
+            },
+            "level": "warn",
+            "message": "Property at \"$defs.AllOfCases.InlineObjectCompositionPatterns.allOf.3.not.additionalProperties.properties.anotherForbiddenProperty\" was processed as `unknown`.\nEncountered at:\ncomprehensive.jsonc:271:47\n  270 |                 \"properties\": {                     \n> 271 |                   \"anotherForbiddenProperty\": {}    \n      |                                               ^\n  272 |                 }                                   "
+          },
+          {
+            "jsoncNode": {
+              "col": 45,
+              "fileName": "comprehensive.jsonc",
+              "line": 309
+            },
+            "level": "warn",
+            "message": "Property at \"$defs.AllOfCases.InlineObjectCompositionPatterns.allOf.6.patternProperties.^CORE_PROP_[A-Z0-9_]+$.not.properties.exampleForbiddenProp\" was processed as `unknown`.\nEncountered at:\ncomprehensive.jsonc:309:45\n  308 |                   \"properties\": {                   \n> 309 |                     \"exampleForbiddenProp\": {}      \n      |                                             ^\n  310 |                   },                                "
+          },
+          {
+            "jsoncNode": {
+              "col": 19,
+              "fileName": "comprehensive.jsonc",
+              "line": 409
+            },
+            "level": "warn",
+            "message": "Schema forcedly marked as having additional properties.\nBecause the schema has parsed property patterns.\nEncountered at:\ncomprehensive.jsonc:409:19\n  408 |                   },                                \n> 409 |                   {                                 \n      |                   ^\n  410 |                     \"propertyNames\": {              "
+          },
+          {
+            "jsoncNode": {
+              "col": 31,
+              "fileName": "comprehensive.jsonc",
+              "line": 766
+            },
+            "level": "warn",
+            "message": "Schema forcedly marked as having additional properties.\nBecause the schema has parsed property patterns.\nEncountered at:\ncomprehensive.jsonc:766:31\n  765 |           },                                        \n> 766 |           \"abstractProperty\": {                     \n      |                               ^\n  767 |             \"propertyNames\": {                      "
+          },
+          {
+            "jsoncNode": {
+              "col": 31,
+              "fileName": "comprehensive.jsonc",
+              "line": 815
+            },
+            "level": "warn",
+            "message": "Schema forcedly marked as having additional properties.\nBecause the schema has parsed property patterns.\nEncountered at:\ncomprehensive.jsonc:815:31\n  814 |         \"properties\": {                             \n> 815 |           \"abstractProperty\": {                     \n      |                               ^\n  816 |             \"propertyNames\": {                      "
+          },
+          {
+            "jsoncNode": {
+              "col": 22,
+              "fileName": "comprehensive.jsonc",
+              "line": 934
+            },
+            "level": "warn",
+            "message": "Unable to correctly parse object at $defs.SimplestObjectCases.AnotherSimpleObjectWithProperties.properties.content\nUsed Record<string, unknown> as a fallback.\nEncountered at:\ncomprehensive.jsonc:934:22\n  933 |           },                                        \n> 934 |           \"content\": {                              \n      |                      ^\n  935 |             \"type\": \"object\"                        "
+          },
+          {
+            "jsoncNode": {
+              "col": 38,
+              "fileName": "comprehensive.jsonc",
+              "line": 297
+            },
+            "level": "warn",
+            "message": "Unable to correctly parse object at $defs.AllOfCases.InlineObjectCompositionPatterns.allOf.5.patternProperties.^CORE_PROP_[A-Z0-9_]+$.properties.extendedOptions\nUsed Record<string, unknown> as a fallback.\nEncountered at:\ncomprehensive.jsonc:297:38\n  296 |                 \"properties\": {                     \n> 297 |                   \"extendedOptions\": {              \n      |                                      ^\n  298 |                     \"type\": \"object\"                "
+          }
+        ]
+      },
+      "extent": "parent",
+      "id": "comprehensive-schema.ts::ComprehensiveSchema",
+      "parentId": "comprehensive-schema.ts"
+    }
+  ],
+  "edges": [
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "simple-dynamic-ref.ts->simple-dynamic-anchor.ts",
+      "label": "import",
+      "source": "simple-dynamic-ref.ts",
+      "target": "simple-dynamic-anchor.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "first-level.ts->zero-level.ts",
+      "label": "import",
+      "source": "first-level.ts",
+      "target": "zero-level.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "first-level.ts->eighth-level.ts",
+      "label": "import",
+      "source": "first-level.ts",
+      "target": "eighth-level.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "eighth-level.ts->ninth-level.ts",
+      "label": "import",
+      "source": "eighth-level.ts",
+      "target": "ninth-level.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "ninth-level.ts->zero-level.ts",
+      "label": "import",
+      "source": "ninth-level.ts",
+      "target": "zero-level.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "simple-one-of-union-with-mixed-types.ts->simple-object-with-pattern.ts",
+      "label": "import",
+      "source": "simple-one-of-union-with-mixed-types.ts",
+      "target": "simple-object-with-pattern.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "simple-one-of-union-with-refs-to-objects.ts->simple-object-with-pattern.ts",
+      "label": "import",
+      "source": "simple-one-of-union-with-refs-to-objects.ts",
+      "target": "simple-object-with-pattern.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "simple-one-of-union-with-refs-to-objects.ts->simple-object-with-properties.ts",
+      "label": "import",
+      "source": "simple-one-of-union-with-refs-to-objects.ts",
+      "target": "simple-object-with-properties.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "simple-one-of-union-with-refs-to-objects.ts->another-simple-object-with-properties.ts",
+      "label": "import",
+      "source": "simple-one-of-union-with-refs-to-objects.ts",
+      "target": "another-simple-object-with-properties.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "simple-one-of-union-with-refs-to-array.ts->array-min-max-with-refs.ts",
+      "label": "import",
+      "source": "simple-one-of-union-with-refs-to-array.ts",
+      "target": "array-min-max-with-refs.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "simple-one-of-union-with-refs-to-array.ts->array-min-scalar.ts",
+      "label": "import",
+      "source": "simple-one-of-union-with-refs-to-array.ts",
+      "target": "array-min-scalar.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "simple-one-of-union-with-refs-to-array.ts->array-scalar.ts",
+      "label": "import",
+      "source": "simple-one-of-union-with-refs-to-array.ts",
+      "target": "array-scalar.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "non-working-exclusion-from-union-by-any-of.ts->simple-union-with-refs.ts",
+      "label": "import",
+      "source": "non-working-exclusion-from-union-by-any-of.ts",
+      "target": "simple-union-with-refs.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "exclusion-from-union.ts->array-min-max-with-refs.ts",
+      "label": "import",
+      "source": "exclusion-from-union.ts",
+      "target": "array-min-max-with-refs.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "exclusion-from-union.ts->array-scalar.ts",
+      "label": "import",
+      "source": "exclusion-from-union.ts",
+      "target": "array-scalar.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "simple-union-with-refs.ts->array-min-max-with-refs.ts",
+      "label": "import",
+      "source": "simple-union-with-refs.ts",
+      "target": "array-min-max-with-refs.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "simple-union-with-refs.ts->array-min-scalar.ts",
+      "label": "import",
+      "source": "simple-union-with-refs.ts",
+      "target": "array-min-scalar.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "simple-union-with-refs.ts->array-scalar.ts",
+      "label": "import",
+      "source": "simple-union-with-refs.ts",
+      "target": "array-scalar.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "array-min-max-with-refs.ts->simple-object-with-pattern.ts",
+      "label": "import",
+      "source": "array-min-max-with-refs.ts",
+      "target": "simple-object-with-pattern.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "referred-types-composition-and-inline.ts->inline-object-composition-properties.ts",
+      "label": "import",
+      "source": "referred-types-composition-and-inline.ts",
+      "target": "inline-object-composition-properties.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "referred-types-composition-and-inline.ts->inline-object-composition-properties-with-not.ts",
+      "label": "import",
+      "source": "referred-types-composition-and-inline.ts",
+      "target": "inline-object-composition-properties-with-not.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "referred-types-composition-and-inline.ts->inline-object-composition-patterns.ts",
+      "label": "import",
+      "source": "referred-types-composition-and-inline.ts",
+      "target": "inline-object-composition-patterns.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "referred-types-composition-and-inline.ts->inline-object-composition-properties-and-patterns.ts",
+      "label": "import",
+      "source": "referred-types-composition-and-inline.ts",
+      "target": "inline-object-composition-properties-and-patterns.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "referred-types-composition-and-inline.ts->inline-mixed-composition.ts",
+      "label": "import",
+      "source": "referred-types-composition-and-inline.ts",
+      "target": "inline-mixed-composition.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "referred-types-composition.ts->inline-object-composition-properties.ts",
+      "label": "import",
+      "source": "referred-types-composition.ts",
+      "target": "inline-object-composition-properties.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "referred-types-composition.ts->inline-object-composition-properties-with-not.ts",
+      "label": "import",
+      "source": "referred-types-composition.ts",
+      "target": "inline-object-composition-properties-with-not.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "referred-types-composition.ts->inline-object-composition-patterns.ts",
+      "label": "import",
+      "source": "referred-types-composition.ts",
+      "target": "inline-object-composition-patterns.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "referred-types-composition.ts->inline-object-composition-properties-and-patterns.ts",
+      "label": "import",
+      "source": "referred-types-composition.ts",
+      "target": "inline-object-composition-properties-and-patterns.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "referred-types-composition.ts->inline-mixed-composition.ts",
+      "label": "import",
+      "source": "referred-types-composition.ts",
+      "target": "inline-mixed-composition.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "inline-object-composition-properties.ts->simple-object-with-pattern.ts",
+      "label": "import",
+      "source": "inline-object-composition-properties.ts",
+      "target": "simple-object-with-pattern.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "inline-object-composition-properties.ts->simple-object-with-properties.ts",
+      "label": "import",
+      "source": "inline-object-composition-properties.ts",
+      "target": "simple-object-with-properties.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "inline-object-composition-properties.ts->user-role-enum.ts",
+      "label": "import",
+      "source": "inline-object-composition-properties.ts",
+      "target": "user-role-enum.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "comprehensive-schema.ts->inline-object-composition-properties.ts",
+      "label": "import",
+      "source": "comprehensive-schema.ts",
+      "target": "inline-object-composition-properties.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "comprehensive-schema.ts->inline-object-composition-properties-with-not.ts",
+      "label": "import",
+      "source": "comprehensive-schema.ts",
+      "target": "inline-object-composition-properties-with-not.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "comprehensive-schema.ts->inline-object-composition-patterns.ts",
+      "label": "import",
+      "source": "comprehensive-schema.ts",
+      "target": "inline-object-composition-patterns.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "comprehensive-schema.ts->inline-object-composition-properties-and-patterns.ts",
+      "label": "import",
+      "source": "comprehensive-schema.ts",
+      "target": "inline-object-composition-properties-and-patterns.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "comprehensive-schema.ts->inline-mixed-composition.ts",
+      "label": "import",
+      "source": "comprehensive-schema.ts",
+      "target": "inline-mixed-composition.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "comprehensive-schema.ts->referred-types-composition.ts",
+      "label": "import",
+      "source": "comprehensive-schema.ts",
+      "target": "referred-types-composition.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "comprehensive-schema.ts->referred-types-composition-and-inline.ts",
+      "label": "import",
+      "source": "comprehensive-schema.ts",
+      "target": "referred-types-composition-and-inline.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "comprehensive-schema.ts->inline-array-min-items-prefix-items-composition.ts",
+      "label": "import",
+      "source": "comprehensive-schema.ts",
+      "target": "inline-array-min-items-prefix-items-composition.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "comprehensive-schema.ts->inline-array-min-max-items-prefix-items-composition.ts",
+      "label": "import",
+      "source": "comprehensive-schema.ts",
+      "target": "inline-array-min-max-items-prefix-items-composition.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "comprehensive-schema.ts->inline-array-nested-composition.ts",
+      "label": "import",
+      "source": "comprehensive-schema.ts",
+      "target": "inline-array-nested-composition.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "comprehensive-schema.ts->inline-object-nested-composition.ts",
+      "label": "import",
+      "source": "comprehensive-schema.ts",
+      "target": "inline-object-nested-composition.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "comprehensive-schema.ts->exclusion-from-union.ts",
+      "label": "import",
+      "source": "comprehensive-schema.ts",
+      "target": "exclusion-from-union.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "comprehensive-schema.ts->array-min-scalar.ts",
+      "label": "import",
+      "source": "comprehensive-schema.ts",
+      "target": "array-min-scalar.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "comprehensive-schema.ts->simple-union-with-refs.ts",
+      "label": "import",
+      "source": "comprehensive-schema.ts",
+      "target": "simple-union-with-refs.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "comprehensive-schema.ts->non-working-exclusion-from-union-by-any-of.ts",
+      "label": "import",
+      "source": "comprehensive-schema.ts",
+      "target": "non-working-exclusion-from-union-by-any-of.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "comprehensive-schema.ts->object-if-then-else-enum-with-mixin.ts",
+      "label": "import",
+      "source": "comprehensive-schema.ts",
+      "target": "object-if-then-else-enum-with-mixin.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "comprehensive-schema.ts->simple-one-of-union-with-refs-to-array.ts",
+      "label": "import",
+      "source": "comprehensive-schema.ts",
+      "target": "simple-one-of-union-with-refs-to-array.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "comprehensive-schema.ts->simple-one-of-union-with-refs-to-objects.ts",
+      "label": "import",
+      "source": "comprehensive-schema.ts",
+      "target": "simple-one-of-union-with-refs-to-objects.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "comprehensive-schema.ts->simple-one-of-union-with-objects.ts",
+      "label": "import",
+      "source": "comprehensive-schema.ts",
+      "target": "simple-one-of-union-with-objects.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "comprehensive-schema.ts->simple-one-of-union-with-mixed-types.ts",
+      "label": "import",
+      "source": "comprehensive-schema.ts",
+      "target": "simple-one-of-union-with-mixed-types.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "comprehensive-schema.ts->first-level.ts",
+      "label": "import",
+      "source": "comprehensive-schema.ts",
+      "target": "first-level.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "comprehensive-schema.ts->pattern-string.ts",
+      "label": "import",
+      "source": "comprehensive-schema.ts",
+      "target": "pattern-string.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "comprehensive-schema.ts->simplest-string-pattern-case.ts",
+      "label": "import",
+      "source": "comprehensive-schema.ts",
+      "target": "simplest-string-pattern-case.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "comprehensive-schema.ts->simple-dynamic-ref.ts",
+      "label": "import",
+      "source": "comprehensive-schema.ts",
+      "target": "simple-dynamic-ref.ts"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "first-level.ts::FirstLevel->first-level.ts::SecondLevel",
+      "label": "reference",
+      "source": "first-level.ts::FirstLevel",
+      "target": "first-level.ts::SecondLevel"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "first-level.ts::FirstLevel->zero-level.ts::ZeroLevel",
+      "label": "reference",
+      "source": "first-level.ts::FirstLevel",
+      "target": "zero-level.ts::ZeroLevel"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "first-level.ts::SecondLevel->first-level.ts::FirstLevel",
+      "label": "reference",
+      "source": "first-level.ts::SecondLevel",
+      "target": "first-level.ts::FirstLevel"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "first-level.ts::SecondLevel->first-level.ts::ThirdLevel",
+      "label": "reference",
+      "source": "first-level.ts::SecondLevel",
+      "target": "first-level.ts::ThirdLevel"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "first-level.ts::ThirdLevel->first-level.ts::FirstLevel",
+      "label": "reference",
+      "source": "first-level.ts::ThirdLevel",
+      "target": "first-level.ts::FirstLevel"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "first-level.ts::ThirdLevel->first-level.ts::SecondLevel",
+      "label": "reference",
+      "source": "first-level.ts::ThirdLevel",
+      "target": "first-level.ts::SecondLevel"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "first-level.ts::ThirdLevel->first-level.ts::FourthLevel",
+      "label": "reference",
+      "source": "first-level.ts::ThirdLevel",
+      "target": "first-level.ts::FourthLevel"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "first-level.ts::FourthLevel->first-level.ts::FirstLevel",
+      "label": "reference",
+      "source": "first-level.ts::FourthLevel",
+      "target": "first-level.ts::FirstLevel"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "first-level.ts::FourthLevel->first-level.ts::SecondLevel",
+      "label": "reference",
+      "source": "first-level.ts::FourthLevel",
+      "target": "first-level.ts::SecondLevel"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "first-level.ts::FourthLevel->first-level.ts::ThirdLevel",
+      "label": "reference",
+      "source": "first-level.ts::FourthLevel",
+      "target": "first-level.ts::ThirdLevel"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "first-level.ts::FourthLevel->first-level.ts::FifthLevel",
+      "label": "reference",
+      "source": "first-level.ts::FourthLevel",
+      "target": "first-level.ts::FifthLevel"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "first-level.ts::FifthLevel->first-level.ts::FirstLevel",
+      "label": "reference",
+      "source": "first-level.ts::FifthLevel",
+      "target": "first-level.ts::FirstLevel"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "first-level.ts::FifthLevel->first-level.ts::SecondLevel",
+      "label": "reference",
+      "source": "first-level.ts::FifthLevel",
+      "target": "first-level.ts::SecondLevel"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "first-level.ts::FifthLevel->first-level.ts::ThirdLevel",
+      "label": "reference",
+      "source": "first-level.ts::FifthLevel",
+      "target": "first-level.ts::ThirdLevel"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "first-level.ts::FifthLevel->first-level.ts::FourthLevel",
+      "label": "reference",
+      "source": "first-level.ts::FifthLevel",
+      "target": "first-level.ts::FourthLevel"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "first-level.ts::FifthLevel->first-level.ts::SixthLevel",
+      "label": "reference",
+      "source": "first-level.ts::FifthLevel",
+      "target": "first-level.ts::SixthLevel"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "first-level.ts::SixthLevel->first-level.ts::FirstLevel",
+      "label": "reference",
+      "source": "first-level.ts::SixthLevel",
+      "target": "first-level.ts::FirstLevel"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "first-level.ts::SixthLevel->first-level.ts::SeventhLevel",
+      "label": "reference",
+      "source": "first-level.ts::SixthLevel",
+      "target": "first-level.ts::SeventhLevel"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "first-level.ts::SeventhLevel->first-level.ts::FirstLevel",
+      "label": "reference",
+      "source": "first-level.ts::SeventhLevel",
+      "target": "first-level.ts::FirstLevel"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "first-level.ts::SeventhLevel->first-level.ts::SecondLevel",
+      "label": "reference",
+      "source": "first-level.ts::SeventhLevel",
+      "target": "first-level.ts::SecondLevel"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "first-level.ts::SeventhLevel->first-level.ts::ThirdLevel",
+      "label": "reference",
+      "source": "first-level.ts::SeventhLevel",
+      "target": "first-level.ts::ThirdLevel"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "first-level.ts::SeventhLevel->first-level.ts::FourthLevel",
+      "label": "reference",
+      "source": "first-level.ts::SeventhLevel",
+      "target": "first-level.ts::FourthLevel"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "first-level.ts::SeventhLevel->first-level.ts::FifthLevel",
+      "label": "reference",
+      "source": "first-level.ts::SeventhLevel",
+      "target": "first-level.ts::FifthLevel"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "first-level.ts::SeventhLevel->first-level.ts::SixthLevel",
+      "label": "reference",
+      "source": "first-level.ts::SeventhLevel",
+      "target": "first-level.ts::SixthLevel"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "first-level.ts::SeventhLevel->eighth-level.ts::EighthLevel",
+      "label": "reference",
+      "source": "first-level.ts::SeventhLevel",
+      "target": "eighth-level.ts::EighthLevel"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "comprehensive-schema.ts::ComprehensiveSchema->first-level.ts::FirstLevel",
+      "label": "reference",
+      "source": "comprehensive-schema.ts::ComprehensiveSchema",
+      "target": "first-level.ts::FirstLevel"
+    }
+  ],
+  "logs": [
+    {
+      "jsoncNode": {
+        "col": 34,
+        "fileName": "comprehensive.jsonc",
+        "line": 907
+      },
+      "level": "warn",
+      "message": "Schema forcedly marked as having additional properties.\nBecause the schema has parsed property patterns.\nEncountered at:\ncomprehensive.jsonc:907:34\n  906 |     \"SimplestObjectCases\": {                        \n> 907 |       \"SimpleObjectWithPattern\": {                  \n      |                                  ^\n  908 |         \"propertyNames\": {                          "
+    },
+    {
+      "jsoncNode": {
+        "col": 47,
+        "fileName": "comprehensive.jsonc",
+        "line": 271
+      },
+      "level": "warn",
+      "message": "Property at \"$defs.AllOfCases.InlineObjectCompositionPatterns.allOf.3.not.additionalProperties.properties.anotherForbiddenProperty\" was processed as `unknown`.\nEncountered at:\ncomprehensive.jsonc:271:47\n  270 |                 \"properties\": {                     \n> 271 |                   \"anotherForbiddenProperty\": {}    \n      |                                               ^\n  272 |                 }                                   "
+    },
+    {
+      "jsoncNode": {
+        "col": 45,
+        "fileName": "comprehensive.jsonc",
+        "line": 309
+      },
+      "level": "warn",
+      "message": "Property at \"$defs.AllOfCases.InlineObjectCompositionPatterns.allOf.6.patternProperties.^CORE_PROP_[A-Z0-9_]+$.not.properties.exampleForbiddenProp\" was processed as `unknown`.\nEncountered at:\ncomprehensive.jsonc:309:45\n  308 |                   \"properties\": {                   \n> 309 |                     \"exampleForbiddenProp\": {}      \n      |                                             ^\n  310 |                   },                                "
+    },
+    {
+      "jsoncNode": {
+        "col": 19,
+        "fileName": "comprehensive.jsonc",
+        "line": 409
+      },
+      "level": "warn",
+      "message": "Schema forcedly marked as having additional properties.\nBecause the schema has parsed property patterns.\nEncountered at:\ncomprehensive.jsonc:409:19\n  408 |                   },                                \n> 409 |                   {                                 \n      |                   ^\n  410 |                     \"propertyNames\": {              "
+    },
+    {
+      "jsoncNode": {
+        "col": 31,
+        "fileName": "comprehensive.jsonc",
+        "line": 766
+      },
+      "level": "warn",
+      "message": "Schema forcedly marked as having additional properties.\nBecause the schema has parsed property patterns.\nEncountered at:\ncomprehensive.jsonc:766:31\n  765 |           },                                        \n> 766 |           \"abstractProperty\": {                     \n      |                               ^\n  767 |             \"propertyNames\": {                      "
+    },
+    {
+      "jsoncNode": {
+        "col": 31,
+        "fileName": "comprehensive.jsonc",
+        "line": 815
+      },
+      "level": "warn",
+      "message": "Schema forcedly marked as having additional properties.\nBecause the schema has parsed property patterns.\nEncountered at:\ncomprehensive.jsonc:815:31\n  814 |         \"properties\": {                             \n> 815 |           \"abstractProperty\": {                     \n      |                               ^\n  816 |             \"propertyNames\": {                      "
+    },
+    {
+      "jsoncNode": {
+        "col": 22,
+        "fileName": "comprehensive.jsonc",
+        "line": 934
+      },
+      "level": "warn",
+      "message": "Unable to correctly parse object at $defs.SimplestObjectCases.AnotherSimpleObjectWithProperties.properties.content\nUsed Record<string, unknown> as a fallback.\nEncountered at:\ncomprehensive.jsonc:934:22\n  933 |           },                                        \n> 934 |           \"content\": {                              \n      |                      ^\n  935 |             \"type\": \"object\"                        "
+    },
+    {
+      "jsoncNode": {
+        "col": 38,
+        "fileName": "comprehensive.jsonc",
+        "line": 297
+      },
+      "level": "warn",
+      "message": "Unable to correctly parse object at $defs.AllOfCases.InlineObjectCompositionPatterns.allOf.5.patternProperties.^CORE_PROP_[A-Z0-9_]+$.properties.extendedOptions\nUsed Record<string, unknown> as a fallback.\nEncountered at:\ncomprehensive.jsonc:297:38\n  296 |                 \"properties\": {                     \n> 297 |                   \"extendedOptions\": {              \n      |                                      ^\n  298 |                     \"type\": \"object\"                "
+    }
+  ]
+}

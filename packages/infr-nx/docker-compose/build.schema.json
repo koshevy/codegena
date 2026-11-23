@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "version": 2,
+  "title": "Build local Docker Compose images",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "composeFile": {
+      "type": "string",
+      "description": "Compose file path relative to the Nx project.",
+      "default": "docker-compose.yml"
+    },
+    "dryRun": {
+      "type": "boolean",
+      "description": "Preview the changes through Docker Compose."
+    },
+    "services": {
+      "type": "array",
+      "description": "Build only these services. By default, build every service with an image definition.",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]*$"
+      }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "$id": "if-object-simple",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "login": {
+      "type": "string"
+    },
+    "loginBy": {
+      "default": "phone",
+      "enum": [
+        "phone",
+        "email"
+      ]
+    }
+  },
+  "if": {
+    "properties": {
+      "loginBy": {
+        "const": "phone"
+      }
+    }
+  },
+  "then": {
+    "properties": {
+      "login": {
+        "pattern": "^(?:([+]\\d{1,4})[-.\\s]?)?(?:[(](\\d{1,3})[)][-.\\s]?)?(\\d{1,4})[-.\\s]?(\\d{1,4})[-.\\s]?(\\d{1,9})$"
+      }
+    }
+  },
+  "else": {
+    "properties": {
+      "login": {
+        "pattern": "^((?!\\.)[\\w\\-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$"
+      }
+    }
+  }
+}

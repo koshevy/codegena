@@ -1,0 +1,28 @@
+{
+  "$id": "ref-object-with-patterns-and-properties",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/FirstLevelDepthObjectType",
+  "patternProperties": {
+    "^(EXT)_[A-Z0-9]+": {
+      "type": "object",
+      "properties": {
+        "catalog": {}
+      }
+    }
+  },
+  "properties": {
+    "fixedOptionalProperty": {},
+    "fixedRequiredProperty": {}
+  },
+  "propertyNames": {
+    "pattern": "^(LEFT|RIGHT)_[A-Z0-9]+"
+  },
+  "required": [
+    "fixedRequiredProperty"
+  ],
+  "$defs": {
+    "FirstLevelDepthObjectType": {
+      "type": "object"
+    }
+  }
+}

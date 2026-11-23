@@ -1,0 +1,49 @@
+{
+  "name": "landing-mf-host-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/landing-mf-host-e2e/src",
+  "tags": [],
+  "implicitDependencies": ["landing-mf-host", "landing-mf-host-ssr"],
+  "// targets": "to see all targets run: nx show project landing-mf-host-e2e --web",
+  "targets": {
+    "e2e-ssr": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["landing-mf-host-ssr:docker-compose-build"],
+      "parallelism": false,
+      "options": {
+        "command": "playwright test --config=playwright.ssr.config.mts",
+        "cwd": "apps/landing-mf-host-e2e"
+      }
+    },
+    "e2e-quality": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["landing-mf-host-ssr:docker-compose-build"],
+      "parallelism": false,
+      "options": {
+        "command": "playwright test --config=playwright.quality.config.mts",
+        "cwd": "apps/landing-mf-host-e2e"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p tsconfig.e2e.json",
+        "cwd": "apps/landing-mf-host-e2e"
+      }
+    },
+    "e2e": {
+      "dependsOn": [],
+      "configurations": {
+        "development": {
+          "command": "playwright test src/screen-02-item-06-playground.spec.ts src/embedded-playground src/documentation.spec.ts src/documentation-links.spec.ts src/documentation-menu.spec.ts",
+          "env": {
+            "LANDING_E2E_SERVER": "development"
+          }
+        }
+      }
+    }
+  }
+}

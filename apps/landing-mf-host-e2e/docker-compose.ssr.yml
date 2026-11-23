@@ -1,0 +1,17 @@
+services:
+  caddy:
+    environment:
+      CADDY_HTTPS_PORT: "8443"
+    ports: !override
+      - "127.0.0.1:8443:8443/tcp"
+      - "127.0.0.1:8443:8443/udp"
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - --no-check-certificate
+        - --spider
+        - https://localhost:8443/manifest.webmanifest
+      interval: 1s
+      timeout: 3s
+      retries: 10

@@ -1,0 +1,7 @@
+{
+  "$id": "object-ignored-options",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "minProperties": 1,
+  "maxProperties": 10
+}

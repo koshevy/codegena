@@ -1,0 +1,45 @@
+{
+  "$defs": {
+    "Address": {
+      "type": "object",
+      "properties": {
+        "city": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "city"
+      ]
+    },
+    "Payment": {
+      "type": "object",
+      "properties": {
+        "customerId": {
+          "type": "string"
+        },
+        "cardToken": {
+          "type": "string"
+        },
+        "billingAddress": {
+          "$ref": "#/$defs/Address"
+        },
+        "bankAccount": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "customerId"
+      ],
+      "dependentRequired": {
+        "cardToken": [
+          "billingAddress"
+        ],
+        "bankAccount": [
+          "billingAddress"
+        ]
+      },
+      "additionalProperties": false
+    }
+  },
+  "$ref": "#/$defs/Payment"
+}

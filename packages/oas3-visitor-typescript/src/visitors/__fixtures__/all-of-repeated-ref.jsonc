@@ -1,0 +1,17 @@
+{
+  "$defs": {
+    "ContactDetails": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        }
+      },
+      "required": ["email"]
+    }
+  },
+  "allOf": [
+    { "$ref": "#/$defs/ContactDetails" },
+    { "$ref": "#/$defs/ContactDetails" }
+  ]
+}

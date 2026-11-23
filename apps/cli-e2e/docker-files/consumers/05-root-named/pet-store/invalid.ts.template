@@ -1,0 +1,6 @@
+import type { SwaggerPetstore as PetStore } from './generated';
+
+export const pet: PetStore.Pets._Common.Pet = {
+  id: '3',
+  name: 'Pixel',
+};

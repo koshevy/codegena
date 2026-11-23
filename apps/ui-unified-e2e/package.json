@@ -1,0 +1,17 @@
+{
+  "name": "@codegena/ui-unified-e2e",
+  "version": "0.0.0",
+  "private": true,
+  "devDependencies": {
+    "@codegena/infr-nx": "*",
+    "@codegena/ui-unified": "*",
+    "@nx/devkit": "23.3.2",
+    "@nx/playwright": "23.3.2",
+    "@playwright/test": "^1.36.0",
+    "@types/node": "^24.0.0",
+    "eslint": "^10.13.0",
+    "eslint-plugin-playwright": "^1.6.2",
+    "nx": "23.3.2",
+    "typescript": "6.0.3"
+  }
+}

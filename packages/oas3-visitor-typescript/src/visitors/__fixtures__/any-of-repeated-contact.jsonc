@@ -1,0 +1,22 @@
+{
+  "anyOf": [
+    {
+      "type": "object",
+      "properties": {
+        "contactId": {
+          "type": "string"
+        }
+      },
+      "required": ["contactId"]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "contactId": {
+          "type": "string"
+        }
+      },
+      "required": ["contactId"]
+    }
+  ]
+}

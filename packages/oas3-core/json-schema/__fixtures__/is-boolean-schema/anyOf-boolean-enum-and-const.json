@@ -1,0 +1,11 @@
+{
+  "title": "Flexible boolean union",
+  "anyOf": [
+    {
+      "enum": [true, false]
+    },
+    {
+      "const": true
+    }
+  ]
+}

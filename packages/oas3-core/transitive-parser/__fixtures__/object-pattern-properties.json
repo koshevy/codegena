@@ -1,0 +1,13 @@
+{
+  "$id": "object-pattern-properties",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "patternProperties": {
+    "^P_": {
+      "title": "Schema of unknown type for '^P_' properties"
+    },
+    "^S_": {
+      "title": "Schema of unknown type for '^S_' properties"
+    }
+  }
+}

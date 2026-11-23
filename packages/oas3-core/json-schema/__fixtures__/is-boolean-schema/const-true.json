@@ -1,0 +1,4 @@
+{
+  "const": true,
+  "description": "Feature flag that must stay enabled"
+}

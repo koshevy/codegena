@@ -1,0 +1,99 @@
+{
+  "name": "@codegena/pwa",
+  "version": "0.0.1",
+  "main": "./index.esm.js",
+  "module": "./index.esm.js",
+  "nx": {
+    "sourceRoot": "packages/pwa/src",
+    "projectType": "library",
+    "tags": [
+      "pure:publishable"
+    ],
+    "targets": {
+      "build": {
+        "outputs": [
+          "{workspaceRoot}/dist/pwa"
+        ]
+      }
+    }
+  },
+  "type": "module",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.esm.js"
+    },
+    "./bundle-warmup": {
+      "types": "./bundle-warmup/index.ts",
+      "default": "./bundle-warmup/index.ts"
+    },
+    "./bundle-warmup-config": {
+      "types": "./bundle-warmup-config/index.ts",
+      "default": "./bundle-warmup-config/index.ts"
+    },
+    "./bundle-warmup-context": {
+      "types": "./bundle-warmup-context/index.ts",
+      "default": "./bundle-warmup-context/index.ts"
+    },
+    "./common": {
+      "types": "./common/index.ts",
+      "default": "./common/index.ts"
+    },
+    "./rspack": {
+      "types": "./rspack/index.ts",
+      "default": "./rspack/index.ts"
+    },
+    "./service-worker": {
+      "types": "./service-worker.d.ts",
+      "default": "./service-worker.esm.js"
+    },
+    "./service-worker-client": {
+      "types": "./service-worker-client.d.ts",
+      "default": "./service-worker-client.esm.js"
+    },
+    "./assets/service-worker.esm.js": {
+      "default": "./service-worker/worker.ts"
+    },
+    "./assets/service-worker-companion.esm.js": {
+      "default": "./service-worker/companion/worker.ts"
+    }
+  },
+  "dependencies": {
+    "@hono/service-worker": "^1.0.1",
+    "hono": "^4.13.18"
+  },
+  "devDependencies": {
+    "@codegena/infr-nx": "*",
+    "@nx/jest": "23.3.2",
+    "@playwright/test": "^1.36.0",
+    "@swc/core": "1.15.8",
+    "@swc/jest": "~0.2.38",
+    "@testing-library/react": "16.1.0",
+    "@types/jest": "~30.0.0",
+    "@types/node": "^24.0.0",
+    "@types/react": "19.0.0",
+    "esbuild": "^0.28.2",
+    "eslint": "^10.13.0",
+    "jest": "~30.3.0",
+    "jest-environment-jsdom": "~30.3.0",
+    "jest-environment-node": "~30.3.0",
+    "nx": "23.3.2",
+    "rollup": "^4.14.0",
+    "ts-jest": "^29.4.7",
+    "typescript": "6.0.3"
+  },
+  "peerDependencies": {
+    "@rspack/core": "2.x",
+    "react": "19.x",
+    "zod": "4.x"
+  },
+  "peerDependenciesMeta": {
+    "@rspack/core": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    }
+  }
+}

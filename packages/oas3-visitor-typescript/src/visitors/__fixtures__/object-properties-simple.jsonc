@@ -1,0 +1,15 @@
+{
+  "$id": "object-properties-simple",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "nonRequiredPropertyA": {},
+    "nonRequiredPropertyB": {},
+    "requiredPropertyA": {},
+    "requiredPropertyB": {}
+  },
+  "required": [
+    "requiredPropertyA",
+    "requiredPropertyB"
+  ]
+}

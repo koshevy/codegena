@@ -1,0 +1,6 @@
+import type BasicError from './generated/_common';
+
+export const repositoryError: BasicError = {
+  status: '404',
+  message: 'Repository not found',
+};

@@ -1,0 +1,65 @@
+{
+  "name": "playground-mf-remote",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/playground-mf-remote/src",
+  "projectType": "application",
+  "tags": [
+    "mf:remote"
+  ],
+  "targets": {
+    "serve": {
+      "dependsOn": ["^build"],
+      "executor": "nx:run-commands",
+      "continuous": true,
+      "options": {
+        "command": "rspack serve --mode=development",
+        "cwd": "apps/playground-mf-remote",
+        "env": {
+          "TS_NODE_COMPILER_OPTIONS": "{\"module\":\"CommonJS\",\"moduleResolution\":\"Node10\",\"customConditions\":null}"
+        }
+      }
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rspack build --mode=production",
+        "cwd": "apps/playground-mf-remote",
+        "env": {
+          "TS_NODE_COMPILER_OPTIONS": "{\"module\":\"CommonJS\",\"moduleResolution\":\"Node10\",\"customConditions\":null}"
+        }
+      },
+      "outputs": [
+        "{workspaceRoot}/dist/apps/playground-mf-remote",
+        "{workspaceRoot}/dist/apps/playground-mf-remote-services"
+      ],
+      "inputs": [
+        "production",
+        "^production",
+        {
+          "env": "CODEGENA_BUILD_ID"
+        }
+      ]
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p tsconfig.app.json",
+        "cwd": "apps/playground-mf-remote"
+      }
+    },
+    "rspack:build": {
+      "outputs": [
+        "{workspaceRoot}/dist/apps/playground-mf-remote",
+        "{workspaceRoot}/dist/apps/playground-mf-remote-services"
+      ],
+      "inputs": [
+        "production",
+        "^production",
+        {
+          "env": "CODEGENA_BUILD_ID"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "title": "Account",
+  "type": "object",
+  "properties": {
+    "user": {
+      "$ref": "#/$defs/User"
+    }
+  },
+  "$defs": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": ["id"]
+    }
+  }
+}

@@ -1,69 +1,105 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "allowJs": true,
     "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
     "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
     "experimentalDecorators": true,
+    "ignoreDeprecations": "6.0",
     "importHelpers": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
     "target": "es2015",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noPropertyAccessFromIndexSignature": true,
     "module": "esnext",
-    "typeRoots": ["node_modules/@types"],
-    "lib": ["es5", "es2017", "dom"],
-    "types": ["node"],
+    "lib": ["es2025", "dom"],
+    "resolveJsonModule": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "baseUrl": ".",
+    "strict": true,
+    "types": [
+      "@nx/react/typings/cssmodule.d.ts",
+      "@nx/react/typings/image.d.ts",
+      "@codegena/infr-nx/typings/cssraw.d.ts",
+      "mdx",
+      "node"
+    ],
     "paths": {
-      "@codegena/oapi3ts": [
-        "libs/oapi3ts/src/index.ts"
+      "@codegena/util-dev-mode": ["packages/util-dev-mode/src/index.ts"],
+      "playground-mf-remote/App": ["apps/playground-mf-remote/src/remote-entry.ts"],
+      "documentation-mf-remote/App": ["apps/documentation-mf-remote/src/remote-entry.ts"],
+      "@codegena/pwa": ["packages/pwa/src/index.ts"],
+      "@codegena/pwa/bundle-warmup": ["packages/pwa/bundle-warmup/index.ts"],
+      "@codegena/pwa/bundle-warmup-config": ["packages/pwa/bundle-warmup-config/index.ts"],
+      "@codegena/pwa/bundle-warmup-context": ["packages/pwa/bundle-warmup-context/index.ts"],
+      "@codegena/pwa/common": ["packages/pwa/common/index.ts"],
+      "@codegena/pwa/rspack": ["packages/pwa/rspack/index.ts"],
+      "@codegena/pwa/service-worker": ["packages/pwa/service-worker/index.ts"],
+      "@codegena/pwa/service-worker-client": ["packages/pwa/service-worker-client/index.ts"],
+      "@codegena/oas3-core": ["packages/oas3-core/src/index.ts"],
+      "@codegena/oas3-core/json-schema": ["packages/oas3-core/json-schema/index.ts"],
+      "@codegena/oas3-core/logger": ["packages/oas3-core/logger/index.ts"],
+      "@codegena/oas3-core/transitive-node": ["packages/oas3-core/transitive-node/index.ts"],
+      "@codegena/oas3-core/transitive-parser": ["packages/oas3-core/transitive-parser/index.ts"],
+      "@codegena/oas3-core/transitive-utils": ["packages/oas3-core/transitive-utils/index.ts"],
+      "@codegena/oas3-core/ultimate-parser": ["packages/oas3-core/ultimate-parser/index.ts"],
+      "@codegena/graph-core": ["packages/graph-core/src/index.ts"],
+      "@codegena/graph-core/conversion": ["packages/graph-core/conversion/index.ts"],
+      "@codegena/graph-core/testing-utils": ["packages/graph-core/testing-utils/index.ts"],
+      "@codegena/graph-search-core": ["packages/graph-search-core/src/index.ts"],
+      "@codegena/graph-search-core/react": ["packages/graph-search-core/react-adapter/index.ts"],
+      "@codegena/graph-search-core/api": ["packages/graph-search-core/api/index.ts"],
+      "@codegena/oas3-visitor-typescript": ["packages/oas3-visitor-typescript/src/index.ts"],
+      "@codegena/oas3-visitor-typescript/greeting": ["packages/oas3-visitor-typescript/greeting/index.ts"],
+      "@codegena/ui-theme": ["packages/ui-theme/src/index.ts"],
+      "@codegena/ui-theme/storybook": ["packages/ui-theme/storybook/index.ts"],
+      "@codegena/ui-unified": ["packages/ui-unified/src/index.ts"],
+      "@codegena/ui-unified/menus": ["packages/ui-unified/menus/index.ts"],
+      "@codegena/ui-unified/panels": ["packages/ui-unified/panels/index.ts"],
+      "@codegena/ui-unified/icons": ["packages/ui-unified/icons/index.ts"],
+      "@codegena/ui-unified/branding": ["packages/ui-unified/branding/index.ts"],
+      "@codegena/ui-unified/feedback": ["packages/ui-unified/feedback/index.ts"],
+      "@codegena/ui-unified/files": ["packages/ui-unified/files/index.ts"],
+      "@codegena/ui-unified/counts": ["packages/ui-unified/counts/index.ts"],
+      "@codegena/ui-unified/scrolling": ["packages/ui-unified/scrolling/index.ts"],
+      "@codegena/ui-unified/code-editor": ["packages/ui-unified/code-editor/index.ts"],
+      "@codegena/ui-unified/code-editor-minimal": [
+        "packages/ui-unified/code-editor-minimal/index.ts"
       ],
-      "@codegena/oapi3ts/contract": [
-        "libs/oapi3ts/contract/src/index.ts"
-      ],
-      "@codegena/oapi3ts/schematic-tools": [
-        "libs/oapi3ts/schematic-tools/src/index.ts"
-      ],
-      "@codegena/definitions": [
-        "libs/definitions/src/index.ts"
-      ],
-      "@codegena/definitions/aspects": [
-        "libs/definitions/aspects/src/index.ts"
-      ],
-      "@codegena/definitions/json-schema": [
-        "libs/definitions/json-schema/src/index.ts"
-      ],
-      "@codegena/definitions/oas3": [
-        "libs/definitions/oas3/src/index.ts"
-      ],
-      "@codegena/schematics-example": [
-        "libs/schematics-example/src/index.ts"
-      ],
-      "@codegena/schematics-tools": [
-        "libs/schematics-tools/src/index.ts"
-      ],
-      "@codegena/ng-http-tools": [
-        "libs/ng-http-tools/src/index.ts"
-      ],
-      "@codegena/ng-http-tools/rx-operators": [
-        "libs/ng-http-tools/rx-operators/src/index.ts"
-      ],
-      "@codegena/todo-app-contract": [
-        "libs/todo-app-contract/src/index.ts"
-      ],
-      "@codegena/todo-app-contract/domain-schema": [
-        "libs/todo-app-contract/domain-schema/src/index.ts"
-      ]
+      "@codegena/ui-unified/monaco-workers": ["packages/ui-unified/monaco-workers/index.ts"],
+      "@codegena/ui-unified/monaco-environment": ["packages/ui-unified/monaco-environment/index.ts"],
+      "@codegena/ui-unified/monaco-vite": ["packages/ui-unified/monaco-vite/index.ts"],
+      "@codegena/ui-unified/monaco-bootstrap": ["packages/ui-unified/monaco-bootstrap/index.ts"],
+      "@codegena/ui-unified/monaco-webpack": ["packages/ui-unified/monaco-webpack/index.ts"],
+      "@codegena/graph-ui": ["packages/graph-ui/src/index.ts"],
+      "@codegena/graph-search-ui": ["packages/graph-search-ui/src/index.ts"],
+      "@codegena/playground-ui/appearance": ["packages/playground-ui/appearance/index.ts"],
+      "@codegena/playground-ui": ["packages/playground-ui/src/index.ts"],
+      "@codegena/playground-ui/converting-placeholder": ["packages/playground-ui/converting-placeholder/index.ts"],
+      "@codegena/playground-ui/clipboard": ["packages/playground-ui/clipboard/index.ts"],
+      "@codegena/playground-ui/download-files": ["packages/playground-ui/download-files/index.ts"],
+      "@codegena/playground-ui/generated-file-details": ["packages/playground-ui/generated-file-details/index.ts"],
+      "@codegena/playground-ui/generated-files-list": ["packages/playground-ui/generated-files-list/index.ts"],
+      "@codegena/playground-ui/graph-utils": ["packages/playground-ui/graph-utils/index.ts"],
+      "@codegena/playground-ui/json-editor": ["packages/playground-ui/json-editor/index.ts"],
+      "@codegena/playground-ui/misc-ui": ["packages/playground-ui/misc-ui/index.ts"],
+      "@codegena/playground-ui/navigation": ["packages/playground-ui/navigation/index.ts"],
+      "@codegena/playground-ui/playground": ["packages/playground-ui/playground/index.ts"],
+      "@codegena/playground-ui/preferences": ["packages/playground-ui/preferences/index.ts"],
+      "@codegena/playground-ui/search": ["packages/playground-ui/search/index.ts"],
+      "@codegena/notification-ui-core": ["packages/notification-ui-core/src/index.ts"],
+      "@codegena/notification-ui-notistack": ["packages/notification-ui-notistack/src/index.ts"]
     }
   },
-  "exclude": ["node_modules", "tmp"],
-  "angularCompilerOptions": {
-    "skipTemplateCodegen": true,
-    "strictMetadataEmit": false,
-    "enableResourceInlining": true,
-    "enableIvy": false
-  }
+  "exclude": ["node_modules", "tmp"]
 }

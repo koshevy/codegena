@@ -1,0 +1,8 @@
+{
+  "title": "Boolean type enforced via allOf",
+  "allOf": [
+    {
+      "type": "boolean"
+    }
+  ]
+}

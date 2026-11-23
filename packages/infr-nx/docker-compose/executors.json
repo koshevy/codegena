@@ -1,0 +1,14 @@
+{
+  "executors": {
+    "docker-compose-build": {
+      "implementation": "./docker-compose.cjs#build",
+      "schema": "./build.schema.json",
+      "description": "Build images for an Nx project's local Compose services."
+    },
+    "docker-compose-up": {
+      "implementation": "./docker-compose.cjs#up",
+      "schema": "./up.schema.json",
+      "description": "Start an Nx project's local Compose services."
+    }
+  }
+}

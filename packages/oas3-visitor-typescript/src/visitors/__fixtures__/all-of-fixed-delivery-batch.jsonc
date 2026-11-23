@@ -1,0 +1,12 @@
+{
+  "allOf": [
+    { "$ref": "#/definitions/deliveryBatch" },
+    { "minItems": 2, "maxItems": 3 }
+  ],
+  "definitions": {
+    "deliveryBatch": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "required": ["kind"],
+  "oneOf": [
+    {
+      "required": ["destination"],
+      "properties": {
+        "kind": { "const": "email" },
+        "destination": { "type": "string" }
+      }
+    },
+    {
+      "required": ["destination"],
+      "properties": {
+        "kind": { "const": "pickup" },
+        "destination": { "type": "number" }
+      }
+    }
+  ]
+}

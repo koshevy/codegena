@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc",
+    "declaration": true,
+    "types": ["node"]
+  },
+  "include": ["**/*.ts"],
+  "exclude": [
+    "jest.config.ts",
+    "__examples__/**",
+    "**/*.spec.ts",
+    "**/*.test.ts"
+  ],
+  "nx": {
+    "sync": {
+      "ignoredDependencies": ["@codegena/infr-nx"]
+    }
+  }
+}

@@ -1,0 +1,101 @@
+export const contentType = [
+  // Text and event streams
+  'text/html',
+  'text/css',
+  'text/plain',
+  'text/csv',
+  'text/tab-separated-values',
+  'text/markdown',
+  'text/javascript',
+  'text/xml',
+  'text/yaml',
+  'text/calendar',
+  'text/event-stream',
+  'text/vcard',
+
+  // Images
+  'image/jpeg',
+  'image/png',
+  'image/gif',
+  'image/webp',
+  'image/svg+xml',
+  'image/apng',
+  'image/avif',
+  'image/bmp',
+  'image/tiff',
+  'image/x-icon',
+
+  // Video
+  'video/mp4',
+  'video/webm',
+  'video/mpeg',
+  'video/ogg',
+  'video/quicktime',
+  'video/x-msvideo',
+  'video/3gpp',
+
+  // Audio
+  'audio/mpeg',
+  'audio/aac',
+  'audio/wav',
+  'audio/ogg',
+  'audio/webm',
+  'audio/mp4',
+  'audio/flac',
+  'audio/midi',
+
+  // Application data and API formats
+  'application/json',
+  'application/pdf',
+  'application/octet-stream',
+  'application/xml',
+  'application/xhtml+xml',
+  'application/javascript',
+  'application/x-www-form-urlencoded',
+  'application/problem+json',
+  'application/problem+xml',
+  'application/ld+json',
+  'application/json-patch+json',
+  'application/merge-patch+json',
+  'application/json-seq',
+  'application/x-ndjson',
+  'application/yaml',
+  'application/x-yaml',
+  'application/cbor',
+  'application/protobuf',
+  'application/soap+xml',
+  'application/vnd.api+json',
+  'application/hal+json',
+  'application/wasm',
+
+  // Archives and documents
+  'application/zip',
+  'application/x-zip-compressed',
+  'application/gzip',
+  'application/x-tar',
+  'application/x-7z-compressed',
+  'application/x-rar-compressed',
+  'application/rtf',
+  'application/epub+zip',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/vnd.ms-excel',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'application/vnd.ms-powerpoint',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+
+  // Multipart content
+  'multipart/form-data',
+  'multipart/mixed',
+  'multipart/related',
+  'multipart/alternative',
+  'multipart/byteranges',
+
+  // Fonts
+  'font/woff',
+  'font/woff2',
+  'font/ttf',
+  'font/otf',
+] as const;
+
+export type ContentType = (typeof contentType)[number];

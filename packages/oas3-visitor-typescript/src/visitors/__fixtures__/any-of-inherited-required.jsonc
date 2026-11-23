@@ -1,0 +1,29 @@
+{
+  "type": "object",
+  "properties": {
+    "contactInfo": {
+      "$ref": "#/$defs/ContactInfo"
+    },
+    "notes": {},
+    "audit": {}
+  },
+  "required": ["audit"],
+  "anyOf": [
+    {
+      "type": "object",
+      "required": ["contactInfo", "notes"]
+    },
+    {
+      "type": "object",
+      "required": ["contactInfo"]
+    }
+  ],
+  "$defs": {
+    "ContactInfo": {
+      "type": "object",
+      "properties": {
+        "department": {}
+      }
+    }
+  }
+}

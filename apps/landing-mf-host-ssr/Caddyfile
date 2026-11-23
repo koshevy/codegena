@@ -1,0 +1,42 @@
+{
+	auto_https disable_redirects
+	https_port {$CADDY_HTTPS_PORT:443}
+	skip_install_trust
+}
+
+localhost, 127.0.0.1 {
+	tls internal
+	encode zstd gzip
+
+	header {
+		-Server
+		Referrer-Policy strict-origin-when-cross-origin
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options nosniff
+	}
+
+	@hashedAssets {
+		path_regexp [.-](?:[a-f0-9]{8}|[a-f0-9]{16}|[a-f0-9]{32})(?:\.[a-z0-9]+)+$
+		not path *.html *.htm
+	}
+	header @hashedAssets {
+		Cache-Control "public, max-age=31536000, immutable"
+		match {
+			status 2xx
+			header Last-Modified *
+		}
+	}
+
+	@revalidateFiles path *.html *.htm /service-worker.js
+	header @revalidateFiles >Cache-Control no-cache
+
+	header {
+		?Cache-Control no-cache
+		Content-Security-Policy "default-src 'self'; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-eval'; font-src 'self' data:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; worker-src 'self' blob:"
+		Permissions-Policy "camera=(), geolocation=(), microphone=()"
+		X-Frame-Options DENY
+		match header Content-Type text/html*
+	}
+
+	reverse_proxy ssr:8104
+}

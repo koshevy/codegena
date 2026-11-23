@@ -1,0 +1,10 @@
+{
+  "oneOf": [
+    { "default": true },
+    { "default": 17 },
+    { "default": 0.5 },
+    { "default": null },
+    { "pattern": "^[A-Z]+$" },
+    { "items": { "type": "string" } }
+  ]
+}

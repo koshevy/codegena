@@ -1,0 +1,52 @@
+{
+  "name": "@codegena/graph-core",
+  "version": "0.0.1",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.esm.js",
+  "module": "./dist/index.esm.js",
+  "types": "./dist/index.esm.d.ts",
+  "files": [
+    "dist",
+    "!**/*.tsbuildinfo"
+  ],
+  "nx": {
+    "tags": [
+      "pure:publishable"
+    ],
+    "targets": {
+      "build": {
+        "outputs": [
+          "{workspaceRoot}/dist/graph-core"
+        ]
+      }
+    }
+  },
+  "dependencies": {
+    "@codegena/oas3-core": "*"
+  },
+  "devDependencies": {
+    "@codegena/infr-nx": "*",
+    "@codegena/oas3-visitor-typescript": "*",
+    "@nx/jest": "23.3.2",
+    "@swc/core": "1.15.8",
+    "@swc/jest": "~0.2.38",
+    "@types/jest": "~30.0.0",
+    "@types/node": "^24.0.0",
+    "eslint": "^10.13.0",
+    "jest": "~30.3.0",
+    "jest-environment-node": "~30.3.0",
+    "nx": "23.3.2",
+    "rollup": "^4.14.0",
+    "ts-jest": "^29.4.7",
+    "typescript": "6.0.3"
+  },
+  "peerDependencies": {
+    "@codegena/oas3-visitor-typescript": "0.x"
+  },
+  "peerDependenciesMeta": {
+    "@codegena/oas3-visitor-typescript": {
+      "optional": true
+    }
+  }
+}

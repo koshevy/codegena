@@ -1,0 +1,77 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Artifacts API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}": {
+      "delete": {
+        "operationId": "actions/delete-artifact",
+        "tags": ["actions"],
+        "responses": {
+          "200": {
+            "description": "Deleted artifact",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Artifact" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repos/{owner}/{repo}/actions/artifacts/{request_id}": {
+      "delete": {
+        "operationId": "actions.delete_request",
+        "tags": ["actions"],
+        "responses": {
+          "200": {
+            "description": "Deleted request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Artifact" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repos/{owner}/{repo}/actions/artifacts/{alias_id}": {
+      "delete": {
+        "operationId": "delete.artifact",
+        "tags": ["actions"],
+        "responses": {
+          "200": {
+            "description": "Deleted artifact alias",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Artifact" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health/{cluster_id}": {
+      "get": {
+        "responses": { "200": { "description": "Cluster is healthy" } }
+      }
+    },
+    "/health/status": {
+      "get": {
+        "responses": { "200": { "description": "Service is healthy" } }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Artifact": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" }
+        }
+      }
+    }
+  }
+}

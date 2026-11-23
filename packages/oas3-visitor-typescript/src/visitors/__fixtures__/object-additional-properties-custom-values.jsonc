@@ -1,0 +1,13 @@
+{
+  "$id": "object-with-additional-properties-custom-keys",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Option additionalProperties as object change default type of Record",
+  "type": "object",
+  "additionalProperties": {
+    "type": "object",
+    "description": "Custom property sets",
+    "propertyNames": {
+      "pattern": "^(CORE|EXTENSION)_([A-Z_]+)$"
+    }
+  }
+}

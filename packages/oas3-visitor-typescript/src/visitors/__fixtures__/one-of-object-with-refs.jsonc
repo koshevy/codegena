@@ -1,0 +1,24 @@
+{
+  "$defs": {
+    "AnotherType": {
+      "type": "object",
+      "properties": {
+        "propertyOfAnotherType": {}
+      }
+    },
+    "AnotherElseType": {
+      "type": "object",
+      "properties": {
+        "propertyOfAnotherElseType": {}
+      }
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/AnotherType"
+    },
+    {
+      "$ref": "#/$defs/AnotherElseType"
+    }
+  ]
+}

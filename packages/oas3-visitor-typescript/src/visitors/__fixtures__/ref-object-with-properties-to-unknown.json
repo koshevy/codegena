@@ -1,0 +1,12 @@
+{
+  "$id": "ref-object-with-properties-to-unknown",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/FirstLevelDepthUnknownType",
+  "properties": {
+    "mixinProperty": {}
+  },
+  "required": ["mixinProperty"],
+  "$defs": {
+    "FirstLevelDepthUnknownType": {}
+  }
+}

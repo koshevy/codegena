@@ -1,0 +1,89 @@
+---
+title: Get started
+slug: /
+---
+
+import Alert from '@mui/material/Alert';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+Codegena generates TypeScript from OpenAPI and JSON Schema. Start with a specification, run the CLI, and inspect the generated files.
+
+## Install
+
+```bash
+npm install @codegena/oapi3ts@4
+```
+
+## Generate TypeScript
+
+```bash
+npx oas3ts convert --schemaFilePath="./openapi.json" -o="./generated" --mode="separateFiles"
+```
+
+The specification is the source of truth. Keep generated output reproducible and make changes in the specification or generator configuration.
+
+Continue with [Core features](/core-features) or [Extend](/extend).
+
+## React components in MDX
+
+MDX supports React components alongside Markdown. Import a component, then use
+JSX to pass its props and content. These examples render directly in the article.
+
+### A themed callout
+
+<Alert severity="info">
+  Keep the specification as the <strong>source of truth</strong>. Regenerate
+  TypeScript after changing it.
+</Alert>
+
+```jsx
+import Alert from '@mui/material/Alert';
+
+<Alert severity="info">
+  Keep the specification as the <strong>source of truth</strong>. Regenerate
+  TypeScript after changing it.
+</Alert>
+```
+
+### Interactive tabs
+
+Components can also manage interactions. Select a tab to switch between the
+installation and generation commands.
+
+<Tabs>
+  <TabItem
+    default
+    label="Install"
+    value="install"
+  >
+    Install the CLI with `npm install @codegena/oapi3ts@4`.
+  </TabItem>
+  <TabItem
+    label="Generate"
+    value="generate"
+  >
+    Run `npx oas3ts convert --schemaFilePath="./openapi.json" -o="./generated"`.
+  </TabItem>
+</Tabs>
+
+```jsx
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs>
+  <TabItem
+    default
+    label="Install"
+    value="install"
+  >
+    Install the CLI with `npm install @codegena/oapi3ts@4`.
+  </TabItem>
+  <TabItem
+    label="Generate"
+    value="generate"
+  >
+    Run `npx oas3ts convert --schemaFilePath="./openapi.json" -o="./generated"`.
+  </TabItem>
+</Tabs>
+```

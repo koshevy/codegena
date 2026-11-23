@@ -1,0 +1,12 @@
+import type { Pet as BarrelPet } from './generated/pets/_common';
+import type { Pet } from './generated/pets/_common/pet';
+
+export const pet: Pet = {
+  id: 3,
+  name: 'Pixel',
+};
+
+export const petFromBarrel: BarrelPet = {
+  id: 3,
+  name: 'Pixel',
+};

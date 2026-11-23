@@ -1,0 +1,14 @@
+{
+  "$defs": {
+    "DraftStatus": {
+      "enum": ["draft", "published"]
+    },
+    "ReleasedStatus": {
+      "enum": ["published", "archived"]
+    }
+  },
+  "oneOf": [
+    { "$ref": "#/$defs/DraftStatus" },
+    { "$ref": "#/$defs/ReleasedStatus" }
+  ]
+}

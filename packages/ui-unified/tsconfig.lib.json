@@ -1,0 +1,58 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "moduleResolution": "bundler",
+    "outDir": "../../dist/out-tsc",
+    "declaration": true,
+    "types": [
+      "node",
+      "vite/client",
+      "@nx/react/typings/cssmodule.d.ts",
+      "@nx/react/typings/image.d.ts"
+    ]
+  },
+  "exclude": [
+    "src/**/*.spec.ts",
+    "src/**/*.spec.tsx",
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "**/story-utils/**",
+    "**/*.stories.ts",
+    "**/*.stories.tsx"
+  ],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "panels/**/*.ts",
+    "panels/**/*.tsx",
+    "menus/**/*.ts",
+    "menus/**/*.tsx",
+    "icons/**/*.ts",
+    "icons/**/*.tsx",
+    "branding/**/*.ts",
+    "branding/**/*.tsx",
+    "feedback/**/*.ts",
+    "feedback/**/*.tsx",
+    "files/**/*.ts",
+    "files/**/*.tsx",
+    "counts/**/*.ts",
+    "counts/**/*.tsx",
+    "scrolling/**/*.ts",
+    "scrolling/**/*.tsx",
+    "code-editor/**/*.ts",
+    "code-editor/**/*.tsx",
+    "code-editor-minimal/**/*.ts",
+    "monaco-workers/**/*.ts",
+    "monaco-environment/**/*.ts",
+    "monaco-vite/**/*.ts",
+    "monaco-bootstrap/**/*.ts",
+    "monaco-webpack/**/*.ts"
+  ],
+  "nx": {
+    "sync": {
+      "ignoredDependencies": [
+        "@codegena/infr-nx"
+      ]
+    }
+  }
+}

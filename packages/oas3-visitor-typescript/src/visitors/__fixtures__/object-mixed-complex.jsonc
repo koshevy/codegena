@@ -1,0 +1,76 @@
+{
+  "$id": "object-properties-simple",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "propertyNames": {
+    "pattern": "^X_"
+  },
+  "properties": {
+    "dictionary": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "patternProperties": {
+            "^PROPERTY_[A-Z][A-Z0-9_]{0,64}$": {
+              "properties": {
+                "description": {},
+                "rules": {}
+              }
+            },
+            "^PRESET_[A-Z][A-Z0-9_]{0,64}$": {
+              "properties": {
+                "associatedActions": {},
+                "associatedProperties": {},
+                "description": {},
+                "initialValue": {}
+              }
+            },
+            "^ACTION_[A-Z][A-Z0-9_]{0,64}$": {
+              "properties": {
+                "associatedProperties": {},
+                "arguments": {
+                  "patternProperties": {
+                    "^REF_[A-Z][A-Z0-9_]{0,64}$": {
+                      "properties": {
+                        "$ref": {},
+                        "allowRecursive": {},
+                        "defaultValue": {}
+                      },
+                      "required": [
+                        "$ref"
+                      ]
+                    },
+                    "^VAL_": {}
+                  }
+                },
+                "storedFn": {},
+                "trigger": {}
+              }
+            }
+          }
+        },
+        "data": {
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "currentValue": {},
+              "previousValue": {},
+              "changedAt": {}
+            },
+            "required": [
+              "currentValue",
+              "changedAt"
+            ]
+          },
+          "propertyNames": {
+            "pattern": "^(PROPERTY|PRESET|ACTION)_[A-Z][A-Z0-9_]{0,64}_(ARGUMENT|RESULT|VALUE)$"
+          }
+        }
+      },
+      "required": ["meta"]
+    }
+  },
+  "required": [
+    "dictionary"
+  ]
+}

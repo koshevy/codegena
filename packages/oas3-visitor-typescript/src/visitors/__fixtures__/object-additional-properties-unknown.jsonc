@@ -1,0 +1,7 @@
+{
+  "$id": "object-with-additional-properties-unknown",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Option additionalProperties has to be converted to Record<string, unknown>",
+  "type": "object",
+  "additionalProperties": true
+}

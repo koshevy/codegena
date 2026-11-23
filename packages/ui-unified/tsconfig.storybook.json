@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "types": [
+      "node",
+      "vite/client",
+      "@nx/react/typings/cssmodule.d.ts"
+    ]
+  },
+  "include": [
+    "**/*.stories.ts",
+    "**/*.stories.tsx",
+    "**/story-utils/**/*.ts",
+    "**/story-utils/**/*.tsx",
+    ".storybook/*.ts"
+  ]
+}

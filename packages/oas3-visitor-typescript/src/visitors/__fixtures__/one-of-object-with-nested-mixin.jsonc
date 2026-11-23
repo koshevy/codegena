@@ -1,0 +1,49 @@
+{
+  "type": "object",
+  "properties": {
+    "nestedChoice": {
+      "$ref": "#/$defs/NestedChoice"
+    }
+  },
+  "required": [
+    "nestedChoice"
+  ],
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "propertyOfInlineType": {}
+      },
+      "required": [
+        "propertyOfInlineType"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "anotherPropertyOfInlineType": {}
+      },
+      "required": [
+        "anotherPropertyOfInlineType"
+      ]
+    }
+  ],
+  "$defs": {
+    "NestedChoice": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "nestedProperty": {}
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "anotherNestedProperty": {}
+          }
+        }
+      ]
+    }
+  }
+}

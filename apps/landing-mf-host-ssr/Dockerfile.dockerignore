@@ -1,0 +1,9 @@
+**
+!dist/
+!dist/apps/
+!dist/apps/landing-mf-host/
+!dist/apps/landing-mf-host/**
+!dist/apps/landing-mf-host-renderer/
+!dist/apps/landing-mf-host-renderer/renderer.cjs
+!dist/apps/landing-mf-host-ssr/
+!dist/apps/landing-mf-host-ssr/main.js

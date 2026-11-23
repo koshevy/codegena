@@ -1,0 +1,36 @@
+{
+  "$defs": {
+    "Contact": {
+      "$ref": "#/$defs/ContactDetails"
+    },
+    "ContactDetails": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/RequiredContact"
+        }
+      ]
+    },
+    "RequiredContact": {
+      "type": "object",
+      "required": ["contactInfo"]
+    },
+    "ContactInfo": {
+      "type": "object",
+      "properties": {
+        "department": {}
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "contactInfo": {
+      "$ref": "#/$defs/ContactInfo"
+    },
+    "notes": {}
+  },
+  "allOf": [
+    {
+      "$ref": "#/$defs/Contact"
+    }
+  ]
+}

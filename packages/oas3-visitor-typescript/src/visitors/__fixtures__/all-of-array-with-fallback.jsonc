@@ -1,0 +1,18 @@
+{
+  "description": "An array of at least two customer identifiers",
+  "allOf": [
+    { "$ref": "#/definitions/customerIds" },
+    { "minItems": 2 },
+    { "$ref": "#/definitions/minimumCustomerIds" },
+    { "anyOf": [{ "minItems": 2 }, { "minItems": 4 }] }
+  ],
+  "definitions": {
+    "customerIds": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "minimumCustomerIds": {
+      "minItems": 2
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "$id": "object-with-pattern-properties",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Object with patternProperties have to be converted to intersection of records with different key types",
+  "type": "object",
+  "patternProperties": {
+    "^GROUP_CORE_": {
+      "additionalProperties": true
+    },
+    "^GROUP_EXTENSION_": {
+      "type": "object",
+      "patternProperties": {
+        "^EXTENSION_PROPERTY_": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^NESTED_PROPERTY_"
+          }
+        }
+      }
+    }
+  }
+}

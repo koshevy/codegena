@@ -1,0 +1,7 @@
+{
+  "type": [
+    "string",
+    "null"
+  ],
+  "format": "email"
+}

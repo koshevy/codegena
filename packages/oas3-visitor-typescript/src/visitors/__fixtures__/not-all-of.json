@@ -1,0 +1,6 @@
+{
+  "allOf": [
+    { "type": "string", "enum": ["active", "disabled"] },
+    { "not": { "const": "disabled" } }
+  ]
+}

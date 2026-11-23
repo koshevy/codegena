@@ -1,0 +1,34 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc/pwa",
+    "rootDir": ".",
+    "composite": true,
+    "declaration": true,
+    "moduleResolution": "bundler",
+    "types": ["node"]
+  },
+  "include": [
+    "src/**/*.ts",
+    "bundle-warmup/**/*.ts",
+    "bundle-warmup-config/**/*.ts",
+    "bundle-warmup-context/**/*.ts",
+    "common/**/*.ts",
+    "rspack/**/*.ts",
+    "service-worker/**/*.ts",
+    "service-worker-client/**/*.ts"
+  ],
+  "exclude": [
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "**/__fixtures__/**",
+    "**/__mocks__/**"
+  ],
+  "nx": {
+    "sync": {
+      "ignoredDependencies": [
+        "@codegena/infr-nx"
+      ]
+    }
+  }
+}

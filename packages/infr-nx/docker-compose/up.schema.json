@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "version": 2,
+  "title": "Start local Docker Compose services",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "composeFile": {
+      "type": "string",
+      "description": "Compose file path relative to the Nx project.",
+      "default": "docker-compose.yml"
+    },
+    "dryRun": {
+      "type": "boolean",
+      "description": "Preview the changes through Docker Compose."
+    },
+    "services": {
+      "type": "array",
+      "description": "Start only these services and their dependencies. By default, start all services.",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]*$"
+      }
+    },
+    "build": {
+      "type": "boolean",
+      "description": "Build images before starting the services."
+    },
+    "detached": {
+      "type": "boolean",
+      "description": "Start the services in the background."
+    },
+    "abortOnContainerExit": {
+      "type": "boolean",
+      "description": "Stop the other services when any container exits."
+    }
+  }
+}

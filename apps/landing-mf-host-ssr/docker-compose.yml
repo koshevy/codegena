@@ -1,0 +1,48 @@
+services:
+  ssr:
+    image: landing-mf-host-ssr-ssr
+    build:
+      context: ../..
+      dockerfile: apps/landing-mf-host-ssr/Dockerfile
+      target: ssr
+    read_only: true
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      HOST: 0.0.0.0
+      PORT: "8104"
+    healthcheck:
+      test:
+        - CMD
+        - bun
+        - -e
+        - >-
+          process.exit((await fetch('http://127.0.0.1:8104/manifest.webmanifest')).ok ? 0 : 1)
+      interval: 2s
+      timeout: 3s
+      retries: 10
+  caddy:
+    image: landing-mf-host-ssr-caddy
+    build:
+      context: ../..
+      dockerfile: apps/landing-mf-host-ssr/Dockerfile
+      target: caddy
+    read_only: true
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    sysctls:
+      net.ipv4.ip_unprivileged_port_start: "443"
+    depends_on:
+      ssr:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:443:443/tcp"
+      - "127.0.0.1:443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+
+volumes:
+  caddy-data:

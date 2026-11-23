@@ -1,0 +1,13 @@
+{
+  "title": "Account",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string" },
+    "status": { "$ref": "#/$defs/Status" },
+    "role": { "enum": ["member", "admin"] }
+  },
+  "required": ["id", "status"],
+  "$defs": {
+    "Status": { "enum": ["active", "disabled"] }
+  }
+}

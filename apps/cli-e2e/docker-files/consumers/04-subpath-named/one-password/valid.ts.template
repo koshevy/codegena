@@ -1,0 +1,20 @@
+import type { ApiRequest } from './generated/activity';
+import type { ResponseVaultsListAll } from './generated/vaults/list-all';
+import type { Vault } from './generated/vaults/_common/vault';
+
+export const vault: Vault = {
+  type: 'USER_CREATED',
+  name: 'Engineering',
+};
+
+export const activity: ApiRequest = {
+  action: 'READ',
+};
+
+export const vaults: ResponseVaultsListAll<200> = [
+  { name: 'Engineering', items: 3 },
+];
+
+export const jsonVaults: ResponseVaultsListAll<200, 'application/json'> = [
+  { name: 'Support', items: 2 },
+];

@@ -1,0 +1,7 @@
+{
+  "type": "boolean",
+  "title": "Newsletter subscription",
+  "description": "Whether the user opted in to marketing emails",
+  "default": false,
+  "example": true
+}

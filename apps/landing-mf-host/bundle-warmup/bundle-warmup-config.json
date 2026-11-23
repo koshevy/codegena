@@ -1,0 +1,34 @@
+{
+  "manifestPath": "bundle-warmup.json",
+  "remotePath": "playground-remote/mf-manifest.json",
+  "clientShellGroup": "landing-startup",
+  "warmupGroups": {
+    "warmAfterPaintedGroups": {
+      "landing": ["navigation"],
+      "playground": ["embedded-navigation"],
+      "other": []
+    },
+    "extrasGroups": {
+      "landingCompletelyLoaded": ["landing-extras", "playground"]
+    }
+  },
+  "chunkGroups": {
+    "landing-startup": {
+      "chunks": ["main", "landing-bootstrap", "landing-shell", "landing-features"],
+      "assetPrefix": "assets/ui-theme/reset."
+    },
+    "navigation": {
+      "chunks": ["navigation-overlay"]
+    },
+    "embedded-navigation": {
+      "chunks": ["navigation-overlay", "playground-overlay"]
+    },
+    "landing-extras": {
+      "chunks": ["landing-search-preview"]
+    },
+    "playground": {
+      "chunks": ["playground-route", "playground-overlay"],
+      "remoteExpose": "App"
+    }
+  }
+}

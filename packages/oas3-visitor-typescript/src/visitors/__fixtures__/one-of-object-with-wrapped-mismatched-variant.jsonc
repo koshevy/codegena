@@ -1,0 +1,38 @@
+{
+  "type": "object",
+  "properties": {
+    "mixinProp": {}
+  },
+  "required": [
+    "mixinProp"
+  ],
+  "oneOf": [
+    {
+      "$ref": "#/$defs/MatchingObject"
+    },
+    {
+      "$ref": "#/$defs/IncompatibleChoice"
+    }
+  ],
+  "$defs": {
+    "MatchingObject": {
+      "type": "object",
+      "properties": {
+        "matchingProperty": {}
+      }
+    },
+    "IncompatibleChoice": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "matchingProperty": {}
+          }
+        },
+        {
+          "type": "string"
+        }
+      ]
+    }
+  }
+}

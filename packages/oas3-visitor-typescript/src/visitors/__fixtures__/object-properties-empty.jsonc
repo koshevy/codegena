@@ -1,0 +1,6 @@
+{
+  "$id": "empty-business-payload",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Payload intentionally carrying no declared properties",
+  "type": "object"
+}

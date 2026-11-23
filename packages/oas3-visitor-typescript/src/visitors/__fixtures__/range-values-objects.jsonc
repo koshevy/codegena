@@ -1,0 +1,16 @@
+{
+  "enum": [
+    {
+      "kind": "email",
+      "enabled": true
+    },
+    {
+      "kind": "email",
+      "enabled": true
+    },
+    {
+      "kind": "phone",
+      "enabled": false
+    }
+  ]
+}

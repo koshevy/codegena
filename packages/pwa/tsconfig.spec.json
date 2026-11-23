@@ -1,0 +1,31 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc/pwa-spec",
+    "rootDir": ".",
+    "composite": true,
+    "declaration": true,
+    "target": "es2022",
+    "moduleResolution": "bundler",
+    "types": [
+      "jest",
+      "node"
+    ]
+  },
+  "include": [
+    "jest.config.cts",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "**/*.d.ts",
+    "**/__fixtures__/**/*.ts",
+    "**/__mocks__/**/*.ts"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    }
+  ],
+  "exclude": [
+    "e2e/**"
+  ]
+}

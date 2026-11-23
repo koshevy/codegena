@@ -1,0 +1,6 @@
+import type { Api1PasswordConnect } from './generated';
+
+export const vault: Api1PasswordConnect.Lib.Vault = {
+  type: 'SHARED',
+  name: 'Engineering',
+};
