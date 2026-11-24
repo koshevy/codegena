@@ -41,7 +41,11 @@
       }
     },
     "rspack:build": {
-      "dependsOn": ["playground-mf-remote:build", "documentation-mf-remote:build"],
+      "dependsOn": [
+        "@codegena/source:apply-dependency-patches",
+        "playground-mf-remote:build",
+        "documentation-mf-remote:build"
+      ],
       "outputs": [
         "{workspaceRoot}/dist/apps/landing-mf-host",
         "{workspaceRoot}/dist/apps/landing-mf-host-services"
@@ -53,6 +57,12 @@
           "env": "CODEGENA_BUILD_ID"
         }
       ]
+    },
+    "rspack:serve": {
+      "dependsOn": ["@codegena/source:apply-dependency-patches"]
+    },
+    "preview": {
+      "dependsOn": ["@codegena/source:apply-dependency-patches"]
     },
     "storybook": {
       "dependsOn": [
@@ -67,7 +77,8 @@
     "serve": {
       "continuous": true,
       "dependsOn": [
-        "^build"
+        "^build",
+        "@codegena/source:apply-dependency-patches"
       ],
       "executor": "nx:run-commands",
       "options": {
@@ -92,6 +103,7 @@
       }
     },
     "typecheck": {
+      "dependsOn": ["@codegena/source:apply-dependency-patches"],
       "executor": "nx:run-commands",
       "options": {
         "command": "tsc --noEmit -p tsconfig.app.json",
@@ -99,7 +111,7 @@
       }
     },
     "test": {
-      "dependsOn": ["^build", "test-feature-import-boundaries"]
+      "dependsOn": ["^build", "@codegena/source:apply-dependency-patches", "test-feature-import-boundaries"]
     },
     "test-feature-import-boundaries": {
       "executor": "nx:run-commands",

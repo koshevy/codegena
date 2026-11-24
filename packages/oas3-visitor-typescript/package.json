@@ -21,6 +21,7 @@
     ],
     "targets": {
       "build": {
+        "dependsOn": ["^build", "@codegena/source:apply-dependency-patches"],
         "outputs": [
           "{workspaceRoot}/dist/oas3-visitor-typescript"
         ]

@@ -30,6 +30,11 @@
       "type": "boolean",
       "description": "Start the services in the background."
     },
+    "exitCodeFrom": {
+      "type": "string",
+      "description": "Wait for the Compose services and return the exit code of this service.",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]*$"
+    },
     "abortOnContainerExit": {
       "type": "boolean",
       "description": "Stop the other services when any container exits."

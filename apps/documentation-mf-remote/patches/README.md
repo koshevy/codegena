@@ -1,7 +1,8 @@
 # Docusaurus route-loader compatibility
 
-The workspace's `npm ci` applies this project's patch with `patch-package`.
-Installation fails if it no longer applies; review it when upgrading Docusaurus.
+The documentation's Nx build and serve targets apply these patches through
+the workspace's `apply-dependency-patches` target. The target fails if a patch
+no longer applies. Review the patches when upgrading Docusaurus.
 
 ## `react-loadable` 6.0.0
 

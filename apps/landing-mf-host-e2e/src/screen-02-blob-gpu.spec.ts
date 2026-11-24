@@ -6,8 +6,22 @@ import {
   scrollSecondScreenTo,
 } from './landing-journey';
 
-// Headless Chromium needs GPU compositing as well as the WebGPU API.
-test.use({ launchOptions: { args: ['--enable-gpu'] } });
+const softwareGpuArgs = [
+  '--enable-gpu',
+  '--enable-unsafe-webgpu',
+  '--use-angle=vulkan',
+  '--enable-features=Vulkan',
+  '--disable-vulkan-surface',
+];
+const hasContainerChromium = Boolean(process.env['LANDING_E2E_CHROMIUM']);
+const gpuArgs = hasContainerChromium ? softwareGpuArgs : ['--enable-gpu'];
+
+// Mesa supplies a WebGPU adapter to the container.
+test.use({
+  launchOptions: async ({ launchOptions }, applyOptions) => {
+    await applyOptions({ ...launchOptions, args: gpuArgs });
+  },
+});
 
 interface LayoutShift extends PerformanceEntry {
   sources: readonly { node: Node | null }[];

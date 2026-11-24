@@ -1,0 +1,66 @@
+name: Alpha Release for Codegena Monorepo
+on:
+  push:
+    branches: [master]
+permissions:
+  contents: read
+defaults:
+  run:
+    shell: bash
+jobs:
+  nx-release:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Install dependencies
+        run: npm ci
+      - name: Prepare alpha releases
+        id: prepare
+        env:
+          GIT_AUTHOR_NAME: Codegena Release
+          GIT_AUTHOR_EMAIL: release@codegena.invalid
+          GIT_COMMITTER_NAME: Codegena Release
+          GIT_COMMITTER_EMAIL: release@codegena.invalid
+        run: |
+          base=$(git rev-parse HEAD)
+          npm exec -- nx release --preid alpha --skip-publish
+          if [[ "$(git rev-parse HEAD)" != "$base" ]]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Build apps and libraries
+        run: npm exec -- nx run-many --target=build --parallel=1
+      - name: Release Artifacts
+        if: ${{ !env.ACT || env.ACTIONS_RESULTS_URL != '' }}
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: alpha-builds
+          path: |
+            dist/
+            !dist/out-tsc/**
+          if-no-files-found: error
+          retention-days: 14
+          overwrite: true
+      - name: Configure npm registry
+        if: steps.prepare.outputs.changed == 'true'
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          registry-url: ${{ secrets.NPM_REGISTRY }}
+          package-manager-cache: false
+      - name: Publish
+        if: steps.prepare.outputs.changed == 'true'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
+        run: |
+          : "${NPM_REGISTRY:?Set the NPM_REGISTRY secret}" "${NODE_AUTH_TOKEN:?Set the NPM_TOKEN secret}"
+          git tag --points-at HEAD --list '@codegena/*@*-alpha.*' | while IFS= read -r tag; do
+            name="${tag%@*}"
+            directory="dist/${name#@codegena/}"
+            if [[ "$name" == '@codegena/audit-ci' ]]; then
+              directory=packages/audit-ci
+            fi
+            npm stage publish "./$directory" --registry "$NPM_REGISTRY" --tag alpha --access public --ignore-scripts
+          done

@@ -25,7 +25,7 @@ Publishable libraries need the same entrypoint discovery, output formats, assets
   **MUST** provide matching `import`, `require`, and `types` paths.
   Nx prepares the ESM package; the shared factory adds the CommonJS output.
   The built manifest includes files relative to the output directory so npm
-  can pack that directory directly. The [publication E2E project](../apps/cli-e2e/README.md)
+  can pack that directory directly. The [publication E2E project](../apps/cli-delivery-e2e/README.md)
   installs the published CLI from its own registry before compiling generated code.
 - **🗺️ Source maps:** TypeScript emits both JavaScript and declarations, and
   Rollup combines its source maps. A second SWC transformation is unnecessary

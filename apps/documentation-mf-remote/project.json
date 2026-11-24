@@ -6,6 +6,7 @@
   "tags": ["mf:remote"],
   "targets": {
     "serve": {
+      "dependsOn": ["@codegena/source:apply-dependency-patches"],
       "executor": "nx:run-commands",
       "continuous": true,
       "options": {
@@ -19,6 +20,7 @@
       }
     },
     "build": {
+      "dependsOn": ["@codegena/source:apply-dependency-patches"],
       "executor": "nx:run-commands",
       "options": {
         "command": "docusaurus build --out-dir ../../dist/apps/documentation-mf-remote",

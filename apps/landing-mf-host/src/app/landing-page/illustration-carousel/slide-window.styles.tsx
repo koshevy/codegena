@@ -50,6 +50,7 @@ export const SlideWindowStyles = styled(Box)(({ theme }) => `
   &[data-variant='foldering'] .${slideWindowClasses.viewport} {
     flex: 1;
     min-height: 0;
+    overflow: clip;
   }
 
   &[data-variant='foldering']

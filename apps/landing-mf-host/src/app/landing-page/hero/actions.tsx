@@ -43,6 +43,7 @@ export function Actions({
   return (
     <ActionsStyles>
       <Button
+        aria-description="Jump to the interactive Playground examples."
         disabled={!areFeaturesReady}
         endIcon={renderedPlaygroundIcon}
         onClick={handlePlaygroundClick}

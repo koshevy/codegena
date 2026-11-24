@@ -25,7 +25,7 @@ schema and its nested, sibling, or referenced schemas.
 - **Output boundary** matters for exact text: visitor and helper tests compare
   the TypeScript printer's intermediate output; public and CLI tests compare
   complete files formatted after imports are assembled.
-  The [publication suite](../../apps/cli-e2e/README.md#cases)
+  The [publication suite](../../apps/cli-delivery-e2e/README.md#cases)
   runs the installed CLI outside the repository and compiles its full output
   under TypeScript 5, 6, and 7.
 - **Expected log** records diagnostic behavior, separate from the generated

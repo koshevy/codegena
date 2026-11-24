@@ -1,0 +1,18 @@
+storage: /verdaccio/storage
+
+flags:
+  stage: true
+
+auth:
+  htpasswd:
+    file: /verdaccio/storage/htpasswd
+    max_users: 1
+
+packages:
+  '@codegena/*':
+    access: $authenticated
+    stage: act-stager
+    publish: release-maintainer
+
+web:
+  enable: true

@@ -21,8 +21,8 @@ The graph and playground combine editors, trees, notifications, and resizable vi
 - **🌳 Specialized controls:** Use `@mui/x-tree-view` for nested file/declaration lists and `react-resizable-panels` for resizable regions. The feature still owns sorting, selection, visibility, and navigation.
 - **📝 Forms:** `react-hook-form` is the default owner of form values,
   validation, and submission. Use its field, controller, and array APIs for
-  dynamic forms; see the [form state](../CODE_STYLE.md#rule-47) and
-  [widget metadata](../CODE_STYLE.md#rule-48) rules.
+  dynamic forms; see the [form state](../CODE_STYLE.md#rule-48) and
+  [widget metadata](../CODE_STYLE.md#rule-49) rules.
 - **📜 Virtual lists:** Long lists and expensive rows such as Monaco-backed file cards **MUST** use `@tanstack/react-virtual`. The product **MUST** retain ownership of markup, scroll surface, stable IDs, and reveal behavior.
 - **🖱️ Scrollbars:** Use `overlayscrollbars` on application-owned inner scroll surfaces.
   - Keep `window` as the scroll owner when a page controller uses
@@ -54,13 +54,13 @@ The graph and playground combine editors, trees, notifications, and resizable vi
     that state. Independent features retain their own local state.
   - Encapsulate complex editing behind a typed `value` / `onChange` contract.
     Keep related state, effects, refs, handlers, and cleanup in named hooks
-    owned by that feature. See the [state ownership](../CODE_STYLE.md#rule-41),
-    [controlled editor](../CODE_STYLE.md#rule-42), and
-    [hook extraction](../CODE_STYLE.md#rule-43) rules.
+    owned by that feature. See the [state ownership](../CODE_STYLE.md#rule-42),
+    [controlled editor](../CODE_STYLE.md#rule-43), and
+    [hook extraction](../CODE_STYLE.md#rule-44) rules.
   - A provider owns its shared preferences. Expose the values and their
     update actions through one context hook when callers use them together.
     Persist only the saved data. For a single preference, reuse its type at
-    the storage boundary. See [hook result contracts](../CODE_STYLE.md#rule-43).
+    the storage boundary. See [hook result contracts](../CODE_STYLE.md#rule-44).
   - Preferences **SHOULD** persist at the feature boundary when needed; broad React context **MUST NOT** disguise a global UI store.
   - MUI's theme context remains appropriate.
 - **🪜 Components depend downward:** Children **MUST NOT** import parent-private styles or behavior. Place shared controls at a neutral level; put derived data and imperative behavior in focused hooks. See the [React rules](../CODE_STYLE.md#react-rules).

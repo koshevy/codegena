@@ -26,6 +26,8 @@
 
 Maintain project skills only in `.agents/skills/`. Claude's `.claude/skills/` entries are symlinks to those directories; add a symlink there when adding a skill. Cursor and OpenCode discover `.agents/skills/` directly, so do not create copies in their tool-specific directories.
 
+For local GitHub Actions testing, use the [gh-act skill](.agents/skills/gh-act/SKILL.md).
+
 For code changes, load `.agents/skills/relevant-changes/SKILL.md` and apply its design gate before editing and its diff review before finishing. For React changes, follow the React and accessibility rules in `CODE_STYLE.md`.
 
 For library TypeScript project configuration changes, load `.agents/skills/library-tsconfig-consistency/SKILL.md`. Check the project's actual build, test, and Storybook source sets before changing references, globs, or compiler options.

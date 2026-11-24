@@ -175,8 +175,24 @@
   },
   "analytics": false,
   "release": {
+    "projects": [
+      "tag:pure:publishable",
+      "tag:server:publishable",
+      "tag:ui:publishable",
+      "@codegena/infr-nx"
+    ],
+    "projectsRelationship": "independent",
+    "git": {
+      "push": false
+    },
     "version": {
-      "preVersionCommand": "npx nx run-many -t build"
+      "conventionalCommits": true,
+      "fallbackCurrentVersionResolver": "disk",
+      "preserveMatchingDependencyRanges": false,
+      "updateDependents": "never",
+      "versionActionsOptions": {
+        "skipLockFileUpdate": true
+      }
     }
   }
 }

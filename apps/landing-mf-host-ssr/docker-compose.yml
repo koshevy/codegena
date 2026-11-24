@@ -12,16 +12,6 @@ services:
     environment:
       HOST: 0.0.0.0
       PORT: "8104"
-    healthcheck:
-      test:
-        - CMD
-        - bun
-        - -e
-        - >-
-          process.exit((await fetch('http://127.0.0.1:8104/manifest.webmanifest')).ok ? 0 : 1)
-      interval: 2s
-      timeout: 3s
-      retries: 10
   caddy:
     image: landing-mf-host-ssr-caddy
     build:
@@ -41,7 +31,6 @@ services:
       - "127.0.0.1:443:443/tcp"
       - "127.0.0.1:443:443/udp"
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy-data:/data
 
 volumes:

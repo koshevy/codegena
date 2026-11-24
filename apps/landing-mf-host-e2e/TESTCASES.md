@@ -41,8 +41,9 @@
 | ✅ Implemented | 🟡 P1 | 02.02 — Scroll through command typing, greeting, and diagnostics; pause and reverse to verify that the terminal follows page position. |
 | ✅ Implemented | 🟡 P1 | 02.02 — On desktop, a touchpad advances the page while terminal output fits; once output overflows, it scrolls inside the terminal. |
 | ✅ Implemented | 🟡 P1 | 02.02 — On mobile, open the terminal peel during partial playback, close it, then continue scrolling to the complete output. |
-| ✅ Implemented | 🟡 P1 | 02.03 — Read the foldering story and expand `items/_common` to see a generated file. Check its image. |
-| ✅ Implemented | 🟡 P1 | 02.03 — At 15%, 30%, 45%, and 60% of the section, expand `_common`, `vaults`, `vaults/_common`, and show the code example. Manually collapse `vaults` in the preview before continuing. Reverse scrolling to restore each prior state. |
+| ✅ Implemented | 🟡 P1 | 02.03 — Expand `items/_common` and reveal a generated file. Verify the adjacent code slide stays outside the viewport, then check the image. |
+| ✅ Implemented | 🟡 P1 | 02.03 — At 15%, 30%, 45%, and 60% of the section, expand `_common`, `vaults`, `vaults/_common`, and show the code example. Reverse scrolling to restore each prior state. |
+| ✅ Implemented | 🟡 P1 | 02.03 — On desktop, manually collapse `vaults` in the preview. Continue scrolling and verify it reopens. |
 | ✅ Implemented | 🟡 P1 | 02.03 — On mobile, open the folder drawer, expand `items` in its tree, and close the drawer. |
 | ✅ Implemented | 🟡 P1 | 02.03 — Switch to the domain namespace example and inspect its filename, code, and explanation. |
 | ✅ Implemented | 🟡 P1 | 02.03 — On mobile, open the domain namespace code as a peel drawer. |
@@ -143,15 +144,22 @@ Docker Compose and local port 8443 must be available.
 ## Quality metrics
 
 Run `npm exec -- nx run landing-mf-host-e2e:e2e-quality` with Docker Compose
-running and Playwright Chromium installed. Nx runs this separately from
-`e2e-ssr` because both use the same HTTPS test port. When invoking the
-targets in separate Nx sessions, wait for one to finish before starting the other.
+running. Lighthouse connects to the dedicated Chrome launcher on the Caddy
+network. The audit stack uses no host ports.
 
 - **QUALITY-01.** Audit the cold SSR homepage over HTTPS with Lighthouse's
   default mobile profile. Require 100 in Performance, Accessibility,
-  Best Practices, and SEO. The audit browser accepts Caddy's local certificate.
-- Find the HTML and JSON reports under `dist/reports/landing-quality/` after
-  each completed audit, including when a score fails the requirement.
+  Best Practices, and SEO. The audit browser accepts Caddy's local certificate
+  and ignores the halo's exact WebGL-context error on this GPU-less runner.
+- Copy the HTML and JSON reports from the stopped audit container after any
+  completed audit, including a failed score.
+
+  ```sh
+  mkdir -p dist/reports/landing-quality
+  docker compose -f apps/landing-mf-host-e2e/docker-compose.yml \
+    --profile quality cp quality:/workspace/dist/reports/landing-quality/. \
+    dist/reports/landing-quality/
+  ```
 
 ## Check TypeScript
 
@@ -160,6 +168,21 @@ specs, their helpers, and the Playwright configurations without emitting files.
 Run `npm exec -- nx sync:check` to verify project-reference synchronization.
 
 ## Browser and snapshot policy
+
+- Run `npm exec -- nx run landing-mf-host-e2e:e2e` to build the landing
+  production bundle, serve it in the project's Alpine container, and run desktop
+  and iPhone 15 Playwright tests. The `docker-compose-build` and
+  `docker-compose-up` targets provide the same build and execution steps.
+- Use `npm exec -- nx run landing-mf-host-e2e:e2e:native` to use an installed
+  Playwright Chromium and the native preview server instead.
+- Copy browser reports and test output from the stopped Playwright container.
+
+  ```sh
+  mkdir -p dist/.playwright/apps/landing-mf-host-e2e
+  docker compose -f apps/landing-mf-host-e2e/docker-compose.yml \
+    cp playwright:/workspace/dist/.playwright/apps/landing-mf-host-e2e/. \
+    dist/.playwright/apps/landing-mf-host-e2e/
+  ```
 
 - Every landing journey **MUST** run in both desktop Chrome and iPhone 15 mode.
 - Device-specific gestures **MUST** run only where a person can perform them;
@@ -179,8 +202,9 @@ Run `npm exec -- nx sync:check` to verify project-reference synchronization.
 - Hold animated logo and wordmark gradients at their first SVG frame with
   `freezeSvgAnimation` before image comparisons. Cases 01.13 and 01.14 check
   their real animation separately.
-- Live GPU checks open `/` in headless Chromium with `--enable-gpu`. They
-  retain the real renderer and count native canvas frames while scrolling.
+- Live GPU checks open `/` in headless Chromium with `--enable-gpu`. The
+  Docker browser uses Mesa's software Vulkan driver for WebGPU. The checks
+  retain the renderer and count native canvas frames while scrolling.
   Enabling WebGPU alone does not enable headless GPU compositing; a shader
   reporting ready is not enough to prove it continues rendering.
 - The live GPU journey also checks shader compilation warnings. The

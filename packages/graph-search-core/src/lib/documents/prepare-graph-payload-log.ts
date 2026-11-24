@@ -6,7 +6,7 @@ function removeSourceExcerpt(message: string): string {
   const lines = message.split('\n');
   const sourceLineIndex = lines.findIndex((line) => {
     const dividerIndex = line.indexOf('|');
-    const prefix = line.slice(0, dividerIndex).trim().replace('>', '').trim();
+    const prefix = line.slice(0, dividerIndex).trim().replace(/^>\s*/, '');
 
     return dividerIndex !== -1
       && prefix.length > 0

@@ -14,8 +14,8 @@ targets, then run `npm exec -- nx build @codegena/infr-nx`,
 
 ## Local Docker Compose
 
-Place a `docker-compose.yml` beside the project's `project.json`. Add these
-entries to `targets`.
+Keep the `Dockerfile` and `docker-compose.yml` beside the owning project's
+`project.json`. Add these entries to `targets`.
 
 ```json
 {
@@ -37,4 +37,5 @@ Pass `--detached` to run it in the background. Both executors run Compose from
 the project directory, where it can find the project's `.env`. Use
 `composeFile` for a different filename, `services` to select services, or
 `--dryRun` to preview the Compose operations. Add an Nx build dependency
-when the Dockerfile copies prebuilt artifacts.
+when the Dockerfile copies prebuilt artifacts. For a test service that exits,
+set `exitCodeFrom` to its service name so Nx reports its result.

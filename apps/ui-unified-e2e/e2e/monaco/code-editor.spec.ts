@@ -23,7 +23,7 @@ test('edits highlighted JSON without mounting or starting Monaco', async ({ page
   await page.keyboard.press('Control+a');
   await page.keyboard.type('42');
 
-  const editedCode = page.getByText('42', { exact: true });
+  const editedCode = page.locator('[data-token="number"]').filter({ hasText: /^42$/ });
 
   await expect(editedCode).toBeVisible();
   await editor.click({ button: 'right' });

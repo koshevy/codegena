@@ -10,6 +10,7 @@ export function GetStarted(): ReactElement {
 
   return (
     <GetStartedStyles
+      aria-description="Open the Codegena getting started guide."
       component={HostLink}
       endIcon={renderedIcon}
       href={menuAction.href}

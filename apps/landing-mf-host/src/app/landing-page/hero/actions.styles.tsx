@@ -17,9 +17,7 @@ export const ActionsStyles = styled(Box)(({ theme }) => `
   }
 
   & .MuiButton-contained {
-    background: ${theme.palette.info.dark};
     border-radius: 2px;
-    color: ${theme.palette.info.contrastText};
     font-size: 0.78rem;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -27,8 +25,48 @@ export const ActionsStyles = styled(Box)(({ theme }) => `
     text-transform: uppercase;
   }
 
-  & .MuiButton-contained:hover {
-    background: ${theme.palette.info.main};
+  & .MuiButton-contained:not(.Mui-disabled) {
+    background-image: linear-gradient(
+      90deg,
+      ${theme.palette.info.dark},
+      ${theme.palette.primary.dark},
+      ${theme.palette.secondary.dark}
+    );
+    color: ${theme.palette.info.contrastText};
+    isolation: isolate;
+  }
+
+  & .MuiButton-contained:not(.Mui-disabled)::before {
+    background-image: linear-gradient(
+      90deg,
+      ${theme.palette.info.light},
+      ${theme.palette.primary.light} 75%,
+      ${theme.palette.secondary.light}
+    );
+    border-radius: inherit;
+    content: '';
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    transition: opacity 300ms ease;
+    z-index: -1;
+  }
+
+  & .MuiButton-contained:not(.Mui-disabled):hover::before,
+  & .MuiButton-contained:not(.Mui-disabled):active::before {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    & .MuiButton-contained:not(.Mui-disabled)::before {
+      transition: none;
+    }
+  }
+
+  & .MuiButton-contained:focus-visible {
+    outline: 2px solid ${theme.palette.info.dark};
+    outline-offset: 3px;
   }
 
   .${actionsClasses.secondary} {

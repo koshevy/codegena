@@ -1,0 +1,12 @@
+services:
+  verdaccio:
+    image: verdaccio/verdaccio:7.1.2
+    ports:
+      - '127.0.0.1:4873:4873'
+    volumes:
+      - ./config.yaml:/verdaccio/conf/config.yaml:ro
+    healthcheck:
+      test: [CMD, wget, -q, -O, /dev/null, 'http://127.0.0.1:4873/-/ping']
+      interval: 1s
+      timeout: 3s
+      retries: 15

@@ -1,0 +1,174 @@
+name: Pull Request for Codegena Monorepo
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+permissions:
+  contents: read
+defaults:
+  run:
+    shell: bash
+jobs:
+  checkout:
+    runs-on: self-hosted
+    outputs:
+      base: ${{ steps.revisions.outputs.base }}
+      head: ${{ steps.revisions.outputs.head }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Resolve the Nx comparison range
+        id: revisions
+        env:
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          base="$(git rev-parse --verify "${PR_BASE_SHA:-origin/HEAD}^{commit}")"
+          head="$(git rev-parse HEAD)"
+          printf 'base=%s\nhead=%s\n' "$base" "$head" >> "$GITHUB_OUTPUT"
+  security-issues:
+    needs: checkout
+    runs-on: self-hosted
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    env:
+      AUDIT_REPORTS_DIRECTORY: dist/audit-reports
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        id: source
+        with:
+          persist-credentials: false
+      # The CodeQL action needs a GitHub token. Use its CLI directly in act.
+      - name: Analyze locally with CodeQL
+        if: env.ACT
+        run: |
+          codeql_dir="$(mktemp -d "$RUNNER_TEMP/codeql.XXXXXX")"
+          trap 'rm -rf "$codeql_dir"' EXIT
+          codeql database create "$codeql_dir/databases" --db-cluster \
+            --language=javascript,actions --build-mode=none --source-root="$GITHUB_WORKSPACE"
+          mkdir -p "$AUDIT_REPORTS_DIRECTORY/codeql"
+          for language in javascript actions; do
+            codeql database analyze "$codeql_dir/databases/$language" \
+              --format=sarifv2.1.0 --output="$AUDIT_REPORTS_DIRECTORY/codeql/$language.sarif"
+          done
+          sarif summary "$AUDIT_REPORTS_DIRECTORY/codeql"
+      - name: Initialize CodeQL
+        if: ${{ !env.ACT }}
+        uses: github/codeql-action/init@1bd86f2fdb4b86187fa4059f16f31a3202acc9ea # v4.39.4
+        with:
+          languages: javascript-typescript, actions
+      - name: Analyze with CodeQL
+        if: ${{ !env.ACT }}
+        uses: github/codeql-action/analyze@1bd86f2fdb4b86187fa4059f16f31a3202acc9ea # v4.39.4
+        with:
+          output: ${{ env.AUDIT_REPORTS_DIRECTORY }}/codeql
+      - name: Scan source code using Semgrep
+        if: ${{ !cancelled() && steps.source.outcome == 'success' }}
+        run: |
+          mkdir -p "$AUDIT_REPORTS_DIRECTORY"
+          semgrep scan --config=auto --error --verbose \
+            --sarif-output="$AUDIT_REPORTS_DIRECTORY/semgrep.sarif"
+      - name: Validate landing SSR Caddyfile
+        if: ${{ !cancelled() && steps.source.outcome == 'success' }}
+        run: |
+          docker run --rm -i --entrypoint caddy caddy:2.11.9-alpine \
+            validate --config - --adapter caddyfile \
+            < apps/landing-mf-host-ssr/Caddyfile
+      - name: Scan landing SSR IaC with Trivy
+        if: ${{ !cancelled() && steps.source.outcome == 'success' }}
+        run: |
+          mkdir -p "$AUDIT_REPORTS_DIRECTORY"
+          tar --exclude='*.dockerignore' -cf - apps/landing-mf-host-ssr \
+            | docker run --rm -i --workdir /tmp --entrypoint /bin/sh \
+                ghcr.io/aquasecurity/trivy:0.76.2@sha256:8f6bb947dbc528902e11f2f5be52f7b519f6a39d5d148f41166f2040499768fb \
+                -ec 'tar -xf -
+                  exec trivy config --format sarif apps/landing-mf-host-ssr' \
+            > "$AUDIT_REPORTS_DIRECTORY/trivy-landing-ssr.sarif"
+      - &install-dependencies
+        name: Install dependencies
+        id: install-dependencies
+        if: ${{ !cancelled() && steps.source.outcome == 'success' }}
+        run: npm ci
+      - name: Audit NPM packages
+        if: ${{ !cancelled() && steps.install-dependencies.outcome == 'success' }}
+        run: npm exec -- @codegena/audit-ci
+      - name: Prepare SBOM by package-lock.json (see artifacts)
+        id: sbom
+        if: ${{ !cancelled() && steps.source.outcome == 'success' }}
+        run: |
+          mkdir -p "$AUDIT_REPORTS_DIRECTORY"
+          npm exec --yes --package=@cyclonedx/cyclonedx-npm@7.0.1 -- cyclonedx-npm \
+            --output-format JSON \
+            --output-file "$AUDIT_REPORTS_DIRECTORY/bom.cdx.json" \
+            --package-lock-only \
+            --ignore-npm-errors
+      - name: Prepare OSV Scanner report (see artifacts)
+        if: ${{ !cancelled() && steps.sbom.outcome == 'success' }}
+        continue-on-error: true
+        run: |
+          # Stream the SBOM from act's isolated workspace. Exit code 1 means findings.
+          docker run --rm -i --entrypoint /bin/sh \
+            ghcr.io/google/osv-scanner:v2.7.1@sha256:a70ffffc2bfd33482953e5d6b64c6fcdb30239717a07b0f0d3ab2859ce3e4cde \
+            -ec 'cat > /tmp/bom.cdx.json
+              exec /osv-scanner scan source --lockfile /tmp/bom.cdx.json --format html' \
+            < "$AUDIT_REPORTS_DIRECTORY/bom.cdx.json" \
+            > "$AUDIT_REPORTS_DIRECTORY/osv-report.html" || test "$?" -eq 1
+          test -s "$AUDIT_REPORTS_DIRECTORY/osv-report.html"
+      - name: Prepare NPM Audit report (see artifacts)
+        if: ${{ !cancelled() && steps.source.outcome == 'success' }}
+        run: |
+          mkdir -p "$AUDIT_REPORTS_DIRECTORY"
+          npm audit --audit-level=none > "$AUDIT_REPORTS_DIRECTORY/npm-audit-report.txt"
+      - name: Security Artifacts
+        if: ${{ !cancelled() && (!env.ACT || env.ACTIONS_RESULTS_URL != '') }}
+        # act rejects the v7 upload protocol (nektos/act#6114).
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: security-artifacts
+          path: ${{ env.AUDIT_REPORTS_DIRECTORY }}
+          if-no-files-found: ignore
+          retention-days: 14
+          overwrite: true
+  nx-targets:
+    needs: checkout
+    runs-on: self-hosted
+    env:
+      COMPOSE_PROJECT_NAME: codegena-pr-${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        id: source
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - *install-dependencies
+      - name: Install Chromium for E2E
+        run: npm exec -- playwright install --with-deps chromium
+      - name: Run affected targets
+        id: affected-targets
+        env:
+          NX_BASE: ${{ needs.checkout.outputs.base }}
+          NX_HEAD: ${{ needs.checkout.outputs.head }}
+        run: npm exec -- nx affected --targets=build,lint,test,e2e --parallel=1
+      - name: Collect landing E2E reports
+        if: ${{ !cancelled() && steps.affected-targets.outcome != 'skipped' }}
+        working-directory: apps/landing-mf-host-e2e
+        run: |
+          playwright_container="$(docker compose ps --all --quiet playwright)"
+          [[ -n "$playwright_container" ]] || exit 0
+
+          trap 'docker compose down' EXIT
+          reports=dist/.playwright/apps/landing-mf-host-e2e
+          mkdir -p "$GITHUB_WORKSPACE/$reports"
+          docker compose cp "playwright:/workspace/$reports/." "$GITHUB_WORKSPACE/$reports/"
+      - name: E2E Artifacts
+        if: ${{ !cancelled() && (!env.ACT || env.ACTIONS_RESULTS_URL != '') }}
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: e2e-artifacts
+          path: dist/.playwright
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 14
+          overwrite: true

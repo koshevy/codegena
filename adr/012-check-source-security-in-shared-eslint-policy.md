@@ -43,7 +43,7 @@ the same check visible in every Nx project that uses the shared configuration.
 - **🔎 Review findings:** A security diagnostic is a prompt to inspect the
   affected behavior. It **MUST NOT** be silenced merely to make lint pass;
   exceptional suppressions follow the approval rule in
-  [CODE_STYLE.md](../CODE_STYLE.md#rule-74).
+  [CODE_STYLE.md](../CODE_STYLE.md#rule-75).
 - **🧪 Schema patterns:** OAS3 Core checks schema-supplied regular expressions with
   [recheck](https://www.npmjs.com/package/recheck) before compiling them.
   Only a `safe` result is accepted; vulnerable or inconclusive patterns use

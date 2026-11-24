@@ -27,7 +27,11 @@
           "{workspaceRoot}/dist/playground-ui"
         ]
       },
+      "storybook": {
+        "dependsOn": ["@codegena/source:apply-dependency-patches"]
+      },
       "build-storybook": {
+        "dependsOn": ["@codegena/source:apply-dependency-patches"],
         "inputs": [
           "production",
           "^production",
@@ -43,6 +47,7 @@
         ]
       },
       "storybook-e2e": {
+        "dependsOn": ["@codegena/source:apply-dependency-patches"],
         "continuous": true,
         "executor": "nx:run-commands",
         "options": {

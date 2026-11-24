@@ -23,6 +23,7 @@ to run this from the repository root. [Version requirements](package.json)
 npm ci
 ```
 
+Nx applies the workspace's dependency patches before tasks that use them.
 Find package-specific details in the individual READMEs listed under
 [Libraries](#libraries).
 
@@ -44,7 +45,7 @@ The full end-to-end run needs Docker Compose and Playwright Chromium. Install
 the browser with `npx playwright install chromium` if it is missing. The landing
 SSR and Lighthouse checks have their own targets.
 [Landing test catalog](apps/landing-mf-host-e2e/TESTCASES.md) ·
-[CLI test setup](apps/cli-e2e/README.md)
+[CLI test setup](apps/cli-delivery-e2e/README.md)
 
 <a id="run-the-site-locally"></a>
 

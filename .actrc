@@ -1,0 +1,2 @@
+--platform=self-hosted=codegena-pr:local
+--pull=false

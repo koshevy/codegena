@@ -1,2 +1,0 @@
-#!/bin/sh
-exec wine cmd /c "cd /d ${WIN_WORKDIR} && ${WIN_NODE_DIR}\\node.exe" "$@"

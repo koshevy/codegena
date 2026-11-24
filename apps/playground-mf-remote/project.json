@@ -49,6 +49,7 @@
       }
     },
     "rspack:build": {
+      "dependsOn": ["^rspack:build", "@codegena/source:apply-dependency-patches"],
       "outputs": [
         "{workspaceRoot}/dist/apps/playground-mf-remote",
         "{workspaceRoot}/dist/apps/playground-mf-remote-services"
@@ -60,6 +61,12 @@
           "env": "CODEGENA_BUILD_ID"
         }
       ]
+    },
+    "rspack:serve": {
+      "dependsOn": ["@codegena/source:apply-dependency-patches"]
+    },
+    "preview": {
+      "dependsOn": ["@codegena/source:apply-dependency-patches"]
     }
   }
 }

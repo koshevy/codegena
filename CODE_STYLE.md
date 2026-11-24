@@ -123,7 +123,7 @@ typography through [`ui-theme`](packages/ui-theme/).
   wraps MUI X's `TreeItem`. Its selection color comes from
   `alpha(theme.palette.primary.main, 0.13)`, so it follows the active theme.
 - **Further reading:** [UI toolkit decision](adr/005-standardize-react-ui-toolkit.md),
-  [styling rules](#rule-53), and [accessible controls](#rule-54).
+  [styling rules](#rule-54), and [accessible controls](#rule-55).
 
 <a id="concept-typescript"></a>
 
@@ -150,10 +150,10 @@ change code.
   combines strict, type-aware `typescript-eslint` rules with
   `eslint-plugin-react`, `eslint-plugin-react-hooks`, and
   `@stylistic/eslint-plugin`. Aim to satisfy the rules; exceptional
-  suppressions require [explicit approval](#rule-74).
+  suppressions require [explicit approval](#rule-75).
 
-See [TypeScript source sets](#rule-16), [unknown-value narrowing](#rule-26),
-and [lint verification](#rule-72).
+See [TypeScript source sets](#rule-17), [unknown-value narrowing](#rule-27),
+and [lint verification](#rule-73).
 
 <a id="concept-test-first"></a>
 
@@ -190,7 +190,7 @@ An [architecture decision record (ADR)](https://adr.github.io/) explains
   explains how schemas are processed.
 - **Status:** `proposed` records describe current behavior awaiting maintainer
   review. Read the relevant decision before changing its contract; see
-  [when to record a new decision](#rule-71).
+  [when to record a new decision](#rule-72).
 
 <a id="concept-shared-guidance"></a>
 
@@ -609,14 +609,56 @@ and [OAS3 Core's public entrypoint](packages/oas3-core/json-schema/index.ts).
 
 ## 🛡️ Security
 
-These rules cover **all dependency types**, including development tools and
-transitive packages. See the [dependency-audit decision](adr/017-check-dependencies-with-audit-ci.md)
+These rules cover repository automation and **all dependency types**,
+including development tools and transitive packages. See the [dependency-audit decision](adr/017-check-dependencies-with-audit-ci.md)
 for the audit workflow, exception format, and tool limitations. Source-level
 security checks remain part of the [shared ESLint policy](adr/012-check-source-security-in-shared-eslint-policy.md).
 
 <a id="rule-10"></a>
 
-### 10. Never introduce a vulnerable dependency or version
+### 10. Forbid npm scripts, Git hooks, and standalone shell scripts
+
+- 📦 Repository-owned `package.json` files **MUST NOT** declare a `scripts`
+  section. This includes task aliases and lifecycle scripts such as
+  `preinstall`, `postinstall`, and `prepare`.
+- 🪝 Git hooks **MUST NOT** be committed, installed, or configured by the
+  repository. This includes hook managers and `core.hooksPath`.
+- 🐚 Standalone shell scripts **MUST NOT** be committed. The rule covers
+  `.sh` files and shell scripts with other extensions or no extension.
+
+Use named [Nx targets](#rule-15) for project tasks and explicit workflow steps
+for CI. Keep reusable implementation in the project that owns it.
+
+**Why**
+
+Routine installs and Git operations can execute lifecycle scripts and hooks
+with access to developer or CI credentials. Checked-in shell scripts also
+run with the permissions of the task that invokes them. Explicit targets
+and workflow steps make the execution entry points easier to review.
+
+- **Nx S1ngularity (August 26, 2025).** Attackers used a stolen npm
+  publishing token to ship Nx packages that collected credentials during
+  `postinstall`. [Nx postmortem](https://nx.dev/blog/s1ngularity-postmortem)
+- **Shai-Hulud (September 2025).** A self-replicating worm spread through
+  malicious npm `postinstall` scripts. [GitHub incident report](https://github.blog/security/supply-chain-security/our-plan-for-a-more-secure-npm-supply-chain/)
+- **ESLint (July 2018).** Compromised packages used `postinstall` to steal npm
+  credentials. [ESLint postmortem](https://eslint.org/blog/2018/07/postmortem-for-malicious-package-publishes/)
+
+**❌ Bad** Add an npm alias that runs a checked-in shell script.
+
+```json
+{ "scripts": { "build:ssr": "sh ./scripts/build-ssr.sh" } }
+```
+
+**✅ Good** Invoke the owning Nx target directly.
+
+```bash
+npm exec -- nx run landing-mf-host-ssr:build
+```
+
+<a id="rule-11"></a>
+
+### 11. Never introduce a vulnerable dependency or version
 
 - **🚫 New exposure:** A change **MUST NOT** add a package or resolve a new
   version with a known vulnerability, directly or transitively. This applies
@@ -628,9 +670,9 @@ security checks remain part of the [shared ESLint policy](adr/012-check-source-s
   version **MUST** be rejected immediately. It can be reconsidered only after
   the vulnerable addition is removed or replaced with a patched version.
 
-<a id="rule-11"></a>
+<a id="rule-12"></a>
 
-### 11. Run the dependency audit after every feature
+### 12. Run the dependency audit after every feature
 
 After implementing a feature, contributors **MUST** run Software Composition
 Analysis (SCA) from the repository root before marking the work complete:
@@ -647,9 +689,9 @@ npm exec -- @codegena/audit-ci
 - **📝 Report accurately:** Active exceptions remain visible in the output.
   An accepted finding **MUST NOT** be described as fixed or absent.
 
-<a id="rule-12"></a>
+<a id="rule-13"></a>
 
-### 12. Fix audit failures with patched releases
+### 13. Fix audit failures with patched releases
 
 - **📦 Direct dependency:** Update the declaration in the consuming
   `package.json`, including the root provider when applicable. A direct
@@ -669,9 +711,9 @@ npm exec -- @codegena/audit-ci
   audit. A remaining failure **MUST** be resolved or qualify for the limited
   exception below before the feature is complete.
 
-<a id="rule-13"></a>
+<a id="rule-14"></a>
 
-### 13. Limit unpatchable dependency exceptions to two weeks
+### 14. Limit unpatchable dependency exceptions to two weeks
 
 An exception **MAY** be added to
 [`.vulnerabilities-ignore.json`](.vulnerabilities-ignore.json) **only when both
@@ -684,7 +726,7 @@ conditions hold**:
 Every exception **MUST** follow these limits:
 
 - **🎯 Narrow scope:** Use the specific GHSA advisory whenever possible.
-  A CWE-wide entry **MUST NOT** exempt unrelated findings or bypass rule 10.
+  A CWE-wide entry **MUST NOT** exempt unrelated findings or bypass rule 11.
 - **📅 Short expiry:** Set `expires` to a date no more than **14 days after
   the exception is granted or explicitly reviewed for renewal**. Use
   `YYYY-MM-DD`; expiry is midnight UTC at the start of that date.
@@ -694,7 +736,7 @@ Every exception **MUST** follow these limits:
 - **🔁 Recheck before renewal:** Recheck available releases before extending
   an exception. Automatic date extensions **MUST NOT** be used. Once a patch
   is available, the exception **MUST NOT** be renewed; apply the fix through
-  rule 12 and remove the exception.
+  rule 13 and remove the exception.
 - **⏳ Keep it temporary:** Expired findings **MUST** fail the audit again.
   An exception accepts an existing risk for a limited time; it **MUST NOT**
   authorize a new vulnerable package or version.
@@ -714,9 +756,9 @@ the exception review process and the limits of a successful audit.
 
 ## 🛠 Project configuration
 
-<a id="rule-14"></a>
+<a id="rule-15"></a>
 
-### 14. Use Nx targets and keep workspace policy centralized
+### 15. Use Nx targets and keep workspace policy centralized
 
 - **Find the project:** Its resolved Nx configuration **MUST** determine the
   available targets and dependencies. A package directory or a copied script
@@ -750,9 +792,9 @@ npm exec -- nx show project @codegena/oas3-core --json
 npm exec -- nx lint @codegena/oas3-core
 ```
 
-<a id="rule-15"></a>
+<a id="rule-16"></a>
 
-### 15. Choose Nx tags from the runtime role
+### 16. Choose Nx tags from the runtime role
 
 The [Nx project model](#concept-nx) gives tags their context. The workspace's
 [tag registry](packages/infr-nx/eslint-config/large-rules/global-nx-tags.mjs)
@@ -854,9 +896,9 @@ npm exec -- nx show project @codegena/playground-ui --json
 npm exec -- nx lint @codegena/playground-ui
 ```
 
-<a id="rule-16"></a>
+<a id="rule-17"></a>
 
-### 16. Give each TypeScript source set its own configuration
+### 17. Give each TypeScript source set its own configuration
 
 The [strict TypeScript model](#concept-typescript) starts at the root
 [TypeScript base config](tsconfig.base.json), which owns shared compiler
@@ -867,7 +909,7 @@ and file globs aligned with the source sets it actually contains:
   config, keep `files` and `include` empty, and reference its applicable
   source-set configs.
 - **Production:** `tsconfig.lib.json` **MUST** include shipped sources and
-  follow the [development-source boundary](#rule-17).
+  follow the [development-source boundary](#rule-18).
 - **Tests:** A library with local unit tests **MUST** include them in a
   `tsconfig.spec.json`. A passing transpiled test or production build
   **MUST NOT** stand in for checking test types.
@@ -887,9 +929,9 @@ and [Codegena NX Plugin](packages/infr-nx/tsconfig.json) for low-level workspace
 tooling. The [configuration skill](.agents/skills/library-tsconfig-consistency/SKILL.md)
 gives the inspection and verification steps.
 
-<a id="rule-17"></a>
+<a id="rule-18"></a>
 
-### 17. Exclude development sources from production TypeScript
+### 18. Exclude development sources from production TypeScript
 
 - **Production boundary:** `tsconfig.lib.json` **MUST** exclude development-only
   files and directories matched by its `include` globs. This includes tests,
@@ -966,9 +1008,9 @@ helper in the source sets that use it.
 
 ## 🔎 TypeScript rules
 
-<a id="rule-18"></a>
+<a id="rule-19"></a>
 
-### 18. Return early on invalid input
+### 19. Return early on invalid input
 
 - **Control flow:** Related invalid cases **SHOULD** return early together so
   the successful path stays at one indentation level.
@@ -999,9 +1041,9 @@ if (!operation || !operation.request) {
 return convert(operation);
 ```
 
-<a id="rule-19"></a>
+<a id="rule-20"></a>
 
-### 19. Name a computed condition before using it
+### 20. Name a computed condition before using it
 
 When a decision needs a collection search or compound expression, it
 **SHOULD** be computed once and named for its intent. A repeated validation
@@ -1028,9 +1070,9 @@ if (hasCookieParameters) {
 }
 ```
 
-<a id="rule-20"></a>
+<a id="rule-21"></a>
 
-### 20. Choose the collection operation by its result
+### 21. Choose the collection operation by its result
 
 - **Transform:** Operations **SHOULD** match their result: `map` for one-to-one,
   `filter` for selection, `flatMap` for zero-to-many, and `reduce` for
@@ -1072,9 +1114,9 @@ callback. Independent tasks **SHOULD** use `Promise.all(items.map(...))`.
 Dependent tasks **MUST NOT** be placed in `Promise.all`; they **SHOULD** use a
 focused sequential helper or promise-aware `reduce`.
 
-<a id="rule-21"></a>
+<a id="rule-22"></a>
 
-### 21. Move complex per-item logic into named functions
+### 22. Move complex per-item logic into named functions
 
 - **When to extract:** An iteration callback with multiple decisions, or one
   that creates or materially changes a feature-owned data type, **MUST** become
@@ -1092,9 +1134,9 @@ focused sequential helper or promise-aware `reduce`.
   reducers **MUST** use names that describe their own operation, not a `map`
   prefix.
 
-This refines the [collection-operation rule](#rule-20). The named function
+This refines the [collection-operation rule](#rule-21). The named function
 makes a significant conversion easy to find and review; it is not a generic
-mapping framework. See the [helper ownership rule](#rule-69).
+mapping framework. See the [helper ownership rule](#rule-70).
 
 **❌ Bad:** hide a conversion and its output contract inside the iteration.
 
@@ -1117,9 +1159,9 @@ function mapHeaderToOption(header: ResponseHeader): HeaderOption {
 const options = headers.map(mapHeaderToOption);
 ```
 
-<a id="rule-22"></a>
+<a id="rule-23"></a>
 
-### 22. Name prepared values by what changed
+### 23. Name prepared values by what changed
 
 A transformation **SHOULD** be computed once and reused in the branch that
 tests it. Its name **SHOULD** reveal what changed: `titleTrimmed`,
@@ -1143,9 +1185,9 @@ if (titleTrimmed) {
 }
 ```
 
-<a id="rule-23"></a>
+<a id="rule-24"></a>
 
-### 23. Separate independent declarations
+### 24. Separate independent declarations
 
 - **Group:** Short declarations that form one thought **SHOULD** stay together.
   An immediately dependent pair **MAY** stay together even if one is multiline.
@@ -1183,9 +1225,9 @@ const requestPath = isReferenceObject(request)
   : null;
 ```
 
-<a id="rule-24"></a>
+<a id="rule-25"></a>
 
-### 24. Wrap expressions at meaningful boundaries
+### 25. Wrap expressions at meaningful boundaries
 
 - **Assignment:** `=` **MUST** stay on the declaration line.
 - **Line breaks:** Expressions **SHOULD** break at natural boundaries; roughly
@@ -1212,9 +1254,9 @@ const content: ContentTypeRecordTransitiveNode | undefined = (
 );
 ```
 
-<a id="rule-25"></a>
+<a id="rule-26"></a>
 
-### 25. Join multiline messages from complete fragments
+### 26. Join multiline messages from complete fragments
 
 A fixed message split across source lines **SHOULD** keep each phrase complete
 and join the phrases with an explicit separator. Spaces **SHOULD NOT** be
@@ -1236,9 +1278,9 @@ const explanation = [
 ].join(' ');
 ```
 
-<a id="rule-26"></a>
+<a id="rule-27"></a>
 
-### 26. Narrow unknown data through reusable guards
+### 27. Narrow unknown data through reusable guards
 
 - **Input:** Parsed input **MUST** remain `unknown` until narrowed.
 - **Type integrity:** New TypeScript code **MUST** preserve meaningful types;
@@ -1272,9 +1314,9 @@ if (!isHasRef(value)) {
 return processReference(value.$ref);
 ```
 
-<a id="rule-27"></a>
+<a id="rule-28"></a>
 
-### 27. Model passive data with interfaces and companion functions
+### 28. Model passive data with interfaces and companion functions
 
 - **Data contract:** An object that only carries data **MUST** use an interface
   or discriminated union rather than a class with conversion methods.
@@ -1285,13 +1327,13 @@ return processReference(value.$ref);
 - **Stored values:** Pass storage code the data it saves. Reuse the value's
   existing type when saving a single field, such as `ThemeMode`. A
   persisted-data type **MUST NOT** contain setters, callbacks, or services.
-  See [hook result contracts](#rule-43).
+  See [hook result contracts](#rule-44).
 - **Class boundary:** A class **MAY** own genuine identity, mutable state,
   lifecycle, or a required framework contract. Passive data alone is not a
   reason to introduce one.
 
-See [mapper contracts](#rule-21) for naming and purity, and
-[unknown-value narrowing](#rule-26) for guard design.
+See [mapper contracts](#rule-22) for naming and purity, and
+[unknown-value narrowing](#rule-27) for guard design.
 
 **❌ Bad:** wrap a data result in a class solely to host its conversion.
 
@@ -1327,9 +1369,9 @@ function mapOperationToSummary(operation: Operation): OperationSummary {
 An `OperationSummary` read from `unknown` input may also have an
 `isOperationSummary` guard; one produced only by the mapper does not need it.
 
-<a id="rule-28"></a>
+<a id="rule-29"></a>
 
-### 28. Use one absence value at a boundary
+### 29. Use one absence value at a boundary
 
 A local flow **SHOULD** choose either `null` or `undefined` for an absent
 result. Equivalent absence values **MUST** be normalized at the boundary.
@@ -1347,9 +1389,9 @@ const header: StructureTransitiveNode | null | undefined = parseHeader();
 const header: StructureTransitiveNode | null = parseHeader() ?? null;
 ```
 
-<a id="rule-29"></a>
+<a id="rule-30"></a>
 
-### 29. Carry narrowed types through the whole call
+### 30. Carry narrowed types through the whole call
 
 - **Variant:** An optional discriminated union **MUST** be present and narrowed
   before variant-specific fields are read. A helper **SHOULD** accept the
@@ -1382,9 +1424,9 @@ if (contentNode?.type !== 'contentTypeRecord') {
 return renderContent(contentNode);
 ```
 
-<a id="rule-30"></a>
+<a id="rule-31"></a>
 
-### 30. Document public contracts with multiline TSDoc
+### 31. Document public contracts with multiline TSDoc
 
 - **Purpose:** Comments **SHOULD** explain meaning, provenance, or a
   non-obvious constraint rather than narrate the next line.
@@ -1423,16 +1465,16 @@ export type OperationMethod = (typeof operationMethods)[number];
 
 Read from basic code structure to specialized behavior:
 
-- **🧱 [Imports and composition](#rule-31):** Explicit types, ownership,
+- **🧱 [Imports and composition](#rule-32):** Explicit types, ownership,
   and component boundaries.
-- **🔁 [State and behavior](#rule-39):** Service-free views, shared state,
+- **🔁 [State and behavior](#rule-40):** Service-free views, shared state,
   controlled editors, owned hooks, and update handling.
-- **📝 [Forms](#rule-47):** Field changes, validation, and dynamic metadata.
-- **🎨 [Rendering and styles](#rule-49):** JSX, props, classes, and the theme.
+- **📝 [Forms](#rule-48):** Field changes, validation, and dynamic metadata.
+- **🎨 [Rendering and styles](#rule-50):** JSX, props, classes, and the theme.
 
-<a id="rule-31"></a>
+<a id="rule-32"></a>
 
-### 31. Import React types explicitly by name
+### 32. Import React types explicitly by name
 
 - **🏷️ Named type imports:** React types **MUST** use explicit named type
   imports. Use `import type { ReactElement } from 'react'` for a type-only
@@ -1481,9 +1523,9 @@ export function Caption({ children }: CaptionProps): ReactElement {
 }
 ```
 
-<a id="rule-32"></a>
+<a id="rule-33"></a>
 
-### 32. Keep the component hierarchy one-directional
+### 33. Keep the component hierarchy one-directional
 
 Before moving a component, its parent, children, and independent siblings
 **MUST** be identified.
@@ -1525,9 +1567,9 @@ export function PlaygroundTopbar() {
 See the [Playground topbar](packages/playground-ui/playground/playground-topbar.tsx)
 and its [styles](packages/playground-ui/playground/playground-topbar.styles.tsx).
 
-<a id="rule-33"></a>
+<a id="rule-34"></a>
 
-### 33. Name a component for its owner and purpose
+### 34. Name a component for its owner and purpose
 
 - **Private child:** Its name **SHOULD** include the parent or feature and its
   role, such as `PlaygroundTopbar`.
@@ -1571,9 +1613,9 @@ playground/
 The [Playground directory](packages/playground-ui/playground/)
 demonstrates this relationship.
 
-<a id="rule-34"></a>
+<a id="rule-35"></a>
 
-### 34. Extract a responsibility before splitting a crowded file
+### 35. Extract a responsibility before splitting a crowded file
 
 - **Responsibility:** A distinct visual or behavioral responsibility
   **SHOULD** become a child even when it is short.
@@ -1630,9 +1672,9 @@ When a child becomes a distinct feature, its markup, styles, and stories
 the parent's workflow **MUST** remain with the parent, even if it passes
 values to that child.
 
-<a id="rule-35"></a>
+<a id="rule-36"></a>
 
-### 35. Give each component one implementation file
+### 36. Give each component one implementation file
 
 - **File:** Every component, including a small private child, **MUST** have
   one implementation file. A second component **MUST NOT** hide in that file.
@@ -1669,9 +1711,9 @@ export function PanelHeader({ title }: { title: string }) {
 <PanelHeader title="Generated output" />;
 ```
 
-<a id="rule-36"></a>
+<a id="rule-37"></a>
 
-### 36. Share repeated markup through a component
+### 37. Share repeated markup through a component
 
 - **Same view:** Repeated structure and styles **SHOULD** share a component
   that owns both.
@@ -1701,9 +1743,9 @@ See the [Playground component ADR](packages/playground-ui/adr/005-keep-feature-c
 />
 ```
 
-<a id="rule-37"></a>
+<a id="rule-38"></a>
 
-### 37. Separate private display from reusable controls
+### 38. Separate private display from reusable controls
 
 - **Private display:** A fixed, one-caller view, such as an edge legend,
   **SHOULD** remain adjacent to its owner.
@@ -1745,9 +1787,9 @@ interface PanelToggleProps {
 Compare the private [edge legend](packages/playground-ui/playground/generated-output/edge-type-legend.tsx)
 with the reusable [panel toggle](packages/ui-unified/panels/panel-toggle/).
 
-<a id="rule-38"></a>
+<a id="rule-39"></a>
 
-### 38. Give a collection and its items separate owners
+### 39. Give a collection and its items separate owners
 
 - **Collection:** It **MUST** own item mapping and layout.
 - **Item:** It **MUST** own its markup, classes, and styles. A row with nested
@@ -1800,9 +1842,9 @@ export function FileRow({ file }: FileRowProps): ReactElement {
 See [GeneratedFilesList](packages/playground-ui/generated-files-list/generated-files-list.tsx)
 and its [file item](packages/playground-ui/generated-files-list/items/generated-files-list-file-item.tsx).
 
-<a id="rule-39"></a>
+<a id="rule-40"></a>
 
-### 39. Keep presentational components free of services
+### 40. Keep presentational components free of services
 
 - **Container or feature hook:** It **SHOULD** subscribe to external state,
   call services, and map business rules to view-ready data and callbacks.
@@ -1811,10 +1853,10 @@ and its [file item](packages/playground-ui/generated-files-list/items/generated-
 - **No ceremony:** A self-contained view **MAY** omit a container when there
   is no service wiring to separate.
 
-Keep parent-managed values with their [shared-state owner](#rule-41).
-A reusable [controlled editor](#rule-42) can encapsulate complex interaction
+Keep parent-managed values with their [shared-state owner](#rule-42).
+A reusable [controlled editor](#rule-43) can encapsulate complex interaction
 without taking ownership of a parent's services. Extract its substantial
-behavior into [named hooks](#rule-43).
+behavior into [named hooks](#rule-44).
 
 See the [component ownership ADR](packages/playground-ui/adr/005-keep-feature-components-one-directional.md)
 and the [notification group container](packages/notification-ui-notistack/src/lib/notification-group-card/notification-group-card-container.tsx).
@@ -1864,9 +1906,9 @@ function NotificationGroupCardContainer({
 }
 ```
 
-<a id="rule-40"></a>
+<a id="rule-41"></a>
 
-### 40. Avoid hidden side-effect dependencies in components
+### 41. Avoid hidden side-effect dependencies in components
 
 - **⚙️ Environment:** Application runtime configuration **MUST** be read and
   prepared in the application's `environment.ts`. Export ready-to-use values,
@@ -1948,9 +1990,9 @@ cleanup. See the [landing environment](apps/landing-mf-host/src/environment.ts),
 [bootstrap](apps/landing-mf-host/src/bootstrap.tsx)
 and the [runtime composition decision](adr/015-compose-browser-runtime-explicitly.md).
 
-<a id="rule-41"></a>
+<a id="rule-42"></a>
 
-### 41. Keep shared state in the nearest coordinating feature
+### 42. Keep shared state in the nearest coordinating feature
 
 - **One owner:** State used by several views **MUST** belong to the nearest
   feature that coordinates them, such as
@@ -1960,16 +2002,16 @@ and the [runtime composition decision](adr/015-compose-browser-runtime-explicitl
 - **Presentational children:** Simple controls **SHOULD** display parent-owned
   state and request changes through callbacks. They **MUST NOT** keep another
   copy of that state or synchronize a copy with effects. See
-  [service-free views](#rule-39).
+  [service-free views](#rule-40).
 - **Independent features:** A self-contained feature **MAY** own state that
   its surroundings do not need. For example, a reusable search drawer can own
   its query and highlighted suggestion. Do not move every such value into
-  `Playground` or `App`. Expose a [controlled value](#rule-42) when a parent
+  `Playground` or `App`. Expose a [controlled value](#rule-43) when a parent
   needs to read or change it.
 - **Keep simple cases simple:** A local toggle **MAY** stay in its component.
   A new container or hook **SHOULD NOT** exist solely to hold one state setter.
 
-See [hook extraction](#rule-43) for related state, effects, and handlers.
+See [hook extraction](#rule-44) for related state, effects, and handlers.
 
 **Example:** `Playground` owns whether the details panel is open. Both a graph
 selection and the details toggle can change that value.
@@ -2037,9 +2079,9 @@ The controlled panel has `id="generated-details"` in both versions. The real
 cross-panel coordination; the [React toolkit ADR](adr/005-standardize-react-ui-toolkit.md)
 explains that ownership boundary.
 
-<a id="rule-42"></a>
+<a id="rule-43"></a>
 
-### 42. Encapsulate complex two-way editing in controlled components
+### 43. Encapsulate complex two-way editing in controlled components
 
 A large component can edit objects, nested objects, or collections without
 implementing every field and item action itself. Extract a coherent part,
@@ -2048,10 +2090,10 @@ such as `PlansEditor`, with one **`value` / `onChange` contract**.
 - **Controlled value:** The parent **MUST** supply the current typed `value`.
   The editor **MUST** report a replacement value through `onChange` after a
   user edit. It **MUST NOT** mutate that value or keep a second authoritative
-  copy. See [shared-state ownership](#rule-41).
+  copy. See [shared-state ownership](#rule-42).
 - **Owned editing:** The editor **SHOULD** encapsulate its item controls,
   add/remove/reorder actions, and local display state. Substantial behavior
-  belongs in its [named hooks](#rule-43). Its parent handles the complete
+  belongs in its [named hooks](#rule-44). Its parent handles the complete
   document or workflow rather than the editor's internal actions.
 - **Reusable contract:** The editor **MUST NOT** require one parent's form
   instance, concrete service, or separate setters for its internal fields.
@@ -2060,13 +2102,13 @@ such as `PlansEditor`, with one **`value` / `onChange` contract**.
   Share an actually reused editor through its [owning entrypoint](#rule-2).
 - **Composition and validation:** Controlled editors **SHOULD** compose through
   the same contract, including nested collections. This lets each editor be
-  tested independently. A [form adapter](#rule-48) connects the editor to
-  [form state and validation](#rule-47); submission and cross-field validation
+  tested independently. A [form adapter](#rule-49) connects the editor to
+  [form state and validation](#rule-48); submission and cross-field validation
   remain with the form.
 - **Portable data:** Saved or shared values **SHOULD** be serializable objects
   or arrays with stable item IDs. Keep callbacks, services, refs, and temporary
   display state out of the value. An imperative third-party editor may need
-  local synchronization; follow the [update-loop safeguards](#rule-45).
+  local synchronization; follow the [update-loop safeguards](#rule-46).
 
 **Example:** billing settings contain `plans: Plan[]` alongside other billing
 fields. Each plan has an `id` and `name`. The excerpts show only plan removal;
@@ -2154,9 +2196,9 @@ The parent still owns the plans array. The child owns how users edit it;
 changing billing settings or testing the editor does not require duplicating
 its editing behavior.
 
-<a id="rule-43"></a>
+<a id="rule-44"></a>
 
-### 43. Extract related state, effects, and handlers into named hooks
+### 44. Extract related state, effects, and handlers into named hooks
 
 - **One behavior:** Related state, effects, handlers, refs, and subscriptions
   that form a substantial behavior **MUST** live together in a focused hook
@@ -2173,7 +2215,7 @@ its editing behavior.
 - **Describe the result:** A hook's return type **MUST** describe what callers
   can read or change. If callers always obtain the same values and actions
   together, use one hook and one result type. Pass only the saved value to
-  storage as described in [rule 27](#rule-27).
+  storage as described in [rule 28](#rule-28).
 - **Imperative UI:** A DOM measurement, the effect or observer that schedules
   it, its event handler, and cleanup **SHOULD** share one hook. Cleanup and
   dependencies **MUST** be preserved when moving the code.
@@ -2183,7 +2225,7 @@ its editing behavior.
   asynchronous lifecycle **MAY** need a request marker; its owner **MUST**
   explain why it is needed.
 - **Proportion:** A trivial handler **MAY** stay in the component, following
-  the [callback rule](#rule-44). Pure calculations that need no React state or
+  the [callback rule](#rule-45). Pure calculations that need no React state or
   lifecycle **SHOULD** remain plain functions.
 
 **❌ Bad:** saved preferences include an action, and two hooks expose the
@@ -2216,9 +2258,9 @@ declare function writeThemePreference(mode: ThemeMode): void;
 See the [appearance context](apps/landing-mf-host/src/app/appearance/appearance-context.ts)
 and [provider](apps/landing-mf-host/src/app/appearance/appearance-provider.tsx).
 
-Choose the [state owner](#rule-41) first. Extraction changes where its behavior
+Choose the [state owner](#rule-42) first. Extraction changes where its behavior
 is implemented; it does not give every child its own state. A
-[controlled editor](#rule-42) can use the same approach internally.
+[controlled editor](#rule-43) can use the same approach internally.
 
 **Example:** a filename needs clipped-edge styling when its text overflows.
 `FileNameStyles` supplies the same constrained width and overflow styles in
@@ -2352,9 +2394,9 @@ function FileName({ name }: FileNameProps): ReactElement {
 For a complete implementation with resize and scroll handling, see the
 [PanelHeader overflow hook](packages/ui-unified/panels/panel-header/use-panel-header-overflow.ts).
 
-<a id="rule-44"></a>
+<a id="rule-45"></a>
 
-### 44. Memoize derived data and local callbacks
+### 45. Memoize derived data and local callbacks
 
 - **Derived data:** Repeated traversal, indexing, deduplication, or parsing
   **SHOULD** use a focused `useMemo` or owning hook. Inputs **SHOULD** be the
@@ -2377,7 +2419,7 @@ For a complete implementation with resize and scroll handling, see the
 - **Formatting:** Multiple hook dependencies and multi-field result
   destructures **MUST** be vertical, one value per line with trailing commas.
 - **Proportion:** Cheap expressions **MAY** remain inline. A hook **SHOULD NOT**
-  exist merely to move a few lines. Use the [extraction criteria](#rule-43)
+  exist merely to move a few lines. Use the [extraction criteria](#rule-44)
   when several hook calls implement one behavior.
 
 **❌ Bad:** derive warning logs from all graph nodes on every render.
@@ -2466,17 +2508,17 @@ function stopPropagation(event: SyntheticEvent<HTMLElement>): void {
 />
 ```
 
-<a id="rule-45"></a>
+<a id="rule-46"></a>
 
-### 45. Stop controlled-state echoes at the owning boundary
+### 46. Stop controlled-state echoes at the owning boundary
 
 When a parent controls several children, a child may report a prop-driven
 update through the same callback it uses for a user edit. Relaying that report
 to every child can start a reaction loop or repeat expensive work.
 
-This rule covers synchronization of [controlled values](#rule-42), including
-[form updates](#rule-47). It does not require ordinary controlled components
-to keep another copy of their [parent's state](#rule-41).
+This rule covers synchronization of [controlled values](#rule-43), including
+[form updates](#rule-48). It does not require ordinary controlled components
+to keep another copy of their [parent's state](#rule-42).
 
 **One-directional flow:** parent value → guarded child initialization → user
 edit reported upward → parent comparison before rebroadcast. An equal external
@@ -2496,7 +2538,7 @@ child reinitialization.
 - **Component-owned hook:** Complex change detection, initialization, and
   notification logic **SHOULD** live in a focused hook beside the component
   that owns it. The hook **SHOULD** expose named actions rather than its
-  mutable flag; see [hook ownership](#rule-43).
+  mutable flag; see [hook ownership](#rule-44).
 - **Forced reinitialization:** A child hook **MAY** expose a narrow
   `resetIsInitialised` action when its parent must intentionally reapply an
   external value. The code starting reinitialization **MUST** close the guard
@@ -2506,7 +2548,7 @@ child reinitialization.
   child **MUST** ignore stale completions after a newer value or unmount.
 - **Proportion:** A simple controlled input that does not echo prop updates
   **MUST NOT** acquire a lock just for consistency. A timer **MUST NOT** be
-  used to conceal the loop; see [interaction scheduling](#rule-46).
+  used to conceal the loop; see [interaction scheduling](#rule-47).
 
 **❌ Bad:** the parent rebroadcasts equal values and the child reports its
 own reset as another edit.
@@ -2585,9 +2627,9 @@ adapting the idea to a composed feature. See the
 [live form playground](https://koshevy.github.io/bot-store/?path=/story/bot-subscription-seller-control-panel-container--successful-start-and-update-playground)
 for a start, edit, and revert path.
 
-<a id="rule-46"></a>
+<a id="rule-47"></a>
 
-### 46. Defer only coupled UI work that blocks an interaction
+### 47. Defer only coupled UI work that blocks an interaction
 
 - **Coupled action:** When one event updates several expensive views,
   substantial downstream work **SHOULD** run after the originating event.
@@ -2628,9 +2670,9 @@ const handleSelect = (nodeId: string, additive: boolean): void => {
 };
 ```
 
-<a id="rule-47"></a>
+<a id="rule-48"></a>
 
-### 47. Track simple form changes with React Hook Form
+### 48. Track simple form changes with React Hook Form
 
 - **Form state:** Use `useForm` for values, validation, and submission. Supply
   `defaultValues` so the initial value of each watched field is clear.
@@ -2641,14 +2683,14 @@ const handleSelect = (nodeId: string, additive: boolean): void => {
   and return the unsubscribe function from the effect.
 - **External values:** `reset` and `setValue` can also trigger notifications.
   When the parent sends values back to the form, compare and guard that path
-  as described in [rule 45](#rule-45).
+  as described in [rule 46](#rule-46).
 - **Validation:** Field rules **MAY** be declared with the fields. Schema or
   cross-field validation **SHOULD** use a resolver, such as the adopted
   `@hookform/resolvers`, instead of a parallel error-state engine.
 
-Keep complex field editors reusable through [value and onChange](#rule-42).
-Use an [adapter](#rule-48) for form-specific wiring and an
-[owned hook](#rule-43) for substantial subscriptions or change handling.
+Keep complex field editors reusable through [value and onChange](#rule-43).
+Use an [adapter](#rule-49) for form-specific wiring and an
+[owned hook](#rule-44) for substantial subscriptions or change handling.
 
 **❌ Bad:** watch the whole form to drive one field's UI and draft saving.
 
@@ -2711,9 +2753,9 @@ deprecated in favor of `subscribe`. See the React Hook Form
 [useWatch](https://react-hook-form.com/docs/usewatch), and
 [subscribe](https://react-hook-form.com/docs/useform/subscribe) APIs.
 
-<a id="rule-48"></a>
+<a id="rule-49"></a>
 
-### 48. Describe dynamic form widgets with typed metadata
+### 49. Describe dynamic form widgets with typed metadata
 
 - **Widget contract:** Dynamic form widgets **SHOULD** share a typed interface
   based on React Hook Form's `ControllerRenderProps`. Keep form-specific
@@ -2730,11 +2772,11 @@ deprecated in favor of `subscribe`. See the React Hook Form
   the form context and `useFieldArray` for repeated form fields.
 - **Stable definitions:** Static metadata **SHOULD** live outside the
   component. Memoize derived definitions when subscriptions depend on their
-  identity; see [derived data](#rule-44).
+  identity; see [derived data](#rule-45).
 
-The reusable [controlled editor](#rule-42) keeps its value/onChange API;
-the adapter owns the [form integration](#rule-47). Extract substantial
-adapter behavior into its own [named hook](#rule-43).
+The reusable [controlled editor](#rule-43) keeps its value/onChange API;
+the adapter owns the [form integration](#rule-48). Extract substantial
+adapter behavior into its own [named hook](#rule-44).
 
 **❌ Bad:** a reusable dynamic form chooses controls by individual field name,
 so every new form requires another branch.
@@ -2822,9 +2864,9 @@ compose them. See also React Hook Form's
 [Controller](https://react-hook-form.com/docs/usecontroller/controller) and
 [useFieldArray](https://react-hook-form.com/docs/usefieldarray) APIs.
 
-<a id="rule-49"></a>
+<a id="rule-50"></a>
 
-### 49. Name conditions and prepare conditional child nodes
+### 50. Name conditions and prepare conditional child nodes
 
 - **Conditional child:** A component **MUST** assign a conditionally rendered
   child to a named value before `return`. The returned JSX **MUST** use that
@@ -2938,9 +2980,9 @@ conditional child.
 <Collapse in={expanded}>{children}</Collapse>
 ```
 
-<a id="rule-50"></a>
+<a id="rule-51"></a>
 
-### 50. Put multiple JSX props on separate lines
+### 51. Put multiple JSX props on separate lines
 
 JSX with two or more props, or one prop longer than 32 characters, **MUST** put each prop on its own line. The closing `>` **MUST** be on its own line. See [the warning code-line component](packages/playground-ui/misc-ui/warning-detailed/warning-detailed-code-line.tsx).
 
@@ -2967,9 +3009,9 @@ JSX with two or more props, or one prop longer than 32 characters, **MUST** put 
 </Box>
 ```
 
-<a id="rule-51"></a>
+<a id="rule-52"></a>
 
-### 51. Omit optional props instead of passing empty values
+### 52. Omit optional props instead of passing empty values
 
 - **Absence:** A prop **MUST** be optional when omission is valid. Callers
   **MUST NOT** pass `""` or `[]` just to satisfy its type.
@@ -3003,9 +3045,9 @@ interface GeneratedFilesListProps {
 <GeneratedFilesList graph={graph} />
 ```
 
-<a id="rule-52"></a>
+<a id="rule-53"></a>
 
-### 52. Compose conditional classes with `clsx`
+### 53. Compose conditional classes with `clsx`
 
 Class names **MUST** be owned by their component. Conditional classes **MUST**
 use object-form `clsx`. A single unconditional class **MAY** be passed
@@ -3032,9 +3074,9 @@ className={clsx({
 })}
 ```
 
-<a id="rule-53"></a>
+<a id="rule-54"></a>
 
-### 53. Use the shared MUI theme and keep styles beside components
+### 54. Use the shared MUI theme and keep styles beside components
 
 - **UI foundation:** React UI projects **MUST** use
   [`@codegena/ui-theme`](packages/ui-theme/) for their shared palette and
@@ -3122,9 +3164,9 @@ export function PanelHeader({ leading }: PanelHeaderProps): ReactElement {
 
 ## ♿ Accessibility
 
-<a id="rule-54"></a>
+<a id="rule-55"></a>
 
-### 54. Reuse controls with built-in accessibility
+### 55. Reuse controls with built-in accessibility
 
 - **Match the purpose:** The control's semantics **MUST** match what it does:
   use a button for an action, a link for navigation, a menu for a list of
@@ -3138,7 +3180,7 @@ export function PanelHeader({ leading }: PanelHeaderProps): ReactElement {
   for their matching use cases. Their built-in accessibility support is a
   starting point: callers **MUST** supply any missing accessible name and
   application-specific names and state described in rules
-  [55](#rule-55) and [56](#rule-56).
+  [56](#rule-56) and [57](#rule-57).
 - **Custom fallback:** When a graph or editor genuinely needs a custom
   control, its owner **MUST** implement the relevant role, keyboard operation,
   focus management, and state. Decorative elements **MUST NOT** become extra
@@ -3171,9 +3213,9 @@ import Button from '@mui/material/Button';
 </Button>
 ```
 
-<a id="rule-55"></a>
+<a id="rule-56"></a>
 
-### 55. Give controls specific, distinct accessible names
+### 56. Give controls specific, distinct accessible names
 
 - **Visible label first:** A control **SHOULD** get its accessible name from
   visible text when that text describes the action. An icon-only control
@@ -3193,7 +3235,7 @@ import Button from '@mui/material/Button';
 
 See [WAI-ARIA's naming guidance](https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/)
 and the [declaration glyph](packages/playground-ui/json-editor/declaration-glyph.tsx).
-Verify these names through the [accessible UI testing rule](#rule-60).
+Verify these names through the [accessible UI testing rule](#rule-61).
 
 **❌ Bad:** every button announces the same vague action.
 
@@ -3223,9 +3265,9 @@ Verify these names through the [accessible UI testing rule](#rule-60).
 ))}
 ```
 
-<a id="rule-56"></a>
+<a id="rule-57"></a>
 
-### 56. Expose the state the user can change
+### 57. Expose the state the user can change
 
 - **State:** Selection, expansion, checked choice, disabled status, and busy
   status **MUST** use the semantics of the chosen control. Visual styling
@@ -3259,9 +3301,9 @@ and the [context-menu entry](packages/ui-unified/menus/context-menu/context-menu
 </MenuItem>
 ```
 
-<a id="rule-57"></a>
+<a id="rule-58"></a>
 
-### 57. Remove inactive views from the focus path
+### 58. Remove inactive views from the focus path
 
 - **Mounted views:** A view kept mounted to preserve graph or list state
   **MUST** leave both the accessibility tree and keyboard tab order while
@@ -3308,9 +3350,9 @@ export const PlaygroundGeneratedOutputViewStyles = styled(Box)`
 `;
 ```
 
-<a id="rule-58"></a>
+<a id="rule-59"></a>
 
-### 58. Preserve keyboard paths and predictable focus
+### 59. Preserve keyboard paths and predictable focus
 
 - **Equivalent action:** An action available by click or right-click
   **MUST** also have a keyboard path. A context menu **SHOULD** have a
@@ -3362,9 +3404,9 @@ const handleButtonClick = (event: MouseEvent<HTMLButtonElement>): void => {
 </Box>
 ```
 
-<a id="rule-59"></a>
+<a id="rule-60"></a>
 
-### 59. Keep focus visible and distinct from selection
+### 60. Keep focus visible and distinct from selection
 
 - **Focus indicator:** A keyboard-focused control **MUST** remain visibly
   identifiable. Removing the browser outline **MUST** be paired with an
@@ -3406,9 +3448,9 @@ export const CodegenaGraphViewStyles = styled(Paper)(({ theme }) => `
 
 ## 🧪 Testing
 
-<a id="rule-60"></a>
+<a id="rule-61"></a>
 
-### 60. Test controls and results by role and name
+### 61. Test controls and results by role and name
 
 - **Inspect:** Changed UI **SHOULD** be inspected in Storybook for its
   relevant role, name, focus order, and state.
@@ -3422,7 +3464,7 @@ export const CodegenaGraphViewStyles = styled(Paper)(({ theme }) => `
 - **Keyboard regression:** A changed interaction with a custom focus path
   **SHOULD** have a keyboard assertion as well as a pointer assertion.
 
-Give repeated controls [distinct accessible names](#rule-55) so these checks
+Give repeated controls [distinct accessible names](#rule-56) so these checks
 can identify the intended action. See also the
 [accessible interactions ADR](adr/009-make-ui-interactions-accessible-and-testable.md)
 and [Playground E2E cases](apps/playground-ui-e2e/e2e/).
@@ -3482,16 +3524,16 @@ await expect(fileBadge).toBeVisible();
 await expect(fileBadge).toHaveText('2 files');
 ```
 
-<a id="rule-61"></a>
+<a id="rule-62"></a>
 
-### 61. Start from a concrete case and local test assets
+### 62. Start from a concrete case and local test assets
 
 - **Case:** A new feature **MUST** begin with a focused test that demonstrates
   its behavior and fails before implementation. Related specs **SHOULD** be
   read for existing assertions and names.
 - **Layer:** Small features and edge cases **MUST** have focused Jest coverage.
   UI-visible behavior **MUST** also have a Playwright path in its related E2E
-  project; see [rule 65](#rule-65).
+  project; see [rule 66](#rule-66).
 - **Assets:** Fixtures, mocks, and rendering helpers **MUST** come from the
   owning Nx project. A test **SHOULD NOT** copy an existing loader or borrow
   another project's fixture.
@@ -3564,9 +3606,9 @@ and [visitor specifications](packages/oas3-visitor-typescript/src/visitors/).
 The [control panel stories](https://github.com/koshevy/bot-store/blob/main/libs/bot-subscription-seller-ui/src/lib/control-panel/control-panel.stories.tsx)
 show named lifecycle scenarios with local fixtures.
 
-<a id="rule-62"></a>
+<a id="rule-63"></a>
 
-### 62. Reuse the shared Storybook preview
+### 63. Reuse the shared Storybook preview
 
 - **Shared setup:** A UI library's Storybook preview **MUST** use
   `@codegena/ui-theme/storybook` for its theme, CSS baseline, and page styles.
@@ -3610,9 +3652,9 @@ See the [Graph Search preview](packages/graph-search-ui/.storybook/preview.ts)
 and the [Playground preview](packages/playground-ui/.storybook/preview.ts),
 which adds its own notification provider.
 
-<a id="rule-63"></a>
+<a id="rule-64"></a>
 
-### 63. Put focused tests beside their owner
+### 64. Put focused tests beside their owner
 
 An isolated module's focused test **MUST** live beside it as
 `<module>.spec.ts`. Cases **SHOULD** name observable behavior. Tests **SHOULD**
@@ -3636,9 +3678,9 @@ it('sorts files by source location', () => {
 });
 ```
 
-<a id="rule-64"></a>
+<a id="rule-65"></a>
 
-### 64. Give cross-feature smoke tests their own owner
+### 65. Give cross-feature smoke tests their own owner
 
 - **Owner:** A full-engine test **MUST** sit beside its owning abstraction as
   `<owner>.<concern>.spec.ts`, not beside one incidental helper.
@@ -3675,9 +3717,9 @@ it('preserves GitHub generated file structure', async () => {
 });
 ```
 
-<a id="rule-65"></a>
+<a id="rule-66"></a>
 
-### 65. Follow affected E2E projects for UI behavior
+### 66. Follow affected E2E projects for UI behavior
 
 - **Find the project:** The Nx graph **MUST** be checked for E2E projects
   related by imports or `implicitDependencies`, including indirect consumers.
@@ -3688,7 +3730,7 @@ it('preserves GitHub generated file structure', async () => {
   focused Playwright test that fails before the fix. If no related E2E
   project exists, one **MUST** be established for that UI behavior.
 - **Supply state:** The E2E test **SHOULD** reuse the story required by
-  [rule 61](#rule-61). If no existing story exposes the use case's starting
+  [rule 62](#rule-62). If no existing story exposes the use case's starting
   state and action, add or extend one before implementation. A story alone
   **MUST NOT** count as a behavior test.
 - **Track coverage:** The related case catalog **MUST** be updated.
@@ -3732,13 +3774,13 @@ test('keeps a selected file visible after list scrolling', async ({ page }) => {
 The [Playground case catalog](apps/playground-ui-e2e/TESTCASES.md) tracks
 implemented and missing cases.
 
-<a id="rule-66"></a>
+<a id="rule-67"></a>
 
-### 66. Type-check tests and compare meaningful output
+### 67. Type-check tests and compare meaningful output
 
 - **Type safety:** Tests **MUST** type-check under their specification
   `tsconfig`; Jest transpilation or a build excluding specs **MUST NOT** stand
-  in for that check. Test-value narrowing follows rule 29.
+  in for that check. Test-value narrowing follows rule 30.
 - **Output:** Complete generated output **SHOULD** be compared when its whole
   form is the contract. For repeatability, the first result **SHOULD** match
   the expected output and later results **SHOULD** match the first.
@@ -3768,9 +3810,9 @@ expect(second).toBe(first);
 
 ## 🔧 Design and refactoring
 
-<a id="rule-67"></a>
+<a id="rule-68"></a>
 
-### 67. [🤖 AI only] Learn the owner before changing behavior
+### 68. [🤖 AI only] Learn the owner before changing behavior
 
 Before editing an Nx project:
 
@@ -3804,9 +3846,9 @@ rg -n 'visitorSomeOf' packages/oas3-visitor-typescript/src/visitors
 rg --files packages/oas3-visitor-typescript/src/visitors | rg '(__fixtures__|testing-utils|spec\.ts)'
 ```
 
-<a id="rule-68"></a>
+<a id="rule-69"></a>
 
-### 68. Use adopted APIs before writing infrastructure
+### 69. Use adopted APIs before writing infrastructure
 
 Before a nontrivial transformation:
 
@@ -3853,9 +3895,9 @@ if (targetIndex < 0) {
 virtualizer.scrollToIndex(targetIndex, { align: 'center' });
 ```
 
-<a id="rule-69"></a>
+<a id="rule-70"></a>
 
-### 69. Extract a helper only for a named responsibility
+### 70. Extract a helper only for a named responsibility
 
 For shared logic, separate the decision into three checks:
 
@@ -3894,9 +3936,9 @@ function createNotificationMessageKey(
 
 See the [notification key helper](packages/notification-ui-notistack/src/lib/create-notification-message-key.ts).
 
-<a id="rule-70"></a>
+<a id="rule-71"></a>
 
-### 70. Keep the requested operation and its types small
+### 71. Keep the requested operation and its types small
 
 - **Scope:** An extraction **MUST** stay within the requested operation; it
   **MUST NOT** move the owner's unrelated work.
@@ -3935,9 +3977,9 @@ and [its owning hook](packages/playground-ui/generated-files-list/use-generated-
 
 ## ✅ Verification and sources
 
-<a id="rule-71"></a>
+<a id="rule-72"></a>
 
-### 71. Record significant architecture changes at their owner
+### 72. Record significant architecture changes at their owner
 
 - **Existing decision:** A changed shared contract, dependency, data flow,
   or ownership pattern **MUST** be checked against related ADRs. A changed
@@ -3969,9 +4011,9 @@ manifests with it.
         └── package.json
 ```
 
-<a id="rule-72"></a>
+<a id="rule-73"></a>
 
-### 72. [🤖 AI only] Inspect the active ESLint policy before editing
+### 73. [🤖 AI only] Inspect the active ESLint policy before editing
 
 - **Before editing:** For an affected project, an AI assistant **MUST** read
   the root and project ESLint configurations and inspect relevant shared rules.
@@ -4000,9 +4042,9 @@ npm exec -- nx show project @codegena/playground-ui --json
 npm exec -- nx lint @codegena/playground-ui
 ```
 
-<a id="rule-73"></a>
+<a id="rule-74"></a>
 
-### 73. Keep diagnostics visible and fix their cause
+### 74. Keep diagnostics visible and fix their cause
 
 - **No suppression:** New code and tests **MUST NOT** add `@ts-ignore`,
   `@ts-nocheck`, `@ts-expect-error`, or formatting-ignore comments merely to
@@ -4035,9 +4077,9 @@ if (typeof input.operationId !== 'string') {
 const name = input.operationId.toUpperCase();
 ```
 
-<a id="rule-74"></a>
+<a id="rule-75"></a>
 
-### 74. Require approval for exceptional `eslint-disable` use
+### 75. Require approval for exceptional `eslint-disable` use
 
 - **Default:** An ESLint failure **MUST** be fixed in the code unless the
   exception below is approved. A directive **MUST NOT** be added for
@@ -4087,7 +4129,7 @@ const schemaId = 'https://schemas.example.org/a/long/external/identifier/that/is
   configuration, and [`.editorconfig`](.editorconfig) govern indentation,
   quotes, import order, and line limits. These rules **MUST** be followed;
   the only source-level ESLint exception is the approved, scoped directive
-  described in [rule 74](#rule-74).
+  described in [rule 75](#rule-75).
 - **Architecture:** Contributors **SHOULD** consult the
   [repository ADR index](adr/README.md), then the affected package's ADR
   index. The [schema interpretation boundary](adr/001-use-transitive-nodes-as-schema-boundary.md)
@@ -4106,18 +4148,18 @@ const schemaId = 'https://schemas.example.org/a/long/external/identifier/that/is
   each child, through its `onChange` or subscription, and back to the parent.
   Verify that an equal value stops there, a user edit produces one outward
   update, and an intentional external reset reinitializes the child once.
-  See the [state ownership](#rule-41) and [echo guard](#rule-45) rules.
+  See the [state ownership](#rule-42) and [echo guard](#rule-46) rules.
 - **🧭 Conflicting user paths:** List the hooks that react to the same
   selection, form value, or reveal action. Check their combined order at the
   common owner: a local fix in one hook can trigger another hook to undo it.
   For example, trace selection → details reveal → graph focus → selection.
   Verify both the direct path and the path through a sibling view, including
-  repeated actions and remounts. Do not use [deferred work](#rule-46) to mask
+  repeated actions and remounts. Do not use [deferred work](#rule-47) to mask
   a feedback loop.
 - **🧪 Reproduce the full path:** A focused test **SHOULD** check the pure
   comparator or transformation. A composed UI regression **MUST** also have a
   human-repeatable browser path and an E2E check for the visible result; see
-  [browser testing](#rule-65).
+  [browser testing](#rule-66).
 
 <a id="before-finishing"></a>
 
@@ -4134,8 +4176,8 @@ const schemaId = 'https://schemas.example.org/a/long/external/identifier/that/is
    commands. A passing test suite **MUST NOT** substitute for the design
    review.
 3. **Check dependency security.** After a feature, run the
-   [required SCA command](#rule-11). Resolve findings through patched releases
-   or the [time-limited exception policy](#rule-13); review newly added
+   [required SCA command](#rule-12). Resolve findings through patched releases
+   or the [time-limited exception policy](#rule-14); review newly added
    dependencies even when an existing exception makes the audit pass.
 4. **Update the right record.** New behavior **MUST** appear in adjacent tests
    and the applicable case catalog. A significant contract or architectural

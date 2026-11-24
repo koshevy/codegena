@@ -69,6 +69,7 @@
     "ansi-colors": "4.x",
     "ansi-to-react": "6.x",
     "clsx": "2.x",
+    "dompurify": "3.x",
     "embla-carousel-react": "8.x",
     "jsonc-parser": "3.x",
     "lenis": "1.x",

@@ -68,6 +68,6 @@ configuration directly. Exercise service release during initialization,
 replacement after failure, and normal use through the owning application's
 browser tests. Editor consumers must load local workers without a CDN request.
 
-See [service-free views](../CODE_STYLE.md#rule-39),
-[explicit runtime dependencies](../CODE_STYLE.md#rule-40), and the
+See [service-free views](../CODE_STYLE.md#rule-40),
+[explicit runtime dependencies](../CODE_STYLE.md#rule-41), and the
 [shared UI toolkit](005-standardize-react-ui-toolkit.md).

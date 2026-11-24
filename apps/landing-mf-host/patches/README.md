@@ -1,9 +1,8 @@
 # Landing shader dependency fix
 
-The workspace's `npm ci` applies this project's version-specific patch through
-`patch-package --patch-dir apps/landing-mf-host/patches`.
-Installation fails if a patch no longer applies; review it when upgrading the
-affected dependency.
+The landing's Nx tasks apply this patch through the workspace's
+`apply-dependency-patches` target. The target fails if a patch no longer
+applies. Review the patch when upgrading the affected dependency.
 
 ## `shaders` 4.0.7
 

@@ -10,11 +10,14 @@ RUN XCADDY_SETCAP=0 xcaddy build \
 
 FROM caddy:${CADDY_VERSION}-alpine AS caddy
 COPY --from=caddy-builder /usr/bin/caddy /usr/bin/caddy
+COPY apps/landing-mf-host-ssr/Caddyfile /etc/caddy/Caddyfile
 RUN apk upgrade --no-cache \
   && addgroup -g 10001 caddy \
   && adduser -D -H -u 10001 -G caddy caddy \
   && chown -R caddy:caddy /config /data
 USER caddy
+HEALTHCHECK --interval=2s --timeout=3s --retries=10 \
+  CMD wget -q --no-check-certificate --spider "https://localhost:${CADDY_HTTPS_PORT:-443}/manifest.webmanifest"
 
 FROM oven/bun:1-alpine AS ssr
 RUN apk upgrade --no-cache
@@ -23,4 +26,6 @@ COPY dist/apps/landing-mf-host/ ./landing-mf-host/
 COPY dist/apps/landing-mf-host-renderer/renderer.cjs ./landing-mf-host-renderer/renderer.cjs
 COPY dist/apps/landing-mf-host-ssr/main.js ./landing-mf-host-ssr/main.js
 USER bun
+HEALTHCHECK --interval=2s --timeout=3s --retries=10 \
+  CMD ["bun", "-e", "process.exit((await fetch(`http://127.0.0.1:${process.env.PORT ?? 8104}/manifest.webmanifest`)).ok ? 0 : 1)"]
 CMD ["bun", "landing-mf-host-ssr/main.js"]

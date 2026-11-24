@@ -7,3 +7,6 @@
 !dist/apps/landing-mf-host-renderer/renderer.cjs
 !dist/apps/landing-mf-host-ssr/
 !dist/apps/landing-mf-host-ssr/main.js
+!apps/
+!apps/landing-mf-host-ssr/
+!apps/landing-mf-host-ssr/Caddyfile

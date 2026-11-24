@@ -1,10 +1,26 @@
-import { expect, test, type Page } from '@playwright/test';
+import { type CDPSession, expect, test, type Page } from '@playwright/test';
 
 import {
   observeLandingDiagnostics,
   scrollSecondScreenTo,
   waitForPlaygroundIllustration,
 } from './landing-journey';
+
+async function swipeDown(session: CDPSession, x: number, y: number): Promise<void> {
+  await session.send('Input.dispatchTouchEvent', {
+    type: 'touchStart',
+    touchPoints: [{ x, y }],
+  });
+
+  for (const distance of [50, 100, 150, 200]) {
+    await session.send('Input.dispatchTouchEvent', {
+      type: 'touchMove',
+      touchPoints: [{ x, y: y + distance }],
+    });
+  }
+
+  await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+}
 
 async function scrollTowardTop(page: Page, isMobile: boolean): Promise<void> {
   const viewport = page.viewportSize();
@@ -19,13 +35,13 @@ async function scrollTowardTop(page: Page, isMobile: boolean): Promise<void> {
   if (isMobile) {
     const session = await page.context().newCDPSession(page);
 
-    await session.send('Input.synthesizeScrollGesture', {
-      gestureSourceType: 'touch',
-      x,
-      y,
-      yDistance: 400,
-    });
-    await session.detach();
+    try {
+      await swipeDown(session, x, y);
+    }
+    finally {
+      await session.detach();
+    }
+
     return;
   }
 
@@ -103,8 +119,9 @@ test('02.04 — GitHub graph search finds a generated declaration', async ({
 });
 
 test('02.04 — opening search keeps the landing page still until it closes', async ({
+  isMobile,
   page,
-}, testInfo) => {
+}) => {
   const expectNoDiagnostics = observeLandingDiagnostics(page);
 
   await page.goto('/?testingMode=true');
@@ -122,14 +139,14 @@ test('02.04 — opening search keeps the landing page still until it closes', as
 
   const scrollPosition = await page.evaluate(() => window.scrollY);
 
-  await scrollTowardTop(page, testInfo.project.name === 'iPhone 15');
+  await scrollTowardTop(page, isMobile);
   await expect.poll(async () => page.evaluate(() => window.scrollY))
     .toBe(scrollPosition);
 
   await drawer.getByRole('combobox').press('Escape');
-  await expect(drawer).toBeHidden();
+  await expect(page.getByRole('dialog', { includeHidden: true })).toHaveCount(0);
 
-  await scrollTowardTop(page, testInfo.project.name === 'iPhone 15');
+  await scrollTowardTop(page, isMobile);
   await expect.poll(async () => page.evaluate(() => window.scrollY))
     .toBeLessThan(scrollPosition);
 

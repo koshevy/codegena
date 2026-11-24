@@ -7,6 +7,23 @@
   "implicitDependencies": ["landing-mf-host", "landing-mf-host-ssr"],
   "// targets": "to see all targets run: nx show project landing-mf-host-e2e --web",
   "targets": {
+    "docker-compose-build": {
+      "executor": "@codegena/infr-nx:docker-compose-build",
+      "cache": false,
+      "dependsOn": ["landing-mf-host:rspack:build"],
+      "options": { "services": ["playwright"] }
+    },
+    "docker-compose-build-chrome": {
+      "executor": "@codegena/infr-nx:docker-compose-build",
+      "cache": false,
+      "options": { "services": ["chrome"] }
+    },
+    "docker-compose-up": {
+      "executor": "@codegena/infr-nx:docker-compose-up",
+      "cache": false,
+      "dependsOn": ["docker-compose-build"],
+      "options": { "services": ["playwright"], "exitCodeFrom": "playwright" }
+    },
     "e2e-ssr": {
       "executor": "nx:run-commands",
       "cache": false,
@@ -18,13 +35,17 @@
       }
     },
     "e2e-quality": {
-      "executor": "nx:run-commands",
+      "executor": "@codegena/infr-nx:docker-compose-up",
       "cache": false,
-      "dependsOn": ["landing-mf-host-ssr:docker-compose-build"],
+      "dependsOn": [
+        "docker-compose-build",
+        "docker-compose-build-chrome",
+        "landing-mf-host-ssr:docker-compose-build"
+      ],
       "parallelism": false,
       "options": {
-        "command": "playwright test --config=playwright.quality.config.mts",
-        "cwd": "apps/landing-mf-host-e2e"
+        "services": ["quality", "chrome", "caddy", "ssr"],
+        "exitCodeFrom": "quality"
       }
     },
     "typecheck": {
@@ -35,8 +56,13 @@
       }
     },
     "e2e": {
+      "cache": false,
       "dependsOn": [],
+      "options": {
+        "command": "npm exec -- nx run landing-mf-host-e2e:docker-compose-up"
+      },
       "configurations": {
+        "native": { "command": "playwright test" },
         "development": {
           "command": "playwright test src/screen-02-item-06-playground.spec.ts src/embedded-playground src/documentation.spec.ts src/documentation-links.spec.ts src/documentation-menu.spec.ts",
           "env": {

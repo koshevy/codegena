@@ -70,17 +70,26 @@ export async function expectGeneratedDeclaration(
   declaration: RegExp,
 ): Promise<void> {
   const editor = getCodeEditor(overlay, `Generated code editor for ${fileName}`);
-  const declarationLine = editor.locator('.view-line').filter({ hasText: declaration });
-  const activeGutterRow = editor.locator('.margin-view-overlays > div').filter({
-    has: overlay.page().locator('.line-numbers.active-line-number'),
-  });
 
-  await expect(declarationLine).toBeVisible();
+  // Monaco can replace both rows between browser calls. Read them together.
+  await expect.poll(() => editor.evaluate((element) => {
+    const activeGutterRow = element.querySelector(
+      '.margin-view-overlays > div:has(.line-numbers.active-line-number)',
+    );
 
-  // Monaco renders the line and its gutter row at the same vertical offset.
-  const declarationTop = await declarationLine.evaluate((line) => (
-    getComputedStyle(line).top
-  ));
+    if (!activeGutterRow) {
+      return '';
+    }
 
-  await expect(activeGutterRow).toHaveCSS('top', declarationTop);
+    const activeTop = getComputedStyle(activeGutterRow).top;
+    const renderedLines = [...element.querySelectorAll('.view-line')];
+    const activeLine = renderedLines.find((line) => {
+      const { top, visibility } = getComputedStyle(line);
+
+      return top === activeTop && visibility === 'visible'
+        && line.getBoundingClientRect().height > 0;
+    });
+
+    return activeLine?.textContent ?? '';
+  })).toMatch(declaration);
 }

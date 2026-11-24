@@ -39,6 +39,15 @@ export function useHalo(canLoadHalo: boolean): RefObject<HTMLDivElement | null> 
     let effect: { destroy: () => void } | undefined;
 
     const cancelLoad = scheduleHaloLoad(() => {
+      const canvas = element.ownerDocument.createElement('canvas');
+      const attributes = { alpha: true, antialias: true };
+      const context = canvas.getContext('webgl2', attributes)
+        ?? canvas.getContext('webgl', attributes);
+
+      if (!context) {
+        return;
+      }
+
       void Promise.all([
         import(/* webpackFetchPriority: "low" */ 'vanta/dist/vanta.halo.min'),
         import(/* webpackFetchPriority: "low" */ 'three'),

@@ -26,6 +26,12 @@
         "outputs": [
           "{workspaceRoot}/dist/graph-ui"
         ]
+      },
+      "storybook": {
+        "dependsOn": ["@codegena/source:apply-dependency-patches"]
+      },
+      "build-storybook": {
+        "dependsOn": ["@codegena/source:apply-dependency-patches"]
       }
     }
   },

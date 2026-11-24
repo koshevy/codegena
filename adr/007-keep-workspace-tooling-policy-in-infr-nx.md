@@ -33,6 +33,18 @@ projects that run a local Docker Compose stack.
 - **📦 Builds:** The [Rollup factory](../packages/infr-nx/rollup/create-unified-rollup-config.cjs) discovers first-level entrypoints, emits ESM/CJS, copies assets, and writes exports.
   - Consumers supply options.
   - The [Rollup decision](006-centralize-rollup-config-and-isolate-cli-resolution.md) covers the CLI exception.
+- **🏷️ Alpha releases** use independent [Nx Release](../nx.json) versions.
+  [Conventional Commits](https://nx.dev/docs/guides/nx-release/automatically-version-with-conventional-commits)
+  determine the bumps for publishable libraries. The
+  [pull request job](../.github/workflows/pull-request.yml) runs
+  `npm exec -- nx release --preid alpha --skip-publish` to prepare local
+  commits and tags.
+  - Run from a clean checkout when creating a release commit. Add
+    `--dry-run` to preview the release or pass `--projects` to limit it to
+    specific libraries.
+  - The release configuration skips lockfile updates. The stable workspace
+    ranges need to admit the alpha versions before npm can regenerate the
+    lockfile for publishing.
 - **🐳 Docker Compose** runs from the owning project directory via the
   [shared executors](../packages/infr-nx/README.md#local-docker-compose).
   Projects define their Compose files and declare artifact build dependencies

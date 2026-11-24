@@ -15,12 +15,12 @@ export function ThemeModeMenu({
   return (
     <ContextMenu
       anchor={anchor}
-      anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
       ariaLabel="Theme mode"
       header="Appearance"
       items={items}
       onClose={onClose}
-      transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+      transformOrigin={{ horizontal: 'center', vertical: 'top' }}
     />
   );
 }

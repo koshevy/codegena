@@ -37,12 +37,19 @@ function build(options, context) {
   return runDockerCompose(options, context, ['build']);
 }
 
-function up({ abortOnContainerExit, build: buildImages, detached, ...options }, context) {
+function up({
+  abortOnContainerExit,
+  build: buildImages,
+  detached,
+  exitCodeFrom,
+  ...options
+}, context) {
   const args = [
     'up',
     ...(buildImages ? ['--build'] : []),
     ...(detached ? ['--detach'] : []),
     ...(abortOnContainerExit ? ['--abort-on-container-exit'] : []),
+    ...(exitCodeFrom ? ['--exit-code-from', exitCodeFrom] : []),
   ];
 
   return runDockerCompose(options, context, args);

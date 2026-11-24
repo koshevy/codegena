@@ -17,6 +17,13 @@ async function scrollFolderingTo(page: Page, progress: number): Promise<void> {
   await scrollSecondScreenTo(page, (8 + 3 * progress) / 17);
 }
 
+async function returnToFolderingStart(page: Page): Promise<void> {
+  // Clicking or revealing a control can also scroll the document.
+  await scrollFolderingTo(page, 0.05);
+  await expect(page.getByRole('progressbar', { name: 'Current feature scroll progress' }))
+    .toHaveAttribute('aria-valuenow', '5');
+}
+
 test('02.03 — scroll opens folders, switches examples, and reverses each step', async ({
   page,
 }) => {
@@ -49,8 +56,6 @@ test('02.03 — scroll opens folders, switches examples, and reverses each step'
   });
 
   await expect(collapseVaults).toBeVisible();
-  await collapseVaults.click();
-  await expect(tree.getByRole('button', { name: 'Expand ./vaults' })).toBeVisible();
 
   await scrollFolderingTo(page, 0.46);
   await expect(tree.getByRole('button', {
@@ -79,10 +84,42 @@ test('02.03 — scroll opens folders, switches examples, and reverses each step'
   })).toBeVisible();
 
   await scrollFolderingTo(page, 0.29);
-  await expect(tree.getByRole('button', { name: 'Expand ./vaults' })).toBeVisible();
+  await expect(tree.getByRole('button', {
+    exact: true,
+    name: 'Expand ./vaults',
+  })).toBeVisible();
 
   await scrollFolderingTo(page, 0.14);
   await expect(tree.getByRole('button', { name: 'Expand ./_common' })).toBeVisible();
+  expectNoDiagnostics();
+});
+
+test('02.03 — a manually collapsed folder reopens at the next scroll step', {
+  tag: '@desktop-foldering',
+}, async ({ page }) => {
+  const expectNoDiagnostics = observeLandingDiagnostics(page);
+
+  await openFolderingStory(page);
+  await scrollFolderingTo(page, 0.38);
+
+  const tree = page.getByRole('tree', { name: 'Generated files' });
+  const collapseVaults = tree.getByRole('button', {
+    exact: true,
+    name: 'Collapse ./vaults',
+  });
+
+  await collapseVaults.scrollIntoViewIfNeeded();
+  // Revealing the folder can move the page into the next expansion step.
+  await scrollFolderingTo(page, 0.38);
+  await expect(collapseVaults).toBeInViewport({ ratio: 1 });
+  await collapseVaults.click();
+  await expect(tree.getByRole('button', {
+    exact: true,
+    name: 'Expand ./vaults',
+  })).toBeVisible();
+
+  await scrollFolderingTo(page, 0.46);
+  await expect(collapseVaults).toBeVisible();
   expectNoDiagnostics();
 });
 
@@ -114,6 +151,7 @@ test('02.03 — mobile folder drawer lets you expand the generated tree', {
 });
 
 test('02.03 — OnePassword files reveal shared types in domain folders', async ({
+  isMobile,
   page,
 }) => {
   const expectNoDiagnostics = observeLandingDiagnostics(page);
@@ -145,13 +183,50 @@ test('02.03 — OnePassword files reveal shared types in domain folders', async 
   })).toBeVisible();
   await tree.getByRole('button', { name: 'Expand ./items/_common' }).click();
 
+  const collapseSharedItems = tree.getByRole('button', {
+    name: 'Collapse ./items/_common',
+  });
   const generatedFile = tree.getByRole('treeitem', {
     name: /generator-recipe\.ts/,
   });
 
-  await generatedFile.scrollIntoViewIfNeeded();
+  if (isMobile) {
+    await generatedFile.scrollIntoViewIfNeeded();
+  }
+
+  await returnToFolderingStart(page);
+
+  if (!isMobile) {
+    // Desktop fits the expanded rows from the first folder to the generated file.
+    await tree.evaluate(async (element, shouldRepaint) => {
+      element.parentElement?.scrollTo({ behavior: 'instant', top: 0 });
+
+      if (!shouldRepaint) {
+        return;
+      }
+
+      if (!(element instanceof HTMLElement)) {
+        throw new TypeError('Expected an HTML file tree.');
+      }
+
+      // Repaint stale text in Linux Chromium after the carousel settles.
+      const contentVisibility = element.style.contentVisibility;
+
+      element.style.contentVisibility = 'hidden';
+      await new Promise<void>((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+      });
+      element.style.contentVisibility = contentVisibility;
+    }, process.platform === 'linux');
+    await expect(collapseSharedItems).toBeInViewport({ ratio: 1 });
+    await collapseSharedItems.hover();
+  }
 
   await expect(generatedFile).toBeInViewport();
+  await expect(illustration.getByRole('group', {
+    includeHidden: true,
+    name: /^Example 2\/2:/,
+  })).not.toBeInViewport();
 
   await expect(page).toHaveScreenshot('02-03-onepassword-foldering.png');
   expectNoDiagnostics();
@@ -189,6 +264,7 @@ test('02.03 — foldering carousel shows its domain namespace example', async ({
   await expect(page.getByRole('tooltip', {
     name: 'Domain namespace with local type exports',
   })).toBeHidden();
+  await returnToFolderingStart(page);
   // Capture the carousel after the document scrollbar auto-hides.
   await expect(page.locator('.os-scrollbar-vertical.os-theme-codegena-window'))
     .toHaveCSS('opacity', '0');
