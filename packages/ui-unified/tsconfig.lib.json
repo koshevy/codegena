@@ -44,6 +44,8 @@
     "code-editor/**/*.ts",
     "code-editor/**/*.tsx",
     "code-editor-minimal/**/*.ts",
+    "under-construction/**/*.ts",
+    "under-construction/**/*.tsx",
     "we-use-cookies/**/*.ts",
     "we-use-cookies/**/*.tsx",
     "monaco-workers/**/*.ts",

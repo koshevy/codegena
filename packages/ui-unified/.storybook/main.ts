@@ -20,6 +20,7 @@ const config: StorybookConfig = {
     '../counts/**/*.stories.@(ts|tsx)',
     '../scrolling/**/*.stories.@(ts|tsx)',
     '../code-editor/**/*.stories.@(ts|tsx)',
+    '../under-construction/**/*.stories.@(ts|tsx)',
     '../we-use-cookies/**/*.stories.@(ts|tsx)',
   ],
   addons: ['@storybook/addon-docs'],

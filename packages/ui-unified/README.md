@@ -28,6 +28,7 @@ these secondary entrypoints:
 | `@codegena/ui-unified/monaco-vite` | Build-only Vite config that imports local worker factories |
 | `@codegena/ui-unified/monaco-environment` | JSON and editor worker factories used by the Vite binding |
 | `@codegena/ui-unified/monaco-workers` | Runtime bootstrap for Vite's local Monaco instance |
+| `@codegena/ui-unified/under-construction` | Modal warning acknowledged once per browser tab |
 | `@codegena/ui-unified/we-use-cookies` | Cookie notice and `useSavedUserAcception` hook for reading the saved choice |
 
 The root import also exports the controls. Prefer a secondary entrypoint so an

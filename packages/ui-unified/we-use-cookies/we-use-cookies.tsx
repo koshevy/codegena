@@ -15,9 +15,13 @@ export function WeUseCookies({
   privacyPolicyHref,
   repoLink,
   rickNRollLink = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-}: WeUseCookiesProps): ReactElement {
+}: WeUseCookiesProps): ReactElement | null {
   const titleId = useId();
   const consent = useCookieConsentSnapshot();
+
+  if (consent === undefined) {
+    return null;
+  }
 
   return (
     <WeUseCookiesStyles
