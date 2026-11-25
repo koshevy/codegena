@@ -36,11 +36,11 @@ containers and volumes after failed runs.
 
 Read `.github/workflows/` in the checkout you are testing. Check the event,
 job ID, and `runs-on` label. This checkout's `.actrc` maps `self-hosted` to
-`codegena-pr:local`. Build it before the first run and after changes to its
-Dockerfile.
+`codegena-pull-request-act:local`. Build it before the first run and after
+changes to the [shared Dockerfile](../../../runners/pull-request/Dockerfile).
 
 ```sh
-docker build -t codegena-pr:local .github/runners/codegena-pr
+docker compose -f runners/docker-compose.yml build pull-request-act
 ```
 
 ### Start a fresh registry for every run
@@ -55,9 +55,9 @@ the browser. The web interface is bound to localhost.
 run_act() (
   set -euo pipefail
   registry_project=codegena-act-registry
-  registry=(docker compose -p "$registry_project" -f .github/runners/verdaccio/docker-compose.yml)
-  "${registry[@]}" down --volumes
-  "${registry[@]}" up --detach --wait
+  registry=(docker compose -p "$registry_project" -f runners/docker-compose.yml)
+  "${registry[@]}" rm --stop --force --volumes verdaccio
+  "${registry[@]}" up --detach --wait verdaccio
 
   NPM_REGISTRY=http://verdaccio:4873/
   VERDACCIO_PASSWORD="$(node -p "require('node:crypto').randomUUID()")"

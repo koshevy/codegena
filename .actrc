@@ -1,2 +1,2 @@
---platform=self-hosted=codegena-pr:local
+--platform=self-hosted=codegena-pull-request-act:local
 --pull=false
