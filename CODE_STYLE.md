@@ -73,87 +73,22 @@ Codegena is a **monorepo of focused projects**. Its work includes:
 change, find its owner by responsibility and use the project graph to see what
 else it affects. The numbered sections below contain the coding rules.
 
-<a id="concept-nx"></a>
+<a id="concept-shared-guidance"></a>
 
-### 🧭 Monorepo and Nx
+### 🤝 One standard for people and AI
 
-We use [NX](https://nx.dev/) as the main tool for managing this monorepo.
-A **monorepo** places projects with different jobs side by side,
-with shared tools and visible relationships.
+AI assistance is part of development here. Human contributors and AI
+assistants use the same guidance:
 
-- **📦 Projects:** The parser, generator, React UI, applications, and E2E
-  suites keep distinct responsibilities while sharing lint, test, and build
-  tooling.
-- **🕸️ [Project graph](https://nx.dev/docs/features/explore-graph):** Shows
-  dependencies. `oas3-visitor-typescript` uses `oas3-core`, so a parser change can affect generated
-  TypeScript.
-- **🎯 [Affected tasks](https://nx.dev/docs/features/ci-features/affected):**
-  Select relevant checks from changed files and task inputs. CI can skip
-  unaffected builds, tests, and E2E suites; Nx can reuse cached results.
-
-> **New to Nx?** Start with its [official introduction](https://nx.dev/docs/getting-started/intro).
-
-**Try it locally:**
-
-```bash
-# List the projects in this workspace.
-npm exec -- nx show projects
-
-# Open their interactive dependency graph.
-npm exec -- nx graph
-```
-
-<a id="concept-mui"></a>
-
-### 🎨 React, MUI, and the shared theme
-
-**[React](https://react.dev/learn)** builds the interactive views from
-components.
-[Material UI (MUI)](https://mui.com/material-ui/getting-started/) supplies
-ready-made React controls and a theme system; Codegena uses its own colors and
-typography through [`ui-theme`](packages/ui-theme/).
-
-**In this repository:**
-
-- **Shared themes:** The [light](packages/ui-theme/src/lib/theme/codegena-light-theme.tsx)
-  and [dark](packages/ui-theme/src/lib/theme/codegena-dark-theme.tsx) themes
-  use separate palettes and share [typography](packages/ui-theme/src/lib/theme/typography.ts)
-  and [MUI options](packages/ui-theme/src/lib/theme/theme-options.ts).
-- **Theme-aware control:** The [file-tree style](packages/playground-ui/generated-files-list/items/generated-files-list-tree-item.styles.tsx)
-  wraps MUI X's `TreeItem`. Its selection color comes from
-  `alpha(theme.palette.primary.main, 0.13)`, so it follows the active theme.
-- **Further reading:** [UI toolkit decision](adr/005-standardize-react-ui-toolkit.md),
-  [styling rules](#rule-54), and [accessible controls](#rule-55).
-
-<a id="concept-typescript"></a>
-
-### 🔒 Strict TypeScript
-
-**[TypeScript](https://www.typescriptlang.org/docs/handbook/2/basic-types)
-is the foundation of safe, predictable development here.** Strict
-compile-time contracts let the checker expose mistakes while we design and
-change code.
-
-- **🔒 Strict by default:** The [root configuration](tsconfig.base.json)
-  enables `strict`, `noImplicitAny`, and other checks. Keep those checks in
-  place so missing or uncertain values remain visible.
-- **🔎 Prove before use:** [Narrow values](https://www.typescriptlang.org/docs/handbook/2/narrowing.html)
-  with conditions and reusable type guards. For example,
-  [`isSchemaString`](packages/oas3-core/json-schema/json-schema-type-guards.ts)
-  refines an unknown schema before its fields are read. This preserves useful
-  types throughout the code instead of discarding them with casts.
-- **🛡️ Protect the boundary:** Every `any` opts out of checking at that point;
-  it is a hole in type safety and can hide security-relevant mistakes around
-  external input. Static types cannot validate incoming JSON, so runtime
-  guards still matter.
-- **🧹 Enforce the standard:** The [shared ESLint setup](packages/infr-nx/eslint-config/)
-  combines strict, type-aware `typescript-eslint` rules with
-  `eslint-plugin-react`, `eslint-plugin-react-hooks`, and
-  `@stylistic/eslint-plugin`. Aim to satisfy the rules; exceptional
-  suppressions require [explicit approval](#rule-75).
-
-See [TypeScript source sets](#rule-17), [unknown-value narrowing](#rule-27),
-and [lint verification](#rule-73).
+- **Shared sources:** This guide defines code conventions; the
+  [ADRs](adr/README.md) explain architectural decisions. Guides and ADRs use
+  explicit context and unambiguous wording so people and AI can understand
+  them without private chat history.
+- **Agent workflow:** [AGENTS.md](AGENTS.md) and
+  [skills](.agents/skills/) explain how assistants apply that guidance. They
+  refer back to the shared documents instead of maintaining competing rules.
+- **Same quality bar:** AI-assisted code is judged like work by an experienced
+  human engineer: focused, well typed, maintainable, and verified.
 
 <a id="concept-test-first"></a>
 
@@ -192,22 +127,87 @@ An [architecture decision record (ADR)](https://adr.github.io/) explains
   review. Read the relevant decision before changing its contract; see
   [when to record a new decision](#rule-72).
 
-<a id="concept-shared-guidance"></a>
+<a id="concept-nx"></a>
 
-### 🤝 One standard for people and AI
+### 🧭 Monorepo and Nx
 
-AI assistance is part of development here. Human contributors and AI
-assistants use the same guidance:
+We use [NX](https://nx.dev/) as the main tool for managing this monorepo.
+A **monorepo** places projects with different jobs side by side,
+with shared tools and visible relationships.
 
-- **Shared sources:** This guide defines code conventions; the
-  [ADRs](adr/README.md) explain architectural decisions. Guides and ADRs use
-  explicit context and unambiguous wording so people and AI can understand
-  them without private chat history.
-- **Agent workflow:** [AGENTS.md](AGENTS.md) and
-  [skills](.agents/skills/) explain how assistants apply that guidance. They
-  refer back to the shared documents instead of maintaining competing rules.
-- **Same quality bar:** AI-assisted code is judged like work by an experienced
-  human engineer: focused, well typed, maintainable, and verified.
+- **📦 Projects:** The parser, generator, React UI, applications, and E2E
+  suites keep distinct responsibilities while sharing lint, test, and build
+  tooling.
+- **🕸️ [Project graph](https://nx.dev/docs/features/explore-graph):** Shows
+  dependencies. `oas3-visitor-typescript` uses `oas3-core`, so a parser change can affect generated
+  TypeScript.
+- **🎯 [Affected tasks](https://nx.dev/docs/features/ci-features/affected):**
+  Select relevant checks from changed files and task inputs. CI can skip
+  unaffected builds, tests, and E2E suites; Nx can reuse cached results.
+
+> **New to Nx?** Start with its [official introduction](https://nx.dev/docs/getting-started/intro).
+
+**Try it locally:**
+
+```bash
+# List the projects in this workspace.
+npm exec -- nx show projects
+
+# Open their interactive dependency graph.
+npm exec -- nx graph
+```
+
+<a id="concept-typescript"></a>
+
+### 🔒 Strict TypeScript
+
+**[TypeScript](https://www.typescriptlang.org/docs/handbook/2/basic-types)
+is the foundation of safe, predictable development here.** Strict
+compile-time contracts let the checker expose mistakes while we design and
+change code.
+
+- **🔒 Strict by default:** The [root configuration](tsconfig.base.json)
+  enables `strict`, `noImplicitAny`, and other checks. Keep those checks in
+  place so missing or uncertain values remain visible.
+- **🔎 Prove before use:** [Narrow values](https://www.typescriptlang.org/docs/handbook/2/narrowing.html)
+  with conditions and reusable type guards. For example,
+  [`isSchemaString`](packages/oas3-core/json-schema/json-schema-type-guards.ts)
+  refines an unknown schema before its fields are read. This preserves useful
+  types throughout the code instead of discarding them with casts.
+- **🛡️ Protect the boundary:** Every `any` opts out of checking at that point;
+  it is a hole in type safety and can hide security-relevant mistakes around
+  external input. Static types cannot validate incoming JSON, so runtime
+  guards still matter.
+- **🧹 Enforce the standard:** The [shared ESLint setup](packages/infr-nx/eslint-config/)
+  combines strict, type-aware `typescript-eslint` rules with
+  `eslint-plugin-react`, `eslint-plugin-react-hooks`, and
+  `@stylistic/eslint-plugin`. Aim to satisfy the rules; exceptional
+  suppressions require [explicit approval](#rule-75).
+
+See [TypeScript source sets](#rule-17), [unknown-value narrowing](#rule-27),
+and [lint verification](#rule-73).
+
+<a id="concept-mui"></a>
+
+### 🎨 React, MUI, and the shared theme
+
+**[React](https://react.dev/learn)** builds the interactive views from
+components.
+[Material UI (MUI)](https://mui.com/material-ui/getting-started/) supplies
+ready-made React controls and a theme system; Codegena uses its own colors and
+typography through [`ui-theme`](packages/ui-theme/).
+
+**In this repository:**
+
+- **Shared themes:** The [light](packages/ui-theme/src/lib/theme/codegena-light-theme.tsx)
+  and [dark](packages/ui-theme/src/lib/theme/codegena-dark-theme.tsx) themes
+  use separate palettes and share [typography](packages/ui-theme/src/lib/theme/typography.ts)
+  and [MUI options](packages/ui-theme/src/lib/theme/theme-options.ts).
+- **Theme-aware control:** The [file-tree style](packages/playground-ui/generated-files-list/items/generated-files-list-tree-item.styles.tsx)
+  wraps MUI X's `TreeItem`. Its selection color comes from
+  `alpha(theme.palette.primary.main, 0.13)`, so it follows the active theme.
+- **Further reading:** [UI toolkit decision](adr/005-standardize-react-ui-toolkit.md),
+  [styling rules](#rule-54), and [accessible controls](#rule-55).
 
 <a id="file-structure"></a>
 
