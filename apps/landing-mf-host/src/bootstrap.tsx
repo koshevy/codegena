@@ -9,6 +9,7 @@ import {
   csrExtrasGroups,
   devModeEnv,
   ssrExtrasGroups,
+  underConstructionDisclamerText,
   warmAfterPaintedGroups,
 } from './environment';
 
@@ -32,6 +33,7 @@ async function startLanding(): Promise<void> {
     initialLanding,
     loadDocumentation: () => import('documentation-mf-remote/App'),
     loadPlayground: () => import('playground-mf-remote/App'),
+    underConstructionDisclamerText,
     warmAfterPaintedGroups,
   });
 

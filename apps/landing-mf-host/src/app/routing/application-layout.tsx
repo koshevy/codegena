@@ -1,6 +1,7 @@
 import { useBundleWarmup } from '@codegena/pwa/bundle-warmup';
 import type { BundleWarmupGroups } from '@codegena/pwa/bundle-warmup-config';
 import { setPreloadingStateOff } from '@codegena/ui-theme';
+import { UnderConstruction } from '@codegena/ui-unified/under-construction';
 import { WeUseCookies } from '@codegena/ui-unified/we-use-cookies';
 import {
   lazy,
@@ -32,10 +33,12 @@ import type { LandingPageOutletContext } from '../landing-page';
 import { privacyPolicyHref, repositoryHref } from '../menu';
 import { getPlaygroundLabel } from '../playground-examples';
 
-export type ApplicationLayoutProps = BundleWarmupGroups<
+export interface ApplicationLayoutProps extends BundleWarmupGroups<
   'landing' | 'playground' | 'other',
   'landingCompletelyLoaded'
->;
+> {
+  underConstructionDisclamerText?: string;
+}
 
 const PlaygroundConvertingPlaceholder = lazy(async () => {
   const { PlaygroundConvertingPlaceholder: Placeholder } = await import(
@@ -67,6 +70,7 @@ function getNavigationWarmupGroups(
 export function ApplicationLayout({
   warmAfterPaintedGroups,
   extrasGroups,
+  underConstructionDisclamerText,
 }: ApplicationLayoutProps): ReactElement {
   const cookieNoticeRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
@@ -143,16 +147,25 @@ export function ApplicationLayout({
     />
   );
 
+  const renderedCookieNotice = (
+    <WeUseCookies
+      privacyPolicyHref={privacyPolicyHref}
+      repoLink={repositoryHref}
+    />
+  );
+  const renderedConstructionNotice = underConstructionDisclamerText && (
+    <UnderConstruction disclamerText={underConstructionDisclamerText}>
+      {renderedCookieNotice}
+    </UnderConstruction>
+  );
+
   return (
     <>
       <CookieNoticeSlot
         data-lenis-prevent
         ref={cookieNoticeRef}
       >
-        <WeUseCookies
-          privacyPolicyHref={privacyPolicyHref}
-          repoLink={repositoryHref}
-        />
+        {renderedConstructionNotice || renderedCookieNotice}
       </CookieNoticeSlot>
       <Outlet context={outletContext} />
       {renderedLoading}

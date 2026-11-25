@@ -1,5 +1,6 @@
-import { expect, type Locator, type Page, test } from '@playwright/test';
+import { type Locator, type Page } from '@playwright/test';
 
+import { expect, test } from '../fixtures';
 import {
   observeLandingDiagnostics,
   scrollSecondScreenTo,

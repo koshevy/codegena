@@ -19,7 +19,13 @@ export const devModeEnv: DevModeEnv = {
 };
 
 export const { warmAfterPaintedGroups } = bundleWarmupConfig.warmupGroups;
+
 export { csrExtrasGroups, ssrExtrasGroups };
+
+export const underConstructionDisclamerText = [
+  'Site under construction until December\u{a0}15.',
+  'Content may be incomplete or inaccurate.',
+].join(' ');
 
 export const bundleWarmupRuntime: BundleWarmupRuntime = {
   buildId: appBuildId,

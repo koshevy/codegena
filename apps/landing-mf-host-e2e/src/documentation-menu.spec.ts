@@ -1,6 +1,6 @@
-import { expect, test } from '@playwright/test';
 import assert from 'node:assert/strict';
 
+import { expect, test } from '../fixtures';
 import { observeLandingDiagnostics } from './landing-journey';
 
 test.use({ storageState: { cookies: [], origins: [] } });

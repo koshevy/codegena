@@ -1,5 +1,4 @@
-import { expect, test } from '@playwright/test';
-
+import { expect, test } from '../../fixtures';
 import { observeLandingDiagnostics } from '../landing-journey';
 import { onePasswordExample, openEmbeddedPlayground } from './journey';
 

@@ -1,5 +1,6 @@
-import { expect, test, type Response } from '@playwright/test';
+import type { Response } from '@playwright/test';
 
+import { expect, test } from '../fixtures';
 import { observeLandingDiagnostics, scrollLandingTo } from './landing-journey';
 
 const navigationChunk = /\/navigation-overlay\.[^/]+\.js$/;

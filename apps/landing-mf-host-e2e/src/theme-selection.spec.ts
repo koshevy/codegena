@@ -1,5 +1,6 @@
-import { expect, type Page, test } from '@playwright/test';
+import type { Page } from '@playwright/test';
 
+import { expect, test } from '../fixtures';
 import {
   freezeSvgAnimation,
   observeLandingDiagnostics,

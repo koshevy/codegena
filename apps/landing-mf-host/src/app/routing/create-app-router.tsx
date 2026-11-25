@@ -40,9 +40,14 @@ export function createAppRouter({
   initialLanding,
   loadDocumentation,
   loadPlayground,
+  underConstructionDisclamerText,
   warmAfterPaintedGroups,
 }: CreateAppRouterOptions): ReturnType<typeof createBrowserRouter> {
-  const route = createApplicationRoute({ extrasGroups, warmAfterPaintedGroups }, [
+  const route = createApplicationRoute({
+    extrasGroups,
+    underConstructionDisclamerText,
+    warmAfterPaintedGroups,
+  }, [
     createHomeRoute(appBuildId, initialLanding),
     {
       path: '/docs/*',

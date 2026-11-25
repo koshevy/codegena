@@ -1,4 +1,6 @@
-import { expect, type Locator, type Page, test } from '@playwright/test';
+import { type Locator, type Page } from '@playwright/test';
+
+import { expect, test } from '../fixtures';
 
 const homeUrl = '/?testingMode=true';
 const welcomeHeading = /Code generation on steroids/;
@@ -303,4 +305,23 @@ test('opens the federated Playground from a direct request', async ({ page }) =>
     .toBeVisible();
   await expect(page.getByRole('heading', { name: 'Declaration Api1PasswordConnect' }))
     .toBeVisible();
+});
+
+test.describe('construction notice on the server-rendered landing page', () => {
+  test.use({ hasAcknowledgedConstructionNotice: false });
+
+  test('acknowledges after hydration and stays dismissed on reload', async ({ page }) => {
+    await page.goto(homeUrl);
+
+    const notice = page.getByRole('alertdialog', { name: 'Site under construction' });
+
+    await expect(notice).toBeVisible();
+    await notice.getByRole('button', { name: 'Got it' }).click();
+    await expect(notice).toBeHidden();
+
+    await page.reload();
+    await expect(page.getByRole('heading', { level: 1, name: welcomeHeading }))
+      .toBeVisible();
+    await expect(notice).toBeHidden();
+  });
 });

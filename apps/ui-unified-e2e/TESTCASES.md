@@ -55,6 +55,12 @@ journey, then update its status after verification.
 | EDITOR-08 | The minimal editor highlights editable JSON with no Monaco network requests or workers. Light and dark modes preserve the same typography and padding. | ✅ Implemented | 🟡 P1 |
 | SCROLL-01 | The themed area has vertical and horizontal overflow and responds to wheel scrolling. | ✅ Implemented | 🟢 P2 |
 
+## Under construction
+
+| ID | User path | Status | Priority |
+| --- | --- | --- | --- |
+| CONSTRUCTION-01 | Read the warning in either theme, acknowledge it by keyboard, and reload with the dialog dismissed. | ✅ Implemented | 🟡 P1 |
+
 ## Cookies and privacy
 
 | ID | User path | Status | Priority |

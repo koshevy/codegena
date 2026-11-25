@@ -1,5 +1,4 @@
-import { expect, test } from '@playwright/test';
-
+import { expect, test } from '../fixtures';
 import { scrollLandingTo, scrollSecondScreenTo } from './landing-journey';
 
 test('01.16 — reveal the welcome view before the feature bundle finishes', async ({

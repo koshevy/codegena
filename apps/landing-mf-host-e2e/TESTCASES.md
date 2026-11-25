@@ -77,6 +77,15 @@
 | ✅ Implemented | 🔴 P0 | 02.06 — Hold the conversion worker download in both dark and light appearance. The converting placeholder and ready Playground retain the host's theme. |
 | ✅ Implemented | 🟡 P1 | 02.06 — Dolly buttons transition to the overlay's paper background; the glitch retains its dark-theme gradient in light appearance. |
 
+## Under construction
+
+- **Implemented · P1 — CONSTRUCTION-01:** Open a fresh landing session, read the
+  construction notice before the cookie notice, and acknowledge it. Reload
+  and open Docs in the same tab with the notice dismissed. Check that a separate
+  tab still receives the notice.
+- **Implemented · P1 — CONSTRUCTION-02:** Open Docs or Playground directly in a
+  fresh session and see the same construction notice.
+
 ## Documentation routes
 
 - **Implemented · P0 — DOCS-00:** Hold the Nx-configured remote download, check the HTML
