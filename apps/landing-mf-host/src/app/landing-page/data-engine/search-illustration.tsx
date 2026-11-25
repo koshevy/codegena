@@ -1,7 +1,7 @@
 import type { GraphSearchSource } from '@codegena/graph-search-core';
 import { SearchDrawer, SearchSuggestionsSourceProvider } from '@codegena/graph-search-ui';
+import { GradientButton } from '@codegena/ui-unified/buttons';
 import SearchIcon from '@mui/icons-material/Search';
-import Button from '@mui/material/Button';
 import type { MotionValue } from 'motion/react';
 import type { ReactElement } from 'react';
 
@@ -41,13 +41,16 @@ export function SearchIllustration({
         repetitions={4}
       />
       <div className={searchIllustrationClasses.action}>
-        <Button
+        <GradientButton
+          aria-description="Search declarations in the GitHub REST API example."
+          aria-haspopup="dialog"
           onClick={handleOpen}
+          size="large"
           startIcon={renderedSearchIcon}
           variant="contained"
         >
           Try searching GitHub’s API
-        </Button>
+        </GradientButton>
         <ClickCue />
       </div>
       <SearchSuggestionsSourceProvider source={searchSource}>

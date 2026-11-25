@@ -1,10 +1,10 @@
+import { GradientButton } from '@codegena/ui-unified/buttons';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import Button from '@mui/material/Button';
 import { HockeyStick } from 'lucide-react';
 import type { MotionValue } from 'motion/react';
 import type { ReactElement, RefObject } from 'react';
 
-import { actionsClasses, ActionsStyles } from './actions.styles';
+import { ActionsStyles } from './actions.styles';
 import { useNavigation } from './use-navigation';
 
 interface ActionsProps {
@@ -42,7 +42,7 @@ export function Actions({
 
   return (
     <ActionsStyles>
-      <Button
+      <GradientButton
         aria-description="Jump to the interactive Playground examples."
         disabled={!areFeaturesReady}
         endIcon={renderedPlaygroundIcon}
@@ -51,16 +51,16 @@ export function Actions({
         variant="contained"
       >
         Playground
-      </Button>
-      <button
-        className={actionsClasses.secondary}
+      </GradientButton>
+      <GradientButton
         disabled={isFeatureActionDisabled}
+        endIcon={renderedSecondaryIcon}
         onClick={handleSecondaryClick}
-        type="button"
+        size="large"
+        variant="outlined"
       >
         {isPromptReady ? 'See more' : 'How it works'}
-        {renderedSecondaryIcon}
-      </button>
+      </GradientButton>
     </ActionsStyles>
   );
 }

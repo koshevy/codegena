@@ -48,6 +48,11 @@ export const IllustrationCarouselStyles = styled(Box)`
       margin-bottom: 1rem;
     }
 
+    &[data-variant='code'] .${illustrationCarouselClasses.descriptions}
+    > [aria-hidden='true'] {
+      display: none;
+    }
+
     &[data-variant='foldering'] {
       height: 100%;
     }

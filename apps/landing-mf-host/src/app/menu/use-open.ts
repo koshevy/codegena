@@ -13,7 +13,10 @@ interface OpenState {
 /**
  * Keeps page scrolling and Escape handling in sync with the menu layer.
  */
-export function useOpen(pageContentRef: RefObject<HTMLElement | null>): OpenState {
+export function useOpen(
+  pageContentRef: RefObject<HTMLElement | null>,
+  cookieNoticeRef?: RefObject<HTMLElement | null>,
+): OpenState {
   const lenis = useLenis();
   const [menuState, setMenuState] = useState<'unopened' | 'open' | 'closed'>('unopened');
   const lastLinkRef = useRef<HTMLAnchorElement>(null);
@@ -57,8 +60,9 @@ export function useOpen(pageContentRef: RefObject<HTMLElement | null>): OpenStat
 
     const viewportStyle = document.documentElement.style;
     const previousOverflowY = viewportStyle.overflowY;
-    const pageContent = pageContentRef.current;
-    const wasPageContentInert = pageContent?.inert;
+    const inactiveContent = [pageContentRef.current, cookieNoticeRef?.current]
+      .filter((element) => element != null)
+      .map((element) => ({ element, wasInert: element.inert }));
     const wasLenisRunning = !!lenis && !lenis.isStopped;
 
     if (wasLenisRunning) {
@@ -68,9 +72,9 @@ export function useOpen(pageContentRef: RefObject<HTMLElement | null>): OpenStat
     // Lock the viewport so the body does not become a sticky scroll container.
     viewportStyle.overflowY = 'hidden';
 
-    if (pageContent) {
-      pageContent.inert = true;
-    }
+    inactiveContent.forEach(({ element }) => {
+      element.inert = true;
+    });
 
     document.addEventListener('keydown', handleKeyDown, true);
 
@@ -78,15 +82,16 @@ export function useOpen(pageContentRef: RefObject<HTMLElement | null>): OpenStat
       viewportStyle.overflowY = previousOverflowY;
       document.removeEventListener('keydown', handleKeyDown, true);
 
-      if (pageContent && wasPageContentInert !== undefined) {
-        pageContent.inert = wasPageContentInert;
-      }
+      inactiveContent.forEach(({ element, wasInert }) => {
+        element.inert = wasInert;
+      });
 
       if (wasLenisRunning) {
         lenis.start();
       }
     };
   }, [
+    cookieNoticeRef,
     handleKeyDown,
     isOpen,
     lenis,

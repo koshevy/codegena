@@ -1,6 +1,6 @@
+import { GradientButton } from '@codegena/ui-unified/buttons';
 import { GeneratedCodeEditor } from '@codegena/ui-unified/code-editor-minimal';
 import { FileDetailsHeader } from '@codegena/ui-unified/files';
-import Button from '@mui/material/Button';
 import { Braces, Folder, Search, SquareTerminal } from 'lucide-react';
 import { motionValue } from 'motion/react';
 import { stripVTControlCharacters } from 'node:util';
@@ -109,13 +109,15 @@ function renderPreview(activeStep: number, search: string): ReactElement {
           phrase="Click to try out the search"
           repetitions={4}
         />
-        <Button
+        <GradientButton
+          aria-description="Open the GitHub REST API example in Playground."
           href={`${href}${search}`}
+          size="large"
           startIcon={<Search aria-hidden />}
           variant="contained"
         >
           Try searching GitHub’s API
-        </Button>
+        </GradientButton>
       </SearchIllustrationStyles>
     );
   }

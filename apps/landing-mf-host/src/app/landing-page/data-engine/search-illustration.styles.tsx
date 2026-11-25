@@ -6,7 +6,7 @@ export const searchIllustrationClasses = {
 } as const;
 
 // language=postcss
-export const SearchIllustrationStyles = styled(Box)(({ theme }) => `
+export const SearchIllustrationStyles = styled(Box)`
   & {
     align-items: center;
     display: flex;
@@ -16,15 +16,6 @@ export const SearchIllustrationStyles = styled(Box)(({ theme }) => `
   }
 
   & .MuiButton-root {
-    background: ${theme.palette.info.dark};
-    border-radius: 2px;
-    color: ${theme.palette.info.contrastText};
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    padding: 0.95rem 1.45rem;
-    position: relative;
-    text-transform: uppercase;
     z-index: 1;
   }
 
@@ -32,10 +23,6 @@ export const SearchIllustrationStyles = styled(Box)(({ theme }) => `
     isolation: isolate;
     position: relative;
     z-index: 1;
-  }
-
-  & .MuiButton-root:hover {
-    background: ${theme.palette.info.main};
   }
 
   @media (max-width: 700px) {
@@ -58,4 +45,4 @@ export const SearchIllustrationStyles = styled(Box)(({ theme }) => `
       max-width: 11rem;
     }
   }
-`);
+`;

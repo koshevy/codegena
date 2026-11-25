@@ -15,13 +15,14 @@ import { useHeaderVisibility } from './use-header-visibility';
 import { useOpen } from './use-open';
 
 interface MenuProps {
+  cookieNoticeRef?: RefObject<HTMLElement | null>;
   pageContentRef: RefObject<HTMLElement | null>;
 }
 
 /**
  * Top navigation and a drawer control when the header leaves view.
  */
-export function Menu({ pageContentRef }: MenuProps): ReactElement {
+export function Menu({ cookieNoticeRef, pageContentRef }: MenuProps): ReactElement {
   const navigationId = useId();
 
   const {
@@ -31,7 +32,7 @@ export function Menu({ pageContentRef }: MenuProps): ReactElement {
     lastLinkRef,
     toggleMenu,
     toggleRef,
-  } = useOpen(pageContentRef);
+  } = useOpen(pageContentRef, cookieNoticeRef);
 
   const {
     headerRef,

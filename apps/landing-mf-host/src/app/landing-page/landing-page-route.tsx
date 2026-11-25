@@ -1,10 +1,11 @@
-import type { ReactElement } from 'react';
+import type { ReactElement, RefObject } from 'react';
 import { useLoaderData, useOutletContext } from 'react-router-dom';
 
 import type { LandingPreview } from './landing-preview';
 import { LandingRoute } from './landing-route';
 
 export interface LandingPageOutletContext {
+  cookieNoticeRef: RefObject<HTMLDivElement | null>;
   hasPainted: boolean;
   haveLandingFeaturesLoaded: boolean;
   onLandingFeaturesReady: () => void;
@@ -17,6 +18,7 @@ interface LandingPageRouteProps {
 export function LandingPageRoute({ preview }: LandingPageRouteProps): ReactElement {
   const appBuildId = useLoaderData<string>();
   const {
+    cookieNoticeRef,
     hasPainted,
     haveLandingFeaturesLoaded,
     onLandingFeaturesReady,
@@ -25,6 +27,7 @@ export function LandingPageRoute({ preview }: LandingPageRouteProps): ReactEleme
   return (
     <LandingRoute
       appBuildId={appBuildId}
+      cookieNoticeRef={cookieNoticeRef}
       hasPainted={hasPainted}
       haveFeaturesLoaded={haveLandingFeaturesLoaded}
       onFeaturesReady={onLandingFeaturesReady}

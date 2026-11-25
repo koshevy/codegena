@@ -57,13 +57,14 @@ export function SlideWindow({
     index: number,
   ): ReactElement => {
     const isSelected = selectedIndex === index;
-    const renderedCode = slide.kind === 'code' && (
+    const isCode = slide.kind === 'code';
+    const renderedCode = isCode && (
       <CodeSlide
         height={editorHeight}
         slide={slide}
       />
     );
-    const renderedContent = slide.kind === 'code' ? renderedCode : slide.renderedContent;
+    const renderedContent = isCode ? renderedCode : slide.renderedContent;
 
     return (
       <div
@@ -71,6 +72,7 @@ export function SlideWindow({
         aria-hidden={!isSelected}
         aria-label={`Example ${index + 1}/${slides.length}: ${slide.fileName}`}
         className={slideWindowClasses.slide}
+        data-lenis-prevent={isCode || undefined}
         inert={!isSelected}
         key={slide.fileName}
         role="group"
@@ -88,7 +90,11 @@ export function SlideWindow({
   const renderedSlides = slides.map((slide, index) => renderSlide(slide, index));
 
   const renderedHeader = (
-    <div className={slideWindowClasses.header}>
+    <div
+      className={slideWindowClasses.header}
+      onTouchEnd={canExpandCode ? handleTouchEnd : undefined}
+      onTouchStart={canExpandCode ? handleTouchStart : undefined}
+    >
       <FileDetailsHeader
         actions={renderedControls}
         ariaExpanded={isNarrow ? isOpen : undefined}
@@ -106,8 +112,6 @@ export function SlideWindow({
       data-kind={selectedSlide.kind}
       layout
       layoutId={isNarrow ? `landing-playground-${bulletNoun}` : undefined}
-      onTouchEnd={canExpandCode ? handleTouchEnd : undefined}
-      onTouchStart={canExpandCode ? handleTouchStart : undefined}
     >
       {renderedHeader}
       <div

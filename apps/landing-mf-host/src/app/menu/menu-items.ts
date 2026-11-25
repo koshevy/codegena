@@ -9,6 +9,9 @@ import {
   Waypoints,
 } from 'lucide-react';
 
+export const repositoryHref = 'https://github.com/koshevy/codegena';
+export const privacyPolicyHref = '/docs/personal-data-privacy';
+
 export const menuItems = [
   { href: '/docs', icon: BookOpen, label: 'Docs' },
   { href: '/docs/roadmap-and-status', icon: Map, label: 'Roadmap and status' },
@@ -17,7 +20,7 @@ export const menuItems = [
   { href: '/docs/about', icon: Info, label: 'About' },
   { href: '/docs/contacts', icon: Mail, label: 'Contacts' },
   {
-    href: 'https://github.com/koshevy/codegena',
+    href: repositoryHref,
     icon: GitHubInvertocatIcon,
     label: 'GitHub',
   },
@@ -28,5 +31,5 @@ export const menuAction = { href: '/docs', label: 'Get started' } as const;
 
 export const policyItems = [
   { href: '/docs/security', label: 'Security' },
-  { href: '/docs/personal-data-privacy', label: 'Personal data privacy' },
+  { href: privacyPolicyHref, label: 'Personal data privacy' },
 ] as const;

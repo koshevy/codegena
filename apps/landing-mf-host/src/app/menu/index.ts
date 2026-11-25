@@ -4,4 +4,6 @@ export {
   menuAction,
   menuItems,
   policyItems,
+  privacyPolicyHref,
+  repositoryHref,
 } from './menu-items';

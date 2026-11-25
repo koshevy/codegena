@@ -1,6 +1,7 @@
 import {
   lazy,
   type ReactElement,
+  type RefObject,
   Suspense,
   useCallback,
   useRef,
@@ -41,6 +42,7 @@ const WindowScrollbar = lazy(async () => {
 
 interface LandingPageProps {
   appBuildId: string;
+  cookieNoticeRef?: RefObject<HTMLDivElement | null>;
   hasPainted: boolean;
   haveFeaturesLoaded?: boolean;
   onFeaturesReady?: () => void;
@@ -52,6 +54,7 @@ interface LandingPageProps {
  */
 export function LandingPage({
   appBuildId,
+  cookieNoticeRef,
   hasPainted,
   haveFeaturesLoaded = false,
   onFeaturesReady,
@@ -102,7 +105,10 @@ export function LandingPage({
   return (
     <LandingPageStyles>
       {renderedPreloader}
-      <Menu pageContentRef={pageContentRef} />
+      <Menu
+        cookieNoticeRef={cookieNoticeRef}
+        pageContentRef={pageContentRef}
+      />
       <div
         id="landing-page-content"
         ref={pageContentRef}

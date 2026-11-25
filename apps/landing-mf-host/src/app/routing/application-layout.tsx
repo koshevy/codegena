@@ -1,12 +1,14 @@
 import { useBundleWarmup } from '@codegena/pwa/bundle-warmup';
 import type { BundleWarmupGroups } from '@codegena/pwa/bundle-warmup-config';
 import { setPreloadingStateOff } from '@codegena/ui-theme';
+import { WeUseCookies } from '@codegena/ui-unified/we-use-cookies';
 import {
   lazy,
   type ReactElement,
   Suspense,
   useCallback,
   useLayoutEffect,
+  useRef,
   useState,
 } from 'react';
 import {
@@ -18,6 +20,7 @@ import {
   useNavigation,
 } from 'react-router-dom';
 
+import { CookieNoticeSlot } from './application-layout.styles';
 import {
   hasSavedScrollPositions,
   scrollRestorationStorageKey,
@@ -26,6 +29,7 @@ import { NavigationCancelStyles, NavigationPending } from './navigation-pending.
 import { RouteLoading } from './route-loading';
 import { useCancelNavigation } from './use-cancel-navigation';
 import type { LandingPageOutletContext } from '../landing-page';
+import { privacyPolicyHref, repositoryHref } from '../menu';
 import { getPlaygroundLabel } from '../playground-examples';
 
 export type ApplicationLayoutProps = BundleWarmupGroups<
@@ -64,6 +68,7 @@ export function ApplicationLayout({
   warmAfterPaintedGroups,
   extrasGroups,
 }: ApplicationLayoutProps): ReactElement {
+  const cookieNoticeRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
   const navigation = useNavigation();
   const handleCancel = useCancelNavigation();
@@ -98,6 +103,7 @@ export function ApplicationLayout({
   }, []);
 
   const outletContext: LandingPageOutletContext = {
+    cookieNoticeRef,
     hasPainted,
     haveLandingFeaturesLoaded,
     onLandingFeaturesReady: handleLandingFeaturesReady,
@@ -139,6 +145,15 @@ export function ApplicationLayout({
 
   return (
     <>
+      <CookieNoticeSlot
+        data-lenis-prevent
+        ref={cookieNoticeRef}
+      >
+        <WeUseCookies
+          privacyPolicyHref={privacyPolicyHref}
+          repoLink={repositoryHref}
+        />
+      </CookieNoticeSlot>
       <Outlet context={outletContext} />
       {renderedLoading}
       {renderedScrollRestoration}

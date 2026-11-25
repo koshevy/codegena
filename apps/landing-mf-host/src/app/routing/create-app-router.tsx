@@ -60,7 +60,7 @@ export function createAppRouter({
         };
       },
     },
-    { path: '/playground', loader: redirectToPlayground },
+    { path: '/playground', loader: redirectToPlayground, element: null },
     {
       path: '/playground/:specUrl',
       lazy: async () => {

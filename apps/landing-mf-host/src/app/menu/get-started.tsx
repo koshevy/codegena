@@ -14,6 +14,7 @@ export function GetStarted(): ReactElement {
       component={HostLink}
       endIcon={renderedIcon}
       href={menuAction.href}
+      size="small"
       variant="outlined"
     >
       {menuAction.label}

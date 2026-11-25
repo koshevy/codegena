@@ -75,6 +75,10 @@ export const SlideWindowStyles = styled(Box)(({ theme }) => `
       border-bottom: 0;
     }
 
+    &[data-variant='code'] .${slideWindowClasses.viewport} {
+      --code-editor-overlay-scrollbar-divider: none;
+    }
+
     &[data-variant='foldering'] .${slideWindowClasses.window} {
       height: 100%;
     }
