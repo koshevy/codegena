@@ -1,3 +1,4 @@
+import { getStoryUrl } from '@codegena/util-e2e';
 import { expect, test, type Locator } from '@playwright/test';
 
 import { expectActiveEdgesAboveInactive } from '../expect-active-edges-above-inactive';
@@ -9,10 +10,7 @@ const implicitSelectionClass = /(?:^|\s)implicitly-selected(?:\s|$)/;
 test('shows only relations present in the comprehensive graph legend', async ({
   page,
 }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-playground--comprehensive-with-persistence'
-    + '&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--comprehensive-with-persistence'));
 
   await page.getByRole('button', { name: 'Graph', exact: true }).click();
 
@@ -54,7 +52,7 @@ async function expectActiveEdge(edge: Locator): Promise<void> {
 }
 
 test('keeps the file list near zero-level.ts after a source reveal', async ({ page }) => {
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   const header = page.getByRole('group', { name: 'Generated output header' });
 
@@ -104,9 +102,7 @@ test('keeps the file list near zero-level.ts after a source reveal', async ({ pa
 test('keeps the small muted count for multiple file declarations', async ({
   page,
 }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-playground--comprehensive&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
   await page.getByRole('button', { name: 'List', exact: true }).click();
 
   const tree = page.getByRole('tree', { name: 'Generated files' });
@@ -121,10 +117,7 @@ test('keeps the small muted count for multiple file declarations', async ({
 test('uses list actions in blank space and keeps a menu row highlighted', async ({
   page,
 }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-playground--comprehensive-with-persistence'
-    + '&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--comprehensive-with-persistence'));
   await page.getByRole('button', { name: 'List', exact: true }).click();
 
   const list = page.locator('.GeneratedFilesList__root');
@@ -168,10 +161,7 @@ test('uses list actions in blank space and keeps a menu row highlighted', async 
 test('reveals and refocuses a declaration from the source editor', async ({
   page,
 }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-playground--comprehensive-with-persistence'
-    + '&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--comprehensive-with-persistence'));
 
   const graphView = page.locator('.react-flow');
   const viewport = graphView.locator('.react-flow__viewport');
@@ -221,9 +211,7 @@ test('reveals and refocuses a declaration from the source editor', async ({
 });
 
 test('keeps a selected file visible after list scrolling', async ({ page }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-playground--comprehensive-with-persistence&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--comprehensive-with-persistence'));
 
   await page.getByRole('button', { name: 'List', exact: true }).click();
 
@@ -245,7 +233,7 @@ test('keeps a selected file visible after list scrolling', async ({ page }) => {
 });
 
 test('sorts generated files and declarations by source or name', async ({ page }) => {
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   const sortBySource = page.getByRole('button', { name: 'By source' });
   const sortByFilename = page.getByRole('button', { name: 'By filename' });
@@ -289,7 +277,7 @@ test('sorts generated files and declarations by source or name', async ({ page }
 });
 
 test('reveals the same declaration again after scrolling away', async ({ page }) => {
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   await expect(page.getByRole('group', { name: 'Generated output header' }))
     .toBeVisible();
@@ -331,7 +319,7 @@ test('reveals the same declaration again after scrolling away', async ({ page })
 });
 
 test('preserves graph and list state across view switches', async ({ page }) => {
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   const graphView = page.locator('.PlaygroundGeneratedOutputView__view').first();
   const listView = page.locator('.PlaygroundGeneratedOutputView__view').last();
@@ -406,7 +394,7 @@ test('preserves graph and list state across view switches', async ({ page }) => 
 });
 
 test('collapses and expands files from the generated output header', async ({ page }) => {
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
   await page.getByRole('button', { name: 'List', exact: true }).click();
 
   const header = page.getByRole('group', { name: 'Generated output header' });
@@ -427,7 +415,7 @@ test('collapses and expands files from the generated output header', async ({ pa
 });
 
 test('syncs single and Shift-multiple selections across views', async ({ page }) => {
-  await page.goto('/iframe.html?id=codegena-playground--light&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--light'));
 
   const graphView = page.locator('.PlaygroundGeneratedOutputView__view').first();
   const listView = page.locator('.PlaygroundGeneratedOutputView__view').last();
@@ -487,7 +475,7 @@ test('syncs single and Shift-multiple selections across views', async ({ page })
 test('keeps unselected graph edges solid and disables Clear selection', async ({
   page,
 }) => {
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   const graphView = page.locator('.PlaygroundGeneratedOutputView__view').first();
   const importPath = getGraphEdge(
@@ -526,7 +514,7 @@ test('keeps unselected graph edges solid and disables Clear selection', async ({
 test('centers the comprehensive file among the generated file groups', async ({
   page,
 }) => {
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   const graphView = page.locator('.PlaygroundGeneratedOutputView__view').first();
   const root = getGraphNode(graphView, 'comprehensive-schema.ts');
@@ -562,7 +550,7 @@ test('centers the comprehensive file among the generated file groups', async ({
 test('activates comprehensive edges from either node and restores them on clear', async ({
   page,
 }) => {
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   const graphView = page.locator('.PlaygroundGeneratedOutputView__view').first();
   const file = graphView.getByRole('group', {
@@ -621,7 +609,7 @@ test('activates comprehensive edges from either node and restores them on clear'
 test('layers active import and reference edges above inactive edges', async ({
   page,
 }) => {
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   const graphView = page.locator('.react-flow');
   const file = graphView.getByRole('group', {
@@ -644,7 +632,7 @@ test('layers active import and reference edges above inactive edges', async ({
 test('activates every edge on the directed path to Shift-selected ZeroLevel', async ({
   page,
 }) => {
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   const graphView = page.locator('.PlaygroundGeneratedOutputView__view').first();
   const comprehensiveFile = graphView.getByRole('group', {

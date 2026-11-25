@@ -1,3 +1,4 @@
+import { collectBrowserDiagnostics, getStoryUrl } from '@codegena/util-e2e';
 import { expect, type Locator, test } from '@playwright/test';
 
 import {
@@ -6,8 +7,9 @@ import {
   getFileCard,
 } from './file-details-navigation';
 
-const storyUrl = '/iframe.html?id=codegena-playground--'
-  + 'one-password-connect-with-persistence&viewMode=story';
+const storyUrl = getStoryUrl(
+  'codegena-playground--one-password-connect-with-persistence',
+);
 const searchName = [
   'Search generated files, directories, declarations,',
   'specification, and warnings',
@@ -28,14 +30,7 @@ test.use({ viewport: { height: 720, width: 1280 } });
 test('keeps search available without console errors after reloading the story', async ({
   page,
 }) => {
-  const errors: string[] = [];
-
-  page.on('pageerror', (error) => errors.push(error.message));
-  page.on('console', (message) => {
-    if (message.type() === 'error' || message.type() === 'warning') {
-      errors.push(message.text());
-    }
-  });
+  const errors = collectBrowserDiagnostics(page);
 
   await page.goto(storyUrl);
   await page.getByRole('button', { name: 'Search in files and directories' }).click();
@@ -481,10 +476,7 @@ test('keeps files and declarations in broad GitHub search results', async ({
 }) => {
   test.setTimeout(120_000);
 
-  await page.goto(
-    '/iframe.html?id=codegena-playground--git-hub-rest-api-with-persistence'
-    + '&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--git-hub-rest-api-with-persistence'));
   await expect(page.getByRole('status', {
     name: '5257 generated files in this specification',
   })).toBeVisible({ timeout: 90_000 });
@@ -538,10 +530,7 @@ test('keeps keyboard navigation usable across the large suggestion list', async 
 }) => {
   test.setTimeout(120_000);
 
-  await page.goto(
-    '/iframe.html?id=codegena-playground--git-hub-rest-api-with-persistence'
-    + '&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--git-hub-rest-api-with-persistence'));
   await expect(page.getByRole('status', {
     name: '5257 generated files in this specification',
   })).toBeVisible({ timeout: 90_000 });
@@ -574,10 +563,7 @@ test('prioritizes matching-case declaration titles and file excerpts', async ({
 }) => {
   test.setTimeout(120_000);
 
-  await page.goto(
-    '/iframe.html?id=codegena-playground--git-hub-rest-api-with-persistence'
-    + '&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--git-hub-rest-api-with-persistence'));
   await expect(page.getByRole('status', {
     name: '5257 generated files in this specification',
   })).toBeVisible({ timeout: 90_000 });
@@ -601,10 +587,7 @@ test('reveals the same-case Users match in the specification excerpt', async ({
 }) => {
   test.setTimeout(120_000);
 
-  await page.goto(
-    '/iframe.html?id=codegena-playground--git-hub-rest-api-with-persistence'
-    + '&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--git-hub-rest-api-with-persistence'));
   await expect(page.getByRole('status', {
     name: '5257 generated files in this specification',
   })).toBeVisible({ timeout: 90_000 });

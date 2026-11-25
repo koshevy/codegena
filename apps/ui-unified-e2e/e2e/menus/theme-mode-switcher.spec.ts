@@ -1,14 +1,13 @@
+import { getStoryUrl } from '@codegena/util-e2e';
 import { expect, test } from '@playwright/test';
 
 for (const mode of ['System', 'Light', 'Dark']) {
   test(`shows ${mode} as the selected appearance and restores keyboard focus`, async ({
     page,
   }) => {
-    await page.goto([
-      '/iframe.html?id=codegena-unified-ui-menus-theme-mode-switcher--',
-      mode.toLowerCase(),
-      '&viewMode=story',
-    ].join(''));
+    await page.goto(
+      getStoryUrl(`codegena-unified-ui-menus-theme-mode-switcher--${mode.toLowerCase()}`),
+    );
 
     const toggle = page.getByRole('button', { name: `Theme: ${mode}`, exact: true });
 

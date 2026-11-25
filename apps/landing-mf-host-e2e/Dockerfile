@@ -8,10 +8,12 @@ WORKDIR /workspace
 COPY package.json package-lock.json ./
 COPY apps/landing-mf-host-e2e/package.json ./apps/landing-mf-host-e2e/
 COPY packages/infr-nx/package.json ./packages/infr-nx/
+COPY packages/util-e2e/package.json ./packages/util-e2e/
 RUN npm ci --ignore-scripts --no-audit --no-fund \
     --workspace=landing-mf-host-e2e \
   && npm cache clean --force
 COPY nx.json tsconfig.base.json ./
+COPY packages/util-e2e/src/ ./packages/util-e2e/src/
 COPY --chown=node:node apps/landing-mf-host-e2e/ ./apps/landing-mf-host-e2e/
 COPY --chown=node:node dist/apps/landing-mf-host/ ./dist/apps/landing-mf-host/
 RUN cp dist/apps/landing-mf-host/index.html dist/apps/landing-mf-host/404.html \

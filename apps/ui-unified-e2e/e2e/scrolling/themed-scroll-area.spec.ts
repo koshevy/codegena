@@ -1,9 +1,8 @@
+import { getStoryUrl } from '@codegena/util-e2e';
 import { expect, test } from '@playwright/test';
 
 test('scrolls overflowing content in the themed area', async ({ page }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-unified-ui-scrolling-themed-scroll-area--light',
-  );
+  await page.goto(getStoryUrl('codegena-unified-ui-scrolling-themed-scroll-area--light'));
 
   const area = page.getByRole('region', { name: 'Example scroll area' });
 

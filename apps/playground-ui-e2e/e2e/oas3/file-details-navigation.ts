@@ -31,16 +31,3 @@ export async function expectSourceLine(
   await expect(editor.locator('.view-line').filter({ hasText: text }).first())
     .toBeVisible();
 }
-
-export function watchBrowserMessages(page: Page): string[] {
-  const messages: string[] = [];
-
-  page.on('console', (message) => {
-    if (message.type() === 'error' || message.type() === 'warning') {
-      messages.push(message.text());
-    }
-  });
-  page.on('pageerror', (error) => messages.push(error.message));
-
-  return messages;
-}

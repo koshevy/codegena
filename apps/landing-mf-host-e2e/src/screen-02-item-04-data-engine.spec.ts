@@ -1,25 +1,16 @@
-import { type CDPSession, expect, test, type Page } from '@playwright/test';
+import { expect, type Locator, type Page, test } from '@playwright/test';
 
 import {
   observeLandingDiagnostics,
   scrollSecondScreenTo,
+  swipeTouch,
   waitForPlaygroundIllustration,
 } from './landing-journey';
 
-async function swipeDown(session: CDPSession, x: number, y: number): Promise<void> {
-  await session.send('Input.dispatchTouchEvent', {
-    type: 'touchStart',
-    touchPoints: [{ x, y }],
-  });
-
-  for (const distance of [50, 100, 150, 200]) {
-    await session.send('Input.dispatchTouchEvent', {
-      type: 'touchMove',
-      touchPoints: [{ x, y: y + distance }],
-    });
-  }
-
-  await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+function getSearchDemoButton(page: Page): Locator {
+  return page.getByRole('region', { name: 'Landing feature sections' })
+    .getByRole('button', { name: 'Try searching GitHub’s API', exact: true })
+    .and(page.locator('[aria-haspopup="dialog"]'));
 }
 
 async function scrollTowardTop(page: Page, isMobile: boolean): Promise<void> {
@@ -33,14 +24,7 @@ async function scrollTowardTop(page: Page, isMobile: boolean): Promise<void> {
   const y = Math.round(viewport.height / 2);
 
   if (isMobile) {
-    const session = await page.context().newCDPSession(page);
-
-    try {
-      await swipeDown(session, x, y);
-    }
-    finally {
-      await session.detach();
-    }
+    await swipeTouch(page, { x, y }, { x: 0, y: 200 });
 
     return;
   }
@@ -69,11 +53,11 @@ test('02.04 — GitHub graph search finds a generated declaration', async ({
     name: 'Graph index by our own design',
   })).toBeVisible();
 
-  const demoButton = playground.getByRole('button', {
-    name: 'Try searching GitHub’s API',
-  });
+  const demoButton = getSearchDemoButton(page);
 
   await expect(demoButton).toBeVisible();
+  await expect(demoButton)
+    .toHaveAccessibleDescription('Search declarations in the GitHub REST API example.');
   await expect(playground.getByRole('img', {
     name: 'Click to try out the search',
   })).toBeVisible();
@@ -127,9 +111,7 @@ test('02.04 — opening search keeps the landing page still until it closes', as
   await page.goto('/?testingMode=true');
   await scrollSecondScreenTo(page, 11.90909 / 17);
 
-  await page.getByRole('button', {
-    name: 'Try searching GitHub’s API',
-  }).click();
+  await getSearchDemoButton(page).click();
 
   const drawer = page.getByRole('dialog', {
     name: 'Search generated files and directories',

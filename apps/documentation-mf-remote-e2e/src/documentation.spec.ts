@@ -1,4 +1,5 @@
-import { expect, test } from './fixtures';
+import { testWithBrowserDiagnostics as test } from '@codegena/util-e2e';
+import { expect } from '@playwright/test';
 
 const sections = [
   { path: '/roadmap-and-status', title: 'Roadmap and status' },

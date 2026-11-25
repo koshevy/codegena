@@ -1,7 +1,9 @@
+import { getStoryUrl } from '@codegena/util-e2e';
 import { expect, test, type Locator } from '@playwright/test';
 
-const storyUrl = '/iframe.html?id=codegena-playground--'
-  + 'one-password-connect-with-persistence&viewMode=story';
+const storyUrl = getStoryUrl(
+  'codegena-playground--one-password-connect-with-persistence',
+);
 
 async function expectCenteredDeclaration(
   graphView: Locator,

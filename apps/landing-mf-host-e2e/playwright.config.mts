@@ -1,6 +1,11 @@
+import {
+  desktopChromiumProject,
+  e2eCommonOptions,
+  mobileChromiumProject,
+} from '@codegena/util-e2e';
 import { workspaceRoot } from '@nx/devkit';
 import { nxE2EPreset } from '@nx/playwright/preset';
-import { defineConfig, devices } from '@playwright/test';
+import { type BrowserContextOptions, defineConfig } from '@playwright/test';
 
 const baseURL = process.env['BASE_URL'] ?? 'http://localhost:8103';
 const chromiumExecutablePath = process.env['LANDING_E2E_CHROMIUM'];
@@ -26,12 +31,27 @@ const previewCommand = hasContainerBrowser
 const isStaticPreview = serverTarget === 'serve-static';
 const isNxStaticServer = !hasContainerBrowser && isStaticPreview;
 
+export function returningVisitorStorage(
+  origin: string,
+): BrowserContextOptions['storageState'] {
+  return {
+    cookies: [],
+    origins: [{
+      origin,
+      localStorage: [{ name: 'codegena:cookie-consent', value: 'disableAnalytics' }],
+    }],
+  };
+}
+
 export default defineConfig({
   ...nxE2EPreset(import.meta.dirname, { testDir: './src' }),
+  expect: { toHaveScreenshot: e2eCommonOptions.screenshots },
   workers: 2,
   use: {
     baseURL,
     launchOptions: { executablePath: chromiumExecutablePath },
+    // Most journeys start with a returning visitor who already declined analytics.
+    storageState: returningVisitorStorage(previewUrl.origin),
     trace: 'on-first-retry',
   },
   webServer: {
@@ -47,22 +67,15 @@ export default defineConfig({
   },
   projects: [
     {
-      name: 'desktop',
+      ...desktopChromiumProject,
       grepInvert: [/@mobile-peel/, ...excludedBuildCases],
-      use: { ...devices['Desktop Chrome'] },
     },
     {
-      name: 'iPhone 15',
+      ...mobileChromiumProject,
       grepInvert: [
         /@desktop-touchpad|@desktop-menu|@desktop-foldering/,
         ...excludedBuildCases,
       ],
-      use: {
-        ...devices['iPhone 15'],
-        browserName: 'chromium',
-        // Match the engine: Safari's user agent triggers Monaco's WebKit path.
-        userAgent: devices['Pixel 7'].userAgent,
-      },
     },
   ],
 });

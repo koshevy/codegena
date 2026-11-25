@@ -1,3 +1,4 @@
+import { getStoryUrl } from '@codegena/util-e2e';
 import { expect, type Page, test } from '@playwright/test';
 import { strFromU8, unzipSync } from 'fflate';
 import { readFile } from 'node:fs/promises';
@@ -9,7 +10,7 @@ import {
 import { visitGeneratedFileRows } from './visit-generated-file-rows';
 import { withUpdatedStorybookOutput } from './with-updated-storybook-output';
 
-const detailsStory = '/iframe.html?id=codegena-playground-generated-file-details--';
+const detailsStoryIdPrefix = 'codegena-playground-generated-file-details--';
 const expectedAccountFileText = [
   'import type { Status } from \'./status\';',
   '',
@@ -26,9 +27,7 @@ const expectedAccountFileText = [
 test('focuses the last clicked declaration in a multi-selection', async ({
   page,
 }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-playground--comprehensive&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   await page.getByRole('button', { name: 'Show details' }).click();
   await page.getByRole('button', { name: 'Show all' }).click();
@@ -59,7 +58,7 @@ test('focuses the last clicked declaration in a multi-selection', async ({
 test('selects files from details headers in graph and list views', async ({
   page,
 }) => {
-  await page.goto('/iframe.html?id=codegena-playground--light&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--light'));
   await page.getByRole('button', { name: 'Show details' }).click();
   await page.getByRole('button', { name: 'Show all' }).click();
 
@@ -126,7 +125,7 @@ test('selects files from details headers in graph and list views', async ({
 test('reveals a distant file after Shift-selecting its details header', async ({
   page,
 }) => {
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
   await page.getByRole('button', { name: 'Show details' }).click();
   await page.getByRole('button', { name: 'Show all' }).click();
 
@@ -170,7 +169,7 @@ test('reveals a distant file after Shift-selecting its details header', async ({
 });
 
 test('reveals source lines from generated declaration glyphs', async ({ page }) => {
-  await page.goto('/iframe.html?id=codegena-playground--light&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--light'));
   await page.getByRole('button', { name: 'Show details' }).click();
   await page.getByRole('button', { name: 'Show all' }).click();
 
@@ -202,9 +201,7 @@ test('reveals source lines from generated declaration glyphs', async ({ page }) 
 test('keeps a multi-declaration file implicit after a generated glyph click', async ({
   page,
 }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-playground--comprehensive&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   await page.getByRole('button', { name: 'Show details' }).click();
   await page.getByRole('button', { name: 'List', exact: true }).click();
@@ -258,7 +255,7 @@ test('keeps a multi-declaration file implicit after a generated glyph click', as
 });
 
 test('keeps folding but omits TypeScript hints in generated code', async ({ page }) => {
-  await page.goto(`${detailsStory}one-file&viewMode=story`);
+  await page.goto(getStoryUrl(`${detailsStoryIdPrefix}one-file`));
 
   const generatedEditor = page.locator('.GeneratedFileDetails__root .monaco-editor');
   const declaration = generatedEditor.locator('.view-line')
@@ -314,7 +311,7 @@ async function observeDetailsScrollBehavior(page: Page): Promise<void> {
 }
 
 test('uses smooth scrolling only for short generated-file lists', async ({ page }) => {
-  await page.goto('/iframe.html?id=codegena-playground--light&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--light'));
   await page.getByRole('button', { name: 'Show details' }).click();
   await page.getByRole('button', { name: 'Show all' }).click();
   await page.getByRole('button', { name: 'List', exact: true }).click();
@@ -326,7 +323,7 @@ test('uses smooth scrolling only for short generated-file lists', async ({ page 
     /smooth/,
   );
 
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
   await page.getByRole('button', { name: 'Show details' }).click();
   await page.getByRole('button', { name: 'Show all' }).click();
   await page.getByRole('button', { name: 'List', exact: true }).click();
@@ -346,9 +343,7 @@ test('reveals a file with a half-rem inset from the details viewport', async ({
     document.documentElement.style.fontSize = '20px';
   });
 
-  await page.goto(
-    '/iframe.html?id=codegena-playground--comprehensive&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   await page.getByRole('button', { name: 'Show details' }).click();
   await page.getByRole('button', { name: 'Show all' }).click();
@@ -381,7 +376,7 @@ test('reveals a file with a half-rem inset from the details viewport', async ({
 });
 
 test('shows the empty selected scope and offers all files', async ({ page }) => {
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   await page.getByRole('button', { name: 'Show details' }).click();
 
@@ -406,7 +401,7 @@ test('shows the empty selected scope and offers all files', async ({ page }) => 
 });
 
 test('emphasizes selected file cards only in Show all', async ({ page }) => {
-  await page.goto('/iframe.html?id=codegena-playground--light&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--light'));
   await page.getByRole('button', { name: 'Show details' }).click();
   await page.getByRole('button', { name: 'Show all' }).click();
   await page.getByRole('button', { name: 'List', exact: true }).click();
@@ -460,9 +455,7 @@ test('emphasizes selected file cards only in Show all', async ({ page }) => {
 test('reveals a file without a blue highlight after scrolling', async ({
   page,
 }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-playground--comprehensive-with-persistence&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--comprehensive-with-persistence'));
 
   await page.getByRole('button', { name: 'List', exact: true }).click();
 
@@ -507,7 +500,7 @@ test('reveals a file without a blue highlight after scrolling', async ({
 
 test('copies the complete generated file from its header', async ({ page }) => {
   await stubClipboardWrites(page);
-  await page.goto('/iframe.html?id=codegena-playground--light&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--light'));
   await page.getByRole('button', { name: 'Show details' }).click();
   await page.getByRole('button', { name: 'Show all' }).click();
   await page.getByRole('button', { name: 'Copy account.ts' }).click();
@@ -519,7 +512,7 @@ test('copies the complete generated file from its header', async ({ page }) => {
 });
 
 test('downloads the complete generated file from its header', async ({ page }) => {
-  await page.goto('/iframe.html?id=codegena-playground--light&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--light'));
   await page.getByRole('button', { name: 'Show details' }).click();
   await page.getByRole('button', { name: 'Show all' }).click();
 
@@ -534,7 +527,7 @@ test('downloads the complete generated file from its header', async ({ page }) =
 });
 
 test('offers a complete ZIP after a minimum pending period', async ({ page }) => {
-  await page.goto('/iframe.html?id=codegena-playground--light&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--light'));
   await page.getByRole('button', { name: 'Show details' }).click();
   await page.getByRole('button', { name: 'List', exact: true }).click();
   await page.locator('[data-node-id="account.ts"]').click();
@@ -571,7 +564,7 @@ test('offers a complete ZIP after a minimum pending period', async ({ page }) =>
 });
 
 test('downloads the cached ZIP immediately on a later click', async ({ page }) => {
-  await page.goto('/iframe.html?id=codegena-playground--light&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--light'));
   await page.getByRole('button', { name: 'Show details' }).click();
   await page.getByRole('button', { name: 'List', exact: true }).click();
   await page.locator('[data-node-id="account.ts"]').click();
@@ -593,7 +586,7 @@ test('downloads the cached ZIP immediately on a later click', async ({ page }) =
 });
 
 test('reports an archive preparation failure', async ({ page }) => {
-  await page.goto('/iframe.html?id=codegena-playground--light&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--light'));
   await page.getByRole('button', { name: 'Show details' }).click();
   await page.getByRole('button', { name: 'List', exact: true }).click();
   await page.locator('[data-node-id="account.ts"]').click();
@@ -621,7 +614,7 @@ test('initializes each virtualized generated file with TypeScript syntax', async
 
   page.on('domcontentloaded', () => documentLoads.push(page.url()));
 
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
   await page.getByRole('button', { name: 'Show details' }).click();
   await page.getByRole('button', { name: 'Show all' }).click();
 
@@ -688,9 +681,7 @@ test('initializes each virtualized generated file with TypeScript syntax', async
 });
 
 test('restores the virtual file position after remounting', async ({ page }) => {
-  await page.goto(
-    `${detailsStory}snapshot-restoration&viewMode=story`,
-  );
+  await page.goto(getStoryUrl(`${detailsStoryIdPrefix}snapshot-restoration`));
 
   const details = page.locator('.GeneratedFileDetails__root');
 
@@ -708,9 +699,7 @@ test('restores the virtual file position after remounting', async ({ page }) => 
 });
 
 test('keeps the visible file anchored when a file is prepended', async ({ page }) => {
-  await page.goto(
-    `${detailsStory}changing-files&viewMode=story`,
-  );
+  await page.goto(getStoryUrl(`${detailsStoryIdPrefix}changing-files`));
 
   const details = page.locator('.GeneratedFileDetails__root');
 
@@ -739,9 +728,7 @@ test('keeps the visible file anchored when a file is prepended', async ({ page }
 });
 
 test('follows a streamed file when already at the end', async ({ page }) => {
-  await page.goto(
-    `${detailsStory}streaming-at-end&viewMode=story`,
-  );
+  await page.goto(getStoryUrl(`${detailsStoryIdPrefix}streaming-at-end`));
 
   const details = page.locator('.GeneratedFileDetails__root');
 

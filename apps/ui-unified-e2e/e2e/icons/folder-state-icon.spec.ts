@@ -1,3 +1,4 @@
+import { getStoryUrl } from '@codegena/util-e2e';
 import { expect, test } from '@playwright/test';
 
 [
@@ -7,11 +8,7 @@ import { expect, test } from '@playwright/test';
   test(`folder icon keeps a dark outline around its pale fill: ${story}`, async ({
     page,
   }) => {
-    await page.goto([
-      '/iframe.html?id=codegena-unified-ui-icons-folder-state-icon--',
-      story,
-      '&viewMode=story',
-    ].join(''));
+    await page.goto(getStoryUrl(`codegena-unified-ui-icons-folder-state-icon--${story}`));
 
     const icon = page.locator('#storybook-root svg');
 

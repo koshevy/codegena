@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "allowJs": false
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"],
+  "nx": {
+    "sync": {
+      "ignoredDependencies": ["@codegena/infr-nx"]
+    }
+  }
+}

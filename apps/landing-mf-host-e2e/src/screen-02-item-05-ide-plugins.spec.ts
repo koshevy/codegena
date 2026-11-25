@@ -24,7 +24,8 @@ test('02.05 — IDE plugins preview shows the planned editors', async ({
 
   await page.goto('/?testingMode=true');
   await scrollSecondScreenTo(page, 14 / 17);
-  await waitForPlaygroundIllustration(page);
+  await expect(page.getByRole('group', { name: 'Feature illustration' }))
+    .toHaveCSS('transform', 'none');
 
   const playground = page.getByRole('region', {
     name: 'Landing feature sections',

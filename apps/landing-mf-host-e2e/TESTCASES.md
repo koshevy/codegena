@@ -7,7 +7,7 @@
 | Status | Priority | User path |
 | --- | --- | --- |
 | ✅ Implemented | 🔴 P0 | 01.01 — Open the welcome screen and check its stacked loop and CODEGENA wordmark, heading, actions, and image. |
-| ✅ Implemented | 🔴 P0 | 01.02 — Scroll through the hero title, intro, prompt, and final heading into the second screen. Check the title’s accent colors in motion, its single color at rest, the gently zooming contour pattern, and each image. |
+| ✅ Implemented | 🔴 P0 | 01.02 — Scroll through the hero title, intro, prompt, and final heading into the second screen. Check the title’s accent colors in motion, its single color at rest, the gently zooming contour pattern, and the second-screen code editor image. |
 | ✅ Implemented | 🔴 P0 | 01.07 — Enter the second screen and wait for its illustration to finish moving and scaling before capturing the code editor. The readiness check must not accept a nearly finished animation. |
 | ✅ Implemented | 🟡 P1 | 01.03 — Copy the full AI assistant prompt from the hero icon button; its tooltip explains the action on keyboard focus. |
 | ✅ Implemented | 🟡 P1 | 01.04 — As the playground panel enters, the hero contour pattern and glow fill the gaps on both sides while the panel covers them. |
@@ -29,14 +29,20 @@
 | ✅ Implemented | 🟡 P1 | 01.22 — Click How it works, then open the menu as the hero scrolls. The hero stops moving and remains visible as the overlay slides in. |
 | ✅ Implemented | 🟡 P1 | 01.23 — Hold the lower landing sections and observe the worker download the navigation overlay. Release the sections and see the worker download Search and the Playground entry while the editor and shaders remain deferred. Open the menu and verify it uses the cached script. |
 | ✅ Implemented | 🟡 P1 | 01.24 — Open the landing page and check that its Web App Manifest and both installation icons are available. |
+| ✅ Implemented | 🟡 P1 | 01.25 — Read the cookie notice before feature bundles load, verify the privacy and repository links, and reload after declining analytics. |
+| ✅ Implemented | 🟡 P1 | 01.26 — Open navigation with the cookie notice visible, then close the menu and return to the notice. |
+| ✅ Implemented | 🟡 P1 | CONSENT-01 — Open each documentation and blog page with a fresh browser context and find the cookie notice. |
+| ✅ Implemented | 🟡 P1 | CONSENT-02 — Open Playground directly and find the same notice. |
+| ✅ Implemented | 🟡 P1 | CONSENT-03 — Accept all or disable analytics in Docs, then navigate to landing, Playground, and another article without seeing the notice again. |
 | ✅ Implemented | 🟡 P1 | 02.00 — Follow the centered progress blob down each feature's scroll path and see it restart at the next feature. |
 | ✅ Implemented | 🟡 P1 | 02.00 — Scroll through a feature with WebGPU enabled and verify Chrome reports no layout shifts for the moving blob. |
 | ✅ Implemented | 🟡 P1 | 02.00 — Watch the blob start growing about 100px before section 05 ends, remain smaller than the screen there, then fill section 06 and stop. |
 | ✅ Implemented | 🟡 P1 | 02.06 — Choose each theme and open Unified UI. Pale description panels and example buttons retain dark accent text in both modes. |
 | ✅ Implemented | 🟡 P1 | 02.06 — Once the blob fills the screen, hold its rendered frame and pause its shape morph. Further downward scrolling keeps it frozen; scrolling backward resumes the same animation without resetting it. |
 | ✅ Implemented | 🔴 P0 | 02.06 — With live WebGPU rendering enabled, reach Unified UI, see Nebula draw, and check that the blob pauses at full size and resumes on backward scrolling. The full shader registry stays unloaded. |
-| ✅ Implemented | 🔴 P0 | 02.01 — Visit each JSON Schema code example. Check its file, declaration, description, and image. Verify all examples have highlighted code before selection and only the active example is accessible. |
+| ✅ Implemented | 🔴 P0 | 02.01 — Visit each JSON Schema code example. Check its file, declaration, description, and image. Verify all examples have highlighted code before selection, only the active example is accessible, and changing captions preserves the editor height and page scroll position. |
 | ✅ Implemented | 🟡 P1 | 02.01 — Scroll forward and back through the longer JSON Schema section; its active code example follows each equal share of the section's path. |
+| ✅ Implemented | 🟡 P1 | 02.01 — Scroll inside a code slide by wheel or touch without moving the landing page. On mobile, pan through the preview and scroll again in the expanded drawer. |
 | ✅ Implemented | 🟡 P1 | 02.02 — Read the CLI story with the same caption presentation as other illustrations, leave and return to the same scroll position, and check its image. |
 | ✅ Implemented | 🟡 P1 | 02.02 — Scroll through command typing, greeting, and diagnostics; pause and reverse to verify that the terminal follows page position. |
 | ✅ Implemented | 🟡 P1 | 02.02 — On desktop, a touchpad advances the page while terminal output fits; once output overflows, it scrolls inside the terminal. |
@@ -48,7 +54,7 @@
 | ✅ Implemented | 🟡 P1 | 02.03 — Switch to the domain namespace example and inspect its filename, code, and explanation. |
 | ✅ Implemented | 🟡 P1 | 02.03 — On mobile, open the domain namespace code as a peel drawer. |
 | ✅ Implemented | 🟡 P1 | 02.03 — On desktop, scroll the generated folder list with a touchpad while the page stays still. |
-| ✅ Implemented | 🔴 P0 | 02.04 — See the circular search invitation, open the GitHub API demo, and find a declaration from the prepared graph through the PWA virtual HTTP search service. |
+| ✅ Implemented | 🔴 P0 | 02.04 — Find the accessible GitHub API search button beside the circular invitation, open the dialog, and find a declaration from the prepared graph through the PWA virtual HTTP search service. |
 | ✅ Implemented | 🟡 P1 | 02.04 — Open search, scroll against its backdrop, and confirm the landing page stays still until the drawer closes. |
 | ✅ Implemented | 🟡 P1 | 02.05 — Scroll to the IDE plugins story and see the VS Code, JetBrains, and Cursor preview within the circular “Soon!” ring. Check its image. |
 | ✅ Implemented | 🟡 P1 | 02.05 — Move between the graph-search and IDE stories; their rotating text circles keep the same screen center. |

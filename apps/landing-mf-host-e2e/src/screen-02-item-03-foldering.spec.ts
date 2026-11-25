@@ -3,6 +3,7 @@ import { expect, type Page, test } from '@playwright/test';
 import {
   observeLandingDiagnostics,
   scrollSecondScreenTo,
+  waitForLandingScrollbar,
   waitForPlaygroundIllustration,
 } from './landing-journey';
 
@@ -265,9 +266,7 @@ test('02.03 — foldering carousel shows its domain namespace example', async ({
     name: 'Domain namespace with local type exports',
   })).toBeHidden();
   await returnToFolderingStart(page);
-  // Capture the carousel after the document scrollbar auto-hides.
-  await expect(page.locator('.os-scrollbar-vertical.os-theme-codegena-window'))
-    .toHaveCSS('opacity', '0');
+  await waitForLandingScrollbar(page, false);
   await expect(page).toHaveScreenshot('02-03-domain-namespace.png');
   expectNoDiagnostics();
 });

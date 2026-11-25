@@ -1,6 +1,5 @@
-import type { Response } from '@playwright/test';
-
-import { expect, test } from './fixtures';
+import { testWithBrowserDiagnostics as test } from '@codegena/util-e2e';
+import { expect, type Response } from '@playwright/test';
 
 test('loads a local specification and searches through the virtual API', async ({
   page,

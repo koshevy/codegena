@@ -1,9 +1,8 @@
+import { getStoryUrl } from '@codegena/util-e2e';
 import { expect, test } from '@playwright/test';
 
 test('shows a severity card separately from the editor', async ({ page }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-unified-ui-feedback-severity-card--warning',
-  );
+  await page.goto(getStoryUrl('codegena-unified-ui-feedback-severity-card--warning'));
 
   const warning = page.getByRole('article', {
     name: 'Warning at schema.jsonc:1526:21',
@@ -26,9 +25,7 @@ test('uses the theme warning color for the card border', async ({ page }) => {
   ];
 
   for (const { color, story } of themeCases) {
-    await page.goto(
-      `/iframe.html?id=codegena-unified-ui-feedback-severity-card--${story}`,
-    );
+    await page.goto(getStoryUrl(`codegena-unified-ui-feedback-severity-card--${story}`));
 
     const warning = page.getByRole('article', {
       name: 'Warning at schema.jsonc:1526:21',

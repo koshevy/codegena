@@ -54,3 +54,12 @@ journey, then update its status after verification.
 | EDITOR-07 | Editable JSON stays pending until colored Monaco tokens appear and blends into syntax colors on initialization. | ✅ Implemented | 🔴 P0 |
 | EDITOR-08 | The minimal editor highlights editable JSON with no Monaco network requests or workers. Light and dark modes preserve the same typography and padding. | ✅ Implemented | 🟡 P1 |
 | SCROLL-01 | The themed area has vertical and horizontal overflow and responds to wheel scrolling. | ✅ Implemented | 🟢 P2 |
+
+## Cookies and privacy
+
+| ID | User path | Status | Priority |
+| --- | --- | --- | --- |
+| COOKIES-01 | Choose Accept all or Disable analytics, observe the saved choice change, and reload with the notice closed. | ✅ Implemented | 🟡 P1 |
+| COOKIES-02 | Follow the alternate destination without recording a choice. | ✅ Implemented | 🟡 P1 |
+| COOKIES-03 | Show the notice for an invalid stored choice and accept a new choice even if browser storage is blocked. | ✅ Implemented | 🟡 P1 |
+| COOKIES-04 | Hover and press the filled and outlined actions in both themes, then move away to release them without selecting a choice. | ✅ Implemented | 🟡 P1 |

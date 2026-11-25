@@ -1,12 +1,10 @@
+import { getStoryUrl } from '@codegena/util-e2e';
 import { expect, test } from '@playwright/test';
 
 test('opens the GitHub REST API after conversion', async ({ page }) => {
   test.setTimeout(120_000);
 
-  await page.goto(
-    '/iframe.html?id=codegena-playground--git-hub-rest-api-with-persistence'
-    + '&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--git-hub-rest-api-with-persistence'));
 
   const conversionStatus = page.getByRole('status', {
     name: 'Specification is converting',

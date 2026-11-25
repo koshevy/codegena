@@ -1,6 +1,11 @@
+import {
+  desktopChromiumProject,
+  e2eCommonOptions,
+  mobileChromiumProject,
+} from '@codegena/util-e2e';
 import { workspaceRoot } from '@nx/devkit';
 import { nxE2EPreset } from '@nx/playwright/preset';
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig } from '@playwright/test';
 
 const baseURL = 'http://127.0.0.1:8113';
 const serverTarget = process.env['DOCUMENTATION_E2E_SERVER'] === 'production'
@@ -9,6 +14,7 @@ const serverTarget = process.env['DOCUMENTATION_E2E_SERVER'] === 'production'
 
 export default defineConfig({
   ...nxE2EPreset(import.meta.dirname, { testDir: './src' }),
+  expect: { toHaveScreenshot: e2eCommonOptions.screenshots },
   retries: 0,
   workers: 1,
   use: {
@@ -35,18 +41,5 @@ export default defineConfig({
     gracefulShutdown: { signal: 'SIGINT', timeout: 5000 },
     cwd: workspaceRoot,
   }],
-  projects: [
-    {
-      name: 'desktop',
-      use: { ...devices['Desktop Chrome'] },
-    },
-    {
-      name: 'iPhone 15',
-      use: {
-        ...devices['iPhone 15'],
-        browserName: 'chromium',
-        userAgent: devices['Pixel 7'].userAgent,
-      },
-    },
-  ],
+  projects: [desktopChromiumProject, mobileChromiumProject],
 });

@@ -1,14 +1,15 @@
+import { collectBrowserDiagnostics, getStoryUrl } from '@codegena/util-e2e';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
 import {
   expectGeneratedLine,
   expectSourceLine,
   getFileCard,
-  watchBrowserMessages,
 } from './file-details-navigation';
 
-const storyUrl = '/iframe.html?id=codegena-playground--'
-  + 'one-password-connect-with-persistence&viewMode=story';
+const storyUrl = getStoryUrl(
+  'codegena-playground--one-password-connect-with-persistence',
+);
 
 test.use({ viewport: { height: 1117, width: 1728 } });
 
@@ -56,7 +57,7 @@ async function openGraphAndDetails(
 test('graph declarations reveal their file and generated source lines', async ({
   page,
 }) => {
-  const browserMessages = watchBrowserMessages(page);
+  const browserMessages = collectBrowserDiagnostics(page);
   const graph = await openGraphAndDetails(page);
 
   await test.step('root namespace', async () => {
@@ -115,7 +116,7 @@ test('graph declarations reveal their file and generated source lines', async ({
 test('directory selection reveals direct details and active relations', async ({
   page,
 }) => {
-  const browserMessages = watchBrowserMessages(page);
+  const browserMessages = collectBrowserDiagnostics(page);
   const graph = await openGraphAndDetails(page);
 
   await getGraphNode(graph, 'items').getByRole('button', {

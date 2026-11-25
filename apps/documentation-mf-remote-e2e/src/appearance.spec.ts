@@ -1,6 +1,6 @@
+import { testWithBrowserDiagnostics as test } from '@codegena/util-e2e';
+import { expect } from '@playwright/test';
 import assert from 'node:assert/strict';
-
-import { expect, test } from './fixtures';
 
 test('renders React components and switches tabs inside an MDX article', async ({
   page,

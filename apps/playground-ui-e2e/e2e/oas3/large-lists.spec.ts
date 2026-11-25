@@ -1,7 +1,7 @@
+import { getStoryUrl } from '@codegena/util-e2e';
 import { expect, test } from '@playwright/test';
 
-const storyUrl = '/iframe.html?id=codegena-playground--'
-  + 'git-hub-rest-api-with-persistence&viewMode=story';
+const storyUrl = getStoryUrl('codegena-playground--git-hub-rest-api-with-persistence');
 
 test('shows editor and graph loading skeletons during the large conversion', async ({
   page,

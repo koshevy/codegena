@@ -448,6 +448,16 @@ test('01.03 — copy the complete prompt for an AI assistant', async ({
   expectNoDiagnostics();
 });
 
+async function waitForBackdropIllustration(
+  page: Page,
+  isMobile: boolean,
+): Promise<void> {
+  // The code illustration is below the entrance trigger on a narrow viewport.
+  if (!isMobile) {
+    await waitForGeneratedCodeIllustration(page);
+  }
+}
+
 test('01.04 — the hero backdrop continues beside the entering playground', async ({
   isMobile,
   page,
@@ -474,6 +484,7 @@ test('01.04 — the hero backdrop continues beside the entering playground', asy
   await expect(page.getByRole('heading', {
     name: 'Most detailed JSON Schema support',
   })).toBeVisible();
+  await waitForBackdropIllustration(page, isMobile);
   await expect(page).toHaveScreenshot('01-09-hero-backdrop-entrance.png');
   expectNoDiagnostics();
 });

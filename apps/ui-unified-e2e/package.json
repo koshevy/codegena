@@ -5,6 +5,7 @@
   "devDependencies": {
     "@codegena/infr-nx": "*",
     "@codegena/ui-unified": "*",
+    "@codegena/util-e2e": "*",
     "@nx/devkit": "23.3.2",
     "@nx/playwright": "23.3.2",
     "@playwright/test": "^1.36.0",

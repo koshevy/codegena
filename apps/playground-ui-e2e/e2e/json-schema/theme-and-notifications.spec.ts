@@ -1,10 +1,11 @@
+import { getStoryUrl } from '@codegena/util-e2e';
 import { expect, test } from '@playwright/test';
 
 import { stubClipboardWrites } from './clipboard';
 
 test('Light and Dark stories keep their named appearance', async ({ page }) => {
   await page.emulateMedia({ colorScheme: 'dark' });
-  await page.goto('/iframe.html?id=codegena-playground--light&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--light'));
 
   const playground = page.locator('.Playground__root');
 
@@ -43,7 +44,7 @@ test('Light and Dark stories keep their named appearance', async ({ page }) => {
 
   try {
     await page.emulateMedia({ colorScheme: 'light' });
-    await page.goto('/iframe.html?id=codegena-playground--dark&viewMode=story');
+    await page.goto(getStoryUrl('codegena-playground--dark'));
     await registrationStarted.promise;
 
     await expect(playground).toHaveCSS('background-color', 'rgb(18, 21, 26)');
@@ -83,7 +84,7 @@ test('Light and Dark stories keep their named appearance', async ({ page }) => {
 });
 
 test('switches the playground from light to dark mode', async ({ page }) => {
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   const playground = page.locator('.Playground__root');
   const lightBackground = await playground.evaluate(
@@ -103,10 +104,12 @@ test('switches the playground from light to dark mode', async ({ page }) => {
       return Number.POSITIVE_INFINITY;
     }
 
-    const buttonRight = button.getBoundingClientRect().right;
-    const menuRight = menu.getBoundingClientRect().right;
+    const buttonBounds = button.getBoundingClientRect();
+    const menuBounds = menu.getBoundingClientRect();
+    const buttonCenter = buttonBounds.x + buttonBounds.width / 2;
+    const menuCenter = menuBounds.x + menuBounds.width / 2;
 
-    return Math.abs(buttonRight - menuRight);
+    return Math.abs(buttonCenter - menuCenter);
   })).toBeLessThan(4);
 
   await expect(page.getByRole('menuitemradio', { name: 'System' })).toHaveAttribute(
@@ -132,8 +135,7 @@ test('switches the playground from light to dark mode', async ({ page }) => {
 test('themes visible and grouped notifications in dark mode', async ({ page }) => {
   await stubClipboardWrites(page);
   await page.goto(
-    '/iframe.html?id=codegena-playground--comprehensive-with-notification-overflow'
-    + '&viewMode=story',
+    getStoryUrl('codegena-playground--comprehensive-with-notification-overflow'),
   );
 
   await page.getByRole('button', { name: 'Appearance preferences' }).click();

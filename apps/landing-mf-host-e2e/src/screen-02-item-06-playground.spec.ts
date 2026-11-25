@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test';
 import {
   observeLandingDiagnostics,
   scrollSecondScreenTo,
+  waitForPlaygroundIllustration,
 } from './landing-journey';
 
 const examples = [
@@ -37,6 +38,7 @@ examples.forEach(({ label, query, result, specUrl, title }) => {
 
     await page.goto('/?testingMode=true');
     await scrollSecondScreenTo(page, 15.5 / 17);
+    await waitForPlaygroundIllustration(page);
 
     const landingUrl = page.url();
     const button = page.getByRole('button', { name: label, exact: true });

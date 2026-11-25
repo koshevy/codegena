@@ -1,3 +1,4 @@
+import { getStoryUrl } from '@codegena/util-e2e';
 import { expect, test } from '@playwright/test';
 
 import {
@@ -8,8 +9,7 @@ import { observeMonacoTokenColors } from './observe-monaco-token-colors';
 import { visitGeneratedFileRows } from './visit-generated-file-rows';
 
 const referenceStoryId = 'codegena-playground-json-editor--reference-navigation';
-const referenceNavigationStoryPath = `/iframe.html?id=${referenceStoryId}`
-  + '&viewMode=story';
+const referenceNavigationStoryPath = getStoryUrl(referenceStoryId);
 
 test('navigates a local $ref with Go to Definition', async ({ page }) => {
   await page.goto(referenceNavigationStoryPath);
@@ -73,7 +73,7 @@ test('disables schema requests while keeping Codegena warnings', async ({ page }
     await route.fulfill({ json: {} });
   });
 
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   const sourceEditor = page.locator('.Playground__source .monaco-editor');
 
@@ -88,7 +88,7 @@ test('disables schema requests while keeping Codegena warnings', async ({ page }
 
 test('copies the current edited source schema and shows feedback', async ({ page }) => {
   await stubClipboardWrites(page);
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   const copyButton = page.getByRole('button', { name: 'Copy whole schema' });
   const sourceEditor = page.locator('.Playground__source .monaco-editor');
@@ -115,7 +115,7 @@ test('copies the current edited source schema and shows feedback', async ({ page
 });
 
 test('keeps Monaco actions in the source editor context menu', async ({ page }) => {
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   const sourceEditor = page.locator('.Playground__source .monaco-editor');
 
@@ -133,7 +133,7 @@ test('keeps Monaco actions in the source editor context menu', async ({ page }) 
 });
 
 test('keeps the source editor mounted while generated files scroll', async ({ page }) => {
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   const sourceEditor = page.locator('.Playground__source .monaco-editor').first();
 
@@ -169,7 +169,7 @@ test('keeps the source editor mounted while generated files scroll', async ({ pa
 test('keeps source state while every generated editor mounts', async ({ page }) => {
   test.setTimeout(90_000);
 
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   const sourceEditor = page.locator('.Playground__source .monaco-editor');
   const sourceInput = sourceEditor.getByRole('textbox', {
@@ -316,7 +316,7 @@ test('keeps source state while every generated editor mounts', async ({ page }) 
 test('explains a source declaration glyph with a themed tooltip', async ({
   page,
 }) => {
-  await page.goto('/iframe.html?id=codegena-playground--light&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--light'));
 
   const sourceGlyph = page.locator('.Playground__source').getByRole('button', {
     name: 'Reveal generated declarations for line 1',
@@ -332,7 +332,7 @@ test('explains a source declaration glyph with a themed tooltip', async ({
 test('centers source and generated declaration glyphs on their code lines', async ({
   page,
 }) => {
-  await page.goto('/iframe.html?id=codegena-playground--light&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--light'));
   await page.getByRole('button', { name: 'Show details' }).click();
   await page.getByRole('button', { name: 'Show all' }).click();
 

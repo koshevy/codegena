@@ -1,25 +1,11 @@
-import { expect, type Locator, type Page } from '@playwright/test';
+import { collectBrowserDiagnostics } from '@codegena/util-e2e';
+import { type CDPSession, expect, type Locator, type Page } from '@playwright/test';
 
 /**
  * Records browser diagnostics from the first page load onward.
  */
 export function observeLandingDiagnostics(page: Page): () => void {
-  const messages: string[] = [];
-
-  page.on('console', (message) => {
-    if (message.type() !== 'error' && message.type() !== 'warning') {
-      return;
-    }
-
-    const { lineNumber, url } = message.location();
-    const location = url ? ` (${url}:${lineNumber + 1})` : '';
-
-    messages.push(`${message.type()}: ${message.text()}${location}`);
-  });
-
-  page.on('pageerror', (error) => {
-    messages.push(`page error: ${error.stack ?? error.message}`);
-  });
+  const messages = collectBrowserDiagnostics(page);
 
   return () => expect(messages).toEqual([]);
 }
@@ -111,6 +97,17 @@ export async function waitForPlaygroundIllustration(page: Page): Promise<void> {
   })).toBe(true);
 }
 
+/** Waits for the decorative document scrollbar to finish fading. */
+export async function waitForLandingScrollbar(
+  page: Page,
+  isVisible: boolean,
+): Promise<void> {
+  const opacity = isVisible ? '1' : '0';
+
+  await expect(page.locator('.os-scrollbar-vertical.os-theme-codegena-window'))
+    .toHaveCSS('opacity', opacity);
+}
+
 /**
  * Waits for the code illustration's entrance to finish before capturing its canvas.
  */
@@ -122,4 +119,51 @@ export async function waitForGeneratedCodeIllustration(page: Page): Promise<void
   });
 
   await expect(illustration).toHaveCSS('transform', 'none');
+}
+
+interface ViewportPoint {
+  x: number;
+  y: number;
+}
+
+async function dispatchTouchSwipe(
+  session: CDPSession,
+  start: ViewportPoint,
+  delta: ViewportPoint,
+): Promise<void> {
+  await session.send('Input.dispatchTouchEvent', {
+    type: 'touchStart',
+    touchPoints: [start],
+  });
+
+  for (const progress of [0.25, 0.5, 0.75, 1]) {
+    await session.send('Input.dispatchTouchEvent', {
+      type: 'touchMove',
+      touchPoints: [{
+        x: start.x + delta.x * progress,
+        y: start.y + delta.y * progress,
+      }],
+    });
+  }
+
+  await session.send('Input.dispatchTouchEvent', {
+    type: 'touchEnd',
+    touchPoints: [],
+  });
+}
+
+/** Sends the touch moves that Chromium can omit from synthesized scroll gestures. */
+export async function swipeTouch(
+  page: Page,
+  start: ViewportPoint,
+  delta: ViewportPoint,
+): Promise<void> {
+  const session = await page.context().newCDPSession(page);
+
+  try {
+    await dispatchTouchSwipe(session, start, delta);
+  }
+  finally {
+    await session.detach();
+  }
 }

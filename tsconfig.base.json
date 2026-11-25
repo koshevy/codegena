@@ -66,6 +66,7 @@
       "@codegena/ui-unified": ["packages/ui-unified/src/index.ts"],
       "@codegena/ui-unified/menus": ["packages/ui-unified/menus/index.ts"],
       "@codegena/ui-unified/panels": ["packages/ui-unified/panels/index.ts"],
+      "@codegena/ui-unified/buttons": ["packages/ui-unified/buttons/index.ts"],
       "@codegena/ui-unified/icons": ["packages/ui-unified/icons/index.ts"],
       "@codegena/ui-unified/branding": ["packages/ui-unified/branding/index.ts"],
       "@codegena/ui-unified/feedback": ["packages/ui-unified/feedback/index.ts"],
@@ -76,6 +77,7 @@
       "@codegena/ui-unified/code-editor-minimal": [
         "packages/ui-unified/code-editor-minimal/index.ts"
       ],
+      "@codegena/ui-unified/we-use-cookies": ["packages/ui-unified/we-use-cookies/index.ts"],
       "@codegena/ui-unified/monaco-workers": ["packages/ui-unified/monaco-workers/index.ts"],
       "@codegena/ui-unified/monaco-environment": ["packages/ui-unified/monaco-environment/index.ts"],
       "@codegena/ui-unified/monaco-vite": ["packages/ui-unified/monaco-vite/index.ts"],

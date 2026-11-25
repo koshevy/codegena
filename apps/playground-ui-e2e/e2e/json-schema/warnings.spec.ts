@@ -1,3 +1,4 @@
+import { getStoryUrl } from '@codegena/util-e2e';
 import { expect, type Locator, type Page, test } from '@playwright/test';
 
 import {
@@ -30,9 +31,7 @@ async function hoverWarningOnLine(
 async function openComprehensiveGraphAndSelectedDetails(
   page: Page,
 ): Promise<void> {
-  await page.goto(
-    '/iframe.html?id=codegena-playground--comprehensive-with-persistence&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--comprehensive-with-persistence'));
 
   const graphMode = page.getByRole('button', { name: 'Graph', exact: true });
 
@@ -67,7 +66,7 @@ async function openComprehensiveGraphAndSelectedDetails(
   { line: 934, col: 22 },
 ].forEach(({ line, col }) => {
   test(`reveals source warning at line ${line} twice`, async ({ page }) => {
-    await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+    await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
     const sourceEditor = page.locator('.Playground__source .monaco-editor');
 
@@ -102,7 +101,7 @@ async function openComprehensiveGraphAndSelectedDetails(
 });
 
 test('shows Codegena warnings in Monaco at their source locations', async ({ page }) => {
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   const sourceEditor = page.locator('.Playground__source .monaco-editor');
 
@@ -138,7 +137,7 @@ test('shows Codegena warnings in Monaco at their source locations', async ({ pag
 });
 
 test('reveals a Monaco warning in generated file details', async ({ page }) => {
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   const sourceEditor = page.locator('.Playground__source .monaco-editor');
 
@@ -156,7 +155,7 @@ test('reveals a Monaco warning in generated file details', async ({ page }) => {
 });
 
 test('shows a left-aligned warning with a themed Monaco hover', async ({ page }) => {
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   const sourceEditor = page.locator('.Playground__source .monaco-editor');
   const sourceInput = page.getByRole('textbox', { name: 'Source schema code editor' });
@@ -202,7 +201,7 @@ test('shows a left-aligned warning with a themed Monaco hover', async ({ page })
 });
 
 test('reveals all warnings from the details shortcut', async ({ page }) => {
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   await expect(page.getByRole('group', { name: 'Generated output header' }))
     .toBeVisible();
@@ -253,7 +252,7 @@ test('reveals and highlights the exact warning in the virtual list', async ({ pa
     'interactive-warning-reveal',
   ].join('--');
 
-  await page.goto(`/iframe.html?id=${storyId}&viewMode=story`);
+  await page.goto(getStoryUrl(storyId));
   await page.getByRole('button', { name: 'Reveal warning' }).click();
 
   const focusedWarning = page.locator('[data-details-row="warning"]')
@@ -274,7 +273,7 @@ test('reveals and highlights the exact warning in the virtual list', async ({ pa
 test('copies one warning with its source excerpt and shows success', async ({ page }) => {
   await stubClipboardWrites(page);
 
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
   await page.getByRole('button', { name: 'Show details' }).click();
   await page.getByRole('button', { name: 'Show all' }).click();
   await page.getByRole('button', {
@@ -304,7 +303,7 @@ test('copies all displayed warnings in source order with count-aware feedback', 
   page,
 }) => {
   await stubClipboardWrites(page);
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   await page.getByRole('button', { name: 'Show details' }).click();
   await page.getByRole('button', { name: 'Show all' }).click();

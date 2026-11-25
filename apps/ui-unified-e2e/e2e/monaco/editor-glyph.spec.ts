@@ -1,3 +1,4 @@
+import { getStoryUrl } from '@codegena/util-e2e';
 import { expect, test } from '@playwright/test';
 
 test('reveals a symbol from an editable editor glyph', async ({ page }) => {
@@ -11,9 +12,7 @@ test('reveals a symbol from an editable editor glyph', async ({ page }) => {
     }
   });
 
-  await page.goto(
-    '/iframe.html?id=codegena-unified-ui-monaco-editor-glyph--editable',
-  );
+  await page.goto(getStoryUrl('codegena-unified-ui-monaco-editor-glyph--editable'));
 
   const glyph = page.getByRole('button', { name: 'Reveal Interface on line 2' });
 
@@ -24,9 +23,7 @@ test('reveals a symbol from an editable editor glyph', async ({ page }) => {
 });
 
 test('reveals a symbol from a generated editor glyph', async ({ page }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-unified-ui-monaco-editor-glyph--generated',
-  );
+  await page.goto(getStoryUrl('codegena-unified-ui-monaco-editor-glyph--generated'));
 
   const glyph = page.getByRole('button', { name: 'Reveal Interface on line 2' });
 

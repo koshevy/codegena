@@ -1,3 +1,4 @@
+import { getStoryUrl } from '@codegena/util-e2e';
 import { expect, test } from '@playwright/test';
 
 test('edits highlighted JSON without mounting or starting Monaco', async ({ page }) => {
@@ -12,7 +13,7 @@ test('edits highlighted JSON without mounting or starting Monaco', async ({ page
       monacoRequests.push(pathname);
     }
   });
-  await page.goto('/iframe.html?id=codegena-unified-ui-monaco-code-editor--minimal');
+  await page.goto(getStoryUrl('codegena-unified-ui-monaco-code-editor--minimal'));
 
   const editor = page.getByRole('textbox', { name: 'Example JSON editor' });
 
@@ -34,7 +35,7 @@ test('edits highlighted JSON without mounting or starting Monaco', async ({ page
 });
 
 test('matches Monaco keyword color and typography in both themes', async ({ page }) => {
-  const storyPrefix = '/iframe.html?id=codegena-unified-ui-monaco-code-editor--';
+  const storyIdPrefix = 'codegena-unified-ui-monaco-code-editor--';
   const editor = page.getByRole('textbox', { name: 'Example JSON editor' });
   const fullKeyword = page.locator('.view-line').getByText('true', { exact: true });
   const minimalKeyword = page.getByText('true', { exact: true });
@@ -44,14 +45,14 @@ test('matches Monaco keyword color and typography in both themes', async ({ page
   ];
 
   for (const { full, minimal } of themes) {
-    await page.goto(`${storyPrefix}${full}`);
+    await page.goto(getStoryUrl(`${storyIdPrefix}${full}`));
     await expect(page.locator('[aria-busy="false"]')).toBeVisible();
 
     const keywordColor = await fullKeyword.evaluate((element) => (
       getComputedStyle(element).color
     ));
 
-    await page.goto(`${storyPrefix}${minimal}`);
+    await page.goto(getStoryUrl(`${storyIdPrefix}${minimal}`));
     await expect(editor).toHaveCSS('font-size', '13px');
     await expect(editor).toHaveCSS('font-weight', '400');
     // Chromium reports zero letter spacing as either 0px or normal.
@@ -67,9 +68,7 @@ test('formats JSON with the local language worker', async ({ page }) => {
 
   page.on('worker', (worker) => workerUrls.push(worker.url()));
 
-  await page.goto(
-    '/iframe.html?id=codegena-unified-ui-monaco-code-editor--editable-json',
-  );
+  await page.goto(getStoryUrl('codegena-unified-ui-monaco-code-editor--editable-json'));
 
   await expect(page.locator('[aria-busy="false"]')).toBeVisible();
   await page.getByRole('textbox', { name: 'Example JSON editor' }).focus();
@@ -91,10 +90,7 @@ test('formats JSON with the local language worker', async ({ page }) => {
 });
 
 test('mounts an accessible editable JSON editor', async ({ page }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-unified-ui-monaco-code-editor--editable-json'
-    + '&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-unified-ui-monaco-code-editor--editable-json'));
 
   const editor = page.getByRole('textbox', { name: 'Example JSON editor' });
 
@@ -104,10 +100,9 @@ test('mounts an accessible editable JSON editor', async ({ page }) => {
 });
 
 test('keeps JSON pending until its syntax colors are ready', async ({ page }) => {
-  const storyPrefix = '/iframe.html?id=codegena-unified-ui-monaco-'
-    + 'code-editor--';
+  const storyIdPrefix = 'codegena-unified-ui-monaco-code-editor--';
 
-  await page.goto(`${storyPrefix}pending-syntax`);
+  await page.goto(getStoryUrl(`${storyIdPrefix}pending-syntax`));
 
   const pendingFrame = page.locator('[aria-busy="true"]');
 
@@ -117,7 +112,7 @@ test('keeps JSON pending until its syntax colors are ready', async ({ page }) =>
   await expect(pendingFrame.locator('.view-line > span').first())
     .toHaveCSS('animation-name', 'codegena-code-text-shimmer');
 
-  await page.goto(`${storyPrefix}editable-json`);
+  await page.goto(getStoryUrl(`${storyIdPrefix}editable-json`));
 
   const readyFrame = page.locator('[aria-busy="false"]');
 

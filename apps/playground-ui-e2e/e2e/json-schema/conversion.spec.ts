@@ -1,3 +1,4 @@
+import { getStoryUrl } from '@codegena/util-e2e';
 import { expect, test } from '@playwright/test';
 
 test('shows generated files after converting a source schema', async ({
@@ -9,10 +10,7 @@ test('shows generated files after converting a source schema', async ({
     return url.pathname === '/fixtures/account.schema.jsonc' && response.ok();
   });
 
-  await page.goto(
-    '/iframe.html?id=codegena-playground--account-converted-in-worker'
-    + '&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--account-converted-in-worker'));
   await sourceLoaded;
 
   await expect(page.getByRole('button', {

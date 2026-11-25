@@ -1,11 +1,17 @@
+import {
+  desktopChromiumProject,
+  e2eCommonOptions,
+  mobileChromiumProject,
+} from '@codegena/util-e2e';
 import { workspaceRoot } from '@nx/devkit';
 import { nxE2EPreset } from '@nx/playwright/preset';
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig } from '@playwright/test';
 
 const baseURL = 'http://127.0.0.1:8101';
 
 export default defineConfig({
   ...nxE2EPreset(import.meta.dirname, { testDir: './src' }),
+  expect: { toHaveScreenshot: e2eCommonOptions.screenshots },
   retries: 0,
   workers: 1,
   use: { baseURL, headless: true, trace: 'retain-on-failure' },
@@ -15,15 +21,5 @@ export default defineConfig({
     reuseExistingServer: false,
     cwd: workspaceRoot,
   },
-  projects: [
-    { name: 'desktop', use: { ...devices['Desktop Chrome'] } },
-    {
-      name: 'iPhone 15',
-      use: {
-        ...devices['iPhone 15'],
-        browserName: 'chromium',
-        userAgent: devices['Pixel 7'].userAgent,
-      },
-    },
-  ],
+  projects: [desktopChromiumProject, mobileChromiumProject],
 });

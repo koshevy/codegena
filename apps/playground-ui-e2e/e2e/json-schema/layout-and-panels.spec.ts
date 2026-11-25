@@ -1,3 +1,4 @@
+import { getStoryUrl } from '@codegena/util-e2e';
 import { expect, test, type Locator } from '@playwright/test';
 
 import { getGraphViewportZoom } from '../get-graph-viewport-zoom';
@@ -18,7 +19,7 @@ async function getBounds(locator: Locator): Promise<{
 }
 
 test('hides and restores the source and details columns', async ({ page }) => {
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   await expect(page.getByText('Source schema', { exact: true })).toBeVisible();
 
@@ -36,9 +37,7 @@ test('hides and restores the source and details columns', async ({ page }) => {
 });
 
 test('restores theme mode and list sorting', async ({ page }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-playground--comprehensive-with-persistence&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--comprehensive-with-persistence'));
 
   await page.getByRole('button', { name: 'Appearance preferences' }).click();
   await expect(page.getByRole('menuitemradio', { name: 'System' })).toHaveAttribute(
@@ -74,7 +73,7 @@ test('restores theme mode and list sorting', async ({ page }) => {
 test('keeps graph content in place while the source column moves', async ({
   page,
 }) => {
-  await page.goto('/iframe.html?id=codegena-playground--comprehensive&viewMode=story');
+  await page.goto(getStoryUrl('codegena-playground--comprehensive'));
 
   const graph = page.locator('.react-flow');
   const viewport = graph.locator('.react-flow__viewport');

@@ -1,3 +1,4 @@
+import { getStoryUrl } from '@codegena/util-e2e';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
 import { expectActiveEdgesAboveInactive } from '../expect-active-edges-above-inactive';
@@ -93,8 +94,7 @@ test('keeps root directory children in name order when items expands', async ({
   page,
 }) => {
   await page.goto(
-    '/iframe.html?id=codegena-playground--one-password-connect-with-persistence'
-    + '&viewMode=story',
+    getStoryUrl('codegena-playground--one-password-connect-with-persistence'),
   );
 
   await page.getByRole('button', { name: 'Graph', exact: true }).click();
@@ -117,8 +117,7 @@ test('keeps the root index file beside first-level directories', async ({
   page,
 }) => {
   await page.goto(
-    '/iframe.html?id=codegena-playground--one-password-connect-with-persistence'
-    + '&viewMode=story',
+    getStoryUrl('codegena-playground--one-password-connect-with-persistence'),
   );
 
   await page.getByRole('button', { name: 'Graph', exact: true }).click();
@@ -165,8 +164,7 @@ test('keeps a directory visible after collapsing its expanded tree', async ({
   page,
 }) => {
   await page.goto(
-    '/iframe.html?id=codegena-playground--one-password-connect-with-persistence'
-    + '&viewMode=story',
+    getStoryUrl('codegena-playground--one-password-connect-with-persistence'),
   );
 
   await page.getByRole('button', { name: 'Graph', exact: true }).click();
@@ -209,8 +207,7 @@ test('keeps a directory visible after collapsing its expanded tree', async ({
 
 test('loads the 1Password OpenAPI story and restores its view', async ({ page }) => {
   await page.goto(
-    '/iframe.html?id=codegena-playground--one-password-connect-with-persistence'
-    + '&viewMode=story',
+    getStoryUrl('codegena-playground--one-password-connect-with-persistence'),
   );
 
   const sourceEditor = page.locator('.monaco-editor').first();
@@ -232,8 +229,7 @@ test('reveals a source declaration inside collapsed graph directories', async ({
   page,
 }) => {
   await page.goto(
-    '/iframe.html?id=codegena-playground--one-password-connect-with-persistence'
-    + '&viewMode=story',
+    getStoryUrl('codegena-playground--one-password-connect-with-persistence'),
   );
 
   const graphView = page.locator('.react-flow');
@@ -299,8 +295,7 @@ test('keeps nested OAS directories collapsed after reopening their parent', asyn
   page,
 }) => {
   await page.goto(
-    '/iframe.html?id=codegena-playground--one-password-connect-with-persistence'
-    + '&viewMode=story',
+    getStoryUrl('codegena-playground--one-password-connect-with-persistence'),
   );
 
   await page.getByRole('button', { name: 'List', exact: true }).click();
@@ -344,7 +339,7 @@ test('shows generated directories in graph and list views', async ({
 }) => {
   const storyId = 'codegena-playground--directory-hierarchy';
 
-  await page.goto(`/iframe.html?id=${storyId}&viewMode=story`);
+  await page.goto(getStoryUrl(storyId));
 
   const graphView = page.locator('.react-flow');
   const health = getGraphNode(graphView, 'health');
@@ -410,9 +405,7 @@ test('shows generated directories in graph and list views', async ({
 test('describes direct directory contents in graph and list views', async ({
   page,
 }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-playground--directory-hierarchy&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--directory-hierarchy'));
 
   const graph = page.locator('.react-flow');
   const healthNode = getGraphNode(graph, 'health');
@@ -467,7 +460,7 @@ test('keeps directory names readable across the 20vw count threshold', async ({
   const storyId = 'codegena-playground-generated-files-list--constrained-directories';
 
   await page.setViewportSize({ height: 720, width: 1280 });
-  await page.goto(`/iframe.html?id=${storyId}&viewMode=story`);
+  await page.goto(getStoryUrl(storyId));
 
   const tree = page.getByRole('tree', { name: 'Generated files' });
 
@@ -511,9 +504,7 @@ test('keeps directory names readable across the 20vw count threshold', async ({
 test('shows total file and folder chips for the active list sort', async ({
   page,
 }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-playground--directory-hierarchy&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--directory-hierarchy'));
 
   await page.getByRole('button', { name: 'List', exact: true }).click();
 
@@ -558,8 +549,7 @@ test('updates the edge legend as 1Password directories expand and collapse', asy
   page,
 }) => {
   await page.goto(
-    '/iframe.html?id=codegena-playground--one-password-connect-with-persistence'
-    + '&viewMode=story',
+    getStoryUrl('codegena-playground--one-password-connect-with-persistence'),
   );
 
   await page.getByRole('button', { name: 'Graph', exact: true }).click();
@@ -605,9 +595,7 @@ test('updates the edge legend as 1Password directories expand and collapse', asy
 test('explains hidden nested directories and switches to selected details', async ({
   page,
 }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-playground--directory-hierarchy&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--directory-hierarchy'));
 
   await page.getByRole('button', { name: 'List', exact: true }).click();
   await page.getByRole('button', { name: 'Show details' }).click();
@@ -652,7 +640,7 @@ test('explains hidden nested directories and switches to selected details', asyn
 test('lists files by source location without directory rows', async ({ page }) => {
   const storyId = 'codegena-playground--directory-hierarchy';
 
-  await page.goto(`/iframe.html?id=${storyId}&viewMode=story`);
+  await page.goto(getStoryUrl(storyId));
   await page.getByRole('button', { name: 'List', exact: true }).click();
 
   const tree = page.getByRole('tree', { name: 'Generated files' });
@@ -759,9 +747,7 @@ test('lists files by source location without directory rows', async ({ page }) =
 });
 
 test('selects graph directories separately from expanding them', async ({ page }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-playground--directory-hierarchy&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--directory-hierarchy'));
 
   const graphView = page.locator('.react-flow');
   const root = getGraphNode(graphView, '.');
@@ -804,9 +790,7 @@ test('selects graph directories separately from expanding them', async ({ page }
 test('keeps the graph viewport still when selecting and deselecting nodes', async ({
   page,
 }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-playground--directory-hierarchy&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--directory-hierarchy'));
 
   const graphView = page.locator('.react-flow');
   const viewport = graphView.locator('.react-flow__viewport');
@@ -851,9 +835,7 @@ test('keeps the graph viewport still when selecting and deselecting nodes', asyn
 test('selects graph directories and their direct children', async ({
   page,
 }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-playground--directory-hierarchy&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--directory-hierarchy'));
 
   const graphView = page.locator('.react-flow');
   const root = getGraphNode(graphView, '.');
@@ -892,9 +874,7 @@ test('selects graph directories and their direct children', async ({
 test('selects and expands tree directories like files', async ({
   page,
 }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-playground--directory-hierarchy&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--directory-hierarchy'));
 
   await page.getByRole('button', { name: 'List', exact: true }).click();
 
@@ -963,9 +943,7 @@ test('selects and expands tree directories like files', async ({
 test('reveals a directory chosen from details inside a collapsed tree', async ({
   page,
 }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-playground--directory-hierarchy&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--directory-hierarchy'));
 
   const graphView = page.locator('.react-flow');
 
@@ -990,9 +968,7 @@ test('reveals a directory chosen from details inside a collapsed tree', async ({
 });
 
 test('uses the file selection color for directory rows', async ({ page }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-playground--directory-hierarchy&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--directory-hierarchy'));
 
   await page.getByRole('button', { name: 'List', exact: true }).click();
 
@@ -1021,9 +997,7 @@ test('uses the file selection color for directory rows', async ({ page }) => {
 test('selects an implicitly selected tree directory with Space', async ({
   page,
 }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-playground--directory-hierarchy&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--directory-hierarchy'));
 
   await page.getByRole('button', { name: 'List', exact: true }).click();
 
@@ -1052,8 +1026,7 @@ test('activates placement paths between Shift-selected root and nested file', as
   page,
 }) => {
   await page.goto(
-    '/iframe.html?id=codegena-playground--one-password-connect-with-persistence'
-    + '&viewMode=story',
+    getStoryUrl('codegena-playground--one-password-connect-with-persistence'),
   );
 
   await page.getByRole('button', { name: 'Graph', exact: true }).click();
@@ -1109,9 +1082,7 @@ test('activates placement paths between Shift-selected root and nested file', as
 test('keeps the graph root open while real directories toggle on double-click', async ({
   page,
 }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-playground--directory-hierarchy&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--directory-hierarchy'));
 
   const graphView = page.locator('.react-flow');
   const root = getGraphNode(graphView, '.');
@@ -1135,8 +1106,7 @@ test('keeps the graph root open while real directories toggle on double-click', 
 
 test('names graph directories in themed path tooltips', async ({ page }) => {
   await page.goto(
-    '/iframe.html?id=codegena-playground--one-password-connect-with-persistence'
-    + '&viewMode=story',
+    getStoryUrl('codegena-playground--one-password-connect-with-persistence'),
   );
 
   await page.getByRole('button', { name: 'Graph', exact: true }).click();
@@ -1161,8 +1131,7 @@ test('reveals a graph node in either details scope or its specification', async 
   page,
 }) => {
   await page.goto(
-    '/iframe.html?id=codegena-playground--one-password-connect-with-persistence'
-    + '&viewMode=story',
+    getStoryUrl('codegena-playground--one-password-connect-with-persistence'),
   );
 
   await page.getByRole('button', { name: 'Graph', exact: true }).click();
@@ -1278,8 +1247,7 @@ test('collapses graph and list directories from shared menus', async ({
   page,
 }) => {
   await page.goto(
-    '/iframe.html?id=codegena-playground--one-password-connect-with-persistence'
-    + '&viewMode=story',
+    getStoryUrl('codegena-playground--one-password-connect-with-persistence'),
   );
 
   await page.getByRole('button', { name: 'Graph', exact: true }).click();
@@ -1442,8 +1410,7 @@ test('collapses graph and list directories from shared menus', async ({
 
 test('opens both side panels from a graph declaration glyph', async ({ page }) => {
   await page.goto(
-    '/iframe.html?id=codegena-playground--one-password-connect-with-persistence'
-    + '&viewMode=story',
+    getStoryUrl('codegena-playground--one-password-connect-with-persistence'),
   );
 
   await page.getByRole('button', { name: 'Hide source schema' }).click();
@@ -1466,8 +1433,7 @@ test('graph glyph actions keep selected declarations and reveal unselected ones'
   page,
 }) => {
   await page.goto(
-    '/iframe.html?id=codegena-playground--one-password-connect-with-persistence'
-    + '&viewMode=story',
+    getStoryUrl('codegena-playground--one-password-connect-with-persistence'),
   );
 
   const graph = page.locator('.react-flow');
@@ -1514,8 +1480,7 @@ test('list glyph actions keep selected declarations and reveal unselected ones',
   page,
 }) => {
   await page.goto(
-    '/iframe.html?id=codegena-playground--one-password-connect-with-persistence'
-    + '&viewMode=story',
+    getStoryUrl('codegena-playground--one-password-connect-with-persistence'),
   );
   await page.getByRole('button', { name: 'List', exact: true }).click();
 
@@ -1569,8 +1534,7 @@ test('list glyph actions keep selected declarations and reveal unselected ones',
 
 test('fits graph after hidden bulk expansion and repeated collapse', async ({ page }) => {
   await page.goto(
-    '/iframe.html?id=codegena-playground--one-password-connect-with-persistence'
-    + '&viewMode=story',
+    getStoryUrl('codegena-playground--one-password-connect-with-persistence'),
   );
 
   const graph = page.locator('.react-flow');
@@ -1623,9 +1587,7 @@ test('fits graph after hidden bulk expansion and repeated collapse', async ({ pa
 });
 
 test('hides graph handles without a visible edge', async ({ page }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-playground--directory-hierarchy&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--directory-hierarchy'));
 
   const graphView = page.locator('.react-flow');
   const root = getGraphNode(graphView, '.');
@@ -1665,9 +1627,7 @@ test('hides graph handles without a visible edge', async ({ page }) => {
 });
 
 test('keeps equal insets around graph file declarations', async ({ page }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-playground--directory-hierarchy&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-playground--directory-hierarchy'));
 
   const graphView = page.locator('.react-flow');
   const health = getGraphNode(graphView, 'health');
@@ -1722,7 +1682,7 @@ test('keeps equal insets around graph file declarations', async ({ page }) => {
 test('indents each generated-files list level by one rem', async ({ page }) => {
   const storyId = 'codegena-playground-generated-files-list--with-directories';
 
-  await page.goto(`/iframe.html?id=${storyId}&viewMode=story`);
+  await page.goto(getStoryUrl(storyId));
 
   const tree = page.getByRole('tree', { name: 'Generated files' });
   const fileId = 'health/check-liveness/index.ts';
@@ -1757,8 +1717,7 @@ test('indents each generated-files list level by one rem', async ({ page }) => {
 
 async function openMetricsGraph(page: Page): Promise<Locator> {
   await page.goto(
-    '/iframe.html?id=codegena-playground--one-password-connect-with-persistence'
-    + '&viewMode=story',
+    getStoryUrl('codegena-playground--one-password-connect-with-persistence'),
   );
 
   const hideSource = page.getByRole('button', { name: 'Hide source schema' });

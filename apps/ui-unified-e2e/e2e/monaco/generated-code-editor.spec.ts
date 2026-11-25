@@ -1,12 +1,12 @@
+import { getStoryUrl } from '@codegena/util-e2e';
 import { expect, test } from '@playwright/test';
 
 test('shimmers pending generated code without changing its typography', async ({
   page,
 }) => {
-  const storyPrefix = '/iframe.html?id=codegena-unified-ui-monaco-'
-    + 'generated-code-editor--';
+  const storyIdPrefix = 'codegena-unified-ui-monaco-generated-code-editor--';
 
-  await page.goto(`${storyPrefix}pending-syntax`);
+  await page.goto(getStoryUrl(`${storyIdPrefix}pending-syntax`));
 
   const pendingLine = page.locator('.monaco-editor .view-line').first();
   const pendingText = pendingLine.locator(':scope > span');
@@ -35,7 +35,7 @@ test('shimmers pending generated code without changing its typography', async ({
   expect(pendingBackgroundImage).toContain('rgb(88, 138, 213)');
   expect(pendingBackgroundImage).toContain('rgb(124, 159, 27)');
 
-  await page.goto(`${storyPrefix}ready`);
+  await page.goto(getStoryUrl(`${storyIdPrefix}ready`));
 
   const readyLine = page.locator('.monaco-editor .view-line').first();
   const readyText = readyLine.locator(':scope > span');
@@ -64,8 +64,7 @@ test('shimmers pending generated code without changing its typography', async ({
 
 test('uses dark theme colors for the pending shimmer', async ({ page }) => {
   await page.goto(
-    '/iframe.html?id=codegena-unified-ui-monaco-'
-    + 'generated-code-editor--dark-pending-syntax',
+    getStoryUrl('codegena-unified-ui-monaco-generated-code-editor--dark-pending-syntax'),
   );
 
   const pendingLine = page.locator('.monaco-editor .view-line > span').first();
@@ -89,8 +88,7 @@ test('finishes pending syntax for default-colored TypeScript', async ({
   page,
 }) => {
   await page.goto(
-    '/iframe.html?id=codegena-unified-ui-monaco-'
-    + 'generated-code-editor--plain-identifier',
+    getStoryUrl('codegena-unified-ui-monaco-generated-code-editor--plain-identifier'),
   );
 
   const editor = page.getByRole('code');
@@ -103,8 +101,7 @@ test('finishes pending syntax for default-colored TypeScript', async ({
 
 test('blends pending text into syntax colors over 300 ms', async ({ page }) => {
   await page.goto(
-    '/iframe.html?id=codegena-unified-ui-monaco-'
-    + 'generated-code-editor--syntax-reveal',
+    getStoryUrl('codegena-unified-ui-monaco-generated-code-editor--syntax-reveal'),
   );
 
   const line = page.locator('.monaco-editor .view-line').first();
@@ -149,8 +146,7 @@ test('shows steady pending text when reduced motion is requested', async ({
 }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto(
-    '/iframe.html?id=codegena-unified-ui-monaco-'
-    + 'generated-code-editor--pending-syntax',
+    getStoryUrl('codegena-unified-ui-monaco-generated-code-editor--pending-syntax'),
   );
 
   const pendingLine = page.locator('.monaco-editor .view-line > span').first();

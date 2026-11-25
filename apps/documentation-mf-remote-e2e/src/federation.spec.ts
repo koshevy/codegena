@@ -1,4 +1,5 @@
-import { expect, test } from './fixtures';
+import { testWithBrowserDiagnostics as test } from '@codegena/util-e2e';
+import { expect } from '@playwright/test';
 
 test('mounts the exposed App and uses browser URLs for article navigation', async ({
   page,

@@ -1,9 +1,8 @@
+import { getStoryUrl } from '@codegena/util-e2e';
 import { expect, test } from '@playwright/test';
 
 test('shows headed menu actions and disabled choices', async ({ page }) => {
-  await page.goto(
-    '/iframe.html?id=codegena-unified-ui-menus-context-menu--with-header&viewMode=story',
-  );
+  await page.goto(getStoryUrl('codegena-unified-ui-menus-context-menu--with-header'));
 
   await page.getByRole('button', { name: 'Open menu' }).click();
 

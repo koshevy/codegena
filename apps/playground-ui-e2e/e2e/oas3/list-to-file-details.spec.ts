@@ -1,14 +1,15 @@
+import { collectBrowserDiagnostics, getStoryUrl } from '@codegena/util-e2e';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
 import {
   expectGeneratedLine,
   expectSourceLine,
   getFileCard,
-  watchBrowserMessages,
 } from './file-details-navigation';
 
-const storyUrl = '/iframe.html?id=codegena-playground--'
-  + 'one-password-connect-with-persistence&viewMode=story';
+const storyUrl = getStoryUrl(
+  'codegena-playground--one-password-connect-with-persistence',
+);
 
 test.use({ viewport: { height: 1117, width: 1728 } });
 
@@ -80,7 +81,7 @@ test('expands list directories independently of their selection', async ({
 test('list files and declarations navigate both code panels', async ({
   page,
 }) => {
-  const browserMessages = watchBrowserMessages(page);
+  const browserMessages = collectBrowserDiagnostics(page);
   const tree = await openList(page);
 
   await showSourceAndAllDetails(page);
@@ -162,7 +163,7 @@ test('list files and declarations navigate both code panels', async ({
 test('selecting a nested list directory reveals its direct files', async ({
   page,
 }) => {
-  const browserMessages = watchBrowserMessages(page);
+  const browserMessages = collectBrowserDiagnostics(page);
   const tree = await openList(page);
 
   await showSourceAndAllDetails(page);
