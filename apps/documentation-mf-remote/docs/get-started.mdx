@@ -3,11 +3,9 @@ title: Get started
 slug: /
 ---
 
-import Alert from '@mui/material/Alert';
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import { DocsAlert, DocsInlineCode, DocsTabs } from '@codegena/ui-unified/docs';
 
-Codegena generates TypeScript from OpenAPI and JSON Schema. Start with a specification, run the CLI, and inspect the generated files.
+Codegena generates TypeScript from OpenAPI and JSON Schema. Start with a specification, run the `convert` command, and inspect the generated files.
 
 ## Install
 
@@ -17,7 +15,7 @@ npm install @codegena/oapi3ts@4
 
 ## Generate TypeScript
 
-```bash
+```sh
 npx oas3ts convert --schemaFilePath="./openapi.json" -o="./generated" --mode="separateFiles"
 ```
 
@@ -32,18 +30,18 @@ JSX to pass its props and content. These examples render directly in the article
 
 ### A themed callout
 
-<Alert severity="info">
+<DocsAlert severity="info">
   Keep the specification as the <strong>source of truth</strong>. Regenerate
   TypeScript after changing it.
-</Alert>
+</DocsAlert>
 
-```jsx
-import Alert from '@mui/material/Alert';
+```tsx
+import { DocsAlert } from '@codegena/ui-unified/docs';
 
-<Alert severity="info">
+<DocsAlert severity="info">
   Keep the specification as the <strong>source of truth</strong>. Regenerate
   TypeScript after changing it.
-</Alert>
+</DocsAlert>
 ```
 
 ### Interactive tabs
@@ -51,39 +49,38 @@ import Alert from '@mui/material/Alert';
 Components can also manage interactions. Select a tab to switch between the
 installation and generation commands.
 
-<Tabs>
-  <TabItem
-    default
-    label="Install"
-    value="install"
-  >
-    Install the CLI with `npm install @codegena/oapi3ts@4`.
-  </TabItem>
-  <TabItem
-    label="Generate"
-    value="generate"
-  >
-    Run `npx oas3ts convert --schemaFilePath="./openapi.json" -o="./generated"`.
-  </TabItem>
-</Tabs>
+<DocsTabs
+  ariaLabel="CLI commands"
+  items={[
+    {
+      label: 'Install',
+      value: 'install',
+      content: <DocsInlineCode>npm install @codegena/oapi3ts@4</DocsInlineCode>,
+    },
+    {
+      label: 'Generate',
+      value: 'generate',
+      content: <DocsInlineCode>{'npx oas3ts convert --schemaFilePath="./openapi.json" -o="./generated"'}</DocsInlineCode>,
+    },
+  ]}
+/>
 
-```jsx
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+```tsx
+import { DocsInlineCode, DocsTabs } from '@codegena/ui-unified/docs';
 
-<Tabs>
-  <TabItem
-    default
-    label="Install"
-    value="install"
-  >
-    Install the CLI with `npm install @codegena/oapi3ts@4`.
-  </TabItem>
-  <TabItem
-    label="Generate"
-    value="generate"
-  >
-    Run `npx oas3ts convert --schemaFilePath="./openapi.json" -o="./generated"`.
-  </TabItem>
-</Tabs>
+<DocsTabs
+  ariaLabel="CLI commands"
+  items={[
+    {
+      label: 'Install',
+      value: 'install',
+      content: <DocsInlineCode>npm install @codegena/oapi3ts@4</DocsInlineCode>,
+    },
+    {
+      label: 'Generate',
+      value: 'generate',
+      content: <DocsInlineCode>{'npx oas3ts convert --schemaFilePath="./openapi.json" -o="./generated"'}</DocsInlineCode>,
+    },
+  ]}
+/>
 ```

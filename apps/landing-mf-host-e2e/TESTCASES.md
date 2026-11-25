@@ -93,6 +93,8 @@
 - **Implemented · P0 — DOCS-01:** Open `/docs/core-features` directly, follow
   an article link, use Back/Forward, and reload the article at its browser URL.
 - **Implemented · P0 — DOCS-02:** Open Docs through the desktop header.
+  The docs header is transparent at the top and shares the landing header’s
+  surface, height, and shadow after scrolling.
 - **Implemented · P0 — DOCS-03:** Confirm landing does not fetch remote entries
   until navigation requests one. Open Docs through the footer and landing menu
   on desktop and iPhone 15.
@@ -121,7 +123,8 @@
 - **Implemented · P1 — DOCS-14:** Open Personal data privacy from the landing
   overlay's policy links.
 - **Implemented · P1 — DOCS-15:** Check desktop menu and sidebar order, sidebar
-  spacing, body-sized contents links, and the pagination title's weight and color.
+  spacing, body-sized contents links, and pagination link styles. Follow the
+  destination titles forward and back.
 - **Implemented · P0 — DOCS-16:** Open the original documentation menu in dark
   and light themes at narrow desktop and mobile widths. Its drawer and backdrop
   fill the viewport. Dismiss it through the backdrop or close button, navigate

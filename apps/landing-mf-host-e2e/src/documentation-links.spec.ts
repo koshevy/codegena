@@ -72,14 +72,21 @@ test('DOCS-15 — docs navigation orders pages and preserves reading styles @des
     await expect(sidebar.getByRole('link').first()).toHaveText('Roadmap and status');
 
     const nextPage = page.getByRole('navigation', { name: 'Docs pages' })
-      .getByRole('link', { name: /Next Core features/ });
-    // Docusaurus separates the page title from its Previous/Next caption.
+      .getByRole('link', { name: 'Core features', exact: true });
     const title = nextPage.locator('.pagination-nav__label');
     const bodyColor = await page.getByRole('article').getByRole('paragraph')
       .first().evaluate((element) => getComputedStyle(element).color);
 
     await expect(title).toHaveCSS('font-weight', '400');
     await expect(title).toHaveCSS('color', bodyColor);
+    await nextPage.click();
+    await expect(page).toHaveURL(/\/docs\/core-features$/);
+
+    const previousPage = page.getByRole('navigation', { name: 'Docs pages' })
+      .getByRole('link', { name: 'Get started', exact: true });
+
+    await previousPage.click();
+    await expect(page).toHaveURL(/\/docs\/?$/);
     expectNoDiagnostics();
   });
 

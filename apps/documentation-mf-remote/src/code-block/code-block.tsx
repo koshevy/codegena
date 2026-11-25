@@ -14,19 +14,25 @@ export function DocumentationCodeBlock({
   className,
   language,
 }: DocumentationCodeBlockProps): ReactElement {
-  const editorLanguage = language ?? className?.replace('language-', '') ?? 'plaintext';
+  const fencedLanguage = className?.match(/(?:^|\s)language-(\S+)/)?.[1];
+  const editorLanguage = language ?? fencedLanguage ?? 'plaintext';
+  const shellLanguages = ['bash', 'cmd', 'console', 'sh', 'shell', 'zsh'];
+  const isShell = shellLanguages.includes(editorLanguage.toLowerCase());
   const source = children.trimEnd();
-  const lineCount = source.split('\n').length;
-  const height = Math.min(480, lineCount * 22 + 32);
   const label = `${editorLanguage} code example`;
 
   return (
     <DocumentationCodeBlockStyles elevation={0}>
       <CodeEditor
         ariaLabel={label}
-        height={height}
+        compactLineNumbers
+        height="auto"
+        highlightActiveLine={false}
         language={editorLanguage}
+        maxHeight={480}
+        padding={16}
         readOnly
+        showLineNumbers={!isShell}
         value={source}
       />
     </DocumentationCodeBlockStyles>

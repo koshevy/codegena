@@ -179,7 +179,15 @@ test('02.03 — OnePassword files reveal shared types in domain folders', async 
     name: 'Expand ./_common',
   })).toBeVisible();
 
-  await tree.getByRole('button', { name: 'Expand ./items' }).click();
+  const expandItems = tree.getByRole('button', { name: 'Expand ./items', exact: true });
+
+  // Revealing the row can advance the page into the automatic expansion step.
+  await expandItems.scrollIntoViewIfNeeded();
+  await returnToFolderingStart(page);
+  await expect(tree.getByRole('button', { name: 'Expand ./_common', exact: true }))
+    .toBeVisible();
+  await expect(expandItems).toBeInViewport({ ratio: 1 });
+  await expandItems.click();
   await expect(tree.getByRole('button', {
     name: 'Expand ./items/_common',
   })).toBeVisible();

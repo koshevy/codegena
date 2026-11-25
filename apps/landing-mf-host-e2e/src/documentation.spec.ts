@@ -194,10 +194,13 @@ test('DOCS-02 — the desktop header opens documentation @desktop-menu', async (
   })).toBeVisible();
   await expect(page).toHaveURL(/\/docs\/?$/);
 
-  const documentationFrame = await page.getByRole('navigation', {
-    name: 'Main',
-    exact: true,
-  }).evaluate((element) => {
+  const docsHeader = page.getByRole('navigation', { name: 'Main', exact: true });
+
+  await expect(docsHeader).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  await page.mouse.wheel(0, 40);
+  await expect(docsHeader).toHaveCSS('background-color', landingFrame.background);
+
+  const documentationFrame = await docsHeader.evaluate((element) => {
     const style = getComputedStyle(element);
 
     return {

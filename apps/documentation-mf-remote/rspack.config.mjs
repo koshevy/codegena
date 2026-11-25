@@ -41,6 +41,8 @@ export function createDocumentationRspackConfig(siteDir, isServer, currentBundle
     alias: {
       '@theme/Root': resolve(siteDir, 'src/dev-mode/index.ts'),
       '@theme/CodeBlock': resolve(siteDir, 'src/theme/code-block.tsx'),
+      '@theme/CodeInline': resolve(siteDir, 'src/theme/code-inline.tsx'),
+      '@theme/PaginatorNavLink': resolve(siteDir, 'src/theme/paginator-nav-link.tsx'),
       '@theme/Footer': resolve(siteDir, 'src/theme/footer.tsx'),
       '@theme/Navbar/Logo': resolve(siteDir, 'src/theme/navbar-logo.tsx'),
       '@theme/Navbar/ColorModeToggle': resolve(siteDir, 'src/theme/navbar-actions.tsx'),
