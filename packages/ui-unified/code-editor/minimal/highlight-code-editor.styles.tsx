@@ -44,7 +44,7 @@ export const HighlightCodeEditorStyles = styled('div')(({ theme }) => {
 
     &::after {
       border-left: 1px solid ${palette.divider};
-      content: '';
+      content: var(--code-editor-overlay-scrollbar-divider, '');
       inset-block: 0;
       pointer-events: none;
       position: absolute;
