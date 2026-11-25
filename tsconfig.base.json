@@ -69,6 +69,7 @@
       "@codegena/ui-unified/buttons": ["packages/ui-unified/buttons/index.ts"],
       "@codegena/ui-unified/icons": ["packages/ui-unified/icons/index.ts"],
       "@codegena/ui-unified/branding": ["packages/ui-unified/branding/index.ts"],
+      "@codegena/ui-unified/docs": ["packages/ui-unified/docs/index.ts"],
       "@codegena/ui-unified/feedback": ["packages/ui-unified/feedback/index.ts"],
       "@codegena/ui-unified/files": ["packages/ui-unified/files/index.ts"],
       "@codegena/ui-unified/counts": ["packages/ui-unified/counts/index.ts"],

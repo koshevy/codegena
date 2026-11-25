@@ -19,7 +19,7 @@
         "executor": "nx:run-commands",
         "options": {
           "cwd": "packages/ui-unified",
-          "command": "eslint . && stylelint \"{panels,menus,buttons,icons,branding,feedback,files,counts,scrolling,code-editor,we-use-cookies,under-construction,src}/**/*.{js,jsx,ts,tsx}\""
+          "command": "eslint . && stylelint \"{panels,menus,buttons,icons,branding,feedback,files,counts,scrolling,code-editor,we-use-cookies,under-construction,docs,src}/**/*.{js,jsx,ts,tsx}\""
         }
       },
       "build": {
@@ -75,6 +75,10 @@
     "./branding": {
       "types": "./branding.d.ts",
       "default": "./branding.esm.js"
+    },
+    "./docs": {
+      "types": "./docs.d.ts",
+      "default": "./docs.esm.js"
     },
     "./feedback": {
       "types": "./feedback.d.ts",

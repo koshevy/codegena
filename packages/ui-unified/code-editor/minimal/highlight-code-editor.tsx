@@ -15,8 +15,12 @@ export function HighlightCodeEditor({
   defaultValue,
   glyphMargin = false,
   height = '100%',
+  highlightActiveLine = true,
   language,
+  maxHeight,
+  padding,
   readOnly = false,
+  showLineNumbers = true,
   value,
 }: HighlightCodeEditorProps): ReactElement {
   const {
@@ -47,16 +51,14 @@ export function HighlightCodeEditor({
     />
   );
 
+  const highlightedLine = highlightActiveLine ? activeLine : null;
   const renderedLines = useMemo(() => lines.map((line) => (
     <HighlightedCodeLine
-      isActive={line.number === activeLine}
+      isActive={line.number === highlightedLine}
       key={line.number}
       line={line}
     />
-  )), [
-    activeLine,
-    lines,
-  ]);
+  )), [highlightedLine, lines]);
 
   const minimumDigits = compactLineNumbers ? 2 : 5;
   const lineNumberDigits = Math.max(minimumDigits, String(lines.length).length);
@@ -67,10 +69,13 @@ export function HighlightCodeEditor({
     <HighlightCodeEditorStyles
       data-editable={!readOnly}
       data-glyph-margin={glyphMargin}
+      data-line-numbers={showLineNumbers}
       sx={{
         height,
+        maxHeight,
         '--editor-indent-size': indentSize,
         '--editor-line-number-digits': lineNumberDigits,
+        '--editor-padding': padding === undefined ? undefined : `${padding}px`,
       }}
     >
       <pre

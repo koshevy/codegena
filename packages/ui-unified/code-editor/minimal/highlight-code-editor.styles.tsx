@@ -71,8 +71,10 @@ export const HighlightCodeEditorStyles = styled('div')(({ theme }) => {
       height: 100%;
       letter-spacing: inherit;
       margin: 0;
+      max-height: inherit;
       overflow: auto;
-      padding: ${codeEditorMetrics.paddingBlock}px 0;
+      padding-block: var(--editor-padding, ${codeEditorMetrics.paddingBlock}px);
+      padding-inline: var(--editor-padding, 0px);
       white-space: pre;
       width: 100%;
     }
@@ -128,6 +130,11 @@ export const HighlightCodeEditorStyles = styled('div')(({ theme }) => {
       position: absolute;
     }
 
+    &[data-line-numbers='false'] {
+      --editor-line-number-width: 0px;
+      --editor-decoration-width: 0px;
+    }
+
     [data-line]::before {
       background: var(--editor-paper);
       box-sizing: content-box;
@@ -140,6 +147,10 @@ export const HighlightCodeEditorStyles = styled('div')(({ theme }) => {
       text-align: right;
       user-select: none;
       width: var(--editor-line-number-width);
+    }
+
+    &[data-line-numbers='false'] [data-line]::before {
+      content: '';
     }
 
     [data-active='true'] {
@@ -167,11 +178,15 @@ export const HighlightCodeEditorStyles = styled('div')(({ theme }) => {
 
     [data-token='comment'] { color: ${colors.comment}; }
     [data-token='invalid'] { color: ${colors.invalid}; }
+    [data-token='command'],
     [data-token='keyword'] { color: ${colors.keyword}; }
     [data-token='number'] { color: ${colors.number}; }
     [data-token='regexp'] { color: ${colors.regexp}; }
     [data-token='string'] { color: ${colors.string}; }
+    [data-token='tag'],
     [data-token='type'] { color: ${colors.type}; }
+    [data-token='attr'],
+    [data-token='variable'] { color: ${colors.number}; }
 
     &[data-editable='true'] .${highlightCodeEditorClasses.viewport} {
       overflow: hidden;
@@ -183,7 +198,7 @@ export const HighlightCodeEditorStyles = styled('div')(({ theme }) => {
       color: transparent;
       inset: 0;
       outline: 0;
-      padding-inline-start: var(--editor-gutter-width);
+      padding-inline-start: calc(var(--editor-gutter-width) + var(--editor-padding, 0px));
       position: absolute;
       resize: none;
     }

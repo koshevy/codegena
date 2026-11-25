@@ -33,6 +33,8 @@
     "icons/**/*.tsx",
     "branding/**/*.ts",
     "branding/**/*.tsx",
+    "docs/**/*.ts",
+    "docs/**/*.tsx",
     "feedback/**/*.ts",
     "feedback/**/*.tsx",
     "files/**/*.ts",

@@ -17,6 +17,7 @@ these secondary entrypoints:
 | `@codegena/ui-unified/buttons` | Filled and outlined gradient buttons in compact and large sizes |
 | `@codegena/ui-unified/icons` | Declaration, language, folder, warning, and GitHub icons |
 | `@codegena/ui-unified/branding` | Codegena logo, animated wordmark, contact details, site footer, GitHub link, and shared page-header styles |
+| `@codegena/ui-unified/docs` | Themed article callouts, tabs, and inline code |
 | `@codegena/ui-unified/feedback` | Severity cards and labels, plus show/hide controls |
 | `@codegena/ui-unified/files` | File and directory detail headers |
 | `@codegena/ui-unified/counts` | Compact nested-item counts |

@@ -4,7 +4,11 @@ export interface HighlightCodeEditorProps {
   defaultValue?: string;
   glyphMargin?: boolean;
   height?: number | string;
+  highlightActiveLine?: boolean;
   language: string;
+  maxHeight?: number;
+  padding?: number;
   readOnly?: boolean;
+  showLineNumbers?: boolean;
   value?: string;
 }

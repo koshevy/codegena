@@ -3,6 +3,7 @@ export * from '../menus';
 export * from '../buttons';
 export * from '../icons';
 export * from '../branding';
+export * from '../docs';
 export * from '../feedback';
 export * from '../files';
 export * from '../counts';

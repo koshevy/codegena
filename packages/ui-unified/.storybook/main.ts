@@ -15,6 +15,7 @@ const config: StorybookConfig = {
     '../buttons/**/*.stories.@(ts|tsx)',
     '../icons/**/*.stories.@(ts|tsx)',
     '../branding/**/*.stories.@(ts|tsx)',
+    '../docs/**/*.stories.@(ts|tsx)',
     '../feedback/**/*.stories.@(ts|tsx)',
     '../files/**/*.stories.@(ts|tsx)',
     '../counts/**/*.stories.@(ts|tsx)',
