@@ -12,6 +12,7 @@ const config: StorybookConfig = {
   stories: [
     '../panels/**/*.stories.@(ts|tsx)',
     '../menus/**/*.stories.@(ts|tsx)',
+    '../buttons/**/*.stories.@(ts|tsx)',
     '../icons/**/*.stories.@(ts|tsx)',
     '../branding/**/*.stories.@(ts|tsx)',
     '../feedback/**/*.stories.@(ts|tsx)',
@@ -19,6 +20,7 @@ const config: StorybookConfig = {
     '../counts/**/*.stories.@(ts|tsx)',
     '../scrolling/**/*.stories.@(ts|tsx)',
     '../code-editor/**/*.stories.@(ts|tsx)',
+    '../we-use-cookies/**/*.stories.@(ts|tsx)',
   ],
   addons: ['@storybook/addon-docs'],
   framework: {

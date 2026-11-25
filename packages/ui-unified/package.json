@@ -19,7 +19,7 @@
         "executor": "nx:run-commands",
         "options": {
           "cwd": "packages/ui-unified",
-          "command": "eslint . && stylelint \"{panels,menus,icons,branding,feedback,files,counts,scrolling,code-editor,src}/**/*.{js,jsx,ts,tsx}\""
+          "command": "eslint . && stylelint \"{panels,menus,buttons,icons,branding,feedback,files,counts,scrolling,code-editor,we-use-cookies,src}/**/*.{js,jsx,ts,tsx}\""
         }
       },
       "build": {
@@ -64,6 +64,10 @@
       "types": "./menus.d.ts",
       "default": "./menus.esm.js"
     },
+    "./buttons": {
+      "types": "./buttons.d.ts",
+      "default": "./buttons.esm.js"
+    },
     "./icons": {
       "types": "./icons.d.ts",
       "default": "./icons.esm.js"
@@ -95,6 +99,10 @@
     "./code-editor-minimal": {
       "types": "./code-editor-minimal.d.ts",
       "default": "./code-editor-minimal.esm.js"
+    },
+    "./we-use-cookies": {
+      "types": "./we-use-cookies.d.ts",
+      "default": "./we-use-cookies.esm.js"
     },
     "./monaco-workers": {
       "types": "./monaco-workers.d.ts",

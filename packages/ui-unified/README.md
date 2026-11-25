@@ -14,6 +14,7 @@ these secondary entrypoints:
 | --- | --- |
 | `@codegena/ui-unified/panels` | Headers, toolbars, toggles, bodies, floating buttons, and header icon buttons |
 | `@codegena/ui-unified/menus` | Context menus, theme-mode choices, and a keyboard-accessible theme menu button |
+| `@codegena/ui-unified/buttons` | Filled and outlined gradient buttons in compact and large sizes |
 | `@codegena/ui-unified/icons` | Declaration, language, folder, warning, and GitHub icons |
 | `@codegena/ui-unified/branding` | Codegena logo, animated wordmark, contact details, site footer, GitHub link, and shared page-header styles |
 | `@codegena/ui-unified/feedback` | Severity cards and labels, plus show/hide controls |
@@ -27,6 +28,7 @@ these secondary entrypoints:
 | `@codegena/ui-unified/monaco-vite` | Build-only Vite config that imports local worker factories |
 | `@codegena/ui-unified/monaco-environment` | JSON and editor worker factories used by the Vite binding |
 | `@codegena/ui-unified/monaco-workers` | Runtime bootstrap for Vite's local Monaco instance |
+| `@codegena/ui-unified/we-use-cookies` | Cookie notice and `useSavedUserAcception` hook for reading the saved choice |
 
 The root import also exports the controls. Prefer a secondary entrypoint so an
 application can load only the part it uses. Vite 8 applications and Storybook
