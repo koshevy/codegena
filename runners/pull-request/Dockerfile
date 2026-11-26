@@ -7,7 +7,7 @@ RUN npm install --global "npm@${NPM_VERSION}" --no-audit --no-fund
 FROM ubuntu:26.04 AS pull-request-act
 ARG CODEQL_VERSION
 ARG TARGETARCH
-ENV PATH="/opt/codeql:/root/.local/bin:${PATH}"
+ENV PATH="/opt/codeql:${PATH}"
 COPY --from=node-toolchain /usr/local/lib /usr/local/lib
 COPY --from=node-toolchain /usr/local/include /usr/local/include
 COPY --from=node-toolchain /usr/local/bin /usr/local/bin
@@ -39,13 +39,20 @@ RUN case "$TARGETARCH" in \
   esac \
   && curl -fsSL "https://github.com/github/codeql-action/releases/download/codeql-bundle-v${CODEQL_VERSION}/codeql-bundle-${platform}.tar.zst" \
     | tar --zstd -xf - -C /opt
+ENV PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin
 RUN pipx install sarif-tools \
   && pipx install semgrep
+
+RUN --mount=type=bind,source=package-lock.json,target=/tmp/package-lock.json \
+  playwright_version="$(node -p 'require("/tmp/package-lock.json").packages["node_modules/playwright"].version')" \
+  && DEBIAN_FRONTEND=noninteractive npm exec --ignore-scripts --yes \
+    --package="playwright@$playwright_version" -- playwright install-deps chromium \
+  && npm cache clean --force \
+  && rm -rf /var/lib/apt/lists/*
 
 FROM pull-request-act AS pull-request-runner
 ARG RUNNER_VERSION=2.338.2
 ARG TARGETARCH
-ENV RUNNER_ALLOW_RUNASROOT=1
 WORKDIR /opt/actions-runner
 RUN case "$TARGETARCH" in \
     amd64) architecture=x64; checksum=baebf204307bac6193480852732f0aba2ae97b6c5597c244f4d5558390147c40 ;; \
@@ -58,5 +65,8 @@ RUN case "$TARGETARCH" in \
   && tar -xzf "$archive" \
   && rm "$archive" \
   && DEBIAN_FRONTEND=noninteractive ./bin/installdependencies.sh \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
+  && useradd --uid 1001 --user-group --create-home runner \
+  && chown -R runner:runner /opt/actions-runner
+USER runner
 CMD ["./run.sh"]

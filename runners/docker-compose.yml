@@ -15,15 +15,19 @@ services:
     profiles: [act]
     image: codegena-pull-request-act:local
     build:
-      context: ./pull-request
+      context: ..
+      dockerfile: runners/pull-request/Dockerfile
       target: pull-request-act
   pull-request-runner:
     profiles: [github]
     image: codegena-pull-request-runner:local
     build:
-      context: ./pull-request
+      context: ..
+      dockerfile: runners/pull-request/Dockerfile
       target: pull-request-runner
     init: true
+    group_add:
+      - "${DOCKER_SOCKET_GID:-0}"
     environment:
       RUNNER_NAME: ${RUNNER_NAME:-codegena-pull-request}
       RUNNER_REPOSITORY_URL: https://github.com/koshevy/codegena

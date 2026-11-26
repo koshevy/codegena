@@ -26,11 +26,20 @@ The registry UI is at [localhost:4873](http://127.0.0.1:4873/).
 
 ## 🏃 Start the GitHub runner
 
+If the Docker socket belongs to a group other than GID 0, set
+`DOCKER_SOCKET_GID` to that group ID before starting or recreating the runner.
+
 From the repository root, using the Docker context where the runner was registered:
 
 ```bash
 docker compose -f runners/docker-compose.yml up -d pull-request-runner
 ```
+
+On macOS, keep `caffeinate -i` running in a terminal while the runner accepts
+jobs. Idle sleep interrupts the runner connection and artifact uploads.
+
+After the locked Playwright version changes, rebuild both images and recreate
+the GitHub runner so the Chromium system dependencies match.
 
 The Compose volume keeps the registration across restarts. Check the runner in
 [GitHub Settings → Actions → Runners](https://github.com/koshevy/codegena/settings/actions/runners).
@@ -39,6 +48,20 @@ To stop it:
 
 ```bash
 docker compose -f runners/docker-compose.yml stop pull-request-runner
+```
+
+### Upgrade an existing runner from the root-based image
+
+Run this once to keep the existing registration and make its volume writable
+by the new runner user:
+
+```bash
+compose=(docker compose -f runners/docker-compose.yml)
+"${compose[@]}" build pull-request-runner &&
+  "${compose[@]}" stop pull-request-runner &&
+  "${compose[@]}" run --rm --no-deps --user root pull-request-runner \
+    chown -R runner:runner /opt/actions-runner &&
+  "${compose[@]}" up -d pull-request-runner
 ```
 
 ### Register on a new Docker host
