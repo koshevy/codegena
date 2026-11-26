@@ -144,7 +144,8 @@ jobs:
           persist-credentials: false
       - *install-dependencies
       - name: Install Chromium for E2E
-        run: npm exec -- playwright install --with-deps chromium
+        # Both runner images include Chromium's system dependencies.
+        run: npm exec -- playwright install chromium
       - name: Run affected targets
         id: affected-targets
         env:
