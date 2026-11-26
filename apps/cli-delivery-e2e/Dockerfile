@@ -6,6 +6,7 @@ FROM ${VERDACCIO_IMAGE} AS registry
 USER root
 RUN apk upgrade --no-cache
 RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx
+COPY apps/cli-delivery-e2e/verdaccio/config.yaml /verdaccio/conf/config.yaml
 USER 10001
 
 FROM ${NODE_IMAGE} AS workspace
