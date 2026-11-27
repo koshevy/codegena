@@ -7,7 +7,9 @@ import { merge } from 'webpack-merge';
 
 import federationConfig from './module-federation.config.js';
 
-const appBuildId = process.env['CODEGENA_BUILD_ID'] ?? randomUUID();
+const appBuildId = process.env['CODEGENA_BUILD_ID']
+  ?? process.env['NX_TASK_HASH']
+  ?? randomUUID();
 
 const require = createRequire(import.meta.url);
 const docusaurusRequire = createRequire(require.resolve('@docusaurus/core/package.json'));

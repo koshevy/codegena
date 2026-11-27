@@ -7,6 +7,11 @@ workspace root.
 npm exec -- nx run landing-mf-host-ssr:docker-compose-up
 ```
 
+The Docker build and up targets select the `local` configuration by default. Compare
+the [local defaults](.env.local) with the [UAT profile](.env.uat) when
+setting up another environment. Both profiles list the image versions and
+network settings used by Compose.
+
 Caddy serves [https://localhost](https://localhost) via port 443 on loopback.
 TCP serves HTTPS and UDP serves HTTP/3. Nx builds the SSR server, renderer,
 and browser assets before Compose packages them into the Bun image.
@@ -14,14 +19,64 @@ and browser assets before Compose packages them into the Bun image.
 - Run `npm exec -- nx run landing-mf-host-ssr:docker-compose-build` to build
   the image without starting containers.
 - Pass `--detached` to leave the stack running in the background. Stop it with
-  `docker compose -f apps/landing-mf-host-ssr/docker-compose.yml down`.
+  `docker compose --env-file apps/landing-mf-host-ssr/.env.local -f apps/landing-mf-host-ssr/docker-compose.yml down`.
+
+## Deploy to UAT
+
+The [alpha workflow](../../.github/workflows/release-alpha.yml) runs on pushes
+to `master` and temporarily accepts `codegena-4.x` for a UAT rehearsal.
+The rehearsal runs UAT deployment and leaves npm staging to `master`.
+The workflow updates the two private UAT image tags and pulls them over SSH
+as `codegena-deploy`. The VM runs rootless Docker Compose and keeps its Caddy
+certificates across deployments. The executor resolves the references in the
+[UAT profile](.env.uat) using values GitHub Actions supplies. Local development
+uses the [local profile](.env.local).
+
+Add these GitHub Actions secrets before running the workflow.
+
+| Secret | Value |
+| --- | --- |
+| `NPM_REGISTRY` | npm registry URL for staged alpha packages |
+| `NPM_TOKEN` | Token permitted to stage those packages |
+| `UAT_HOSTNAME` | Public UAT hostname |
+| `UAT_IP_ADDRESS` | Public UAT IP address |
+| `UAT_SSR_IMAGE` | Fully qualified SSR image reference with the UAT tag |
+| `UAT_CADDY_IMAGE` | Fully qualified Caddy image reference with the UAT tag |
+| `UAT_REGISTRY_USERNAME` | Username with push access to the registry for both images |
+| `UAT_REGISTRY_TOKEN` | Token with push access to that registry |
+| `UAT_REGISTRY_PULL_CONFIG` | Docker `config.json` with read-only access |
+| `DEPLOY_SNIPPET_LANDING` | Full Bash deployment script, including its line breaks |
+| `UAT_SSH_HOST` | SSH hostname or IP address for the deployment VM |
+| `UAT_SSH_PRIVATE_KEY` | Dedicated Ed25519 private key for `codegena-deploy` |
+| `UAT_SSH_KNOWN_HOSTS` | Verified SSH host key for `UAT_SSH_HOST`, in `known_hosts` format |
+
+To rotate the deployment key, generate a dedicated pair with
+`ssh-keygen -t ed25519 -N '' -f ~/.ssh/codegena-uat-deploy`. Install the
+`.pub` key in the deploy account's `authorized_keys` with the `restrict`
+option and replace the private-key secret. Verify a changed server key
+through the VM console before replacing the known-hosts secret.
+
+The workflow reads the deployment script from `DEPLOY_SNIPPET_LANDING`.
+Use the private copy at `~/.config/codegena/deploy-snippet-landing.sh` to
+set that GitHub secret.
+
+For an intentional UAT deployment through act, keep the matching secrets in
+`~/.config/codegena/.env.uat.secrets` and follow the
+[act guide](../../.agents/skills/gh-act/SKILL.md).
+
+Caddy obtains a short-lived Let's Encrypt certificate for the UAT IP address.
+The hostname uses its own public certificate once its DNS points to the VM.
+After deployment, check `/manifest.webmanifest` over HTTPS on both addresses.
+Allow TCP and UDP 443 through the VM's firewall for HTTPS and HTTP/3.
+Rootless Docker needs permission to publish port 443.
+[Docker's rootless port setup](https://docs.docker.com/engine/security/rootless/tips/#exposing-privileged-ports)
 
 ## Local certificate
 
 After the first start, export Caddy's local root certificate.
 
 ```sh
-docker compose -f apps/landing-mf-host-ssr/docker-compose.yml cp \
+docker compose --env-file apps/landing-mf-host-ssr/.env.local -f apps/landing-mf-host-ssr/docker-compose.yml cp \
   caddy:/data/caddy/pki/authorities/local/root.crt ./landing-caddy-root.crt
 curl --cacert ./landing-caddy-root.crt https://localhost/
 ```
@@ -66,5 +121,5 @@ To refresh the base images and Alpine packages, run this command after
 building the SSR artifacts.
 
 ```sh
-docker compose -f apps/landing-mf-host-ssr/docker-compose.yml build --pull --no-cache
+docker compose --env-file apps/landing-mf-host-ssr/.env.local -f apps/landing-mf-host-ssr/docker-compose.yml build --pull --no-cache
 ```

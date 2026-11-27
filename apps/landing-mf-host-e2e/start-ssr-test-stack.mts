@@ -10,6 +10,7 @@ export default async function startSsrTestStack(): Promise<() => Promise<void>> 
   const composeArgs = [
     'compose',
     '--project-name', `landing-e2e-${randomUUID()}`,
+    '--env-file', join(workspaceRoot, 'apps/landing-mf-host-ssr/.env.local'),
     '--file', join(workspaceRoot, 'apps/landing-mf-host-ssr/docker-compose.yml'),
     '--file', join(import.meta.dirname, 'docker-compose.ssr.yml'),
   ];

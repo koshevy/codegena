@@ -71,7 +71,7 @@ and copy and trust its public root certificate.
 
 ```sh
 caddy_root="$(mktemp -d)/codegena-caddy-root.crt"
-docker compose -f apps/landing-mf-host-ssr/docker-compose.yml cp \
+docker compose --env-file apps/landing-mf-host-ssr/.env.local -f apps/landing-mf-host-ssr/docker-compose.yml cp \
   caddy:/data/caddy/pki/authorities/local/root.crt "$caddy_root"
 sudo security add-trusted-cert -d -r trustRoot \
   -k /Library/Keychains/System.keychain "$caddy_root"
@@ -91,7 +91,8 @@ authority across container restarts.
 | [`@codegena/graph-search-core`](packages/graph-search-core/README.md) | Index graph data, rank search results, and track visits. |
 | [`@codegena/graph-search-ui`](packages/graph-search-ui/README.md) | Render the graph search interface and its results. |
 | [`@codegena/graph-ui`](packages/graph-ui/README.md) | Render the declaration graph and handle selection and navigation. |
-| [`@codegena/infr-nx`](packages/infr-nx/README.md) | Share ESLint policy, Rollup packaging, and Docker Compose targets. |
+| [`@codegena/infr-docker-compose`](packages/infr-docker-compose/README.md) | Build, run, and publish Compose stacks through Nx. |
+| [`@codegena/infr-nx`](packages/infr-nx/README.md) | Share ESLint policy, Rollup packaging, and TypeScript declarations. |
 | [`@codegena/notification-ui-core`](packages/notification-ui-core/README.md) | Define the React notification contract. |
 | [`@codegena/notification-ui-notistack`](packages/notification-ui-notistack/README.md) | Present notifications through Notistack. |
 | [`@codegena/oas3-core`](packages/oas3-core/README.md) | Parse JSONC and schemas into a source-aware model for visitors. |

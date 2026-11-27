@@ -132,12 +132,9 @@ describe('convert', () => {
         /Generated [1-9]\d* TypeScript file/,
       );
 
-      await runWindowsWorkspaceCommand('npx', [
-        '--yes',
-        '--loglevel=warn',
-        `--package=typescript@${typescript6Version}`,
-        '--',
-        'tsc', '--project', 'tsconfig.json', '--pretty', 'false',
+      await runWindowsWorkspaceCommand('node', [
+        String.raw`Z:\opt\typescript\bin\tsc`,
+        '--project', 'tsconfig.json', '--pretty', 'false',
       ]);
 
       await runWindowsWorkspaceCommand('node', [String.raw`build\valid.js`]);

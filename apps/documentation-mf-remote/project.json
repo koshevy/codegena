@@ -22,6 +22,11 @@
     "build": {
       "dependsOn": ["@codegena/source:apply-dependency-patches"],
       "executor": "nx:run-commands",
+      "inputs": [
+        "default",
+        "^default",
+        { "env": "CODEGENA_BUILD_ID" }
+      ],
       "options": {
         "command": "docusaurus build --out-dir ../../dist/apps/documentation-mf-remote",
         "cwd": "apps/documentation-mf-remote"

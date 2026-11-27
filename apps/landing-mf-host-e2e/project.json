@@ -8,21 +8,31 @@
   "// targets": "to see all targets run: nx show project landing-mf-host-e2e --web",
   "targets": {
     "docker-compose-build": {
-      "executor": "@codegena/infr-nx:docker-compose-build",
+      "executor": "@codegena/infr-docker-compose:build",
       "cache": false,
       "dependsOn": ["landing-mf-host:rspack:build"],
-      "options": { "services": ["playwright"] }
+      "options": {
+        "rootEnvFilePath": "apps/landing-mf-host-ssr/.env.local",
+        "services": ["playwright"]
+      }
     },
     "docker-compose-build-chrome": {
-      "executor": "@codegena/infr-nx:docker-compose-build",
+      "executor": "@codegena/infr-docker-compose:build",
       "cache": false,
-      "options": { "services": ["chrome"] }
+      "options": {
+        "rootEnvFilePath": "apps/landing-mf-host-ssr/.env.local",
+        "services": ["chrome"]
+      }
     },
     "docker-compose-up": {
-      "executor": "@codegena/infr-nx:docker-compose-up",
+      "executor": "@codegena/infr-docker-compose:up",
       "cache": false,
       "dependsOn": ["docker-compose-build"],
-      "options": { "services": ["playwright"], "exitCodeFrom": "playwright" }
+      "options": {
+        "rootEnvFilePath": "apps/landing-mf-host-ssr/.env.local",
+        "services": ["playwright"],
+        "exitCodeFrom": "playwright"
+      }
     },
     "e2e-ssr": {
       "executor": "nx:run-commands",
@@ -35,7 +45,7 @@
       }
     },
     "e2e-quality": {
-      "executor": "@codegena/infr-nx:docker-compose-up",
+      "executor": "@codegena/infr-docker-compose:up",
       "cache": false,
       "dependsOn": [
         "docker-compose-build",
@@ -44,6 +54,7 @@
       ],
       "parallelism": false,
       "options": {
+        "rootEnvFilePath": "apps/landing-mf-host-ssr/.env.local",
         "services": ["quality", "chrome", "caddy", "ssr"],
         "exitCodeFrom": "quality"
       }

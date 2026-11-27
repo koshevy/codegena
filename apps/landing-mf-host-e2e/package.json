@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "devDependencies": {
+    "@codegena/infr-docker-compose": "^0.0.1",
     "@codegena/infr-nx": "*",
     "@codegena/util-e2e": "*",
     "@nx/devkit": "23.3.2",

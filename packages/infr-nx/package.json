@@ -2,12 +2,10 @@
   "name": "@codegena/infr-nx",
   "version": "0.0.1",
   "type": "module",
-  "executors": "./docker-compose/executors.json",
   "main": "./dist/index.esm.js",
   "module": "./dist/index.esm.js",
   "types": "./dist/index.esm.d.ts",
   "files": [
-    "docker-compose",
     "dist",
     "!**/*.tsbuildinfo"
   ],

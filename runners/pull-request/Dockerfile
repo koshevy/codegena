@@ -25,6 +25,7 @@ RUN apt-get update \
     jq \
     lsb-release \
     openjdk-11-jdk-headless \
+    openssh-client \
     pipx \
     python3 \
     python3-pip \

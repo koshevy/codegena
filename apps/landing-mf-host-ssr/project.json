@@ -5,15 +5,41 @@
   "projectType": "application",
   "targets": {
     "docker-compose-build": {
-      "executor": "@codegena/infr-nx:docker-compose-build",
+      "executor": "@codegena/infr-docker-compose:build",
       "cache": false,
-      "dependsOn": ["build"]
+      "dependsOn": [
+        "build"
+      ],
+      "defaultConfiguration": "local",
+      "configurations": {
+        "local": { "environment": "local" },
+        "uat": { "environment": "uat" }
+      }
+    },
+    "docker-compose-push": {
+      "executor": "@codegena/infr-docker-compose:push",
+      "cache": false,
+      "dependsOn": [
+        "build"
+      ],
+      "defaultConfiguration": "uat",
+      "options": { "build": true },
+      "configurations": {
+        "uat": { "environment": "uat" }
+      }
     },
     "docker-compose-up": {
-      "executor": "@codegena/infr-nx:docker-compose-up",
+      "executor": "@codegena/infr-docker-compose:up",
       "cache": false,
       "continuous": true,
-      "dependsOn": ["docker-compose-build"]
+      "dependsOn": [
+        "docker-compose-build"
+      ],
+      "defaultConfiguration": "local",
+      "configurations": {
+        "local": { "environment": "local" },
+        "uat": { "environment": "uat" }
+      }
     },
     "build": {
       "executor": "@nx/esbuild:esbuild",

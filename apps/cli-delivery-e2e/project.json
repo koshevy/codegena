@@ -12,12 +12,12 @@
   ],
   "targets": {
     "docker-compose-build": {
-      "executor": "@codegena/infr-nx:docker-compose-build",
+      "executor": "@codegena/infr-docker-compose:build",
       "cache": false,
       "dependsOn": ["^build"]
     },
     "docker-compose-up": {
-      "executor": "@codegena/infr-nx:docker-compose-up",
+      "executor": "@codegena/infr-docker-compose:up",
       "cache": false,
       "dependsOn": ["docker-compose-build"],
       "options": { "detached": true }

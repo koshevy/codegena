@@ -174,7 +174,7 @@ network. The audit stack uses no host ports.
 
   ```sh
   mkdir -p dist/reports/landing-quality
-  docker compose -f apps/landing-mf-host-e2e/docker-compose.yml \
+  docker compose --env-file apps/landing-mf-host-ssr/.env.local -f apps/landing-mf-host-e2e/docker-compose.yml \
     --profile quality cp quality:/workspace/dist/reports/landing-quality/. \
     dist/reports/landing-quality/
   ```
@@ -197,7 +197,7 @@ Run `npm exec -- nx sync:check` to verify project-reference synchronization.
 
   ```sh
   mkdir -p dist/.playwright/apps/landing-mf-host-e2e
-  docker compose -f apps/landing-mf-host-e2e/docker-compose.yml \
+  docker compose --env-file apps/landing-mf-host-ssr/.env.local -f apps/landing-mf-host-e2e/docker-compose.yml \
     cp playwright:/workspace/dist/.playwright/apps/landing-mf-host-e2e/. \
     dist/.playwright/apps/landing-mf-host-e2e/
   ```

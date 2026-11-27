@@ -1,0 +1,24 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "target": "ES2021",
+    "importHelpers": false,
+    "outDir": "./dist",
+    "tsBuildInfoFile": "./dist/tsconfig.lib.tsbuildinfo",
+    "composite": true,
+    "declaration": true,
+    "rewriteRelativeImportExtensions": true,
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "nx": {
+    "sync": {
+      "ignoredDependencies": ["@codegena/infr-nx"]
+    }
+  }
+}

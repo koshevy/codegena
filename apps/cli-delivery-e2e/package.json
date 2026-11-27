@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "devDependencies": {
+    "@codegena/infr-docker-compose": "^0.0.1",
     "@codegena/infr-nx": "^0.0.1",
     "@nx/jest": "23.3.2",
     "@types/fs-extra": "^11.0.4",

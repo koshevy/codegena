@@ -776,7 +776,8 @@ the exception review process and the limits of a successful audit.
 
 The [Nx model](#concept-nx) explains project targets and the role of the
 shared tooling package. The [linting model](#concept-typescript) explains why
-the rule scopes differ. See also the [workspace tooling ADR](adr/007-keep-workspace-tooling-policy-in-infr-nx.md).
+the rule scopes differ. See the [workspace tooling ADR](adr/007-keep-workspace-tooling-policy-in-infr-nx.md)
+and the [Docker Compose ADR](adr/020-manage-docker-stacks-through-nx.md).
 
 **❌ Bad:** bypass the project's Nx target when checking its lint policy.
 

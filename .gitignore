@@ -5,6 +5,7 @@ dist
 tmp
 out-tsc
 .mf
+/test-results
 
 # dependencies
 node_modules
@@ -24,6 +25,9 @@ node_modules
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# local deployment secrets
+.env.*.secrets
 
 # misc
 /.sass-cache

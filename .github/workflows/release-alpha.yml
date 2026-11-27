@@ -1,7 +1,14 @@
 name: Alpha Release for Codegena Monorepo
 on:
   push:
-    branches: [master]
+    # Allow a UAT rehearsal before this workflow reaches master.
+    branches:
+      - master
+#      - codegena-4.x
+  workflow_dispatch:
+concurrency:
+  group: release-alpha-uat
+  cancel-in-progress: false
 permissions:
   contents: read
 defaults:
@@ -9,15 +16,32 @@ defaults:
     shell: bash
 jobs:
   nx-release:
-    runs-on: self-hosted
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/codegena-4.x'
+    runs-on: ubuntu-24.04
+    outputs:
+      changed: ${{ steps.prepare.outputs.changed }}
+      deploy-uat: ${{ steps.deployment.outputs.enabled }}
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - &checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
+      - &setup-node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        if: ${{ !env.ACT }}
+        with:
+          node-version: 24.22.3
+          package-manager-cache: false
+      - &install-npm
+        name: Install the workspace npm version
+        if: ${{ !env.ACT }}
+        run: npm install --global npm@12.2.3 --ignore-scripts --no-audit --no-fund
       - name: Install dependencies
+        if: github.ref == 'refs/heads/master'
         run: npm ci
       - name: Prepare alpha releases
+        if: github.ref == 'refs/heads/master'
         id: prepare
         env:
           GIT_AUTHOR_NAME: Codegena Release
@@ -28,29 +52,97 @@ jobs:
           base=$(git rev-parse HEAD)
           npm exec -- nx release --preid alpha --skip-publish
           if [[ "$(git rev-parse HEAD)" != "$base" ]]; then
+            mapfile -t tags < <(git tag --points-at HEAD --list '@codegena/*@*-alpha.*')
+            git bundle create "$RUNNER_TEMP/alpha-release.bundle" HEAD "${tags[@]}" "^$base"
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
+      - name: Upload release commit and tags
+        if: steps.prepare.outputs.changed == 'true'
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: alpha-release
+          path: ${{ runner.temp }}/alpha-release.bundle
+          if-no-files-found: error
+          retention-days: 14
+          overwrite: true
+      - name: Select UAT deployment
+        id: deployment
+        run: echo "enabled=${{ !env.ACT || env.UAT_DEPLOY == 'true' }}" >> "$GITHUB_OUTPUT"
+
+  build:
+    name: Build apps and libraries
+    needs: nx-release
+    runs-on: ubuntu-24.04
+    steps:
+      - *checkout
+      - *setup-node
+      - *install-npm
+      - &install-dependencies
+        name: Install dependencies
+        run: npm ci
+      - &download-release
+        name: Download release commit and tags
+        if: needs.nx-release.outputs.changed == 'true'
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+        with:
+          name: alpha-release
+          path: ${{ runner.temp }}
+      - &checkout-release
+        name: Check out release commit
+        if: needs.nx-release.outputs.changed == 'true'
+        run: |
+          git fetch "$RUNNER_TEMP/alpha-release.bundle" HEAD 'refs/tags/*:refs/tags/*'
+          git checkout --detach FETCH_HEAD
       - name: Build apps and libraries
         run: npm exec -- nx run-many --target=build --parallel=1
+      - name: Archive build output
+        run: |
+          tar --exclude=dist/out-tsc -cf "$RUNNER_TEMP/alpha-build-output.tar" \
+            dist packages/infr-docker-compose/dist
+      - name: Upload build output
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: alpha-build-output
+          path: ${{ runner.temp }}/alpha-build-output.tar
+          if-no-files-found: error
+          retention-days: 14
+          overwrite: true
+
+  publish:
+    name: Publish
+    needs: [nx-release, build]
+    runs-on: ubuntu-24.04
+    steps:
+      - *checkout
+      - *setup-node
+      - *install-npm
+      - *download-release
+      - *checkout-release
+      - &download-build
+        name: Download build output
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+        with:
+          name: alpha-build-output
+          path: ${{ runner.temp }}
+      - &extract-build
+        name: Restore build output
+        run: tar -xf "$RUNNER_TEMP/alpha-build-output.tar"
       - name: Release Artifacts
-        if: ${{ !env.ACT || env.ACTIONS_RESULTS_URL != '' }}
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: alpha-builds
-          path: |
-            dist/
-            !dist/out-tsc/**
+          path: dist/
           if-no-files-found: error
           retention-days: 14
           overwrite: true
       - name: Configure npm registry
-        if: steps.prepare.outputs.changed == 'true'
+        if: needs.nx-release.outputs.changed == 'true'
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           registry-url: ${{ secrets.NPM_REGISTRY }}
           package-manager-cache: false
       - name: Publish
-        if: steps.prepare.outputs.changed == 'true'
+        if: needs.nx-release.outputs.changed == 'true'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
@@ -64,3 +156,62 @@ jobs:
             fi
             npm stage publish "./$directory" --registry "$NPM_REGISTRY" --tag alpha --access public --ignore-scripts
           done
+
+  deploy-uat:
+    name: Deploy UAT
+    needs: [nx-release, publish]
+    if: needs.nx-release.outputs.deploy-uat == 'true'
+    runs-on: ubuntu-24.04
+    steps:
+      - *checkout
+      - *setup-node
+      - *install-npm
+      - *install-dependencies
+      - *download-release
+      - *checkout-release
+      - *download-build
+      - *extract-build
+      - name: Resolve UAT registry
+        id: registry
+        env: &uat-compose-environment
+          CADDY_IP_ADDRESS: ${{ secrets.UAT_IP_ADDRESS }}
+          LANDING_CADDY_IMAGE: ${{ secrets.UAT_CADDY_IMAGE }}
+          LANDING_SSR_IMAGE: ${{ secrets.UAT_SSR_IMAGE }}
+          UAT_HOSTNAME: ${{ secrets.UAT_HOSTNAME }}
+        run: |
+          : "${LANDING_SSR_IMAGE:?Set UAT_SSR_IMAGE}" "${LANDING_CADDY_IMAGE:?Set UAT_CADDY_IMAGE}"
+          : "${CADDY_IP_ADDRESS:?Set UAT_IP_ADDRESS}" "${UAT_HOSTNAME:?Set UAT_HOSTNAME}"
+          registry="${LANDING_SSR_IMAGE%%/*}"
+          if [[ "$LANDING_SSR_IMAGE" != "$registry/"* || "$LANDING_CADDY_IMAGE" != "$registry/"* ]]; then
+            echo "Use the same explicit registry in both UAT image references." >&2
+            exit 1
+          fi
+          if [[ "$registry" != localhost && "$registry" != *.* && "$registry" != *:* ]]; then
+            echo "Set UAT image references with a registry hostname." >&2
+            exit 1
+          fi
+          printf 'host=%s\n' "$registry" >> "$GITHUB_OUTPUT"
+      - name: Log in to the UAT registry
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        with:
+          registry: ${{ steps.registry.outputs.host }}
+          username: ${{ secrets.UAT_REGISTRY_USERNAME }}
+          password: ${{ secrets.UAT_REGISTRY_TOKEN }}
+      - name: Publish UAT images
+        env: *uat-compose-environment
+        run: |
+          umask 077
+          npm exec -- nx run landing-mf-host-ssr:docker-compose-push:uat --excludeTaskDependencies
+      - name: Deploy UAT
+        env:
+          DEPLOY_SNIPPET_LANDING: ${{ secrets.DEPLOY_SNIPPET_LANDING }}
+          UAT_SSH_HOST: ${{ secrets.UAT_SSH_HOST || env.UAT_SSH_HOST }}
+          UAT_SSH_PRIVATE_KEY: ${{ secrets.UAT_SSH_PRIVATE_KEY }}
+          UAT_SSH_KNOWN_HOSTS: ${{ secrets.UAT_SSH_KNOWN_HOSTS }}
+          UAT_REGISTRY_PULL_CONFIG: ${{ secrets.UAT_REGISTRY_PULL_CONFIG }}
+        run: |
+          : "${DEPLOY_SNIPPET_LANDING:?Set DEPLOY_SNIPPET_LANDING}"
+          # The snippet copies itself via $0. Give that copy a separate pipe.
+          env -u DEPLOY_SNIPPET_LANDING bash -c 'source /dev/stdin' /dev/fd/3 dist/docker-compose \
+            3< <(printf '%s' "$DEPLOY_SNIPPET_LANDING") \
+            < <(printf '%s' "$DEPLOY_SNIPPET_LANDING")

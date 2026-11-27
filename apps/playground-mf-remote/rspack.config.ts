@@ -18,7 +18,9 @@ export default async function createRemoteConfig(
   env: Record<string, unknown> = {},
 ): Promise<Configuration[]> {
   const { CopyRspackPlugin, DefinePlugin } = await import('@rspack/core');
-  const appBuildId = process.env['CODEGENA_BUILD_ID'] ?? randomUUID();
+  const appBuildId = process.env['CODEGENA_BUILD_ID']
+    ?? process.env['NX_TASK_HASH']
+    ?? randomUUID();
   const isProduction = !env['RSPACK_SERVE'];
   const mode = isProduction ? 'production' : 'development';
 

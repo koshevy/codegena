@@ -6,6 +6,7 @@
     "@hono/node-server": "2.1.11"
   },
   "devDependencies": {
+    "@codegena/infr-docker-compose": "^0.0.1",
     "@codegena/infr-nx": "*",
     "@nx/esbuild": "23.3.2",
     "@nx/js": "23.3.2",

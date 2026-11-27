@@ -1,11 +1,14 @@
 {
 	auto_https disable_redirects
-	https_port {$CADDY_HTTPS_PORT:443}
+	https_port {$CADDY_HTTPS_PORT}
 	skip_install_trust
+	default_sni {$CADDY_IP_ADDRESS}
+	cert_issuer acme {
+		disable_http_challenge
+	}
 }
 
-localhost, 127.0.0.1 {
-	tls internal
+(landing) {
 	encode zstd gzip
 
 	header {
@@ -38,5 +41,27 @@ localhost, 127.0.0.1 {
 		match header Content-Type text/html*
 	}
 
-	reverse_proxy ssr:8104
+	reverse_proxy ssr:{$LANDING_SSR_PORT}
+}
+
+(local_ip_tls) {
+	tls internal
+}
+
+(public_ip_tls) {
+	tls {
+		issuer acme {
+			profile shortlived
+			disable_http_challenge
+		}
+	}
+}
+
+{$CADDY_SITE_NAMES} {
+	import landing
+}
+
+{$CADDY_IP_ADDRESS} {
+	import {$CADDY_IP_TLS_SNIPPET}
+	import landing
 }

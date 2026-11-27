@@ -9,8 +9,7 @@ decision-makers: Codegena project maintainers
 ## Why
 
 Libraries import Codegena NX Plugin as `@codegena/infr-nx` in configuration files.
-It owns shared development and packaging policy, including executors used by
-projects that run a local Docker Compose stack.
+It owns shared development and packaging policy.
 
 ## Decision
 
@@ -45,10 +44,12 @@ projects that run a local Docker Compose stack.
   - The release configuration skips lockfile updates. The stable workspace
     ranges need to admit the alpha versions before npm can regenerate the
     lockfile for publishing.
-- **🐳 Docker Compose** runs from the owning project directory via the
-  [shared executors](../packages/infr-nx/README.md#local-docker-compose).
-  Projects define their Compose files and declare artifact build dependencies
-  in Nx. Compose targets disable Nx caching because they change Docker state.
+- **🐳 Docker Compose** runs from the owning project directory via
+  [`@codegena/infr-docker-compose`](../packages/infr-docker-compose/README.md).
+  Projects own their Compose files, environment profiles, and Nx build dependencies.
+  The TypeScript build executor uses the selected profile to prepare Compose files.
+  Push, up, and deployment consume those same files, so they use the image tags
+  selected at build time. Compose targets that change Docker state are uncached.
 - **🧾 Compiler types:** The root [TypeScript config](../tsconfig.base.json) includes the package's [raw stylesheet declarations](../packages/infr-nx/typings/cssraw.d.ts) for multiple projects.
 - **🧭 TypeScript synchronization:** The sync generator in
   [`nx.json`](../nx.json) uses `tsconfig.lib.json` for runtime dependency
@@ -63,7 +64,7 @@ projects that run a local Docker Compose stack.
     checks its E2E config instead of using the inferred declaration-build task.
 
 Projects select the executors in their target configurations. Nx discovers
-them through the package's [executor registry](../packages/infr-nx/docker-compose/executors.json).
+them through the package's [executor registry](../packages/infr-docker-compose/executors.json).
 
 Configuration imports are build-time imports, not runtime dependencies for generated libraries. The [module-boundary rule](../packages/infr-nx/eslint-config/large-rules/enforce-module-boundaries.config.mjs) permits them.
 Consumer library tsconfigs use `nx.sync.ignoredDependencies` for this tooling-only edge, so Nx does not turn it into a TypeScript project reference.
@@ -76,6 +77,9 @@ Consumer library tsconfigs use `nx.sync.ignoredDependencies` for this tooling-on
 - **🎨 CSS templates:** Styles written in MUI/Emotion template strings **SHOULD** use theme values for colors. Stylelint checks the embedded CSS; the shared ESLint rule warns when `styled` uses an object instead of a string template.
 - **🔌 Local build choice:** A consumer can add externals or assets. [Playground UI](../packages/playground-ui/rollup.config.cjs) does so; [OAS3 Visitor TypeScript](../packages/oas3-visitor-typescript/rollup.config.cjs) wraps its CLI build. OAS3 Core retains knowledge of its built entrypoints.
 - **⚙️ Bootstrap:** The package can use its own source-level helpers before its distribution bundle exists. Those helpers **MUST** remain loadable during configuration evaluation.
+
+Docker Compose lifecycle executors have their own package and contract.
+[Manage Docker stacks through Nx](020-manage-docker-stacks-through-nx.md)
 
 ## Trade-offs
 

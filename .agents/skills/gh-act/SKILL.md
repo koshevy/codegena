@@ -35,7 +35,7 @@ checkout into Docker so commits and tags stay there. The second cleans up job
 containers and volumes after failed runs.
 
 Read `.github/workflows/` in the checkout you are testing. Check the event,
-job ID, and `runs-on` label. This checkout's `.actrc` maps `self-hosted` to
+job ID, and `runs-on` label. This checkout's `.actrc` maps `self-hosted` and `ubuntu-24.04` to
 `codegena-pull-request-act:local`. Build it before the first run and after
 changes to the [shared Dockerfile](../../../runners/pull-request/Dockerfile).
 
@@ -78,7 +78,8 @@ JS
 
   act_status=0
   gh act "$@" --bind=false --rm --network "${registry_project}_default" \
-    --secret-file /dev/null --secret NPM_REGISTRY --secret NPM_TOKEN || act_status=$?
+    --secret-file "${CODEGENA_ACT_SECRETS_FILE:-/dev/null}" \
+    --secret NPM_REGISTRY --secret NPM_TOKEN || act_status=$?
 
   printf '\nVerdaccio staged packages\n'
   report_status=0
@@ -102,7 +103,25 @@ Pass the event and any job filters to the function:
 
 ```bash
 run_act pull_request
-run_act push -W .github/workflows/release-alpha.yml -j nx-release
+run_act push -W .github/workflows/release-alpha.yml \
+  --artifact-server-path "$(mktemp -d)" \
+  --artifact-server-addr "$(ipconfig getifaddr en0)"
+```
+
+The release workflow requires an artifact server to transfer files between jobs.
+Use a directory outside the build output and an address the runner containers can reach.
+
+For an intentional UAT deployment, keep the matching GitHub Actions secrets
+in `~/.config/codegena/.env.uat.secrets`, including the full script as
+`DEPLOY_SNIPPET_LANDING`. Use `--secret-file` so the script is passed as
+a multiline secret. Keep the directory at mode `0700` and the file at `0600`.
+Pass the file only to the alpha release workflow.
+
+```bash
+CODEGENA_ACT_SECRETS_FILE="$HOME/.config/codegena/.env.uat.secrets" \
+  run_act push -W .github/workflows/release-alpha.yml --env UAT_DEPLOY=true \
+    --artifact-server-path "$(mktemp -d)" \
+    --artifact-server-addr "$(ipconfig getifaddr en0)"
 ```
 
 When rehearsing the alpha release from another branch, pass a push event

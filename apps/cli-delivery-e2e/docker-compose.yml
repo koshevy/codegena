@@ -1,7 +1,7 @@
 x-build: &image-build
   context: ../..
   dockerfile: apps/cli-delivery-e2e/Dockerfile
-  args:
+  args: &image-build-args
     VERDACCIO_IMAGE: verdaccio/verdaccio:${VERDACCIO_VERSION:?}
     NODE_IMAGE: node:${NODE_VERSION:?}-alpine${ALPINE_VERSION:?}
     NPM_VERSION: ${NPM_VERSION:?}
@@ -24,6 +24,7 @@ services:
       timeout: 3s
       retries: 15
   workspace:
+    container_name: ${COMPOSE_PROJECT_NAME}-workspace
     image: codegena/cli-delivery-e2e
     init: true
     pull_policy: never
@@ -42,6 +43,7 @@ services:
       timeout: 3s
       retries: 60
   workspace-windows:
+    container_name: ${COMPOSE_PROJECT_NAME}-workspace-windows
     profiles: [windows]
     image: codegena/cli-delivery-e2e-windows
     platform: linux/amd64
@@ -52,6 +54,7 @@ services:
       <<: *image-build
       target: workspace-windows
       args:
+        <<: *image-build-args
         WIN_NODE_VERSION: ${NODE_VERSION:?}
         WINE_NODE_DIST_DIR: ${WINE_NODE_DIST_DIR:?}
     environment:

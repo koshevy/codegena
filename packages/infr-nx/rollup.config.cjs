@@ -7,9 +7,7 @@ const getUnifiedExternalPackages = require(
 const { join } = require('node:path');
 
 module.exports = createRollupConfig({
-  additionalExports: ['docker-compose/run-command-in-docker.cjs'],
   additionalAssetDirs: [
-    './docker-compose',
     './eslint-config',
     './eslint-config/exceptions-to-the-rules',
     './eslint-config/large-rules',

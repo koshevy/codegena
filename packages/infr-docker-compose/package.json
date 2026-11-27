@@ -1,0 +1,63 @@
+{
+  "name": "@codegena/infr-docker-compose",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "development": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "executors": "./executors.json",
+  "devDependencies": {
+    "@codegena/infr-nx": "*",
+    "@nx/js": "23.3.2",
+    "@types/node": "^24.0.0",
+    "typescript": "6.0.3"
+  },
+  "peerDependencies": {
+    "@nx/devkit": "23.x"
+  },
+  "nx": {
+    "tags": [
+      "nx:internal"
+    ],
+    "targets": {
+      "build": {
+        "executor": "@nx/js:tsc",
+        "outputs": [
+          "{options.outputPath}"
+        ],
+        "options": {
+          "outputPath": "packages/infr-docker-compose/dist",
+          "main": "packages/infr-docker-compose/src/index.ts",
+          "tsConfig": "packages/infr-docker-compose/tsconfig.lib.json",
+          "rootDir": "packages/infr-docker-compose/src",
+          "generatePackageJson": false,
+          "assets": [
+            {
+              "input": "packages/infr-docker-compose/src",
+              "glob": "**/*.json",
+              "output": "."
+            },
+            {
+              "input": "packages/infr-docker-compose/src",
+              "glob": "**/*.d.ts",
+              "output": "."
+            }
+          ]
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "env-interpolation": "1.1.4"
+  }
+}

@@ -1,2 +1,3 @@
 --platform=self-hosted=codegena-pull-request-act:local
+--platform=ubuntu-24.04=codegena-pull-request-act:local
 --pull=false

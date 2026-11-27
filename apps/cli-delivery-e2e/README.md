@@ -44,6 +44,7 @@ npm exec -- nx run cli-delivery-e2e:e2e --dontSkipTestsForWindows=true --testNam
 
 - **PUB-02** runs Windows Node.js under Wine, converts 1Password Connect with
   the published CLI, and compiles and runs the strict consumer on TypeScript 6.0.3.
+  Docker installs the pinned compiler at build time. Windows Node.js runs it directly.
 
 Jest removes its containers and registry storage unless you pass
 `--skipShootDownVirtualFs=true`. Run

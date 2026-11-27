@@ -21,7 +21,9 @@ export default async function createLandingConfig(
     CopyRspackPlugin,
     DefinePlugin,
   } = await import('@rspack/core');
-  const buildId = process.env['CODEGENA_BUILD_ID'] ?? randomUUID();
+  const buildId = process.env['CODEGENA_BUILD_ID']
+    ?? process.env['NX_TASK_HASH']
+    ?? randomUUID();
   const isProduction = !env['RSPACK_SERVE'];
   const mode = isProduction ? 'production' : 'development';
   const configRequire = createRequire(__filename);
