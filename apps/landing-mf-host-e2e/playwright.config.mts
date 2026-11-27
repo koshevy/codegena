@@ -52,6 +52,8 @@ export default defineConfig({
     launchOptions: { executablePath: chromiumExecutablePath },
     // Most journeys start with a returning visitor who already declined analytics.
     storageState: returningVisitorStorage(previewUrl.origin),
+    screenshot: 'on',
+    video: 'on',
     trace: 'on-first-retry',
   },
   webServer: {

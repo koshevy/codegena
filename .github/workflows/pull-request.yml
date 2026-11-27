@@ -4,11 +4,47 @@ on:
     types: [opened, synchronize, reopened]
 permissions:
   contents: read
+# Serialize runs that share the public report paths.
+concurrency:
+  group: >-
+    ${{ github.event.pull_request.head.repo.full_name == github.repository
+        && github.actor != 'dependabot[bot]' && 'pull-request-report-pages' || github.run_id }}
 defaults:
   run:
     shell: bash
 jobs:
+  clear-reports:
+    name: Clear test reports on GitHub Pages
+    if: >-
+      ${{ github.event.pull_request.head.repo.full_name == github.repository
+          && github.actor != 'dependabot[bot]' }}
+    runs-on: ubuntu-24.04
+    permissions: &pages-permissions
+      pages: write
+      id-token: write
+    environment: github-pages
+    env:
+      PAGES_ARTIFACT_NAME: github-pages-empty-${{ github.run_attempt }}
+    steps:
+      - name: Prepare an empty site
+        if: ${{ !env.ACT }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/empty-site"
+          touch "$RUNNER_TEMP/empty-site/index.html"
+      - name: Upload empty site
+        if: ${{ !env.ACT }}
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          name: ${{ env.PAGES_ARTIFACT_NAME }}
+          path: ${{ runner.temp }}/empty-site
+      - name: Deploy empty site
+        if: ${{ !env.ACT }}
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
+        with:
+          artifact_name: ${{ env.PAGES_ARTIFACT_NAME }}
   checkout:
+    needs: clear-reports
+    if: ${{ !cancelled() && (needs.clear-reports.result == 'success' || needs.clear-reports.result == 'skipped') }}
     runs-on: self-hosted
     outputs:
       base: ${{ steps.revisions.outputs.base }}
@@ -28,6 +64,8 @@ jobs:
           printf 'base=%s\nhead=%s\n' "$base" "$head" >> "$GITHUB_OUTPUT"
   security-issues:
     needs: checkout
+    # The Pages reset can be skipped for local and fork PR runs.
+    if: ${{ !cancelled() && needs.checkout.result == 'success' }}
     runs-on: self-hosted
     permissions:
       actions: read
@@ -133,20 +171,29 @@ jobs:
           mkdir -p "$AUDIT_REPORTS_DIRECTORY"
           npm audit --audit-level=none > "$AUDIT_REPORTS_DIRECTORY/npm-audit-report.txt"
       - name: Security Artifacts
-        if: ${{ !cancelled() && (!env.ACT || env.ACTIONS_RESULTS_URL != '') }}
-        # act rejects the v7 upload protocol (nektos/act#6114).
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
-        with:
+        if: ${{ !cancelled() && !env.ACT }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with: &security-artifacts
           name: security-artifacts
           path: ${{ env.AUDIT_REPORTS_DIRECTORY }}
           if-no-files-found: ignore
           retention-days: 14
           overwrite: true
+      - name: Security Artifacts (act)
+        if: ${{ !cancelled() && env.ACT && env.ACTIONS_RESULTS_URL != '' }}
+        # act rejects the v7 upload protocol (nektos/act#6114).
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with: *security-artifacts
   nx-targets:
-    needs: checkout
+    needs: [checkout, security-issues]
+    if: ${{ !cancelled() && needs.checkout.result == 'success' && needs.security-issues.result == 'success' }}
     runs-on: self-hosted
     outputs:
-      pages-artifact-name: ${{ steps.pages-artifact.outputs.artifact_id && env.PAGES_ARTIFACT_NAME || '' }}
+      pages-artifact-name: >-
+        ${{ (steps.pages-artifact.outputs.artifact_id || steps.pages-artifact-local.outputs.artifact_id)
+            && env.PAGES_ARTIFACT_NAME || '' }}
+      playwright-report: ${{ steps.pages-report.outputs.playwright }}
+      jest-report: ${{ steps.pages-report.outputs.jest }}
     env:
       COMPOSE_PROJECT_NAME: codegena-pr-${{ github.run_id }}-${{ github.run_attempt }}
       # Earlier attempts can leave artifacts in the same workflow run.
@@ -166,6 +213,7 @@ jobs:
         env:
           NX_BASE: ${{ needs.checkout.outputs.base }}
           NX_HEAD: ${{ needs.checkout.outputs.head }}
+          JEST_HTML_REPORTER_OUTPUT_PATH: ${{ github.workspace }}/dist/reports/jest/index.html
         run: npm exec -- nx affected --targets=build,lint,test,e2e --parallel=1
       - name: Collect landing E2E reports
         if: ${{ !cancelled() && steps.affected-targets.outcome != 'skipped' }}
@@ -181,60 +229,85 @@ jobs:
           mkdir -p "$GITHUB_WORKSPACE/$reports"
           docker compose cp "playwright:/workspace/$reports/." "$GITHUB_WORKSPACE/$reports/"
       - name: E2E Artifacts
-        if: ${{ !cancelled() && (!env.ACT || env.ACTIONS_RESULTS_URL != '') }}
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
-        with:
+        if: ${{ !cancelled() && !env.ACT }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with: &e2e-artifacts
           name: e2e-artifacts
           path: dist/.playwright
           include-hidden-files: true
           if-no-files-found: ignore
           retention-days: 14
           overwrite: true
-      - name: Prepare Playwright HTML for Pages
+      - name: E2E Artifacts (act)
+        if: ${{ !cancelled() && env.ACT && env.ACTIONS_RESULTS_URL != '' }}
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with: *e2e-artifacts
+      - name: Prepare test reports for Pages
         id: pages-report
         if: >-
           ${{ !cancelled() && steps.source.outcome == 'success'
-              && hashFiles('dist/.playwright/apps/landing-mf-host-e2e/playwright-report/index.html') != '' }}
+              && hashFiles('dist/.playwright/apps/landing-mf-host-e2e/playwright-report/index.html',
+                           'dist/reports/jest/index.html') != '' }}
         run: |
-          mkdir -p "$RUNNER_TEMP/report-site"
-          cp -R dist/.playwright/apps/landing-mf-host-e2e/playwright-report "$RUNNER_TEMP/report-site/last-report"
-      - name: Upload Playwright HTML for Pages
+          site="$(mktemp -d "$RUNNER_TEMP/report-site.XXXXXX")"
+          printf 'path=%s\n' "$site" >> "$GITHUB_OUTPUT"
+          playwright_report=dist/.playwright/apps/landing-mf-host-e2e/playwright-report
+          if [[ -s "$playwright_report/index.html" ]]; then
+            cp -R "$playwright_report" "$site/last-report"
+            printf 'playwright=true\n' >> "$GITHUB_OUTPUT"
+          fi
+          if [[ -s dist/reports/jest/index.html ]]; then
+            mkdir -p "$site/last-jest-report"
+            cp dist/reports/jest/index.html "$site/last-jest-report/"
+            printf 'jest=true\n' >> "$GITHUB_OUTPUT"
+          fi
+      - name: Upload test reports for Pages
         id: pages-artifact
-        if: ${{ !cancelled() && steps.pages-report.outcome == 'success' && (!env.ACT || env.ACTIONS_RESULTS_URL != '') }}
-        uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4.0.0
-        with:
+        if: ${{ !cancelled() && steps.pages-report.outcome == 'success' && !env.ACT }}
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with: &pages-artifact
           name: ${{ env.PAGES_ARTIFACT_NAME }}
-          path: ${{ runner.temp }}/report-site
+          path: ${{ steps.pages-report.outputs.path }}
+      - name: Upload test reports for Pages (act)
+        id: pages-artifact-local
+        if: ${{ !cancelled() && steps.pages-report.outcome == 'success' && env.ACT && env.ACTIONS_RESULTS_URL != '' }}
+        uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4.0.0
+        with: *pages-artifact
 
-  publish-playwright-report:
-    name: Publish Playwright report
+  publish-test-reports:
+    name: Publish test reports
     needs: nx-targets
     if: >-
       ${{ !cancelled() && needs.nx-targets.outputs.pages-artifact-name != ''
           && github.event.pull_request.head.repo.full_name == github.repository
           && github.actor != 'dependabot[bot]' }}
     runs-on: ubuntu-24.04
-    permissions:
-      pages: write
-      id-token: write
-    concurrency:
-      group: playwright-report-pages
+    permissions: *pages-permissions
     environment:
       name: github-pages
-      url: ${{ steps.report-link.outputs.url }}
+      url: ${{ steps.report-links.outputs.playwright-url || steps.report-links.outputs.jest-url }}
     steps:
-      - name: Deploy Playwright report to GitHub Pages
+      - name: Deploy test reports to GitHub Pages
         id: deployment
         if: ${{ !env.ACT }}
-        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
         with:
           artifact_name: ${{ needs.nx-targets.outputs.pages-artifact-name }}
-      - name: Announce Playwright report
-        id: report-link
+      - name: Link to the published test reports
+        id: report-links
         if: ${{ steps.deployment.outcome == 'success' }}
         env:
           PAGES_URL: ${{ steps.deployment.outputs.page_url }}
+          HAS_PLAYWRIGHT: ${{ needs.nx-targets.outputs.playwright-report }}
+          HAS_JEST: ${{ needs.nx-targets.outputs.jest-report }}
         run: |
-          report_url="${PAGES_URL%/}/last-report/"
-          printf 'url=%s\n' "$report_url" >> "$GITHUB_OUTPUT"
-          printf '::notice title=Playwright report::Playwright report is available at %s\n' "$report_url"
+          pages_url="${PAGES_URL%/}"
+          if [[ "$HAS_PLAYWRIGHT" == true ]]; then
+            printf 'playwright-url=%s/last-report/\n' "$pages_url" >> "$GITHUB_OUTPUT"
+            printf '[Playwright report](%s/last-report/)\n\n' "$pages_url" >> "$GITHUB_STEP_SUMMARY"
+            printf '::notice title=Playwright report::Open the published report from the run summary.\n'
+          fi
+          if [[ "$HAS_JEST" == true ]]; then
+            printf 'jest-url=%s/last-jest-report/\n' "$pages_url" >> "$GITHUB_OUTPUT"
+            printf '[Jest report](%s/last-jest-report/)\n' "$pages_url" >> "$GITHUB_STEP_SUMMARY"
+          fi
