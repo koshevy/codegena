@@ -1,0 +1,20 @@
+{
+  "$id": "oobject-nested-in-pattern-properties",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "patternProperties": {
+    "^FIXED_PROPS_": {
+      "type": "object",
+      "properties": {
+        "title": {},
+        "description": {}
+      }
+    },
+    "^PATTERNS_": {
+      "type": "object",
+      "patternProperties": {
+        "^SUB_PATTERN": {}
+      }
+    }
+  }
+}

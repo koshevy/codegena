@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/jest",
+    "composite": true,
+    "declaration": true,
+    "types": ["jest", "node"],
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": [
+    "jest.config.ts",
+    "jest.config.cts",
+    "package.json",
+    "src/**/*.test.ts",
+    "src/**/*.spec.ts",
+    "src/**/*.d.ts"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    }
+  ]
+}

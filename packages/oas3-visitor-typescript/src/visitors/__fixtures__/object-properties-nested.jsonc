@@ -1,0 +1,44 @@
+{
+  "$id": "customer-account",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Customer account used by the support portal",
+  "type": "object",
+  "properties": {
+    "marketingConsent": {
+      "type": "boolean",
+      "description": "Whether product updates may be sent"
+    },
+    "customerId": {
+      "type": "string",
+      "description": "Stable identifier assigned by the CRM"
+    },
+    "profile": {
+      "type": "object",
+      "properties": {
+        "contact": {
+          "type": "object",
+          "properties": {
+            "phone": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "email"
+          ]
+        },
+        "displayName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "displayName"
+      ]
+    }
+  },
+  "required": [
+    "customerId"
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "name": "landing-mf-host-ssr",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/landing-mf-host-ssr/src",
+  "projectType": "application",
+  "targets": {
+    "docker-compose-build": {
+      "executor": "@codegena/infr-docker-compose:build",
+      "cache": false,
+      "dependsOn": [
+        "build"
+      ],
+      "defaultConfiguration": "local",
+      "configurations": {
+        "local": { "environment": "local" },
+        "uat": { "environment": "uat" }
+      }
+    },
+    "docker-compose-push": {
+      "executor": "@codegena/infr-docker-compose:push",
+      "cache": false,
+      "dependsOn": [
+        "build"
+      ],
+      "defaultConfiguration": "uat",
+      "options": { "build": true },
+      "configurations": {
+        "uat": { "environment": "uat" }
+      }
+    },
+    "docker-compose-up": {
+      "executor": "@codegena/infr-docker-compose:up",
+      "cache": false,
+      "continuous": true,
+      "dependsOn": [
+        "docker-compose-build"
+      ],
+      "defaultConfiguration": "local",
+      "configurations": {
+        "local": { "environment": "local" },
+        "uat": { "environment": "uat" }
+      }
+    },
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/landing-mf-host-ssr",
+        "format": [
+          "cjs"
+        ],
+        "bundle": true,
+        "main": "apps/landing-mf-host-ssr/src/main.ts",
+        "tsConfig": "apps/landing-mf-host-ssr/tsconfig.app.json",
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        },
+        "thirdParty": true,
+        "target": "node24"
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "landing-mf-host:rspack:build",
+        "landing-mf-host:build-renderer"
+      ]
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": [
+        "build"
+      ],
+      "options": {
+        "buildTarget": "landing-mf-host-ssr:build",
+        "runBuildTargetDependencies": false,
+        "inspect": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "landing-mf-host-ssr:build:development"
+        },
+        "production": {
+          "buildTarget": "landing-mf-host-ssr:build:production",
+          "watch": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "eslint .",
+        "cwd": "apps/landing-mf-host-ssr"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p tsconfig.app.json",
+        "cwd": "apps/landing-mf-host-ssr"
+      }
+    }
+  },
+  "tags": [
+    "application:frontend"
+  ],
+  "implicitDependencies": [
+    "landing-mf-host"
+  ]
+}

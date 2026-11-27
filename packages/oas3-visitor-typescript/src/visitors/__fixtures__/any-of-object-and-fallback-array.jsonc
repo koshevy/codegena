@@ -1,0 +1,12 @@
+{
+  "anyOf": [
+    {
+      "type": "object",
+      "properties": {
+        "customerId": { "type": "string" }
+      },
+      "required": ["customerId"]
+    },
+    { "minItems": 2 }
+  ]
+}

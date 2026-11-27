@@ -1,0 +1,18 @@
+{
+  "$ref": "#/$defs/RecursiveChoice",
+  "$defs": {
+    "RecursiveChoice": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/RecursiveChoice"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "leaf": {}
+          }
+        }
+      ]
+    }
+  }
+}

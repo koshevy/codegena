@@ -1,0 +1,29 @@
+{
+  "type": "object",
+  "properties": {
+    "mixinProp": {}
+  },
+  "required": [
+    "mixinProp"
+  ],
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "propertyOfInlineType": {}
+      },
+      "required": [
+        "propertyOfInlineType"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "anotherPropertyOfInlineType": {}
+      },
+      "required": [
+        "anotherPropertyOfInlineType"
+      ]
+    }
+  ]
+}

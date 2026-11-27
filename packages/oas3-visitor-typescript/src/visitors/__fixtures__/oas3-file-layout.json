@@ -1,0 +1,142 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Commerce API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/catalog": {
+      "get": {
+        "operationId": "getCatalog",
+        "tags": ["Catalog"],
+        "responses": {
+          "200": {
+            "description": "Catalog found",
+            "content": {
+              "text/plain": {
+                "schema": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/items/{itemId}": {
+      "get": {
+        "operationId": "getItem",
+        "tags": ["Catalog"],
+        "responses": {
+          "200": {
+            "description": "Item found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Item" }
+              }
+            }
+          },
+          "404": {
+            "description": "Item missing",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/items": {
+      "get": {
+        "operationId": "listItems",
+        "tags": ["Catalog"],
+        "responses": {
+          "200": {
+            "description": "Items listed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Item" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reports": {
+      "get": {
+        "operationId": "getReport",
+        "tags": ["Analytics"],
+        "responses": {
+          "200": {
+            "description": "Report found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Report" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "getHealth",
+        "responses": {
+          "200": {
+            "description": "Healthy",
+            "content": {
+              "text/plain": {
+                "schema": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Item": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "address": { "$ref": "#/components/schemas/Address" },
+          "metadata": { "$ref": "#/components/schemas/SharedMetadata" }
+        },
+        "required": ["id"]
+      },
+      "Address": {
+        "type": "object",
+        "properties": {
+          "street": { "type": "string" }
+        }
+      },
+      "ItemError": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string" }
+        }
+      },
+      "Report": {
+        "type": "object",
+        "properties": {
+          "metadata": { "$ref": "#/components/schemas/SharedMetadata" }
+        }
+      },
+      "SharedMetadata": {
+        "type": "object",
+        "properties": {
+          "code": { "$ref": "#/components/schemas/SharedCode" }
+        }
+      },
+      "SharedCode": {
+        "type": "string"
+      },
+      "Unused": {
+        "type": "boolean"
+      }
+    }
+  }
+}

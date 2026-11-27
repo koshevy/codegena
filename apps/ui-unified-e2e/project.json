@@ -1,0 +1,16 @@
+{
+  "name": "ui-unified-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "tags": ["application:frontend"],
+  "implicitDependencies": ["@codegena/ui-unified"],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/ui-unified-e2e",
+        "command": "tsc --noEmit -p tsconfig.e2e.json"
+      }
+    }
+  }
+}

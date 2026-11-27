@@ -1,0 +1,53 @@
+services:
+  ssr:
+    image: ${LANDING_SSR_IMAGE:?}
+    platform: ${LANDING_PLATFORM}
+    restart: "${LANDING_RESTART_POLICY:?}"
+    build:
+      context: ../..
+      dockerfile: apps/landing-mf-host-ssr/Dockerfile
+      target: ssr
+      args:
+        BUN_VERSION: "${BUN_VERSION:?}"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      HOST: "${LANDING_SSR_HOST:?}"
+      PORT: "${LANDING_SSR_PORT:?}"
+  caddy:
+    image: ${LANDING_CADDY_IMAGE:?}
+    platform: ${LANDING_PLATFORM}
+    restart: "${LANDING_RESTART_POLICY:?}"
+    build:
+      context: ../..
+      dockerfile: apps/landing-mf-host-ssr/Dockerfile
+      target: caddy
+      args:
+        CADDY_VERSION: "${CADDY_VERSION:?}"
+    # Reap the TLS helpers spawned by the BusyBox HTTPS health check.
+    init: true
+    read_only: true
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      LANDING_SSR_PORT: "${LANDING_SSR_PORT:?}"
+      CADDY_HTTPS_PORT: "${CADDY_HTTPS_PORT:?}"
+      CADDY_SITE_NAMES: "${CADDY_SITE_NAMES:?}"
+      CADDY_IP_ADDRESS: "${CADDY_IP_ADDRESS:?}"
+      CADDY_IP_TLS_SNIPPET: "${CADDY_IP_TLS_SNIPPET:?}"
+    sysctls:
+      net.ipv4.ip_unprivileged_port_start: "${CADDY_HTTPS_PORT:?}"
+    depends_on:
+      ssr:
+        condition: service_healthy
+    ports:
+      - "${CADDY_BIND_ADDRESS:?}:443:${CADDY_HTTPS_PORT:?}/tcp"
+      - "${CADDY_BIND_ADDRESS:?}:443:${CADDY_HTTPS_PORT:?}/udp"
+    volumes:
+      - caddy-data:/data
+
+volumes:
+  caddy-data:

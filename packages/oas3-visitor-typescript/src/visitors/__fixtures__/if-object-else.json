@@ -1,0 +1,35 @@
+{
+  "$id": "if-object-else",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "accountType": {
+      "default": "personal",
+      "enum": [
+        "personal",
+        "business"
+      ]
+    }
+  },
+  "required": [
+    "accountType"
+  ],
+  "if": {
+    "properties": {
+      "accountType": {
+        "const": "business"
+      }
+    },
+    "required": [
+      "accountType"
+    ]
+  },
+  "else": {
+    "properties": {
+      "personalEmail": {}
+    },
+    "required": [
+      "personalEmail"
+    ]
+  }
+}

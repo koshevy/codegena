@@ -1,0 +1,7 @@
+{
+  "type": [
+    "number",
+    "string"
+  ],
+  "pattern": "^ORDER_[A-Z]+$"
+}

@@ -1,0 +1,51 @@
+{
+  "$id": "ref-object-merge-required-deep",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/PartiallyRequiredBaseInterface",
+  "properties": {
+    "requiredInDerived": {
+      "$ref": "#/$defs/AnotherSimpleObjectType"
+    }
+  },
+  "required": [
+    "requiredInDerived",
+    "shouldBeRequiredInDerivedInterface",
+    "shouldBeRequiredInDerivedInterfaceFromDeep"
+  ],
+  "$defs": {
+    "PartiallyRequiredBaseInterface": {
+      "type": "object",
+      "$ref": "#/$defs/PartiallyRequiredBaseInterfaceDeep",
+      "properties": {
+        "shouldNotBeRequired": {
+          "$ref": "#/$defs/SimpleObjectType"
+        },
+        "requiredInBaseInterface": {
+          "$ref": "#/$defs/SimpleObjectType"
+        },
+        "shouldBeRequiredInDerivedInterface": {
+          "$ref": "#/$defs/SimpleObjectType"
+        }
+      },
+      "required": [
+        "requiredInBaseInterface"
+      ]
+    },
+    "PartiallyRequiredBaseInterfaceDeep": {
+      "properties": {
+        "shouldBeRequiredInDerivedInterfaceFromDeep": {
+          "$ref": "#/$defs/ThirdSimpleObjectType"
+        }
+      }
+    },
+    "SimpleObjectType": {
+      "type": "object"
+    },
+    "AnotherSimpleObjectType": {
+      "type": "object"
+    },
+    "ThirdSimpleObjectType": {
+      "type": "object"
+    }
+  }
+}

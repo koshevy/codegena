@@ -1,0 +1,18 @@
+{
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "email": {}
+      },
+      "required": ["email"]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "phone": {}
+      },
+      "required": ["phone"]
+    }
+  ]
+}

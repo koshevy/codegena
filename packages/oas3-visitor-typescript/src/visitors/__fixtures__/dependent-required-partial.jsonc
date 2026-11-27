@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "customerId": {
+      "type": "string"
+    },
+    "cardToken": {
+      "type": "string"
+    },
+    "billingAddress": {
+      "type": "string"
+    },
+    "bankAccount": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "customerId",
+    "billingAddress"
+  ],
+  "dependentRequired": {
+    "cardToken": [
+      "billingAddress",
+      "bankAccount"
+    ]
+  },
+  "additionalProperties": false
+}

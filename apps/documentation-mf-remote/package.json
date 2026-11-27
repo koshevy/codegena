@@ -1,0 +1,43 @@
+{
+  "name": "documentation-mf-remote",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@docusaurus/core": "3.10.2",
+    "@docusaurus/preset-classic": "3.10.2",
+    "@docusaurus/theme-classic": "3.10.2",
+    "@docusaurus/theme-common": "3.10.2",
+    "@mdx-js/react": "^3.1.1",
+    "history": "4.10.1",
+    "react-helmet-async": "npm:@slorber/react-helmet-async@^1.3.0",
+    "react-router": "5.3.4",
+    "react-router-dom": "^5.3.4"
+  },
+  "devDependencies": {
+    "@codegena/infr-nx": "*",
+    "@docusaurus/faster": "3.10.2",
+    "@docusaurus/module-type-aliases": "3.10.2",
+    "@docusaurus/plugin-content-docs": "3.10.2",
+    "@docusaurus/types": "3.10.2",
+    "@module-federation/enhanced": "^2.9.2",
+    "@nx/web": "23.3.2",
+    "@types/history": "4.7.11",
+    "@types/react": "19.0.0",
+    "@types/react-dom": "19.0.0",
+    "html-webpack-plugin": "^5.6.6",
+    "postcss-selector-parser": "7.2.1",
+    "typescript": "6.0.3",
+    "webpack-merge": "^6.0.1"
+  },
+  "peerDependencies": {
+    "@codegena/ui-theme": "*",
+    "@codegena/ui-unified": "*",
+    "@codegena/util-dev-mode": "0.x",
+    "@emotion/react": "11.x",
+    "@emotion/styled": "11.x",
+    "@mui/material": "5.x",
+    "clsx": "2.x",
+    "react": "19.x",
+    "react-dom": "19.x"
+  }
+}

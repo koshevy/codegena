@@ -1,0 +1,19 @@
+{
+  "type": [
+    "array",
+    "boolean",
+    "integer",
+    "null",
+    "number",
+    "string",
+    "object"
+  ],
+  "items": {
+    "type": "string"
+  },
+  "properties": {
+    "value": {
+      "type": "string"
+    }
+  }
+}

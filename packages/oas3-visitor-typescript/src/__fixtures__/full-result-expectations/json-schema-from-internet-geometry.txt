@@ -1,0 +1,55 @@
+/**
+ * ## geometry
+ *
+ * One geometry as defined by GeoJSON
+ */
+export type Geometry =
+  | {
+      type: 'Point';
+      coordinates: Position;
+    }
+  | {
+      type: 'MultiPoint';
+      coordinates: PositionArray;
+    }
+  | {
+      type: 'LineString';
+      coordinates: LineString;
+    }
+  | {
+      type: 'MultiLineString';
+      coordinates: LineString[];
+    }
+  | {
+      type: 'Polygon';
+      coordinates: Polygon;
+    }
+  | {
+      type: 'MultiPolygon';
+      coordinates: Polygon[];
+    };
+
+/**
+ * An array of linear rings
+ */
+export type Polygon = LinearRing[];
+
+/**
+ * An array of four positions where the first equals the last
+ */
+export type LinearRing = [Position, Position, Position, Position, ...Position[]];
+
+/**
+ * An array of two or more positions
+ */
+export type LineString = [Position, Position, ...Position[]];
+
+/**
+ * An array of positions
+ */
+export type PositionArray = Position[];
+
+/**
+ * A single position
+ */
+export type Position = [number, number];

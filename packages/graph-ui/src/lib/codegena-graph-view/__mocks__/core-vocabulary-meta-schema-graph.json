@@ -1,0 +1,257 @@
+{
+  "nodes": [
+    {
+      "data": {
+        "fileName": "types.ts",
+        "kind": "group",
+        "label": "types.ts",
+        "text": "/**\n * ## Core vocabulary meta-schema\n */\nexport type CoreVocabularyMetaSchema =\n  | boolean\n  | {\n      $id?: `${string}${'#' | ''}`;\n      $schema?: UriString;\n      $ref?: UriReferenceString;\n      $anchor?: AnchorString;\n      $dynamicRef?: UriReferenceString;\n      $dynamicAnchor?: AnchorString;\n      $vocabulary?: Record<string, boolean>;\n      $comment?: string;\n      $defs?: Record<string, VariativeType>;\n    };\nexport type AnchorString = string;\nexport type UriString = `${string}:${string}`;\nexport type UriReferenceString = string;\n/**\n * ## Core vocabulary meta-schema\n */\nexport type VariativeType = boolean | unknown;"
+      },
+      "id": "types.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "identifierName": "CoreVocabularyMetaSchema",
+        "kind": "item",
+        "label": "CoreVocabularyMetaSchema",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "core-vocabulary-meta-schema.ts",
+        "text": "/**\n * ## Core vocabulary meta-schema\n */\nexport type CoreVocabularyMetaSchema =\n  | boolean\n  | {\n      $id?: `${string}${'#' | ''}`;\n      $schema?: UriString;\n      $ref?: UriReferenceString;\n      $anchor?: AnchorString;\n      $dynamicRef?: UriReferenceString;\n      $dynamicAnchor?: AnchorString;\n      $vocabulary?: Record<string, boolean>;\n      $comment?: string;\n      $defs?: Record<string, VariativeType>;\n    };",
+        "ast": {
+          "kind": 266
+        },
+        "sourceLocation": {
+          "col": 1,
+          "fileName": "core-vocabulary-meta-schema.jsonc",
+          "line": 1
+        },
+        "declarationType": "Union",
+        "logs": [
+          {
+            "jsoncNode": {
+              "col": 16,
+              "fileName": "core-vocabulary-meta-schema.jsonc",
+              "line": 16
+            },
+            "level": "warn",
+            "message": "Anchor ignored at properties.$anchor.\nExpected a valid anchor name.\nEncountered at:\ncore-vocabulary-meta-schema.jsonc:16:16\n  15 |     \"$ref\": { \"$ref\": \"#/$defs/uriReferenceString\" },       \n> 16 |     \"$anchor\": { \"$ref\": \"#/$defs/anchorString\" },          \n     |                ^\n  17 |     \"$dynamicRef\": { \"$ref\": \"#/$defs/uriReferenceString\" },"
+          },
+          {
+            "jsoncNode": {
+              "col": 23,
+              "fileName": "core-vocabulary-meta-schema.jsonc",
+              "line": 18
+            },
+            "level": "warn",
+            "message": "Anchor ignored at properties.$dynamicAnchor.\nExpected a valid anchor name.\nEncountered at:\ncore-vocabulary-meta-schema.jsonc:18:23\n  17 |     \"$dynamicRef\": { \"$ref\": \"#/$defs/uriReferenceString\" },\n> 18 |     \"$dynamicAnchor\": { \"$ref\": \"#/$defs/anchorString\" },   \n     |                       ^\n  19 |     \"$vocabulary\": {                                        "
+          }
+        ]
+      },
+      "extent": "parent",
+      "id": "types.ts::CoreVocabularyMetaSchema",
+      "parentId": "types.ts"
+    },
+    {
+      "data": {
+        "identifierName": "AnchorString",
+        "kind": "item",
+        "label": "AnchorString",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "anchor-string.ts",
+        "text": "export type AnchorString = string;",
+        "ast": {
+          "kind": 266
+        },
+        "sourceLocation": {
+          "col": 21,
+          "fileName": "core-vocabulary-meta-schema.jsonc",
+          "line": 35
+        },
+        "declarationType": "Scalar",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "types.ts::AnchorString",
+      "parentId": "types.ts"
+    },
+    {
+      "data": {
+        "identifierName": "UriString",
+        "kind": "item",
+        "label": "UriString",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "uri-string.ts",
+        "text": "export type UriString = `${string}:${string}`;",
+        "ast": {
+          "kind": 266
+        },
+        "sourceLocation": {
+          "col": 18,
+          "fileName": "core-vocabulary-meta-schema.jsonc",
+          "line": 39
+        },
+        "declarationType": "Literal",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "types.ts::UriString",
+      "parentId": "types.ts"
+    },
+    {
+      "data": {
+        "identifierName": "UriReferenceString",
+        "kind": "item",
+        "label": "UriReferenceString",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "uri-reference-string.ts",
+        "text": "export type UriReferenceString = string;",
+        "ast": {
+          "kind": 266
+        },
+        "sourceLocation": {
+          "col": 27,
+          "fileName": "core-vocabulary-meta-schema.jsonc",
+          "line": 43
+        },
+        "declarationType": "Scalar",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "types.ts::UriReferenceString",
+      "parentId": "types.ts"
+    },
+    {
+      "data": {
+        "identifierName": "VariativeType",
+        "kind": "item",
+        "label": "VariativeType",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "variative-type.ts",
+        "text": "/**\n * ## Core vocabulary meta-schema\n */\nexport type VariativeType = boolean | unknown;",
+        "ast": {
+          "kind": 266
+        },
+        "sourceLocation": {
+          "col": 1,
+          "fileName": "core-vocabulary-meta-schema.jsonc",
+          "line": 1
+        },
+        "declarationType": "Union",
+        "logs": [
+          {
+            "jsoncNode": {
+              "col": 16,
+              "fileName": "core-vocabulary-meta-schema.jsonc",
+              "line": 16
+            },
+            "level": "warn",
+            "message": "Anchor ignored at properties.$anchor.\nExpected a valid anchor name.\nEncountered at:\ncore-vocabulary-meta-schema.jsonc:16:16\n  15 |     \"$ref\": { \"$ref\": \"#/$defs/uriReferenceString\" },       \n> 16 |     \"$anchor\": { \"$ref\": \"#/$defs/anchorString\" },          \n     |                ^\n  17 |     \"$dynamicRef\": { \"$ref\": \"#/$defs/uriReferenceString\" },"
+          },
+          {
+            "jsoncNode": {
+              "col": 23,
+              "fileName": "core-vocabulary-meta-schema.jsonc",
+              "line": 18
+            },
+            "level": "warn",
+            "message": "Anchor ignored at properties.$dynamicAnchor.\nExpected a valid anchor name.\nEncountered at:\ncore-vocabulary-meta-schema.jsonc:18:23\n  17 |     \"$dynamicRef\": { \"$ref\": \"#/$defs/uriReferenceString\" },\n> 18 |     \"$dynamicAnchor\": { \"$ref\": \"#/$defs/anchorString\" },   \n     |                       ^\n  19 |     \"$vocabulary\": {                                        "
+          }
+        ]
+      },
+      "extent": "parent",
+      "id": "types.ts::VariativeType",
+      "parentId": "types.ts"
+    }
+  ],
+  "edges": [
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "types.ts::CoreVocabularyMetaSchema->types.ts::UriString",
+      "label": "reference",
+      "source": "types.ts::CoreVocabularyMetaSchema",
+      "target": "types.ts::UriString"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "types.ts::CoreVocabularyMetaSchema->types.ts::UriReferenceString",
+      "label": "reference",
+      "source": "types.ts::CoreVocabularyMetaSchema",
+      "target": "types.ts::UriReferenceString"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "types.ts::CoreVocabularyMetaSchema->types.ts::AnchorString",
+      "label": "reference",
+      "source": "types.ts::CoreVocabularyMetaSchema",
+      "target": "types.ts::AnchorString"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "types.ts::CoreVocabularyMetaSchema->types.ts::VariativeType",
+      "label": "reference",
+      "source": "types.ts::CoreVocabularyMetaSchema",
+      "target": "types.ts::VariativeType"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "types.ts::VariativeType->types.ts::UriString",
+      "label": "reference",
+      "source": "types.ts::VariativeType",
+      "target": "types.ts::UriString"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "types.ts::VariativeType->types.ts::UriReferenceString",
+      "label": "reference",
+      "source": "types.ts::VariativeType",
+      "target": "types.ts::UriReferenceString"
+    },
+    {
+      "data": {
+        "relation": "reference"
+      },
+      "id": "types.ts::VariativeType->types.ts::AnchorString",
+      "label": "reference",
+      "source": "types.ts::VariativeType",
+      "target": "types.ts::AnchorString"
+    }
+  ],
+  "logs": [
+    {
+      "jsoncNode": {
+        "col": 16,
+        "fileName": "core-vocabulary-meta-schema.jsonc",
+        "line": 16
+      },
+      "level": "warn",
+      "message": "Anchor ignored at properties.$anchor.\nExpected a valid anchor name.\nEncountered at:\ncore-vocabulary-meta-schema.jsonc:16:16\n  15 |     \"$ref\": { \"$ref\": \"#/$defs/uriReferenceString\" },       \n> 16 |     \"$anchor\": { \"$ref\": \"#/$defs/anchorString\" },          \n     |                ^\n  17 |     \"$dynamicRef\": { \"$ref\": \"#/$defs/uriReferenceString\" },"
+    },
+    {
+      "jsoncNode": {
+        "col": 23,
+        "fileName": "core-vocabulary-meta-schema.jsonc",
+        "line": 18
+      },
+      "level": "warn",
+      "message": "Anchor ignored at properties.$dynamicAnchor.\nExpected a valid anchor name.\nEncountered at:\ncore-vocabulary-meta-schema.jsonc:18:23\n  17 |     \"$dynamicRef\": { \"$ref\": \"#/$defs/uriReferenceString\" },\n> 18 |     \"$dynamicAnchor\": { \"$ref\": \"#/$defs/anchorString\" },   \n     |                       ^\n  19 |     \"$vocabulary\": {                                        "
+    }
+  ]
+}

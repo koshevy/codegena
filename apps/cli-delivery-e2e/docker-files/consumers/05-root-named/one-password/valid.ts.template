@@ -1,0 +1,5 @@
+import type { Api1PasswordConnect as Connect } from './generated';
+
+export const vaults: Connect.Vaults.ListAll.ResponseVaultsListAll<200> = [
+  { type: 'USER_CREATED', name: 'Engineering' },
+];

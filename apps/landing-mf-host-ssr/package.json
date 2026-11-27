@@ -1,0 +1,22 @@
+{
+  "name": "landing-mf-host-ssr",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@hono/node-server": "2.1.11"
+  },
+  "devDependencies": {
+    "@codegena/infr-docker-compose": "^0.0.1",
+    "@codegena/infr-nx": "*",
+    "@nx/esbuild": "23.3.2",
+    "@nx/js": "23.3.2",
+    "@types/node": "^24.0.0",
+    "eslint": "^10.13.0",
+    "nx": "23.3.2",
+    "typescript": "6.0.3"
+  },
+  "peerDependencies": {
+    "@codegena/pwa": "0.x",
+    "hono": "4.x"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "title": "Boolean type plus metadata fragment",
+  "allOf": [
+    {
+      "type": "boolean"
+    },
+    {
+      "default": false,
+      "description": "Ships disabled unless explicitly enabled"
+    }
+  ]
+}

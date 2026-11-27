@@ -1,0 +1,46 @@
+{
+  "name": "documentation-mf-remote-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/documentation-mf-remote-e2e/src",
+  "projectType": "application",
+  "tags": [
+    "application:frontend"
+  ],
+  "implicitDependencies": [
+    "documentation-mf-remote"
+  ],
+  "targets": {
+    "build-host": {
+      "executor": "nx:run-commands",
+      "inputs": [
+        "default",
+        "^default",
+        { "env": "DOCUMENTATION_E2E_SERVER" }
+      ],
+      "outputs": ["{workspaceRoot}/dist/apps/documentation-mf-remote-e2e/host"],
+      "options": {
+        "command": "rspack build --config federation-host.config.mjs",
+        "cwd": "apps/documentation-mf-remote-e2e"
+      }
+    },
+    "serve-host": {
+      "executor": "@nx/web:file-server",
+      "continuous": true,
+      "dependsOn": ["build-host"],
+      "options": {
+        "staticFilePath": "dist/apps/documentation-mf-remote-e2e/host",
+        "port": 8114,
+        "host": "127.0.0.1",
+        "watch": false,
+        "spa": true
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p tsconfig.json",
+        "cwd": "apps/documentation-mf-remote-e2e"
+      }
+    }
+  }
+}

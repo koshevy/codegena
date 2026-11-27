@@ -1,0 +1,10 @@
+{
+  "$id": "object-with-additional-properties-custom-keys",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Options additionalProperties and propertyNames have to be converted to Record with custom key type and unknown values",
+  "type": "object",
+  "additionalProperties": true,
+  "propertyNames": {
+    "pattern": "^(CPU|RAM|DISPLAY|HDD)_([A-Z_]+)$"
+  }
+}

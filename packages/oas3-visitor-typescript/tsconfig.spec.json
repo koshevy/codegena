@@ -1,0 +1,24 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/jest",
+    "types": ["jest", "node"],
+    "forceConsistentCasingInFileNames": true,
+    "target": "ESNext"
+  },
+  "include": [
+    "jest.config.ts",
+    "jest.config.cts",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "cli/**/__fixtures__/**/*.ts",
+    "src/**/__fixtures__/**/*.ts",
+    "src/**/__mocks__/**/*.ts",
+    "src/**/testing-utils/**/*.ts"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    }
+  ]
+}

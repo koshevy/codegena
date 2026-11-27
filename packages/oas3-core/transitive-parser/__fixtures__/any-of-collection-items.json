@@ -1,0 +1,8 @@
+{
+  "type": "array",
+  "minItems": 2,
+  "anyOf": [
+    { "items": { "type": "string" } },
+    { "items": { "type": "number" } }
+  ]
+}

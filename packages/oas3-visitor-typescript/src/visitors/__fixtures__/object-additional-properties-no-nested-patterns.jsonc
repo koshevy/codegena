@@ -1,0 +1,11 @@
+{
+  "$id": "object-additional-properties-object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": {
+    "type": "object"
+  },
+  "propertyNames": {
+    "pattern": "^TOP_LEVEL_PREFIX_"
+  }
+}

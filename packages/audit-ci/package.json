@@ -1,0 +1,50 @@
+{
+  "name": "@codegena/audit-ci",
+  "version": "0.0.1",
+  "description": "Zero-dependency npm audit CLI with expiring CWE and GHSA exceptions.",
+  "type": "module",
+  "main": "./src/index.mjs",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.mjs"
+    },
+    "./vulnerabilities-ignore-schema.json": "./vulnerabilities-ignore-schema.json"
+  },
+  "bin": {
+    "audit-ci": "./bin/cli.mjs"
+  },
+  "files": [
+    "bin",
+    "src",
+    "!src/**/*.spec.mjs",
+    "!src/**/__fixtures__/**",
+    "!src/**/testing-utils/**",
+    "vulnerabilities-ignore-schema.json"
+  ],
+  "engines": {
+    "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
+  },
+  "nx": {
+    "sourceRoot": "packages/audit-ci/src",
+    "projectType": "library",
+    "tags": [
+      "server:publishable"
+    ],
+    "targets": {
+      "test": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "node --test src/*.spec.mjs",
+          "cwd": "packages/audit-ci"
+        }
+      }
+    }
+  },
+  "devDependencies": {
+    "@codegena/infr-nx": "*",
+    "eslint": "^10.13.0",
+    "nx": "23.3.2"
+  },
+  "types": "./src/index.d.ts"
+}

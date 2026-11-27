@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": { "module": "esnext", "moduleResolution": "bundler", "target": "es2022", "types": ["node", "vite/client"] },
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["src/**/*.spec.ts", "src/**/*.spec.tsx", "src/**/__mocks__/**", "src/**/*.stories.tsx"]
+}

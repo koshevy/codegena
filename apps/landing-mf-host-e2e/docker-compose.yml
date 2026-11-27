@@ -1,0 +1,83 @@
+services:
+  playwright:
+    image: landing-mf-host-e2e
+    pull_policy: never
+    build:
+      context: ../..
+      dockerfile: apps/landing-mf-host-e2e/Dockerfile
+      target: playwright
+    init: true
+    shm_size: 1gb
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      CI: ${CI:-}
+      LANDING_E2E_CHROMIUM: /usr/bin/chromium-headless-shell
+      VK_LOADER_DRIVERS_SELECT: "*lvp*"
+  quality:
+    image: landing-mf-host-e2e
+    pull_policy: never
+    profiles: [quality]
+    init: true
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    network_mode: service:caddy
+    depends_on:
+      chrome:
+        condition: service_healthy
+    command: ["../../node_modules/.bin/playwright", "test", "--config=playwright.quality.config.mts"]
+  chrome:
+    image: landing-mf-host-e2e-chrome
+    pull_policy: never
+    build:
+      context: ../..
+      dockerfile: apps/landing-mf-host-e2e/Dockerfile
+      target: chrome
+    profiles: [quality]
+    init: true
+    user: "1000:1000"
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    shm_size: 1gb
+    network_mode: service:caddy
+    depends_on:
+      caddy:
+        condition: service_healthy
+    tmpfs: [/tmp]
+    entrypoint: ["/headless-shell/headless-shell"]
+    command:
+      - --no-sandbox
+      - --ignore-certificate-errors
+      - --remote-debugging-port=9222
+      - --user-data-dir=/tmp/lighthouse-chrome
+    healthcheck:
+      test: [CMD, bash, -ec, 'true </dev/tcp/127.0.0.1/9222']
+      interval: 1s
+      timeout: 3s
+      retries: 10
+  caddy:
+    extends:
+      file: ../landing-mf-host-ssr/docker-compose.yml
+      service: caddy
+    pull_policy: never
+    profiles: [quality]
+    environment:
+      CADDY_HTTPS_PORT: "8443"
+    ports: !reset []
+    healthcheck:
+      test: [CMD, wget, --no-check-certificate, --spider, 'https://localhost:8443/manifest.webmanifest']
+      interval: 1s
+      timeout: 3s
+      retries: 10
+  ssr:
+    extends:
+      file: ../landing-mf-host-ssr/docker-compose.yml
+      service: ssr
+    pull_policy: never
+    profiles: [quality]
+
+volumes:
+  caddy-data:

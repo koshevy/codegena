@@ -1,0 +1,15 @@
+{
+  "$id": "object-unknown-properties",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "object-unknown-properties.json5",
+  "description": "Object with properties with unknown type of scheme",
+  "type": "object",
+  "properties": {
+    "location": {
+      "title": "Field with unknown type"
+    },
+    "interests": {
+      "title": "Field with unknown type"
+    }
+  }
+}

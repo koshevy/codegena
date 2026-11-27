@@ -1,0 +1,23 @@
+.git
+
+.idea/
+.vscode/
+
+dist/
+**/dist/
+build/
+node_modules/
+.npm/
+
+**/*.spec.*
+**/*-e2e/
+**/__fixtures__/
+**/__mocks__/
+.verdaccio/
+env-delivery/certs/localhost.*
+**/env-delivery/certs/localhost.*
+
+# It could contain public _authToken for https://gitverse.ru/sber-crm?tab=packagesOrg
+# We have to store it in templates of workspaces until
+# the GitVerse supports an anonymous access to public NPM repos
+**/.npmrc.template

@@ -1,0 +1,474 @@
+{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "@jest/core": {
+      "name": "@jest/core",
+      "severity": "low",
+      "isDirect": false,
+      "via": [
+        "jest-config"
+      ],
+      "effects": [
+        "jest",
+        "jest-cli"
+      ],
+      "range": ">=25.2.0-alpha.86",
+      "nodes": [
+        "node_modules/@jest/core"
+      ],
+      "fixAvailable": {
+        "name": "@nx/web",
+        "version": "22.6.5",
+        "isSemVerMajor": true
+      }
+    },
+    "@nx/cypress": {
+      "name": "@nx/cypress",
+      "severity": "low",
+      "isDirect": false,
+      "via": [
+        "@nx/eslint"
+      ],
+      "effects": [
+        "@nx/storybook",
+        "@nx/web"
+      ],
+      "range": ">=22.7.0-beta.0",
+      "nodes": [
+        "node_modules/@nx/cypress"
+      ],
+      "fixAvailable": {
+        "name": "@nx/web",
+        "version": "22.6.5",
+        "isSemVerMajor": true
+      }
+    },
+    "@nx/eslint": {
+      "name": "@nx/eslint",
+      "severity": "low",
+      "isDirect": true,
+      "via": [
+        "@nx/jest"
+      ],
+      "effects": [
+        "@nx/cypress",
+        "@nx/playwright",
+        "@nx/react",
+        "@nx/storybook",
+        "@nx/vitest",
+        "@nx/web"
+      ],
+      "range": ">=22.7.0-beta.0",
+      "nodes": [
+        "node_modules/@nx/eslint"
+      ],
+      "fixAvailable": {
+        "name": "@nx/eslint",
+        "version": "22.6.5",
+        "isSemVerMajor": true
+      }
+    },
+    "@nx/jest": {
+      "name": "@nx/jest",
+      "severity": "low",
+      "isDirect": true,
+      "via": [
+        "jest",
+        "jest-config",
+        "ts-jest"
+      ],
+      "effects": [
+        "@nx/eslint",
+        "@nx/web"
+      ],
+      "range": "*",
+      "nodes": [
+        "node_modules/@nx/jest"
+      ],
+      "fixAvailable": {
+        "name": "@nx/web",
+        "version": "22.6.5",
+        "isSemVerMajor": true
+      }
+    },
+    "@nx/module-federation": {
+      "name": "@nx/module-federation",
+      "severity": "low",
+      "isDirect": true,
+      "via": [
+        "@nx/web"
+      ],
+      "effects": [
+        "@nx/react",
+        "@nx/rspack"
+      ],
+      "range": "22.7.0-beta.0 - 24.0.0-rc.1",
+      "nodes": [
+        "node_modules/@nx/module-federation"
+      ],
+      "fixAvailable": {
+        "name": "@nx/module-federation",
+        "version": "24.0.6",
+        "isSemVerMajor": true
+      }
+    },
+    "@nx/playwright": {
+      "name": "@nx/playwright",
+      "severity": "low",
+      "isDirect": true,
+      "via": [
+        "@nx/eslint"
+      ],
+      "effects": [
+        "@nx/web"
+      ],
+      "range": ">=22.7.0-beta.0",
+      "nodes": [
+        "node_modules/@nx/playwright"
+      ],
+      "fixAvailable": {
+        "name": "@nx/playwright",
+        "version": "22.6.5",
+        "isSemVerMajor": true
+      }
+    },
+    "@nx/react": {
+      "name": "@nx/react",
+      "severity": "low",
+      "isDirect": true,
+      "via": [
+        "@nx/eslint",
+        "@nx/module-federation",
+        "@nx/vite",
+        "@nx/web"
+      ],
+      "effects": [],
+      "range": ">=22.7.0-beta.0",
+      "nodes": [
+        "node_modules/@nx/react"
+      ],
+      "fixAvailable": {
+        "name": "@nx/react",
+        "version": "22.6.5",
+        "isSemVerMajor": true
+      }
+    },
+    "@nx/rollup": {
+      "name": "@nx/rollup",
+      "severity": "low",
+      "isDirect": true,
+      "via": [
+        "@rollup/plugin-node-resolve"
+      ],
+      "effects": [],
+      "range": "*",
+      "nodes": [
+        "node_modules/@nx/rollup"
+      ],
+      "fixAvailable": false
+    },
+    "@nx/rspack": {
+      "name": "@nx/rspack",
+      "severity": "low",
+      "isDirect": true,
+      "via": [
+        "@nx/module-federation",
+        "@nx/web"
+      ],
+      "effects": [],
+      "range": ">=22.7.0-beta.0",
+      "nodes": [
+        "node_modules/@nx/rspack"
+      ],
+      "fixAvailable": {
+        "name": "@nx/rspack",
+        "version": "22.6.5",
+        "isSemVerMajor": true
+      }
+    },
+    "@nx/storybook": {
+      "name": "@nx/storybook",
+      "severity": "low",
+      "isDirect": true,
+      "via": [
+        "@nx/cypress",
+        "@nx/eslint",
+        "@nx/web"
+      ],
+      "effects": [],
+      "range": ">=22.7.0-beta.0",
+      "nodes": [
+        "node_modules/@nx/storybook"
+      ],
+      "fixAvailable": {
+        "name": "@nx/storybook",
+        "version": "22.6.5",
+        "isSemVerMajor": true
+      }
+    },
+    "@nx/vite": {
+      "name": "@nx/vite",
+      "severity": "low",
+      "isDirect": true,
+      "via": [
+        "@nx/vitest"
+      ],
+      "effects": [
+        "@nx/react",
+        "@nx/web"
+      ],
+      "range": ">=22.7.0-beta.0",
+      "nodes": [
+        "node_modules/@nx/vite"
+      ],
+      "fixAvailable": {
+        "name": "@nx/vite",
+        "version": "22.6.5",
+        "isSemVerMajor": true
+      }
+    },
+    "@nx/vitest": {
+      "name": "@nx/vitest",
+      "severity": "low",
+      "isDirect": true,
+      "via": [
+        "@nx/eslint"
+      ],
+      "effects": [
+        "@nx/vite"
+      ],
+      "range": ">=22.7.0-beta.0",
+      "nodes": [
+        "node_modules/@nx/vitest"
+      ],
+      "fixAvailable": {
+        "name": "@nx/vitest",
+        "version": "22.6.5",
+        "isSemVerMajor": true
+      }
+    },
+    "@nx/web": {
+      "name": "@nx/web",
+      "severity": "low",
+      "isDirect": true,
+      "via": [
+        "@nx/cypress",
+        "@nx/eslint",
+        "@nx/jest",
+        "@nx/playwright",
+        "@nx/vite"
+      ],
+      "effects": [
+        "@nx/module-federation",
+        "@nx/react",
+        "@nx/rspack",
+        "@nx/storybook"
+      ],
+      "range": ">=22.7.0-beta.0",
+      "nodes": [
+        "node_modules/@nx/web"
+      ],
+      "fixAvailable": {
+        "name": "@nx/web",
+        "version": "22.6.5",
+        "isSemVerMajor": true
+      }
+    },
+    "@rollup/plugin-node-resolve": {
+      "name": "@rollup/plugin-node-resolve",
+      "severity": "low",
+      "isDirect": false,
+      "via": [
+        "deepmerge"
+      ],
+      "effects": [
+        "@nx/rollup"
+      ],
+      "range": ">=8.0.0",
+      "nodes": [
+        "node_modules/@rollup/plugin-node-resolve"
+      ],
+      "fixAvailable": false
+    },
+    "@svgr/plugin-svgo": {
+      "name": "@svgr/plugin-svgo",
+      "severity": "low",
+      "isDirect": false,
+      "via": [
+        "deepmerge"
+      ],
+      "effects": [
+        "@svgr/rollup"
+      ],
+      "range": ">=5.5.0",
+      "nodes": [
+        "node_modules/@svgr/plugin-svgo"
+      ],
+      "fixAvailable": {
+        "name": "@svgr/rollup",
+        "version": "5.4.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@svgr/rollup": {
+      "name": "@svgr/rollup",
+      "severity": "low",
+      "isDirect": true,
+      "via": [
+        "@svgr/plugin-svgo"
+      ],
+      "effects": [],
+      "range": ">=5.5.0",
+      "nodes": [
+        "node_modules/@svgr/rollup"
+      ],
+      "fixAvailable": {
+        "name": "@svgr/rollup",
+        "version": "5.4.0",
+        "isSemVerMajor": true
+      }
+    },
+    "deepmerge": {
+      "name": "deepmerge",
+      "severity": "low",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1243505,
+          "name": "deepmerge",
+          "dependency": "deepmerge",
+          "title": "deepmerge mergeObject() allows prototype poisoning of returned objects",
+          "url": "https://github.com/advisories/GHSA-gcqx-w48m-w2h4",
+          "severity": "low",
+          "cwe": [
+            "CWE-1321"
+          ],
+          "cvss": {
+            "score": 5.3,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
+          },
+          "range": ">=4.2.0 <=4.3.1"
+        }
+      ],
+      "effects": [
+        "@rollup/plugin-node-resolve",
+        "@svgr/plugin-svgo",
+        "jest-config"
+      ],
+      "range": ">=4.2.0",
+      "nodes": [
+        "node_modules/deepmerge"
+      ],
+      "fixAvailable": {
+        "name": "@nx/web",
+        "version": "22.6.5",
+        "isSemVerMajor": true
+      }
+    },
+    "jest": {
+      "name": "jest",
+      "severity": "low",
+      "isDirect": true,
+      "via": [
+        "@jest/core",
+        "jest-cli"
+      ],
+      "effects": [
+        "@nx/jest",
+        "ts-jest"
+      ],
+      "range": ">=25.2.0-alpha.86",
+      "nodes": [
+        "node_modules/jest"
+      ],
+      "fixAvailable": {
+        "name": "@nx/web",
+        "version": "22.6.5",
+        "isSemVerMajor": true
+      }
+    },
+    "jest-cli": {
+      "name": "jest-cli",
+      "severity": "low",
+      "isDirect": false,
+      "via": [
+        "@jest/core",
+        "jest-config"
+      ],
+      "effects": [
+        "jest"
+      ],
+      "range": ">=25.2.0-alpha.86",
+      "nodes": [
+        "node_modules/jest-cli"
+      ],
+      "fixAvailable": {
+        "name": "@nx/web",
+        "version": "22.6.5",
+        "isSemVerMajor": true
+      }
+    },
+    "jest-config": {
+      "name": "jest-config",
+      "severity": "low",
+      "isDirect": false,
+      "via": [
+        "deepmerge"
+      ],
+      "effects": [
+        "@jest/core",
+        "@nx/jest",
+        "jest-cli"
+      ],
+      "range": ">=25.2.0-alpha.86",
+      "nodes": [
+        "node_modules/@jest/core/node_modules/jest-config",
+        "node_modules/jest-cli/node_modules/jest-config",
+        "node_modules/jest-config"
+      ],
+      "fixAvailable": {
+        "name": "@nx/web",
+        "version": "22.6.5",
+        "isSemVerMajor": true
+      }
+    },
+    "ts-jest": {
+      "name": "ts-jest",
+      "severity": "low",
+      "isDirect": true,
+      "via": [
+        "jest"
+      ],
+      "effects": [
+        "@nx/jest"
+      ],
+      "range": ">=25.10.0-alpha.1",
+      "nodes": [
+        "node_modules/ts-jest"
+      ],
+      "fixAvailable": {
+        "name": "@nx/web",
+        "version": "22.6.5",
+        "isSemVerMajor": true
+      }
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 21,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 21
+    },
+    "dependencies": {
+      "prod": 1370,
+      "dev": 907,
+      "optional": 265,
+      "peer": 24,
+      "peerOptional": 0,
+      "total": 2380
+    }
+  }
+}

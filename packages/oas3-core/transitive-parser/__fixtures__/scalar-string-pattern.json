@@ -1,0 +1,6 @@
+{
+  "type": "string",
+  "pattern": "^ORDER_[A-Z]+$",
+  "minLength": 7,
+  "maxLength": 24
+}

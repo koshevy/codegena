@@ -1,0 +1,104 @@
+/**
+ * A fixed type, as defined by the Avro specification
+ */
+export interface Fixed {
+  type: 'fixed';
+  name: NameOrNamespace;
+  size: number;
+  nameOrNamespace?: NameOrNamespace;
+  aliases?: Aliases;
+}
+
+/**
+ * A union of schemas. A TypeScript type infered from this type has to be wrong
+ * due the recursive reference. But the `oas3-visitor-typescript` compiler has
+ * only to deal with any possible schema as it is. See original place with
+ * self-reference:
+ * https://github.com/fge/sample-json-schemas/blob/master/avro/avro-schema.json#L91
+ */
+export type Union = Exclude<AvroSchema, Union>[];
+
+/**
+ * A map as defined by the Avro specification
+ */
+export interface Map {
+  type: 'map';
+  values?: AvroSchema;
+}
+
+/**
+ * An array as defined by the Avro specification
+ */
+export interface Array {
+  type: 'array';
+  items?: AvroSchema;
+}
+
+/**
+ * an enum as defined by the Avro specification
+ */
+export interface Enum {
+  type: 'enum';
+  name: NameOrNamespace;
+  symbols: [string, ...string[]];
+  nameOrNamespace?: NameOrNamespace;
+  aliases?: Aliases;
+  doc?: string;
+}
+
+/**
+ * A record
+ */
+export interface Record {
+  type: 'record';
+  name: NameOrNamespace;
+  fields: Field[];
+  nameOrNamespace?: NameOrNamespace;
+  doc?: string;
+  aliases?: Aliases;
+}
+
+/**
+ * One field in a record
+ */
+export interface Field {
+  name: NameOrNamespace;
+  type: AvroSchema;
+  doc?: string;
+  /**
+   * default value, depending on the type
+   */
+  default?: unknown;
+  order?: 'ascending' | 'descending' | 'ignore';
+  aliases?: Aliases;
+}
+
+/**
+ * ## avro-schema
+ *
+ * JSON Schema for an Apache Avro schema, version 1.7.3
+ */
+export type AvroSchema =
+  | string
+  | {
+      type: PrimitiveTypes;
+    }
+  | Record
+  | Enum
+  | Array
+  | Map
+  | Union
+  | Fixed;
+
+export type Aliases = [NameOrNamespace, ...NameOrNamespace[]];
+
+/**
+ * what a nameOrNamespace can be
+ */
+export type NameOrNamespace = string;
+
+/**
+ * One primitive type
+ */
+export type PrimitiveTypes =
+  'null' | 'boolean' | 'int' | 'long' | 'float' | 'double' | 'bytes' | 'string';

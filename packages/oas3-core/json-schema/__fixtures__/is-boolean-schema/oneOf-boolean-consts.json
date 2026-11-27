@@ -1,0 +1,13 @@
+{
+  "title": "Strict boolean union",
+  "oneOf": [
+    {
+      "const": true,
+      "description": "Explicitly enabled"
+    },
+    {
+      "const": false,
+      "description": "Explicitly disabled"
+    }
+  ]
+}

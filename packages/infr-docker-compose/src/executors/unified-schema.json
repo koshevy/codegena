@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "version": 2,
+  "title": "Docker Compose executor",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "composeFile": {
+      "type": "string",
+      "default": "docker-compose.yml"
+    },
+    "environment": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    },
+    "outputPath": {
+      "type": "string",
+      "default": "dist/docker-compose"
+    },
+    "rootEnvFilePath": {
+      "type": "string"
+    },
+    "projects": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "build": {
+      "type": "boolean"
+    },
+    "dryRun": {
+      "type": "boolean"
+    },
+    "detached": {
+      "type": "boolean"
+    },
+    "abortOnContainerExit": {
+      "type": "boolean"
+    },
+    "exitCodeFrom": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]*$"
+    },
+    "services": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]*$"
+      }
+    }
+  }
+}

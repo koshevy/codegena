@@ -1,0 +1,365 @@
+export type SimpleDynamicRef = SimpleDynamicAnchor;
+
+export type SimpleDynamicAnchor = Record<
+  `PROP_${string}`,
+  {
+    id: string;
+  }
+>;
+
+export type SimplestStringPatternCase = string;
+
+export type PatternString = `${'property' | 'event'}.${'invoke' | 'assign'}.${string}`;
+
+export interface FirstLevel extends ZeroLevel {
+  id: string;
+  children?: SecondLevel;
+}
+
+export interface SecondLevel {
+  relatedItem?: FirstLevel | SecondLevel | ThirdLevel;
+}
+
+export interface ThirdLevel extends SecondLevel {
+  relatedItem: FirstLevel | SecondLevel | ThirdLevel;
+  anotherRelatedItem?: FirstLevel | SecondLevel | ThirdLevel | FourthLevel;
+}
+
+export interface FourthLevel extends ThirdLevel {
+  anotherRelatedItem: FirstLevel | SecondLevel | ThirdLevel | FourthLevel;
+  abstractProperty: Record<`abstract-${string}`, unknown>;
+  extendedRelatedItem?: FirstLevel | SecondLevel | ThirdLevel | FourthLevel | FifthLevel;
+}
+
+export interface FifthLevel {
+  extendedRelatedItem?:
+    FirstLevel | SecondLevel | ThirdLevel | FourthLevel | FifthLevel | SixthLevel;
+}
+
+export interface SixthLevel {
+  extendedRelatedItem?: FirstLevel | SeventhLevel;
+}
+
+export interface SeventhLevel {
+  extendedRelatedItem?:
+    | FirstLevel
+    | SecondLevel
+    | ThirdLevel
+    | FourthLevel
+    | FifthLevel
+    | SixthLevel
+    | SeventhLevel
+    | EighthLevel;
+}
+
+export type EighthLevel = NinthLevel;
+
+export type NinthLevel = ZeroLevel;
+
+export interface ZeroLevel {
+  id?: string;
+  abstractProperty?: Record<`abstract-${string}`, unknown>;
+}
+
+export type SimpleOneOfUnionWithMixedTypes =
+  | {
+      id?: string;
+      content?: Blob;
+    }
+  | SimpleObjectWithPattern[]
+  | (null | string);
+
+export type SimpleOneOfUnionWithObjects =
+  | {
+      id?: string;
+      content?: Blob;
+      title?: never;
+    }
+  | {
+      id: unknown;
+      content: unknown;
+      title?: never;
+    }
+  | {
+      content?: string;
+      id?: never;
+      title?: never;
+    }
+  | {
+      title?: string;
+      id?: never;
+      content?: never;
+    };
+
+export type SimpleOneOfUnionWithRefsToObjects =
+  | SimpleObjectWithPattern
+  | SimpleObjectWithProperties
+  | AnotherSimpleObjectWithProperties;
+
+export interface AnotherSimpleObjectWithProperties {
+  content: Record<string, unknown>;
+  title?: string;
+}
+
+export type SimpleOneOfUnionWithRefsToArray =
+  ArrayMinMaxWithRefs | ArrayMinScalar | ArrayScalar;
+
+export type ObjectIfThenElseEnumWithMixin = Record<string, unknown> &
+  (
+    | {
+        type?: 'plants';
+        angiosperms?: 'monocots' | 'eudicots';
+      }
+    | {
+        type?: 'animals';
+        iEumetazoa?: boolean;
+      }
+  );
+
+/**
+ * @privateRemarks
+ * The 'not' will be ignored in current implementation
+ */
+export type NonWorkingExclusionFromUnionByAnyOf = SimpleUnionWithRefs;
+
+export type ExclusionFromUnion = ArrayMinMaxWithRefs | ArrayScalar;
+
+export type SimpleUnionWithRefs = ArrayMinMaxWithRefs | ArrayMinScalar | ArrayScalar;
+
+export type ArrayScalar = number[];
+
+export type ArrayMinScalar = [string, string, ...string[]];
+
+export type ArrayMinMaxWithRefs =
+  | [SimpleObjectWithPattern, SimpleObjectWithPattern]
+  | [SimpleObjectWithPattern, SimpleObjectWithPattern, SimpleObjectWithPattern]
+  | [
+      SimpleObjectWithPattern,
+      SimpleObjectWithPattern,
+      SimpleObjectWithPattern,
+      SimpleObjectWithPattern,
+    ]
+  | [
+      SimpleObjectWithPattern,
+      SimpleObjectWithPattern,
+      SimpleObjectWithPattern,
+      SimpleObjectWithPattern,
+      SimpleObjectWithPattern,
+    ];
+
+export type InlineObjectNestedComposition = Record<`prop-${string}`, unknown> & {
+  id: string;
+  payload: Blob;
+};
+
+export type InlineArrayNestedComposition = [boolean, 0 | 1, ...(0 | 1)[]];
+
+export type InlineArrayMinMaxItemsPrefixItemsComposition =
+  | [boolean, boolean]
+  | [
+      boolean,
+      boolean,
+      {
+        id: string;
+        payload: unknown;
+      },
+    ]
+  | [
+      boolean,
+      boolean,
+      {
+        id: string;
+        payload: unknown;
+      },
+      {
+        id: string;
+        payload: unknown;
+      },
+    ];
+
+export type InlineArrayMinItemsPrefixItemsComposition = [
+  boolean,
+  {
+    id: number;
+    payload: unknown;
+  },
+  ...{
+    id: number;
+    payload: unknown;
+  }[],
+];
+
+/**
+ * ## Intersection of `null` type
+ *
+ * Demonstrates composition of references, inline types and inappropriate types
+ * for intersection.
+ *
+ * @privateRemarks
+ * ###### allOf.1
+ *
+ * It has to be combined with `properties`-section from previous part to get `{
+ * id: string; }`.
+ *
+ * ###### Intersection of `null` type
+ *
+ * This is inappropriate type for this intersection. But there is ready solution
+ * for this case. It leaves up to you at designing time.
+ */
+export type ReferredTypesCompositionAndInline = {
+  id: string;
+} & null &
+  InlineObjectCompositionProperties &
+  InlineObjectCompositionPropertiesWithNot &
+  InlineObjectCompositionPatterns &
+  InlineObjectCompositionPropertiesAndPatterns &
+  InlineMixedComposition;
+
+export type ReferredTypesComposition = InlineObjectCompositionProperties &
+  InlineObjectCompositionPropertiesWithNot &
+  InlineObjectCompositionPatterns &
+  InlineObjectCompositionPropertiesAndPatterns &
+  InlineMixedComposition;
+
+/**
+ * This case has issue. We can't provide any suggestion how to mix
+ * non-compatible types.
+ */
+export type InlineMixedComposition = (Record<`X_${string}`, string> & {
+  id: string;
+}) &
+  `X-VALUE-${string}` &
+  {
+    itemTitle: string;
+    itemDescription?: string;
+  }[];
+
+export type InlineObjectCompositionPropertiesAndPatterns = Record<
+  `X_${string}`,
+  string | number
+> & {
+  id: string;
+  isActive: boolean;
+  description?: string;
+  title?: string;
+};
+
+export type InlineObjectCompositionPatterns = Record<
+  string,
+  {
+    isActivated: boolean;
+    forbiddenProperty?: never;
+    anotherForbiddenProperty?: never;
+    description: string;
+  }
+> &
+  Record<
+    `CORE_PROP_${string}`,
+    {
+      name: string;
+      isActivated?: boolean;
+      extendedOptions?: Record<string, unknown>;
+    }
+  > &
+  Record<
+    `EXTENDED_PROP_${string}`,
+    {
+      corePropertyRef: string;
+      isActivated?: boolean;
+    }
+  >;
+
+/**
+ * Similar to the `InlineObjectCompositionProperties` case, but containing 'not'
+ * condition. All allOf-items has to be merged into one object type to be
+ * rendered as a TypeScript interface.
+ */
+export interface InlineObjectCompositionPropertiesWithNot {
+  id?: string;
+  unprotectedProp?: never;
+  nonRequiredUnprotectedProp?: never;
+}
+
+/**
+ * An allOf-composition of object type aspects has to be merged into one and
+ * rendered as a TypeScript interface.
+ *
+ * @privateRemarks
+ * Required `type` and `unknownProperty` MUST NOT be unknown in th resulting
+ * schema!
+ *
+ * ###### allOf.1
+ *
+ * Enum type of the `type` extended by `'inherited'`
+ */
+export interface InlineObjectCompositionProperties {
+  type: ['inherited', 'hasOnlyProperties', 'emptyObject'];
+  unknownProperty: unknown;
+  payload: SimpleObjectWithPattern | SimpleObjectWithProperties;
+  group?: ['CoreProperty', 'BusinessProperty', 'TechnicalProperty'];
+  tags?: ('Application' | 'Component' | 'Extension' | 'Legacy')[];
+  role: UserRoleEnum | null;
+}
+
+export type UserRoleEnum = 'admin' | 'user' | 'guest';
+
+export interface SimpleObjectWithProperties {
+  content: SimpleObjectWithProperties[] | null;
+  id?: string;
+}
+
+export type SimpleObjectWithPattern = Record<
+  `${'int' | 'str' | 'bool'}_${string}`,
+  unknown
+>;
+
+/**
+ * ## comprehensive-schema
+ *
+ * Complex schema with all possible types
+ *
+ * @privateRemarks
+ * todo: add comments for all entries
+ *
+ * ###### InlineObjectCompositionProperties
+ *
+ * Use case: inline composition of objects with properties
+ *
+ * ###### InlineObjectCompositionPropertiesWithNot
+ *
+ * Use case: inline composition of object with a NOT-construction
+ *
+ * ###### ExclusionFromUnionInline
+ *
+ * `allOf` with combination of a reference to `SimpleUnionWithRefs` and `not` to
+ * `ArrayMinScalar` has to be: `Exclude<SimpleUnionWithRefs, ArrayMinScalar>`
+ */
+export type ComprehensiveSchema =
+  | {
+      delegatedFrom?: ComprehensiveSchema;
+      delegatedTo?: ComprehensiveSchema;
+    }
+  | InlineObjectCompositionProperties
+  | InlineObjectCompositionPropertiesWithNot
+  | InlineObjectCompositionPatterns
+  | InlineObjectCompositionPropertiesAndPatterns
+  | InlineMixedComposition
+  | ReferredTypesComposition
+  | ReferredTypesCompositionAndInline
+  | InlineArrayMinItemsPrefixItemsComposition
+  | InlineArrayMinMaxItemsPrefixItemsComposition
+  | InlineArrayNestedComposition
+  | InlineObjectNestedComposition
+  | ExclusionFromUnion
+  | Exclude<SimpleUnionWithRefs, ArrayMinScalar>
+  | SimpleUnionWithRefs
+  | NonWorkingExclusionFromUnionByAnyOf
+  | ObjectIfThenElseEnumWithMixin
+  | SimpleOneOfUnionWithRefsToArray
+  | SimpleOneOfUnionWithRefsToObjects
+  | SimpleOneOfUnionWithObjects
+  | SimpleOneOfUnionWithMixedTypes
+  | FirstLevel
+  | PatternString
+  | SimplestStringPatternCase
+  | SimpleDynamicRef;

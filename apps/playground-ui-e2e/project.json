@@ -1,0 +1,16 @@
+{
+  "name": "playground-ui-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "tags": ["application:frontend"],
+  "implicitDependencies": ["playground-ui"],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/playground-ui-e2e",
+        "command": "tsc --noEmit -p tsconfig.e2e.json"
+      }
+    }
+  }
+}

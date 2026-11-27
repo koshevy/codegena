@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "properties": {
+    "mixinProp": {}
+  },
+  "required": ["mixinProp"],
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "email": {}
+      },
+      "required": ["email"]
+    },
+    {
+      "type": "array",
+      "items": {}
+    }
+  ]
+}

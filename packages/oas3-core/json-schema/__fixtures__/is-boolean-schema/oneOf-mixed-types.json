@@ -1,0 +1,12 @@
+{
+  "title": "Boolean or string discriminator",
+  "oneOf": [
+    {
+      "type": "boolean"
+    },
+    {
+      "type": "string",
+      "enum": ["true", "false"]
+    }
+  ]
+}

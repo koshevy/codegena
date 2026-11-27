@@ -1,0 +1,70 @@
+{
+  "name": "@codegena/oas3-visitor-typescript",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "../../dist/oas3-visitor-typescript/index.cjs",
+  "module": "../../dist/oas3-visitor-typescript/index.esm.js",
+  "types": "../../dist/oas3-visitor-typescript/index.esm.d.ts",
+  "bin": {
+    "oas3-visitor-typescript": "./cli.esm.js"
+  },
+  "files": [
+    "../../dist/oas3-visitor-typescript",
+    "!**/*.tsbuildinfo"
+  ],
+  "engines": {
+    "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
+  },
+  "nx": {
+    "tags": [
+      "pure:publishable"
+    ],
+    "targets": {
+      "build": {
+        "dependsOn": ["^build", "@codegena/source:apply-dependency-patches"],
+        "outputs": [
+          "{workspaceRoot}/dist/oas3-visitor-typescript"
+        ]
+      },
+      "test": {
+        "dependsOn": [
+          "build"
+        ],
+        "options": {
+          "command": "node --experimental-vm-modules ../../node_modules/jest/bin/jest.js"
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "@codegena/oas3-core": "*",
+    "pathe": "^2.0.3",
+    "prettier": "^3.9.10",
+    "prettier-plugin-jsdoc": "^1.8.1",
+    "recheck": "4.5.0",
+    "regexp-tree": "^0.1.27",
+    "yargs": "^18.2.0"
+  },
+  "devDependencies": {
+    "@codegena/infr-nx": "*",
+    "@nx/jest": "23.3.2",
+    "@swc/core": "1.15.8",
+    "@swc/jest": "~0.2.38",
+    "@types/jest": "~30.0.0",
+    "@types/lodash": "^4.17.25",
+    "@types/node": "^24.0.0",
+    "@types/yargs": "^17.0.35",
+    "eslint": "^10.13.0",
+    "jest": "~30.3.0",
+    "jest-environment-node": "~30.3.0",
+    "nx": "23.3.2",
+    "rollup": "^4.14.0",
+    "ts-jest": "^29.4.7"
+  },
+  "peerDependencies": {
+    "ansi-colors": "4.x",
+    "jsonc-parser": "3.x",
+    "lodash": "4.x",
+    "typescript": "6.x"
+  }
+}

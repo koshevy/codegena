@@ -1,0 +1,1 @@
+export { Infographics } from './infographics';

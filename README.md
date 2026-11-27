@@ -1,227 +1,113 @@
-# Codegeneration from OAS3
+# Codegena
 
-> Actual Roadmap [is published](https://github.com/koshevy/codegena/blob/codegena-3.x/ROADMAP.md)!
+This is the monorepo for the `@codegena/` npm scope. It contains publishable
+libraries that run in Node.js and browsers, shared UI components, and the
+Codegena website and documentation.
 
-This project is a kit of tools for code generation from OpenAPI3 specification:
+Codegena generates programming code from OpenAPI 3 and JSON Schema.
 
-- Data types and models (see [generated examples](https://github.com/koshevy/codegena/tree/master/libs/todo-app-scheme/src/lib/typings) from [this spec](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/specs/todo-app-spec.json))
-- REST API client services ([examples](https://github.com/koshevy/codegena/tree/master/libs/todo-app-scheme/src/lib/services))
-- Validation tools in clients
-- Extracted JSON Schemas ([example](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/services/schema.f494efb9904ca366b64883.ts))
+## Contents
 
-In the future it can be appended with:
-- REST API backend service templates
-- Pure validation tools and validation presets
+- [Get started](#get-started)
+- [Work with Nx](#work-with-nx)
+- [Run the site locally](#run-the-site-locally)
+- [Libraries](#libraries)
+- [Contributing](#contributing)
 
-## Some features:
+## Get started
 
-Features of data type generation:
+Once you have a supported Node.js version and npm 12, the only setup step is
+to run this from the repository root. [Version requirements](package.json)
 
-- Can deal with recursive dependencies and deep nestings
-- Smart adding of comments for different contexts ([types](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/to-do-task.ts#L6) / [properties](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/to-do-task.ts#L45) / [type variants](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/to-do-task.ts#L50) / [interface concatenation parts](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/to-do-group.ts#L6) )
-- Extracts common types and adds [imports](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/attachment-meta-image.ts#L2) where it is necessary
-- Makes correct arrays of [simple](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/http-error-bad-request.ts#L7) and [complex](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/to-do-task.ts#L49) types
-- Marks [optional parameters](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/get-groups-parameters.ts#L9) of objects if they are not in `required`
-- Understands where has to use [OOP inheritance](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/to-do-task.ts#L10) and [interface concatenation](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/to-do-group.ts#L5)
-- Converts JSON Schema enums to [simple type definitions](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/attachment-meta-document.ts#L22) or in TypeScript Enum, if it uses `$ref` to component  
-- Converts `additionalProperties` to [correct typescript constructions](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/attachment-meta-image.ts#L24)
-- Converts `anyOf` / `allOf` to type variants 
-- Makes complex data types of
-  - [responses with few codes](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/update-group-response.ts)
-  - [requests](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/create-group-item-request.ts#L4)
-  - [parameters](https://github.com/koshevy/codegena/blob/master/libs/todo-app-scheme/src/lib/typings/update-group-parameters.ts) (both in a query and in a search)
-
-## Table of contents
-
-1. [Demo](#demo)
-1. [Packages](#packages)
-1. [How to use](#how-to-use)
-   - [oapi3ts-cli: using in NodeJS scripts](#oapi3ts-cli-using-in-nodejs-scripts)
-   - [CLI arguments for oapi3ts-cli](#cli-arguments-for-oapi3ts-cli)
-   - [oapi3ts API](#oapi3ts-api)
-1. [Work with this project](#work-with-this-project)
-
-
-## Demo
-
-- [TypeScript types and Angular client services](https://github.com/koshevy/codegena/tree/master/libs/todo-app-scheme) in a demo project
-- [Stackblitz playground](https://codegena-playground.stackblitz.io/)
-- [Example of using of generated data types](https://github.com/koshevy/codegena/blob/master/apps/todo-app-backend/src/app/app.controller.ts) in a demo backend-controller
-- [Example of using of generated data types](https://github.com/koshevy/codegena/blob/master/apps/todo-app/src/app/todo-tasks/todo-tasks.store.ts) in a demo frontend application
-- [todo-app-backend](https://github.com/koshevy/codegena/tree/master/apps/todo-app-backend) — demo backend application (NestJS) uses `@codegena` tools
-- [todo-app](https://github.com/koshevy/codegena/tree/master/apps/todo-app) — demo frontend application (Angular) uses `@codegena` tools
-- [Source code of codegena-playground](https://stackblitz.com/edit/codegena-playground). Demonstrates work in a browser.
-
-## Packages
-
-- [oapi3ts](https://github.com/koshevy/codegena/tree/master/libs/oapi3ts) — core library with base adadpters for supported languages. Does generation of data types and models.
-- [ng-api-service](https://github.com/koshevy/codegena/tree/master/libs/ng-api-service) — experimental library for generating Angular client services
-- [oapi3ts-cli](https://github.com/koshevy/codegena/tree/master/libs/oapi3ts-cli) — Aggregator for supported generation libraries. Provides application working in browser or in CLI.
-- [todo-app-scheme](https://github.com/koshevy/codegena/tree/master/libs/todo-app-scheme) — Demo library with auto generated data types and Angular services. Works locally, does't get published in NPM. 
-
-## How to use
-
-#### oapi3ts-cli: using in NodeJS scripts
-
-Install:
-
-```
-npm i @codegena/oapi3ts-cli
+```sh
+npm ci
 ```
 
-or
+Nx applies the workspace's dependency patches before tasks that use them.
+Find package-specific details in the individual READMEs listed under
+[Libraries](#libraries).
 
-```
-yarn add @codegena/oapi3ts-cli
-```
+<a id="work-with-nx"></a>
 
-So you can use `@codegena/oapi3ts-cli` in NodeJS scripts. For example, lets create `update-typings.js` script with code:
+## 🧭 Work with Nx
 
-```javascript
-"use strict";
+We use Nx to build and test the apps and libraries in this repository. If
+you're new to Nx, read its introduction before working in the monorepo.
+[Intro to Nx](https://nx.dev/docs/getting-started/intro)
 
-var cliLib = require('@codegena/oapi3ts-cli');
-var cliApp = new cliLib.CliApplication;
+| Command | What it runs |
+| --- | --- |
+| `npx nx run-many --target=build` | Builds all apps and libraries with a `build` target. |
+| `npx nx run-many --target=e2e` | Runs all standard end-to-end suites across the repo. |
+| `npx nx affected --target=test` | Tests projects affected by changes on your branch, including projects that depend on them. |
 
-cliApp.createTypings();
-cliApp.createServices('angular');
-```
+The full end-to-end run needs Docker Compose and Playwright Chromium. Install
+the browser with `npx playwright install chromium` if it is missing. The landing
+SSR and Lighthouse checks have their own targets.
+[Landing test catalog](apps/landing-mf-host-e2e/TESTCASES.md) ·
+[CLI test setup](apps/cli-delivery-e2e/README.md)
 
-Then launch:
+<a id="run-the-site-locally"></a>
 
-```
-node ./update-typings.js --srcPath ./specs/todo-app-spec.json --destPath ./ --separatedFiles true
-```
+## 🌐 Run the site locally
 
-Class `CliApplication` will get command line arguments `destPath`, `srcPath` and `separatedFiles` by itself.
-
-#### CLI arguments for oapi3ts-cli
-
-
-| CLI Argument       | Description                                                                   |
-|--------------------|-------------------------------------------------------------------------------|
-| **srcPath**        | Path of url of JSON file with OpenAPI3 specification                          |
-| **destPath**       | Path for destination directory                                                |
-| **separatedFiles** | Whether should converted types been saved in separate files, or in single file |
-
-Also, you can set some of options for convertor's [configuration](https://github.com/koshevy/oapi3codegen/blob/master/core/config.ts#L99)
-config via CLI:
-
-| Option                          | Description                                                                   |
-|---------------------------------|-------------------------------------------------------------------------------|
-| **defaultContentType**          | Default content-type contains no prefixes/suffixes in type names.             |
-| **implicitTypesRefReplacement** | Mode when models that refer to any models via `$ref` are replacing implicitly even if firsts have names |
-
-#### oapi3ts API
-
-You can use API of `@codegena/oapi3ts` to convert whole OAS3 schema object to data type descriptions. Example for TypeScript:
-
-```typescript
-import { Convertor } from '@codegena/oapi3ts';
-
-const convertor: Convertor = new Convertor();
-const context = {};
-
-/**
- * Base models of specification:
- *  - Requests bodies models
- *  - Requests params sets models
- *  - Responses models
- *
- * Converting starts from entry points and extracts
- * referred types and dependencies. It s why we need
- * to get "entry points". 
- */
-const entryPoints = convertor.getOAPI3EntryPoints(context);
-
-/**
- * Rendering each type: every entry point and each of
- * theirs related types.
- */
-Convertor.renderRecursive(
-    entryPoints,
-    (descriptor: DataTypeDescriptor, text) => {
-        // Here your code: you get text and type descriptor.
-        // Example of using: 
-        // https://github.com/koshevy/codegena/blob/master/libs/oapi3ts-cli/src/abstract-application.ts#L57
-    }
-);
+```sh
+npx nx serve landing-mf-host
 ```
 
-And also, you can convert just a JSON-schema into type descriptor and render it:
+Open the [landing page](http://localhost:8102/), [Docs](http://localhost:8102/docs/),
+or [Playground](http://localhost:8102/playground). To run either app on its own,
+see its setup guide. [Documentation](apps/documentation-mf-remote/README.md) ·
+[Playground](apps/playground-mf-remote/README.md)
 
-```typescript
-import { Convertor } from 'oapi3codegen';
-// you need prettier to beautify result of rendering
-import * as prettier from 'prettier';
-// provides `_.each(...)` for our example
-import * as _ from 'lodash';
+For the server-rendered site at [https://localhost/](https://localhost/), use
+the Docker Compose setup. [Landing SSR guide](apps/landing-mf-host-ssr/README.md)
 
-const convertor: Convertor = new Convertor();
+<details>
+<summary>Trust Caddy's local certificate on macOS</summary>
 
-const anotherJsonSchemaObject = {
-    "title": "Person",
-    "description": "Information about person you have to register in your system.",
-    "type": "object",
-    "properties": {
-        "firstName": {
-            "type": "string"
-        },
-        "lastName": {
-            "type": "string"
-        },
-        "age": {
-            "description": "Age in years",
-            "type": "integer",
-            "minimum": 0
-        }
-    },
-    "required": ["firstName", "lastName"]
-};
+With the Docker stack running, open a second terminal at the repository root
+and copy and trust its public root certificate.
 
-const convertResult = convertor.convert(
-    anotherJsonSchemaObject,
-    {},
-    'AnotherType'
-);
-
-_.each(convertResult, typeDescriptor => {
-    const typeCode = prettier.format(
-        typeDescriptor.render([]),
-        {parser: 'typescript'}
-    );
-
-    console.log(typeCode);
-});
+```sh
+caddy_root="$(mktemp -d)/codegena-caddy-root.crt"
+docker compose --env-file apps/landing-mf-host-ssr/.env.local -f apps/landing-mf-host-ssr/docker-compose.yml cp \
+  caddy:/data/caddy/pki/authorities/local/root.crt "$caddy_root"
+sudo security add-trusted-cert -d -r trustRoot \
+  -k /Library/Keychains/System.keychain "$caddy_root"
 ```
 
-It will output:
+Reopen the browser. The `caddy-data` volume preserves the same certificate
+authority across container restarts.
 
-```plaintext
-/**
- * ## Person
- * Information about person you have to register in your system.
- */
-export interface AnotherType {
-  firstName: string;
+</details>
 
-  lastName: string;
+## Libraries
 
-  /**
-   * Age in years
-   */
-  age?: number;
-}
-```
+| Package | Responsibility |
+| --- | --- |
+| [`@codegena/audit-ci`](packages/audit-ci/README.md) | Check npm dependencies for known vulnerabilities. |
+| [`@codegena/graph-core`](packages/graph-core/README.md) | Build a framework-neutral graph of generated files, declarations, and relations. |
+| [`@codegena/graph-search-core`](packages/graph-search-core/README.md) | Index graph data, rank search results, and track visits. |
+| [`@codegena/graph-search-ui`](packages/graph-search-ui/README.md) | Render the graph search interface and its results. |
+| [`@codegena/graph-ui`](packages/graph-ui/README.md) | Render the declaration graph and handle selection and navigation. |
+| [`@codegena/infr-docker-compose`](packages/infr-docker-compose/README.md) | Build, run, and publish Compose stacks through Nx. |
+| [`@codegena/infr-nx`](packages/infr-nx/README.md) | Share ESLint policy, Rollup packaging, and TypeScript declarations. |
+| [`@codegena/notification-ui-core`](packages/notification-ui-core/README.md) | Define the React notification contract. |
+| [`@codegena/notification-ui-notistack`](packages/notification-ui-notistack/README.md) | Present notifications through Notistack. |
+| [`@codegena/oas3-core`](packages/oas3-core/README.md) | Parse JSONC and schemas into a source-aware model for visitors. |
+| [`@codegena/oas3-visitor-typescript`](packages/oas3-visitor-typescript/README.md) | Generate TypeScript declarations through a JavaScript API or the CLI. |
+| [`@codegena/playground-ui`](packages/playground-ui/README.md) | Combine schema editing, generated files, diagnostics, and graph navigation. |
+| [`@codegena/pwa`](packages/pwa/README.md) | Provide worker-backed HTTP routes, build-scoped caching, and bundle warmup. |
+| [`@codegena/ui-theme`](packages/ui-theme/README.md) | Provide the shared MUI palettes, typography, and startup styles. |
+| [`@codegena/ui-unified`](packages/ui-unified/README.md) | Provide shared controls and code editors with full Monaco and minimal TanStack Highlight modes. |
+| [`@codegena/util-dev-mode`](packages/util-dev-mode/README.md) | Share development and testing settings through React context. |
 
-## Work with this project
+For examples, see the [generator use cases](packages/oas3-visitor-typescript/USECASES.md)
+and [sample graph payloads](packages/graph-core/__examples__/README.md).
 
-| Command                         | Action                                                                   |
-|---------------------------------|-------------------------------------------------------------------------------|
-| `ng serve todo-app-backend` | Run demo backend application. |
-| `ng serve todo-app` | Run demo frontend application. |
-| `yarn run build:all-libs`          | Build all valuable libs and turn applications to use prebuilt versions of libs (not TypeScript). It's necessary for running and testing applications and libraries in terms close to production.             |
-| `yarn run clear:prebuilt-libs` | Clear prebuilt libs versions and return project to using live reloading TypeScript sources. |
-| `yarn run test:libs` | Test libraries supposed to be published. |
-| `yarn run docs:swagger-ui` | Runs `swagger-ui` for spec file at http://localhost:3001.  |
+## Contributing
 
+Read the [contribution guide](CONTRIBUTING.md) and [code style](CODE_STYLE.md)
+before changing code. Consult the [architecture decisions](adr/README.md) when
+changing shared behavior. For AI-assisted work, see [AGENTS.md](AGENTS.md).

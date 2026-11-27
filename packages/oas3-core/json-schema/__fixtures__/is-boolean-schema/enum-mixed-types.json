@@ -1,0 +1,4 @@
+{
+  "enum": [true, "yes", 1],
+  "description": "Ambiguous legacy values from multiple API versions"
+}

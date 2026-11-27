@@ -1,0 +1,20 @@
+{
+  "name": "@codegena/oas3-visitor-typescript-e2e",
+  "version": "0.0.0",
+  "private": true,
+  "devDependencies": {
+    "@codegena/infr-nx": "*",
+    "@codegena/oas3-visitor-typescript": "*",
+    "@nx/jest": "23.3.2",
+    "@swc/core": "1.15.8",
+    "@swc/jest": "~0.2.38",
+    "@types/jest": "~30.0.0",
+    "@types/node": "^24.0.0",
+    "eslint": "^10.13.0",
+    "jest": "~30.3.0",
+    "jest-environment-node": "~30.3.0",
+    "nx": "23.3.2",
+    "ts-jest": "^29.4.7",
+    "typescript": "6.0.3"
+  }
+}

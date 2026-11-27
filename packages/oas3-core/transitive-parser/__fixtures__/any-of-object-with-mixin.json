@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "properties": {
+    "mixinProp": {}
+  },
+  "required": [
+    "mixinProp"
+  ],
+  "anyOf": [
+    {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "email"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "phone": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "phone"
+      ]
+    }
+  ]
+}

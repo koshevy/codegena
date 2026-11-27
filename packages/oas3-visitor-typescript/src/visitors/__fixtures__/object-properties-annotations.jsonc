@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "elevation": {
+      "type": "integer",
+      "title": "Shadow depth",
+      "description": "Corresponds to `dp` in the spec.",
+      "examples": [1]
+    },
+    "square": {
+      "type": "boolean",
+      "description": "If true, rounded corners are disabled.",
+      "$comment": "Remove after migration.",
+      "deprecated": true
+    },
+    "options": {
+      "type": "object",
+      "description": "Additional options.",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "Label shown to the user."
+        }
+      }
+    },
+    "undocumented": {
+      "type": "string"
+    }
+  }
+}

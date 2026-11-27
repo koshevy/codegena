@@ -1,0 +1,26 @@
+{
+  "$id": "object-pattern-properties-non-parseable-custom-default-key",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Keys [a-z-]{2,32} and [0-9]{2,32} are non-parseable so both have to be collapsed in single Record<`EXTERNAL_PROP_${string}`, ...> with nested records containing ^INTERNAL_PROP_ and ^INTERNAL_DEC_PROP_ keys.",
+  "type": "object",
+  "propertyNames": {
+    "pattern": "^EXTERNAL_PROP_"
+  },
+  "patternProperties": {
+    "[a-z-]{2,32}": {
+      "propertyNames": {
+        "pattern": "^INTERNAL_PROP_"
+      }
+    },
+    "[0-9]{2,32}": {
+      "propertyNames": {
+        "pattern": "^INTERNAL_DEC_PROP_"
+      }
+    },
+    "^0x[0-9A-F]{2,32}": {
+      "propertyNames": {
+        "pattern": "^INTERNAL_HEX_PROP_"
+      }
+    }
+  }
+}

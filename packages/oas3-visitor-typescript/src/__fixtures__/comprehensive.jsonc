@@ -1,0 +1,976 @@
+// Endemic testing schema
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "comprehensive-schema",
+  "description": "Complex schema with all possible types",
+  "$comment": "todo: add comments for all entries",
+  "type": "object",
+  "anyOf": [
+    {
+      "description": "Self delegated type",
+      "type": "object",
+      "properties": {
+        "delegatedFrom": { "$ref": "#" },
+        "delegatedTo": { "$ref": "#" }
+      }
+    },
+    {
+      "title": "InlineObjectCompositionProperties",
+      "$comment": "Use case: inline composition of objects with properties",
+      "$ref": "#/$defs/AllOfCases/InlineObjectCompositionProperties"
+    },
+    {
+      "title": "InlineObjectCompositionPropertiesWithNot",
+      "$comment": "Use case: inline composition of object with a NOT-construction",
+      "$ref": "#/$defs/AllOfCases/InlineObjectCompositionPropertiesWithNot"
+    },
+    {
+      "$ref": "#/$defs/AllOfCases/InlineObjectCompositionPatterns"
+    },
+    {
+      "$ref": "#/$defs/AllOfCases/InlineObjectCompositionPropertiesAndPatterns"
+    },
+    {
+      "$ref": "#/$defs/AllOfCases/InlineMixedComposition"
+    },
+    {
+      "$ref": "#/$defs/AllOfCases/ReferredTypesComposition"
+    },
+    {
+      "$ref": "#/$defs/AllOfCases/ReferredTypesCompositionAndInline"
+    },
+    {
+      "$ref": "#/$defs/AllOfCases/InlineArrayMinItemsPrefixItemsComposition"
+    },
+    {
+      "$ref": "#/$defs/AllOfCases/InlineArrayMinMaxItemsPrefixItemsComposition"
+    },
+    {
+      "$ref": "#/$defs/AllOfCases/InlineArrayNestedComposition"
+    },
+    {
+      "$ref": "#/$defs/AllOfCases/InlineObjectNestedComposition"
+    },
+    {
+      "$ref": "#/$defs/AllOfCases/ExclusionFromUnion"
+    },
+    {
+      "title": "ExclusionFromUnionInline",
+      "$comment": "`allOf` with combination of a reference to `SimpleUnionWithRefs` and `not` to `ArrayMinScalar` has to be: `Exclude<SimpleUnionWithRefs, ArrayMinScalar>`",
+      "allOf": [
+        { "$ref": "#/$defs/AnyOfCases/SimpleUnionWithRefs" },
+        {
+          "not": {
+            "$ref": "#/$defs/SimpleArrayCases/ArrayMinScalar"
+          }
+        }
+      ]
+    },
+    {
+      "$ref": "#/$defs/AnyOfCases/SimpleUnionWithRefs"
+    },
+    {
+      "$ref": "#/$defs/AnyOfCases/NonWorkingExclusionFromUnionByAnyOf"
+    },
+    {
+      "$ref": "#/$defs/IfCases/ObjectIfThenElseEnumWithMixin"
+    },
+    {
+      "$ref": "#/$defs/OneOfCases/SimpleOneOfUnionWithRefsToArray"
+    },
+    {
+      "$ref": "#/$defs/OneOfCases/SimpleOneOfUnionWithRefsToObjects"
+    },
+    {
+      "$ref": "#/$defs/OneOfCases/SimpleOneOfUnionWithObjects"
+    },
+    {
+      "$ref": "#/$defs/OneOfCases/SimpleOneOfUnionWithMixedTypes"
+    },
+    {
+      "$ref": "#/$defs/RecursiveRefCases/FirstLevel"
+    },
+    {
+      "$ref": "#/$defs/StringCases/PatternString"
+    },
+    {
+      "$ref": "#/$defs/StringCases/SimplestStringPatternCase"
+    },
+    {
+      "$ref": "#/$defs/DynamicAnchorOnlyCases/SimpleDynamicRef"
+    }
+  ],
+  "$defs": {
+    "AllOfCases": {
+      "InlineObjectCompositionProperties": {
+        "$comment": "Required `type` and `unknownProperty` MUST NOT be unknown in th resulting schema!",
+        "description": "An allOf-composition of object type aspects has to be merged into one and rendered as a TypeScript interface.",
+        "allOf": [
+          {
+            "required": ["type", "unknownProperty"]
+          },
+          {
+            "$comment": "Enum type of the `type` extended by `'inherited'`",
+            "properties": {
+              "type": {
+                "enum": [
+                  "inherited"
+                ]
+              },
+              "payload": {
+                "$ref": "#/$defs/SimplestObjectCases/SimpleObjectWithPattern"
+              }
+            },
+            "required": [
+              "payload"
+            ]
+          },
+          {
+            "properties": {
+              "type": {
+                "enum": [
+                  "hasOnlyProperties",
+                  "emptyObject"
+                ]
+              },
+              "payload": {
+                "$ref": "#/$defs/SimplestObjectCases/SimpleObjectWithProperties"
+              }
+            }
+          },
+          {
+            "properties": {
+              "group": {
+                "const": "CoreProperty"
+              }
+            }
+          },
+          {
+            "properties": {
+              "group": {
+                "enum": [
+                  "BusinessProperty",
+                  "TechnicalProperty"
+                ]
+              }
+            }
+          },
+          {
+            "properties": {
+              "tags": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "Application",
+                    "Component",
+                    "Extension"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "properties": {
+              "tags": {
+                "type": "array",
+                "items": {
+                  "const": ["Legacy"]
+                }
+              }
+            }
+          },
+          {
+            "properties": {
+              "role": {
+                "$ref": "#/$defs/StringCases/UserRoleEnum"
+              }
+            }
+          },
+          {
+            "properties": {
+              "role": {
+                "type": "null"
+              }
+            },
+            "required": ["role"]
+          }
+        ]
+      },
+      "InlineObjectCompositionPropertiesWithNot": {
+        "description": "Similar to the `InlineObjectCompositionProperties` case, but containing 'not' condition. All allOf-items has to be merged into one object type to be rendered as a TypeScript interface.",
+        "allOf": [
+          {
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "unprotectedProp": {
+                "type": "string"
+              },
+              "nonRequiredUnprotectedProp": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "not": {
+              "properties": {
+                "unprotectedProp": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "nonRequiredUnprotectedProp"
+              ]
+            }
+          }
+        ]
+      },
+      "InlineObjectCompositionPatterns": {
+        "allOf": [
+          {
+            "additionalProperties": {
+              "properties": {
+                "isActivated": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "propertyNames": {
+              "pattern": "^[A-Z0-9_]+$"
+            }
+          },
+          {
+            "additionalProperties": {
+              "properties": {
+                "description": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "isActivated",
+                "description"
+              ]
+            }
+          },
+          {
+            "not": {
+              "additionalProperties": {
+                "required": ["forbiddenProperty"]
+              }
+            }
+          },
+          {
+            "not": {
+              "additionalProperties": {
+                "properties": {
+                  "anotherForbiddenProperty": {}
+                }
+              }
+            }
+          },
+          {
+            "patternProperties": {
+              "^CORE_PROP_[A-Z0-9_]+$": {
+                "properties": {
+                  "isActivated": {
+                    "type": "boolean"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          },
+          {
+            "patternProperties": {
+              "^CORE_PROP_[A-Z0-9_]+$": {
+                "properties": {
+                  "extendedOptions": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "patternProperties": {
+              "^CORE_PROP_[A-Z0-9_]+$": {
+                "not": {
+                  "properties": {
+                    "exampleForbiddenProp": {}
+                  },
+                  "required": [
+                    "corePropertyRef"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "patternProperties": {
+              "^EXTENDED_PROP_[A-Z0-9_]+$": {
+                "type": "object",
+                "properties": {
+                  "isActivated": {
+                    "type": "boolean"
+                  },
+                  "corePropertyRef": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "corePropertyRef"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "InlineObjectCompositionPropertiesAndPatterns": {
+        "allOf": [
+          {
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "isActive": {
+                "type": "boolean"
+              },
+              "description": {
+                "type": "string"
+              }
+            },
+            "patternProperties": {
+              "^X_[A-Z0-9_]": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "properties": {
+              "title": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "isActive"
+            ],
+            "patternProperties": {
+              "^X_[A-Z0-9_]": {
+                "type": "number"
+              }
+            }
+          }
+        ]
+      },
+      "InlineObjectNestedComposition": {
+        "allOf": [
+          {
+            "allOf": [
+              {
+                "required": [
+                  "payload"
+                ]
+              }
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "allOf": [
+              {
+                "required": [
+                  "id"
+                ]
+              },
+              {
+                "allOf": [
+                  {
+                    "properties": {
+                      "payload": {
+                        "type": "string",
+                        "format": "binary"
+                      }
+                    }
+                  },
+                  {
+                    "propertyNames": {
+                      "pattern": "^prop-"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "InlineArrayMinItemsPrefixItemsComposition": {
+        "allOf": [
+          {
+            "minItems": 2
+          },
+          {
+            "items": {
+              "properties": {
+                "id": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          {
+            "items": {
+              "required": ["id", "payload"]
+            }
+          },
+          {
+            "prefixItems": [
+              { "type": "boolean" }
+            ]
+          }
+        ]
+      },
+      "InlineArrayMinMaxItemsPrefixItemsComposition": {
+        "allOf": [
+          {
+            "minItems": 2
+          },
+          {
+            "maxItems": 4,
+            "items": {
+              "required": ["id", "payload"]
+            }
+          },
+          {
+            "prefixItems": [
+              { "type": "boolean" },
+              { "type": "boolean" }
+            ]
+          },
+          {
+            "items": {
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "InlineArrayNestedComposition": {
+        "allOf": [
+          {
+            "allOf": [
+              {
+                "prefixItems": [
+                  { "type": "boolean" }
+                ]
+              },
+              {
+                "minItems": 2
+              }
+            ]
+          },
+          {
+            "allOf": [
+              {
+                "items": {
+                  "enum": [0, 1]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "InlineMixedComposition": {
+        "description": "This case has issue. We can't provide any suggestion how to mix non-compatible types.",
+        "allOf": [
+          {
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "patternProperties": {
+              "^X_[A-Z0-9_]": {
+                "type": "string"
+              }
+            },
+            "required": ["id"]
+          },
+          {
+            "pattern": "^X-VALUE-([A-Z0-9-])+$"
+          },
+          {
+            "type": "null"
+          },
+          {
+            "const": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "properties": {
+                "itemTitle": {
+                  "type": "string"
+                },
+                "itemDescription": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "type": "array",
+            "items": {
+              "required": ["itemTitle"]
+            }
+          }
+        ]
+      },
+      "ReferredTypesComposition": {
+        "allOf": [
+          {
+            "$ref": "#/$defs/AllOfCases/InlineObjectCompositionProperties"
+          },
+          {
+            "$ref": "#/$defs/AllOfCases/InlineObjectCompositionPropertiesWithNot"
+          },
+          {
+            "$ref": "#/$defs/AllOfCases/InlineObjectCompositionPatterns"
+          },
+          {
+            "$ref": "#/$defs/AllOfCases/InlineObjectCompositionPropertiesAndPatterns"
+          },
+          {
+            "$ref": "#/$defs/AllOfCases/InlineMixedComposition"
+          }
+        ]
+      },
+      "ReferredTypesCompositionAndInline": {
+        "description": "Demonstrates composition of references, inline types and inappropriate types for intersection.",
+        "allOf": [
+          {
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "$comment": "It has to be combined with `properties`-section from previous part to get `{  id: string; }`.",
+            "required": ["id"]
+          },
+          {
+            "title": "Intersection of `null` type",
+            "$comment": "This is inappropriate type for this intersection. But there is ready solution for this case. It leaves up to you at designing time.",
+            "type": "null"
+          },
+          {
+            "$ref": "#/$defs/AllOfCases/InlineObjectCompositionProperties"
+          },
+          {
+            "$ref": "#/$defs/AllOfCases/InlineObjectCompositionPropertiesWithNot"
+          },
+          {
+            "$ref": "#/$defs/AllOfCases/InlineObjectCompositionPatterns"
+          },
+          {
+            "$ref": "#/$defs/AllOfCases/InlineObjectCompositionPropertiesAndPatterns"
+          },
+          {
+            "$ref": "#/$defs/AllOfCases/InlineMixedComposition"
+          }
+        ]
+      },
+      "ExclusionFromUnion": {
+        "allOf": [
+          { "$ref": "#/$defs/AnyOfCases/SimpleUnionWithRefs" },
+          {
+            "not": {
+              "$ref": "#/$defs/SimpleArrayCases/ArrayMinScalar"
+            }
+          }
+        ]
+      }
+    },
+    "AnyOfCases": {
+      "SimpleUnionWithRefs": {
+        "anyOf": [
+          { "$ref": "#/$defs/SimpleArrayCases/ArrayMinMaxWithRefs" },
+          { "$ref": "#/$defs/SimpleArrayCases/ArrayMinScalar" },
+          { "$ref": "#/$defs/SimpleArrayCases/ArrayScalar" }
+        ]
+      },
+      "NonWorkingExclusionFromUnionByAnyOf": {
+        "$comment": "The 'not' will be ignored in current implementation",
+        "anyOf": [
+          { "$ref": "#/$defs/AnyOfCases/SimpleUnionWithRefs" },
+          {
+            "not": {
+              "$ref": "#/$defs/SimpleArrayCases/ArrayMinScalar"
+            }
+          }
+        ]
+      }
+    },
+    "IfCases": {
+      "ObjectIfThenElseEnumWithMixin": {
+        "properties": {
+          "type": {
+            "enum": [
+              "plants",
+              "animals"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "if": {
+          "properties": {
+            "type": {
+              "const": "plants"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "angiosperms": {
+              "enum": [
+                "monocots",
+                "eudicots"
+              ]
+            }
+          }
+        },
+        "else": {
+          "properties": {
+            "iEumetazoa": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "OneOfCases": {
+      "SimpleOneOfUnionWithRefsToArray": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/SimpleArrayCases/ArrayMinMaxWithRefs"
+          },
+          {
+            "$ref": "#/$defs/SimpleArrayCases/ArrayMinScalar"
+          },
+          {
+            "$ref": "#/$defs/SimpleArrayCases/ArrayScalar"
+          }
+        ]
+      },
+      "SimpleOneOfUnionWithRefsToObjects": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/SimplestObjectCases/SimpleObjectWithPattern"
+          },
+          {
+            "$ref": "#/$defs/SimplestObjectCases/SimpleObjectWithProperties"
+          },
+          {
+            "$ref": "#/$defs/SimplestObjectCases/AnotherSimpleObjectWithProperties"
+          }
+        ]
+      },
+      "SimpleOneOfUnionWithObjects": {
+        "oneOf": [
+          {
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "content": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          },
+          {
+            "required": [
+              "id",
+              "content"
+            ]
+          },
+          {
+            "properties": {
+              "content": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "properties": {
+              "title": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "SimpleOneOfUnionWithMixedTypes": {
+        "oneOf": [
+          {
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "content": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          },
+          {
+            "items": {
+              "$ref": "#/$defs/SimplestObjectCases/SimpleObjectWithPattern"
+            }
+          },
+          {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        ]
+      }
+    },
+    "RecursiveRefCases": {
+      "ZeroLevel": {
+        "$dynamicAnchor": "AnchorZeroLevel",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "abstractProperty": {
+            "propertyNames": {
+              "pattern": "^abstract-"
+            }
+          }
+        }
+      },
+      "FirstLevel": {
+        "$ref": "#/$defs/RecursiveRefCases/ZeroLevel",
+        "properties": {
+          "children": {
+            "$ref": "#/$defs/RecursiveRefCases/SecondLevel"
+          }
+        },
+        "required": ["id"]
+      },
+      "SecondLevel": {
+        "properties": {
+          "relatedItem": {
+            "anyOf": [
+              { "$ref": "#/$defs/RecursiveRefCases/FirstLevel" },
+              { "$ref": "#/$defs/RecursiveRefCases/SecondLevel" },
+              { "$ref": "#/$defs/RecursiveRefCases/ThirdLevel" }
+            ]
+          }
+        }
+      },
+      "ThirdLevel": {
+        "$dynamicAnchor": "AnchorThirdLevel",
+        "$ref": "#/$defs/RecursiveRefCases/SecondLevel",
+        "properties": {
+          "anotherRelatedItem": {
+            "anyOf": [
+              { "$ref": "#/$defs/RecursiveRefCases/FirstLevel" },
+              { "$ref": "#/$defs/RecursiveRefCases/SecondLevel" },
+              { "$ref": "#/$defs/RecursiveRefCases/ThirdLevel" },
+              { "$ref": "#/$defs/RecursiveRefCases/FourthLevel" },
+              { "$dynamicRef": "#AnchorThirdLevel" }
+            ]
+          }
+        },
+        "required": [
+          "relatedItem"
+        ]
+      },
+      "FourthLevel": {
+        "$dynamicAnchor": "AnchorFourthLevel",
+        "$ref": "#/$defs/RecursiveRefCases/ThirdLevel",
+        "properties": {
+          "abstractProperty": {
+            "propertyNames": {
+              "pattern": "^abstract-"
+            }
+          },
+          "extendedRelatedItem": {
+            "anyOf": [
+              { "$ref": "#/$defs/RecursiveRefCases/FirstLevel" },
+              { "$ref": "#/$defs/RecursiveRefCases/SecondLevel" },
+              { "$ref": "#/$defs/RecursiveRefCases/SecondLevel" },
+              { "$ref": "#/$defs/RecursiveRefCases/ThirdLevel" },
+              { "$ref": "#/$defs/RecursiveRefCases/FourthLevel" },
+              { "$ref": "#/$defs/RecursiveRefCases/FifthLevel" },
+              { "$dynamicRef": "#AnchorThirdLevel" },
+              { "$dynamicRef": "#AnchorFourthLevel" }
+            ]
+          }
+        },
+        "required": [
+          "anotherRelatedItem",
+          "abstractProperty"
+        ]
+      },
+      "FifthLevel": {
+        "properties": {
+          "extendedRelatedItem": {
+            "anyOf": [
+              { "$ref": "#/$defs/RecursiveRefCases/FirstLevel" },
+              { "$ref": "#/$defs/RecursiveRefCases/SecondLevel" },
+              { "$ref": "#/$defs/RecursiveRefCases/SecondLevel" },
+              { "$ref": "#/$defs/RecursiveRefCases/ThirdLevel" },
+              { "$ref": "#/$defs/RecursiveRefCases/FourthLevel" },
+              { "$ref": "#/$defs/RecursiveRefCases/FifthLevel" },
+              { "$ref": "#/$defs/RecursiveRefCases/SixthLevel" }
+            ]
+          }
+        }
+      },
+      "SixthLevel": {
+        "properties": {
+          "extendedRelatedItem": {
+            "anyOf": [
+              { "$ref": "#/$defs/RecursiveRefCases/FirstLevel" },
+              { "$ref": "#/$defs/RecursiveRefCases/SeventhLevel" }
+            ]
+          }
+        }
+      },
+      "SeventhLevel": {
+        "properties": {
+          "extendedRelatedItem": {
+            "anyOf": [
+              { "$ref": "#/$defs/RecursiveRefCases/FirstLevel" },
+              { "$ref": "#/$defs/RecursiveRefCases/SecondLevel" },
+              { "$ref": "#/$defs/RecursiveRefCases/SecondLevel" },
+              { "$ref": "#/$defs/RecursiveRefCases/ThirdLevel" },
+              { "$ref": "#/$defs/RecursiveRefCases/FourthLevel" },
+              { "$ref": "#/$defs/RecursiveRefCases/FifthLevel" },
+              { "$ref": "#/$defs/RecursiveRefCases/SixthLevel" },
+              { "$ref": "#/$defs/RecursiveRefCases/SeventhLevel" },
+              { "$ref": "#/$defs/RecursiveRefCases/EighthLevel" }
+            ]
+          }
+        }
+      },
+      "EighthLevel": {
+        "$ref": "#/$defs/RecursiveRefCases/NinthLevel"
+      },
+      "NinthLevel": {
+        "$dynamicRef": "#AnchorZeroLevel"
+      }
+    },
+    "DynamicAnchorOnlyCases": {
+      "SimpleDynamicAnchor": {
+        "$dynamicAnchor": "AnchorSimpleDynamicAnchor",
+        "additionalProperties": {
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          },
+          "required": ["id"]
+        },
+        "propertyNames": {
+          "pattern": "^PROP_[A-Z_]+$"
+        }
+      },
+      "SimpleDynamicRef": {
+        "$dynamicRef": "#AnchorSimpleDynamicAnchor"
+      }
+    },
+    "SimplestObjectCases": {
+      "SimpleObjectWithPattern": {
+        "propertyNames": {
+          "pattern": "^(int|str|bool)_\\w+"
+        }
+      },
+      "SimpleObjectWithProperties": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "content": {
+            "type": ["array", "null"],
+            "format": "binary",
+            "items": {
+              "$ref": "#/$defs/SimplestObjectCases/SimpleObjectWithProperties"
+            }
+          }
+        },
+        "required": [
+          "content"
+        ]
+      },
+      "AnotherSimpleObjectWithProperties": {
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "content"
+        ]
+      }
+    },
+    "StringCases": {
+      "SimplestStringPatternCase": {
+        "type": "string"
+      },
+      "UserRoleEnum": {
+        "enum": [
+          "admin",
+          "user",
+          "guest"
+        ]
+      },
+      "PatternString": {
+        "type": "string",
+        "pattern": "^(property|event)\\.(invoke|assign)\\.[a-z0-9]+$"
+      }
+    },
+    "SimpleArrayCases": {
+      "ArrayScalar": {
+        "items": { "type": "number" }
+      },
+      "ArrayMinScalar": {
+        "minItems": 2,
+        "items": { "type": "string" }
+      },
+      "ArrayMinMaxWithRefs": {
+        "minItems": 2,
+        "maxItems": 5,
+        "items": {
+          "$ref": "#/$defs/SimplestObjectCases/SimpleObjectWithPattern"
+        }
+      }
+    }
+  }
+}

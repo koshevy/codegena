@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org",
+  "title": "Codegena audit exceptions",
+  "description": "Temporary, expiring exceptions for npm audit advisories.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Path to the JSON Schema file"
+    },
+    "cwe": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "expires"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^CWE-[0-9]+$",
+            "description": "A CWE identifier, for example CWE-1321."
+          },
+          "description": {
+            "type": "string",
+            "description": "Reason for temporarily ignoring this weakness."
+          },
+          "expires": {
+            "type": "string",
+            "format": "date",
+            "description": "Expiration date in YYYY-MM-DD format"
+          }
+        }
+      }
+    },
+    "ghsa": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "expires"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^GHSA(-[a-z0-9]{4}){3}$",
+            "description": "The GitHub Security Advisory ID"
+          },
+          "description": {
+            "type": "string",
+            "description": "Reason for temporarily ignoring this advisory."
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Full URL to the GitHub Advisory",
+            "pattern": "^https://github\\.com/advisories/GHSA(-[a-z0-9]{4}){3}$"
+          },
+          "expires": {
+            "type": "string",
+            "format": "date",
+            "description": "Expiration date in YYYY-MM-DD format"
+          }
+        },
+        "oneOf": [
+          {
+            "required": [
+              "id"
+            ]
+          },
+          {
+            "required": [
+              "url"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "required": [
+    "cwe",
+    "ghsa"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "$defs": {
+    "Payload": {
+      "$dynamicAnchor": "payload"
+    }
+  },
+  "$dynamicRef": "#payload"
+}

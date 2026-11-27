@@ -1,0 +1,65 @@
+{
+  "$id": "ref-object-complex",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/ComplexRefTypeWithPatternAndProperties",
+  "properties": {
+    "dictionaryOverrides": {
+      "$ref": "#/$defs/SimplePatternType"
+    }
+  },
+  "required": [
+    "dictionary",
+    "id",
+    "meta",
+    "unknownRequiredType"
+  ],
+  "$defs": {
+    "ComplexRefTypeWithPatternAndProperties": {
+      "$ref": "#/$defs/DeepComplexRefTypeWithPatternAndProperties",
+      "type": "object",
+      "properties": {
+        "id": {},
+        "dictionary": {
+          "$ref": "#/$defs/SimplePatternType"
+        }
+      }
+    },
+    "DeepComplexRefTypeWithPatternAndProperties": {
+      "$ref": "#/$defs/HasMetaDeepType",
+      "patternProperties": {
+        "^OPTION_[A-Z0-9_]+$" : {
+          "$ref": "#/$defs/HasMetaDeepType",
+          "properties": {
+            "optionId": {},
+            "payload": {}
+          }
+        }
+      }
+    },
+    "SimplePatternType": {
+      "additionalProperties": {
+        "$ref": "#/$defs/HasMetaDeepType"
+      },
+      "propertyNames": {
+        "pattern": "^SIMPLE_PROP_[A-Z0-9_]+$"
+      }
+    },
+    "SimplePropertyType": {
+      "properties": {
+        "dictionaryId": {},
+        "meta": {
+          "patternProperties": {
+            "^DICTIONARY_[A-Z0-9_]+$": {}
+          }
+        }
+      }
+    },
+    "HasMetaDeepType": {
+      "properties": {
+        "meta": {
+          "$ref": "#/$defs/SimplePropertyType"
+        }
+      }
+    }
+  }
+}

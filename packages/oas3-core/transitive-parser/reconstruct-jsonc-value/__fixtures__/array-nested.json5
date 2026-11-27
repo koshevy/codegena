@@ -1,0 +1,14 @@
+// Deep array value to check reconstructJsonc
+[
+  ["String value"],
+  [
+    true,
+    [false],
+  ],
+  [
+    0,
+    1,
+    0.1,
+    [null],
+  ],
+]

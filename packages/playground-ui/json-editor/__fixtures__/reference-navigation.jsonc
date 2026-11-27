@@ -1,0 +1,27 @@
+{
+  "title": "Order",
+  "type": "object",
+  "properties": {
+    "shippingAddress": { "$ref": "#/$defs/Address~1US" },
+    "status": { "$ref": "#orderStatus" },
+    "firstItem": { "$ref": "#/$defs/Items/prefixItems/0" },
+    "external": { "$ref": "https://example.com/other.json#/$defs/Other" }
+  },
+  "$defs": {
+    "Address/US": {
+      "type": "object",
+      "properties": { "street": { "type": "string" } }
+    },
+    "Status": {
+      "$anchor": "orderStatus",
+      "enum": ["pending", "shipped"]
+    },
+    "Items": {
+      "type": "array",
+      "prefixItems": [
+        { "type": "string" },
+        { "type": "number" }
+      ]
+    }
+  }
+}

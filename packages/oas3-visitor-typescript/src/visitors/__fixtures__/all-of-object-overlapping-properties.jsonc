@@ -1,0 +1,23 @@
+{
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "contactMethod": {
+          "enum": ["email", "phone"]
+        }
+      },
+      "required": ["contactMethod"]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "contactMethod": {
+          "const": "email"
+        },
+        "contactAddress": {}
+      },
+      "required": ["contactMethod"]
+    }
+  ]
+}

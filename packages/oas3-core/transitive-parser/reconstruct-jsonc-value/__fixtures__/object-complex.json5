@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com",
+  "title": "ComplexOrderSchema",
+  "description": "A complex e-commerce order validation schema.",
+  "type": "object",
+  "required": ["orderId", "customer", "items", "payment"],
+  "properties": {
+    "orderId": {
+      "type": "string",
+      "pattern": "^ORD-[0-9]{4}-[A-Z0-9]{6}$",
+      "description": "Unique order tracking ID matching format ORD-YYYY-XXXXXX.",
+    },
+    "customer": {
+      "$ref": "#/$defs/customerProfile",
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/orderItem",
+      },
+    },
+    "payment": {
+      "$ref": "#/$defs/paymentDetails",
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+      },
+    },
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "description": "Conditional Rule: If country is US, require a 5-digit zip code.",
+      "if": {
+        "properties": {
+          "customer": {
+            "properties": {
+              "shippingAddress": {
+                "properties": {
+                  "country": { "const": "US" },
+                },
+              },
+            },
+          },
+        },
+      },
+      "then": {
+        "properties": {
+          "customer": {
+            "properties": {
+              "shippingAddress": {
+                "properties": {
+                  "postalCode": { "pattern": "^[0-9]{5}$" },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  ],
+
+  "$defs": {
+    "customerProfile": {
+      "type": "object",
+      "required": ["id", "email", "shippingAddress"],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "minimum": 1,
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+        },
+        "shippingAddress": {
+          "type": "object",
+          "required": ["street", "city", "country", "postalCode"],
+          "properties": {
+            "street": { "type": "string", "minLength": 5 },
+            "city": { "type": "string" },
+            "country": { "type": "string", "maxLength": 3 },
+            "postalCode": { "type": "string" },
+          },
+        },
+      },
+    },
+
+    "orderItem": {
+      "type": "object",
+      "required": ["sku", "quantity", "price"],
+      "properties": {
+        "sku": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}-[0-9]{5}$",
+        },
+        "quantity": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 99,
+        },
+        "price": {
+          "type": "number",
+          "exclusiveMinimum": 0.0,
+        },
+      },
+    },
+
+    "paymentDetails": {
+      "type": "object",
+      "required": ["method", "amount"],
+      "properties": {
+        "method": {
+          "type": "string",
+          "enum": ["credit_card", "paypal", "crypto"],
+        },
+        "amount": {
+          "type": "number",
+          "minimum": 0.01,
+        },
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "method": { "const": "credit_card" } },
+          },
+          "then": {
+            "required": ["cardToken"],
+            "properties": {
+              "cardToken": {
+                "type": "string",
+                "pattern": "^tok_[a-z0-9]{24}$",
+              },
+            },
+          },
+        },
+        {
+          "if": {
+            "properties": { "method": { "const": "crypto" } },
+          },
+          "then": {
+            "required": ["walletAddress", "currency"],
+            "properties": {
+              "walletAddress": { "type": "string", "minLength": 26 },
+              "currency": { "enum": ["BTC", "ETH", "USDC"] },
+            },
+          },
+        },
+      ],
+    },
+  },
+}

@@ -1,0 +1,23 @@
+{
+  "$id": "ref-object-with-properties-to-unknown",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/FirstLevelDepthRecursiveType",
+  "properties": {
+    "mixinProperty": {}
+  },
+  "required": ["mixinProperty"],
+  "$defs": {
+    "FirstLevelDepthRecursiveType": {
+      "type": "object",
+      "properties": {
+        "id": {},
+        "ancestor": {
+          "$ref": "#/$defs/FirstLevelDepthRecursiveType"
+        },
+        "descendant": {
+          "$ref": "#/$defs/FirstLevelDepthRecursiveType"
+        }
+      }
+    }
+  }
+}

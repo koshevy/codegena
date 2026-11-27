@@ -1,0 +1,17 @@
+{
+  "type": "array",
+  "prefixItems": [
+    {
+      "type": "string"
+    },
+    {
+      "type": "integer"
+    }
+  ],
+  "items": {
+    "type": "number"
+  },
+  "unevaluatedItems": {
+    "type": "boolean"
+  }
+}

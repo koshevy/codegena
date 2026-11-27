@@ -1,0 +1,30 @@
+{
+  "name": "@codegena/util-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "type": "commonjs",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "nx": {
+    "sourceRoot": "packages/util-e2e/src",
+    "projectType": "library",
+    "tags": ["pure:internal"],
+    "targets": {
+      "typecheck": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "tsc --noEmit -p tsconfig.lib.json",
+          "cwd": "packages/util-e2e"
+        }
+      }
+    }
+  },
+  "devDependencies": {
+    "@codegena/infr-nx": "*",
+    "@playwright/test": "^1.36.0",
+    "eslint": "^10.13.0",
+    "typescript": "6.0.3"
+  }
+}

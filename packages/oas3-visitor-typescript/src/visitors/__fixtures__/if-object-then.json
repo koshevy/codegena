@@ -1,0 +1,37 @@
+{
+  "$id": "if-object-simple",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "loginBy": {
+      "default": "phone",
+      "enum": [
+        "phone",
+        "email"
+      ]
+    }
+  },
+  "required": [
+    "loginBy"
+  ],
+  "if": {
+    "properties": {
+      "loginBy": {
+        "const": "phone"
+      }
+    },
+    "required": [
+      "loginBy"
+    ]
+  },
+  "then": {
+    "properties": {
+      "country": {},
+      "phoneNumber": {}
+    },
+    "required": [
+      "country",
+      "phoneNumber"
+    ]
+  }
+}

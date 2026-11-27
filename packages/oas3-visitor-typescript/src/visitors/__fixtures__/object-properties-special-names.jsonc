@@ -1,0 +1,20 @@
+{
+  "$id": "delivery-preferences",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Delivery preferences received from checkout",
+  "type": "object",
+  "properties": {
+    "delivery-window": {
+      "type": "string"
+    },
+    "recipient name": {
+      "type": "string"
+    },
+    "default": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "delivery-window"
+  ]
+}

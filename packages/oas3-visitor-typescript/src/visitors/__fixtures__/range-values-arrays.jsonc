@@ -1,0 +1,6 @@
+{
+  "enum": [
+    ["email", 2],
+    [false, null]
+  ]
+}

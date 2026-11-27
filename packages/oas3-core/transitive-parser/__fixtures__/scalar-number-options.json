@@ -1,0 +1,6 @@
+{
+  "type": "number",
+  "minimum": 0,
+  "maximum": 9999.99,
+  "multipleOf": 0.01
+}

@@ -1,0 +1,21 @@
+{
+  "$defs": {
+    "EmailContact": {
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" }
+      },
+      "required": ["email"]
+    }
+  },
+  "oneOf": [
+    { "$ref": "#/$defs/EmailContact" },
+    {
+      "type": "object",
+      "properties": {
+        "phone": { "type": "string" }
+      },
+      "required": ["phone"]
+    }
+  ]
+}

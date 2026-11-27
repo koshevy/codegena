@@ -1,0 +1,6 @@
+import type * as Connect from './generated';
+
+export const vault: Connect.Api1PasswordConnect.Vaults._Common.Vault = {
+  type: 'USER_CREATED',
+  name: 'Engineering',
+};

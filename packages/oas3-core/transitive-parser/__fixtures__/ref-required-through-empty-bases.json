@@ -1,0 +1,44 @@
+{
+  "$id": "ref-required-through-empty-bases",
+  "$ref": "#/$defs/Derived",
+  "type": "object",
+  "required": ["meta", "overridden", "missing"],
+  "$defs": {
+    "Derived": {
+      "$ref": "#/$defs/PatternOnly",
+      "properties": {
+        "overridden": {
+          "$ref": "#/$defs/DerivedValue"
+        }
+      }
+    },
+    "PatternOnly": {
+      "$ref": "#/$defs/Alias",
+      "patternProperties": {
+        "^OPTION_": {}
+      }
+    },
+    "Alias": {
+      "$ref": "#/$defs/Base"
+    },
+    "Base": {
+      "properties": {
+        "meta": {
+          "$ref": "#/$defs/Meta"
+        },
+        "overridden": {
+          "$ref": "#/$defs/BaseValue"
+        }
+      }
+    },
+    "Meta": {
+      "type": "object"
+    },
+    "DerivedValue": {
+      "type": "object"
+    },
+    "BaseValue": {
+      "type": "object"
+    }
+  }
+}

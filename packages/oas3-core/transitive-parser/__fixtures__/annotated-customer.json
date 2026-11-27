@@ -1,0 +1,28 @@
+{
+  "$comment": "Internal customer record used for account reconciliation.",
+  "title": "Customer record",
+  "description": "Contact details for an account holder.",
+  "deprecated": false,
+  "default": {
+    "customerId": "guest"
+  },
+  "examples": [
+    {
+      "customerId": "customer-42"
+    }
+  ],
+  "readOnly": true,
+  "writeOnly": false,
+  "type": "object",
+  "properties": {
+    "customerId": {
+      "title": "Customer identifier",
+      "description": "Stable account identifier.",
+      "type": "string",
+      "default": "guest",
+      "examples": ["customer-42"],
+      "readOnly": true
+    }
+  },
+  "required": ["customerId"]
+}

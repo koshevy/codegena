@@ -1,0 +1,19 @@
+{
+  "executors": {
+    "build": {
+      "implementation": "./dist/executors/build/run-executor",
+      "schema": "./dist/executors/unified-schema.json",
+      "description": "Build an Nx project's Docker Compose services."
+    },
+    "up": {
+      "implementation": "./dist/executors/docker-command/run-executor",
+      "schema": "./dist/executors/unified-schema.json",
+      "description": "Up an Nx project's Docker Compose services."
+    },
+    "push": {
+      "implementation": "./dist/executors/docker-command/run-executor",
+      "schema": "./dist/executors/unified-schema.json",
+      "description": "Push an Nx project's Docker Compose services."
+    }
+  }
+}

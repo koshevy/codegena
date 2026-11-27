@@ -1,0 +1,6 @@
+import type { GitHubV3RestApi } from './generated';
+
+export const repositoryError: GitHubV3RestApi.Lib.BasicError = {
+  status: '404',
+  message: 'Repository not found',
+};

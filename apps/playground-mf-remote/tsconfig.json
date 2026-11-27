@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx"
+  },
+  "include": [],
+  "extends": "../../tsconfig.base.json",
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs",
+      "target": "es2022"
+    },
+    "moduleTypes": {
+      "../../packages/**/*.ts": "cjs"
+    },
+    "require": [
+      "tsconfig-paths/register"
+    ]
+  }
+}

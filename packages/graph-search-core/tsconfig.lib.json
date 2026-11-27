@@ -1,0 +1,33 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc",
+    "declaration": true,
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "**/*.ts"
+  ],
+  "exclude": [
+    "jest.config.ts",
+    "__examples__/**",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "**/__mocks__/**",
+    "**/__fixtures__/**"
+  ],
+  "nx": {
+    "sync": {
+      "ignoredDependencies": [
+        "@codegena/infr-nx"
+      ]
+    }
+  },
+  "references": [
+    {
+      "path": "../pwa/tsconfig.lib.json"
+    }
+  ]
+}

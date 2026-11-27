@@ -1,0 +1,20 @@
+{
+  "$id": "ref-nope-to-object-with-pattern-simple",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/FirstLevelDepthObjectTypeWitPatterns",
+  "$defs": {
+    "FirstLevelDepthObjectTypeWitPatterns": {
+      "propertyNames": {
+        "pattern": "^(LEFT|RIGHT)_[A-Z0-9]+"
+      },
+      "patternProperties": {
+        "^(EXT)_[A-Z0-9]+": {
+          "type": "object",
+          "properties": {
+            "catalog": {}
+          }
+        }
+      }
+    }
+  }
+}

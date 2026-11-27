@@ -1,0 +1,8 @@
+{
+  "type": "string",
+  "minLength": 3,
+  "oneOf": [
+    { "pattern": "^ADM", "minLength": 5 },
+    { "pattern": "^USR" }
+  ]
+}

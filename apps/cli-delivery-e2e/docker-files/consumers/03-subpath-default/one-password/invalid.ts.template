@@ -1,0 +1,3 @@
+import type ActivityApiRequests from './generated/activity';
+
+export const activity: ActivityApiRequests.ApiRequest = { action: 'READ' };

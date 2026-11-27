@@ -1,0 +1,22 @@
+storage: /verdaccio/storage
+auth:
+  htpasswd:
+    file: /verdaccio/storage/htpasswd
+    max_users: -1
+
+uplinks:
+  npmjs:
+    url: https://registry.npmjs.org/
+
+packages:
+  '@codegena/*':
+    access: $all
+    publish: $anonymous
+  '**':
+    access: $all
+    proxy: npmjs
+
+web:
+  enable: false
+log:
+  level: warn

@@ -1,0 +1,79 @@
+diff --git a/node_modules/shaders/dist/core/std-DL2iZlL6.js b/node_modules/shaders/dist/core/std-DL2iZlL6.js
+index 0414f94..87aef38 100644
+--- a/node_modules/shaders/dist/core/std-DL2iZlL6.js
++++ b/node_modules/shaders/dist/core/std-DL2iZlL6.js
+@@ -5998,7 +5998,10 @@ function createFnCore(implementation, functionType, workgroupSize) {
+ 						if (!result.success) throw new Error(`Invalid argument name "${arg$4.schemaKey}"${result.error ? `: ${result.error}` : ""}`);
+ 						if (ctx$1.isIdentifierBanned(arg$4.schemaKey)) throw new Error(`Invalid argument name "${arg$4.schemaKey}", the identifier is a reserved keyword.`);
+ 					}
+-					this.setExternals("args", { in: Object.fromEntries(entryInput.positionalArgs.map((a) => [a.schemaKey, new ResolvableString(a.schemaKey)])) });
++					this.setExternals("args", { in: {
++						...Object.fromEntries(Object.keys(entryInput.dataSchema?.propTypes ?? {}).map((key) => [key, new ResolvableString(`in.${key}`)])),
++						...Object.fromEntries(entryInput.positionalArgs.map((a) => [a.schemaKey, new ResolvableString(a.schemaKey)]))
++					} });
+ 				}
+ 				const replacedImpl = replaceExternalsInWgsl(ctx$1, mergeFunctionExternals(externals), implementation);
+ 				let header = "";
+@@ -16021,7 +16024,7 @@ const SQRT3 = Math.sqrt(3);
+ const GOLDEN = 2.3999632297286535;
+ const mxRotl32 = typegpu_default.fn([u32, i32], u32)(/* @__PURE__ */ (($) => (globalThis.__TYPEGPU_META__ ??= /* @__PURE__ */ new WeakMap()).set($.f = ((x, k) => {
+ 	"use gpu";
+-	return x << u32(k) | x >> u32(__tsover_sub(i32(32), k));
++	return x << u32(k) | x >>> u32(__tsover_sub(i32(32), k));
+ }), {
+ 	v: 2,
+ 	name: void 0,
+@@ -16049,7 +16052,7 @@ const mxRotl32 = typegpu_default.fn([u32, i32], u32)(/* @__PURE__ */ (($) => (gl
+ 			[
+ 				1,
+ 				"x",
+-				">>",
++				">>>",
+ 				[
+ 					6,
+ 					"d.u32",
+diff --git a/node_modules/shaders/dist/js/createShader.js b/node_modules/shaders/dist/js/createShader.js
+--- a/node_modules/shaders/dist/js/createShader.js
++++ b/node_modules/shaders/dist/js/createShader.js
+@@ -1,5 +1,4 @@
+ import { createGpuUniformsMap, debugError, getRegisteredShader, resolveBoundingBox, rootPassthrough, shaderRendererGPU } from "../core/index.js";
+-import { getAllShaders } from "../core/registry.js";
+ import { isExternalUser, startTelemetry } from "../core/telemetry/index.js";
+ function isPropDriver(value) {
+ 	if (typeof value !== "object" || value === null || !("type" in value)) return false;
+@@ -19,10 +18,16 @@
+ ]);
+ async function createShader(canvas, preset, options) {
+ 	const componentRegistry = /* @__PURE__ */ new Map();
+-	getAllShaders().forEach((shader) => {
+-		componentRegistry.set(shader.definition.name, shader.definition);
+-		for (const oldName of shader.definition.deprecatedNames ?? []) componentRegistry.set(oldName, shader.definition);
+-	});
++	if (options?.includeBuiltInShaders !== false) {
++		const { getAllShaders } = await import(
++			/* webpackChunkName: "shaders-built-in-registry" */
++			"../core/registry.js"
++		);
++		getAllShaders().forEach((shader) => {
++			componentRegistry.set(shader.definition.name, shader.definition);
++			for (const oldName of shader.definition.deprecatedNames ?? []) componentRegistry.set(oldName, shader.definition);
++		});
++	}
+ 	for (const custom of options?.components ?? []) componentRegistry.set(custom.name, custom);
+ 	if (!canvas.style.width || !canvas.style.height) {
+ 		const rect = canvas.getBoundingClientRect();
+diff --git a/node_modules/shaders/dist/js/types.d.ts b/node_modules/shaders/dist/js/types.d.ts
+--- a/node_modules/shaders/dist/js/types.d.ts
++++ b/node_modules/shaders/dist/js/types.d.ts
+@@ -5,6 +5,11 @@
+      * reference by `type`. Components registered globally with `registerShader` are found too.
+      */
+     components?: import('../core').GpuShaderDefinition[];
++    /**
++     * Set to false in `shaders/js` to supply shader definitions through `components`
++     * without loading the built-in registry. Defaults to true.
++     */
++    includeBuiltInShaders?: boolean;
+     colorSpace?: 'p3-linear' | 'srgb';
+     toneMapping?: 'linear' | 'reinhard' | 'cineon' | 'aces' | 'agx' | 'neutral' | 'hable' | 'unreal';
+     disableTelemetry?: boolean;

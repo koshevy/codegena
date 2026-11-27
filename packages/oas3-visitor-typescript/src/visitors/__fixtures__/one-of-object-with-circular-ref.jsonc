@@ -1,0 +1,20 @@
+{
+  "$defs": {
+    "RecursiveContact": {
+      "type": "object",
+      "properties": {
+        "child": { "$ref": "#/$defs/RecursiveContact" }
+      }
+    },
+    "PhoneContact": {
+      "type": "object",
+      "properties": {
+        "phone": { "type": "string" }
+      }
+    }
+  },
+  "oneOf": [
+    { "$ref": "#/$defs/RecursiveContact" },
+    { "$ref": "#/$defs/PhoneContact" }
+  ]
+}

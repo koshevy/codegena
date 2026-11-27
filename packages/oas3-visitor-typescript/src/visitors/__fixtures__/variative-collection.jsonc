@@ -1,0 +1,15 @@
+{
+  "type": [
+    "array",
+    "object"
+  ],
+  "items": {
+    "type": "string"
+  },
+  "properties": {
+    "total": {
+      "type": "number"
+    }
+  },
+  "required": ["total"]
+}

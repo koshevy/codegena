@@ -1,0 +1,124 @@
+{
+  "name": "landing-mf-host",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/landing-mf-host/src",
+  "projectType": "application",
+  "tags": [
+    "npm:private",
+    "mf:host"
+  ],
+  "implicitDependencies": ["playground-mf-remote", "documentation-mf-remote"],
+  "targets": {
+    "build-renderer": {
+      "executor": "@nx/esbuild:esbuild",
+      "dependsOn": ["^build"],
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "main": "apps/landing-mf-host/src/server-entry.tsx",
+        "tsConfig": "apps/landing-mf-host/tsconfig.app.json",
+        "outputPath": "dist/apps/landing-mf-host-renderer",
+        "outputFileName": "renderer.cjs",
+        "platform": "node",
+        "target": "node24",
+        "format": ["cjs"],
+        "thirdParty": true,
+        "external": [
+          "./landing-features",
+          "./playground-route-placeholder",
+          "./prompt",
+          "./window-scrollbar",
+          "../documentation",
+          "../playground-remote",
+          "three",
+          "vanta/dist/vanta.halo.min"
+        ],
+        "esbuildOptions": {
+          "alias": { "@mui/icons-material": "@mui/icons-material/esm" },
+          "define": { "process.env.NODE_ENV": "\"production\"" },
+          "loader": { ".css": "empty" },
+          "mainFields": ["module", "main"]
+        }
+      }
+    },
+    "rspack:build": {
+      "dependsOn": [
+        "@codegena/source:apply-dependency-patches",
+        "playground-mf-remote:build",
+        "documentation-mf-remote:build"
+      ],
+      "outputs": [
+        "{workspaceRoot}/dist/apps/landing-mf-host",
+        "{workspaceRoot}/dist/apps/landing-mf-host-services"
+      ],
+      "inputs": [
+        "production",
+        "^production",
+        {
+          "env": "CODEGENA_BUILD_ID"
+        }
+      ]
+    },
+    "rspack:serve": {
+      "dependsOn": ["@codegena/source:apply-dependency-patches"]
+    },
+    "preview": {
+      "dependsOn": ["@codegena/source:apply-dependency-patches"]
+    },
+    "storybook": {
+      "dependsOn": [
+        "rspack:build"
+      ]
+    },
+    "build-storybook": {
+      "dependsOn": [
+        "rspack:build"
+      ]
+    },
+    "serve": {
+      "continuous": true,
+      "dependsOn": [
+        "^build",
+        "@codegena/source:apply-dependency-patches"
+      ],
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rspack serve --node-env=development",
+        "cwd": "apps/landing-mf-host",
+        "env": {
+          "TS_NODE_COMPILER_OPTIONS": "{\"module\":\"CommonJS\",\"moduleResolution\":\"Node10\",\"customConditions\":null}"
+        }
+      },
+      "configurations": {
+        "e2e": {
+          "command": "rspack serve --node-env=development --host localhost"
+        }
+      }
+    },
+    "serve-static": {
+      "options": {
+        "buildTarget": "",
+        "spa": true,
+        "staticFilePath": "dist/apps/landing-mf-host",
+        "watch": false
+      }
+    },
+    "typecheck": {
+      "dependsOn": ["@codegena/source:apply-dependency-patches"],
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p tsconfig.app.json",
+        "cwd": "apps/landing-mf-host"
+      }
+    },
+    "test": {
+      "dependsOn": ["^build", "@codegena/source:apply-dependency-patches", "test-feature-import-boundaries"]
+    },
+    "test-feature-import-boundaries": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node --test feature-import-boundaries.spec.mjs",
+        "cwd": "apps/landing-mf-host"
+      }
+    }
+  }
+}

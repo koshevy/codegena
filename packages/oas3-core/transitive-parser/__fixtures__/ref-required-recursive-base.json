@@ -1,0 +1,23 @@
+{
+  "$id": "ref-required-recursive-base",
+  "$ref": "#/$defs/Derived",
+  "type": "object",
+  "required": ["meta", "missing"],
+  "$defs": {
+    "Derived": {
+      "$ref": "#/$defs/Base",
+      "type": "object"
+    },
+    "Base": {
+      "$ref": "#/$defs/Derived",
+      "properties": {
+        "meta": {
+          "$ref": "#/$defs/Meta"
+        }
+      }
+    },
+    "Meta": {
+      "type": "object"
+    }
+  }
+}

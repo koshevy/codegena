@@ -1,0 +1,59 @@
+diff --git a/node_modules/react-loadable/lib/index.js b/node_modules/react-loadable/lib/index.js
+--- a/node_modules/react-loadable/lib/index.js
++++ b/node_modules/react-loadable/lib/index.js
+@@ -151,7 +151,9 @@
+         _this._loadModule();
+       });
+ 
+-      init();
++      // Keep rejected loads observed even if React never commits this render.
++      // preload() still returns the original rejecting promise to its caller.
++      init().catch(function () {});
+       _this.state = {
+         error: res.error,
+         pastDelay: false,
+@@ -168,24 +170,20 @@
+ 
+     var _proto = LoadableComponent.prototype;
+ 
+-    _proto.UNSAFE_componentWillMount = function UNSAFE_componentWillMount() {
+-      this._loadModule();
+-    };
+-
+     _proto.componentDidMount = function componentDidMount() {
+       this._mounted = true;
++      this._loadModule();
+     };
+ 
+     _proto._loadModule = function _loadModule() {
+       var _this2 = this;
+ 
+-      if (this.context && Array.isArray(opts.modules)) {
+-        opts.modules.forEach(function (moduleName) {
+-          _this2.context.report(moduleName);
+-        });
+-      }
+-
+       if (!res.loading) {
++        this.setState({
++          error: res.error,
++          loaded: res.loaded,
++          loading: res.loading
++        });
+         return;
+       }
+ 
+@@ -250,6 +248,13 @@
+     };
+ 
+     _proto.render = function render() {
++      if (this.context && Array.isArray(opts.modules)) {
++        var capture = this.context;
++        opts.modules.forEach(function (moduleName) {
++          capture.report(moduleName);
++        });
++      }
++
+       if (this.state.loading || this.state.error) {
+         return React.createElement(opts.loading, {
+           isLoading: this.state.loading,

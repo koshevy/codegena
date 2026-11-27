@@ -1,0 +1,9 @@
+{
+  "type": "array",
+  "items": {
+    "type": "string"
+  },
+  "unevaluatedItems": {
+    "type": "number"
+  }
+}

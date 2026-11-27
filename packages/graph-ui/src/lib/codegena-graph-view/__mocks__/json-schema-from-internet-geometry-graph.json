@@ -1,0 +1,283 @@
+{
+  "nodes": [
+    {
+      "data": {
+        "fileName": "geometry.ts",
+        "kind": "group",
+        "label": "geometry.ts",
+        "text": "import type { Position } from './position';\nimport type { PositionArray } from './position-array';\nimport type { LineString } from './line-string';\nimport type { Polygon } from './polygon';\n/**\n * ## geometry\n *\n * One geometry as defined by GeoJSON\n */\nexport type Geometry =\n  | {\n      type: 'Point';\n      coordinates: Position;\n    }\n  | {\n      type: 'MultiPoint';\n      coordinates: PositionArray;\n    }\n  | {\n      type: 'LineString';\n      coordinates: LineString;\n    }\n  | {\n      type: 'MultiLineString';\n      coordinates: LineString[];\n    }\n  | {\n      type: 'Polygon';\n      coordinates: Polygon;\n    }\n  | {\n      type: 'MultiPolygon';\n      coordinates: Polygon[];\n    };"
+      },
+      "id": "geometry.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "identifierName": "Geometry",
+        "kind": "item",
+        "label": "Geometry",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "geometry.ts",
+        "text": "/**\n * ## geometry\n *\n * One geometry as defined by GeoJSON\n */\nexport type Geometry =\n  | {\n      type: 'Point';\n      coordinates: Position;\n    }\n  | {\n      type: 'MultiPoint';\n      coordinates: PositionArray;\n    }\n  | {\n      type: 'LineString';\n      coordinates: LineString;\n    }\n  | {\n      type: 'MultiLineString';\n      coordinates: LineString[];\n    }\n  | {\n      type: 'Polygon';\n      coordinates: Polygon;\n    }\n  | {\n      type: 'MultiPolygon';\n      coordinates: Polygon[];\n    };",
+        "ast": {
+          "kind": 266
+        },
+        "sourceLocation": {
+          "col": 1,
+          "fileName": "json-schema-from-internet-geometry.jsonc",
+          "line": 2
+        },
+        "declarationType": "Union",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "geometry.ts::Geometry",
+      "parentId": "geometry.ts"
+    },
+    {
+      "data": {
+        "fileName": "polygon.ts",
+        "kind": "group",
+        "label": "polygon.ts",
+        "text": "import type { LinearRing } from './linear-ring';\n/**\n * An array of linear rings\n */\nexport type Polygon = LinearRing[];"
+      },
+      "id": "polygon.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "identifierName": "Polygon",
+        "kind": "item",
+        "label": "Polygon",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "polygon.ts",
+        "text": "/**\n * An array of linear rings\n */\nexport type Polygon = LinearRing[];",
+        "ast": {
+          "kind": 266
+        },
+        "sourceLocation": {
+          "col": 16,
+          "fileName": "json-schema-from-internet-geometry.jsonc",
+          "line": 86
+        },
+        "declarationType": "Array",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "polygon.ts::Polygon",
+      "parentId": "polygon.ts"
+    },
+    {
+      "data": {
+        "fileName": "linear-ring.ts",
+        "kind": "group",
+        "label": "linear-ring.ts",
+        "text": "import type { Position } from './position';\n/**\n * An array of four positions where the first equals the last\n */\nexport type LinearRing = [Position, Position, Position, Position, ...Position[]];"
+      },
+      "id": "linear-ring.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "identifierName": "LinearRing",
+        "kind": "item",
+        "label": "LinearRing",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "linear-ring.ts",
+        "text": "/**\n * An array of four positions where the first equals the last\n */\nexport type LinearRing = [Position, Position, Position, Position, ...Position[]];",
+        "ast": {
+          "kind": 266
+        },
+        "sourceLocation": {
+          "col": 19,
+          "fileName": "json-schema-from-internet-geometry.jsonc",
+          "line": 79
+        },
+        "declarationType": "Array",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "linear-ring.ts::LinearRing",
+      "parentId": "linear-ring.ts"
+    },
+    {
+      "data": {
+        "fileName": "line-string.ts",
+        "kind": "group",
+        "label": "line-string.ts",
+        "text": "import type { Position } from './position';\n/**\n * An array of two or more positions\n */\nexport type LineString = [Position, Position, ...Position[]];"
+      },
+      "id": "line-string.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "identifierName": "LineString",
+        "kind": "item",
+        "label": "LineString",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "line-string.ts",
+        "text": "/**\n * An array of two or more positions\n */\nexport type LineString = [Position, Position, ...Position[]];",
+        "ast": {
+          "kind": 266
+        },
+        "sourceLocation": {
+          "col": 19,
+          "fileName": "json-schema-from-internet-geometry.jsonc",
+          "line": 72
+        },
+        "declarationType": "Array",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "line-string.ts::LineString",
+      "parentId": "line-string.ts"
+    },
+    {
+      "data": {
+        "fileName": "position-array.ts",
+        "kind": "group",
+        "label": "position-array.ts",
+        "text": "import type { Position } from './position';\n/**\n * An array of positions\n */\nexport type PositionArray = Position[];"
+      },
+      "id": "position-array.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "identifierName": "PositionArray",
+        "kind": "item",
+        "label": "PositionArray",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "position-array.ts",
+        "text": "/**\n * An array of positions\n */\nexport type PositionArray = Position[];",
+        "ast": {
+          "kind": 266
+        },
+        "sourceLocation": {
+          "col": 22,
+          "fileName": "json-schema-from-internet-geometry.jsonc",
+          "line": 67
+        },
+        "declarationType": "Array",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "position-array.ts::PositionArray",
+      "parentId": "position-array.ts"
+    },
+    {
+      "data": {
+        "fileName": "position.ts",
+        "kind": "group",
+        "label": "position.ts",
+        "text": "/**\n * A single position\n */\nexport type Position = [number, number];"
+      },
+      "id": "position.ts",
+      "type": "default"
+    },
+    {
+      "data": {
+        "identifierName": "Position",
+        "kind": "item",
+        "label": "Position",
+        "programmingLanguage": "TypeScript",
+        "programmingLanguageVersion": "6.x",
+        "relativeFilePath": "position.ts",
+        "text": "/**\n * A single position\n */\nexport type Position = [number, number];",
+        "ast": {
+          "kind": 266
+        },
+        "sourceLocation": {
+          "col": 17,
+          "fileName": "json-schema-from-internet-geometry.jsonc",
+          "line": 60
+        },
+        "declarationType": "Array",
+        "logs": []
+      },
+      "extent": "parent",
+      "id": "position.ts::Position",
+      "parentId": "position.ts"
+    }
+  ],
+  "edges": [
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "geometry.ts->position.ts",
+      "label": "import",
+      "source": "geometry.ts",
+      "target": "position.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "geometry.ts->position-array.ts",
+      "label": "import",
+      "source": "geometry.ts",
+      "target": "position-array.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "geometry.ts->line-string.ts",
+      "label": "import",
+      "source": "geometry.ts",
+      "target": "line-string.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "geometry.ts->polygon.ts",
+      "label": "import",
+      "source": "geometry.ts",
+      "target": "polygon.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "polygon.ts->linear-ring.ts",
+      "label": "import",
+      "source": "polygon.ts",
+      "target": "linear-ring.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "linear-ring.ts->position.ts",
+      "label": "import",
+      "source": "linear-ring.ts",
+      "target": "position.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "line-string.ts->position.ts",
+      "label": "import",
+      "source": "line-string.ts",
+      "target": "position.ts"
+    },
+    {
+      "data": {
+        "relation": "import"
+      },
+      "id": "position-array.ts->position.ts",
+      "label": "import",
+      "source": "position-array.ts",
+      "target": "position.ts"
+    }
+  ],
+  "logs": []
+}

@@ -1,0 +1,53 @@
+{
+  "name": "@codegena/util-dev-mode",
+  "version": "0.0.1",
+  "nx": {
+    "tags": [
+      "ui:publishable"
+    ],
+    "targets": {
+      "build": {
+        "outputs": [
+          "{workspaceRoot}/dist/util-dev-mode"
+        ]
+      },
+      "typecheck": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "tsc --noEmit -p tsconfig.lib.json",
+          "cwd": "packages/util-dev-mode"
+        }
+      }
+    }
+  },
+  "type": "module",
+  "main": "./index.cjs",
+  "module": "./index.esm.js",
+  "types": "./index.d.ts",
+  "files": [
+    "**/*.js",
+    "**/*.cjs",
+    "**/*.d.ts"
+  ],
+  "devDependencies": {
+    "@codegena/infr-nx": "*",
+    "@nx/jest": "23.3.2",
+    "@swc/core": "1.15.8",
+    "@swc/jest": "~0.2.38",
+    "@testing-library/react": "16.1.0",
+    "@types/jest": "~30.0.0",
+    "@types/node": "^24.0.0",
+    "@types/react": "19.0.0",
+    "@types/react-dom": "19.0.0",
+    "eslint": "^10.13.0",
+    "jest": "~30.3.0",
+    "jest-environment-jsdom": "~30.3.0",
+    "nx": "23.3.2",
+    "rollup": "^4.14.0",
+    "ts-jest": "^29.4.7",
+    "typescript": "6.0.3"
+  },
+  "peerDependencies": {
+    "react": "19.x"
+  }
+}

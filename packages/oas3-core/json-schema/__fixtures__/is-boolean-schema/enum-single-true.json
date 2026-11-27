@@ -1,0 +1,4 @@
+{
+  "enum": [true],
+  "description": "Only the affirmative answer is allowed"
+}

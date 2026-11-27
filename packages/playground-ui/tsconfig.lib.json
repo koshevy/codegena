@@ -1,0 +1,62 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc",
+    "types": [
+      "node",
+      "vite/client",
+      "@nx/react/typings/cssmodule.d.ts",
+      "@nx/react/typings/image.d.ts"
+    ]
+  },
+  "exclude": [
+    "jest.config.ts",
+    "jest.config.cts",
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts",
+    "src/**/*.spec.tsx",
+    "src/**/*.test.tsx",
+    "src/**/__fixtures__/**",
+    "src/**/__mocks__/**",
+    "src/**/story-utils/**",
+    "**/*.stories.ts",
+    "**/*.stories.tsx"
+  ],
+  "include": [
+    "src/index.ts",
+    "appearance/**/*.ts",
+    "appearance/**/*.tsx",
+    "clipboard/**/*.ts",
+    "clipboard/**/*.tsx",
+    "converting-placeholder/**/*.ts",
+    "converting-placeholder/**/*.tsx",
+    "download-files/**/*.ts",
+    "download-files/**/*.tsx",
+    "generated-file-details/**/*.ts",
+    "generated-file-details/**/*.tsx",
+    "generated-files-list/**/*.ts",
+    "generated-files-list/**/*.tsx",
+    "graph-utils/**/*.ts",
+    "graph-utils/**/*.tsx",
+    "json-editor/**/*.ts",
+    "json-editor/**/*.tsx",
+    "misc-ui/**/*.ts",
+    "misc-ui/**/*.tsx",
+    "navigation/**/*.ts",
+    "navigation/**/*.tsx",
+    "playground/**/*.ts",
+    "playground/**/*.tsx",
+    "preferences/**/*.ts",
+    "preferences/**/*.tsx",
+    "search/**/*.ts",
+    "search/**/*.tsx"
+  ],
+  "nx": {
+    "sync": {
+      "ignoredDependencies": [
+        "@codegena/infr-nx",
+        "@codegena/pwa"
+      ]
+    }
+  }
+}

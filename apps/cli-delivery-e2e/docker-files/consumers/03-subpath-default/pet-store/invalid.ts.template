@@ -1,0 +1,6 @@
+import type Pet from './generated/pets/_common';
+
+export const pet: Pet = {
+  id: 3,
+  name: 'Pixel',
+};

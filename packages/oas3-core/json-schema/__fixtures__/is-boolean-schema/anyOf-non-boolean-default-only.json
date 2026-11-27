@@ -1,0 +1,11 @@
+{
+  "title": "Default without boolean marker",
+  "anyOf": [
+    {
+      "const": false
+    },
+    {
+      "default": false
+    }
+  ]
+}

@@ -1,0 +1,187 @@
+{
+  "name": "@codegena/ui-unified",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./index.esm.js",
+  "module": "./index.esm.js",
+  "types": "./index.d.ts",
+  "files": [
+    "**/*.js",
+    "**/*.d.ts",
+    "!**/*.tsbuildinfo"
+  ],
+  "nx": {
+    "tags": [
+      "ui:publishable"
+    ],
+    "targets": {
+      "lint": {
+        "executor": "nx:run-commands",
+        "options": {
+          "cwd": "packages/ui-unified",
+          "command": "eslint . && stylelint \"{panels,menus,buttons,icons,branding,feedback,files,counts,scrolling,code-editor,we-use-cookies,under-construction,docs,src}/**/*.{js,jsx,ts,tsx}\""
+        }
+      },
+      "build": {
+        "outputs": [
+          "{workspaceRoot}/dist/ui-unified"
+        ]
+      },
+      "typecheck": {
+        "executor": "nx:run-commands",
+        "cache": true,
+        "inputs": ["default", "^production", "{workspaceRoot}/tsconfig.base.json"],
+        "syncGenerators": ["@nx/js:typescript-sync"],
+        "options": {
+          "cwd": "packages/ui-unified",
+          "commands": [
+            "tsc --noEmit -p tsconfig.lib.json",
+            "tsc --noEmit -p tsconfig.storybook.json"
+          ],
+          "parallel": false
+        }
+      },
+      "storybook-e2e": {
+        "continuous": true,
+        "executor": "nx:run-commands",
+        "options": {
+          "cwd": "packages/ui-unified",
+          "command": "storybook dev --port=6007 --host=127.0.0.1 --ci --exact-port"
+        }
+      }
+    }
+  },
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.esm.js"
+    },
+    "./panels": {
+      "types": "./panels.d.ts",
+      "default": "./panels.esm.js"
+    },
+    "./menus": {
+      "types": "./menus.d.ts",
+      "default": "./menus.esm.js"
+    },
+    "./buttons": {
+      "types": "./buttons.d.ts",
+      "default": "./buttons.esm.js"
+    },
+    "./icons": {
+      "types": "./icons.d.ts",
+      "default": "./icons.esm.js"
+    },
+    "./branding": {
+      "types": "./branding.d.ts",
+      "default": "./branding.esm.js"
+    },
+    "./docs": {
+      "types": "./docs.d.ts",
+      "default": "./docs.esm.js"
+    },
+    "./feedback": {
+      "types": "./feedback.d.ts",
+      "default": "./feedback.esm.js"
+    },
+    "./files": {
+      "types": "./files.d.ts",
+      "default": "./files.esm.js"
+    },
+    "./counts": {
+      "types": "./counts.d.ts",
+      "default": "./counts.esm.js"
+    },
+    "./scrolling": {
+      "types": "./scrolling.d.ts",
+      "default": "./scrolling.esm.js"
+    },
+    "./code-editor": {
+      "types": "./code-editor.d.ts",
+      "default": "./code-editor.esm.js"
+    },
+    "./code-editor-minimal": {
+      "types": "./code-editor-minimal.d.ts",
+      "default": "./code-editor-minimal.esm.js"
+    },
+    "./we-use-cookies": {
+      "types": "./we-use-cookies.d.ts",
+      "default": "./we-use-cookies.esm.js"
+    },
+    "./under-construction": {
+      "types": "./under-construction.d.ts",
+      "default": "./under-construction.esm.js"
+    },
+    "./monaco-workers": {
+      "types": "./monaco-workers.d.ts",
+      "default": "./monaco-workers.esm.js"
+    },
+    "./monaco-environment": {
+      "types": "./monaco-environment/index.ts",
+      "default": "./monaco-environment/index.ts"
+    },
+    "./monaco-vite": {
+      "types": "./monaco-vite/index.ts",
+      "default": "./monaco-vite/index.ts"
+    },
+    "./monaco-bootstrap": {
+      "types": "./monaco-bootstrap/index.ts",
+      "default": "./monaco-bootstrap/index.ts"
+    },
+    "./monaco-webpack": {
+      "types": "./monaco-webpack/index.ts",
+      "default": "./monaco-webpack/index.ts"
+    }
+  },
+  "devDependencies": {
+    "@codegena/infr-nx": "*",
+    "@codegena/ui-theme": "*",
+    "@faker-js/faker": "^10.6.0",
+    "@nx/react": "23.3.2",
+    "@storybook/addon-docs": "10.6.7",
+    "@storybook/react": "10.6.7",
+    "@storybook/react-vite": "10.6.7",
+    "@types/node": "^24.0.0",
+    "@types/react": "19.0.0",
+    "@types/react-dom": "19.0.0",
+    "eslint": "^10.13.0",
+    "nx": "23.3.2",
+    "rollup": "^4.14.0",
+    "storybook": "10.6.7",
+    "stylelint": "^17.16.0",
+    "typescript": "6.0.3",
+    "vite": "^8.3.8"
+  },
+  "peerDependencies": {
+    "@emotion/react": "11.x",
+    "@emotion/styled": "11.x",
+    "@fontsource/jetbrains-mono": "5.x",
+    "@monaco-editor/react": "4.x",
+    "@mui/icons-material": "5.x",
+    "@mui/material": "5.x",
+    "@rspack/core": "2.x",
+    "clsx": "2.x",
+    "lucide-react": "1.x",
+    "monaco-editor": "0.x",
+    "monaco-editor-webpack-plugin": "7.x",
+    "overlayscrollbars": "2.x",
+    "react": "19.x",
+    "react-dom": "19.x",
+    "react-icons": "5.x",
+    "vite": "8.x"
+  },
+  "peerDependenciesMeta": {
+    "@rspack/core": {
+      "optional": true
+    },
+    "monaco-editor-webpack-plugin": {
+      "optional": true
+    },
+    "vite": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@tanstack/highlight": "1.2.12"
+  }
+}

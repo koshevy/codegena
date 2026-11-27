@@ -1,0 +1,26 @@
+{
+  "name": "documentation-mf-remote-e2e",
+  "version": "0.0.0",
+  "private": true,
+  "devDependencies": {
+    "@codegena/infr-nx": "*",
+    "@codegena/util-e2e": "*",
+    "@module-federation/enhanced": "^2.9.2",
+    "@nx/devkit": "23.3.2",
+    "@nx/playwright": "23.3.2",
+    "@nx/web": "23.3.2",
+    "@playwright/test": "^1.36.0",
+    "@rspack/cli": "^2.3.1",
+    "@rspack/core": "^2.3.1",
+    "@types/node": "^24.0.0",
+    "@types/react": "19.0.0",
+    "@types/react-dom": "19.0.0",
+    "eslint": "^10.13.0",
+    "nx": "23.3.2",
+    "typescript": "6.0.3"
+  },
+  "peerDependencies": {
+    "react": "19.x",
+    "react-dom": "19.x"
+  }
+}

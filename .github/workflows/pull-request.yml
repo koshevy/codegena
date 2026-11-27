@@ -1,0 +1,313 @@
+name: Pull Request for Codegena Monorepo
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+permissions:
+  contents: read
+# Serialize runs that share the public report paths.
+concurrency:
+  group: >-
+    ${{ github.event.pull_request.head.repo.full_name == github.repository
+        && github.actor != 'dependabot[bot]' && 'pull-request-report-pages' || github.run_id }}
+defaults:
+  run:
+    shell: bash
+jobs:
+  clear-reports:
+    name: Clear test reports on GitHub Pages
+    if: >-
+      ${{ github.event.pull_request.head.repo.full_name == github.repository
+          && github.actor != 'dependabot[bot]' }}
+    runs-on: ubuntu-24.04
+    permissions: &pages-permissions
+      pages: write
+      id-token: write
+    environment: github-pages
+    env:
+      PAGES_ARTIFACT_NAME: github-pages-empty-${{ github.run_attempt }}
+    steps:
+      - name: Prepare an empty site
+        if: ${{ !env.ACT }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/empty-site"
+          touch "$RUNNER_TEMP/empty-site/index.html"
+      - name: Upload empty site
+        if: ${{ !env.ACT }}
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          name: ${{ env.PAGES_ARTIFACT_NAME }}
+          path: ${{ runner.temp }}/empty-site
+      - name: Deploy empty site
+        if: ${{ !env.ACT }}
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
+        with:
+          artifact_name: ${{ env.PAGES_ARTIFACT_NAME }}
+  checkout:
+    needs: clear-reports
+    if: ${{ !cancelled() && (needs.clear-reports.result == 'success' || needs.clear-reports.result == 'skipped') }}
+    runs-on: self-hosted
+    outputs:
+      base: ${{ steps.revisions.outputs.base }}
+      head: ${{ steps.revisions.outputs.head }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Resolve the Nx comparison range
+        id: revisions
+        env:
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          base="$(git rev-parse --verify "${PR_BASE_SHA:-origin/HEAD}^{commit}")"
+          head="$(git rev-parse HEAD)"
+          printf 'base=%s\nhead=%s\n' "$base" "$head" >> "$GITHUB_OUTPUT"
+  security-issues:
+    needs: checkout
+    # The Pages reset can be skipped for local and fork PR runs.
+    if: ${{ !cancelled() && needs.checkout.result == 'success' }}
+    runs-on: self-hosted
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    env:
+      AUDIT_REPORTS_DIRECTORY: dist/audit-reports
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        id: source
+        with:
+          persist-credentials: false
+      # The CodeQL action needs a GitHub token. Use its CLI directly in act.
+      - name: Analyze locally with CodeQL
+        if: env.ACT
+        run: |
+          codeql_dir="$(mktemp -d "$RUNNER_TEMP/codeql.XXXXXX")"
+          trap 'rm -rf "$codeql_dir"' EXIT
+          codeql database create "$codeql_dir/databases" --db-cluster \
+            --language=javascript,actions --build-mode=none --source-root="$GITHUB_WORKSPACE"
+          mkdir -p "$AUDIT_REPORTS_DIRECTORY/codeql"
+          for language in javascript actions; do
+            codeql database analyze "$codeql_dir/databases/$language" \
+              --format=sarifv2.1.0 --output="$AUDIT_REPORTS_DIRECTORY/codeql/$language.sarif"
+          done
+          sarif summary "$AUDIT_REPORTS_DIRECTORY/codeql"
+      - name: Initialize CodeQL
+        if: ${{ !env.ACT }}
+        uses: github/codeql-action/init@1bd86f2fdb4b86187fa4059f16f31a3202acc9ea # v4.39.4
+        with:
+          languages: javascript-typescript, actions
+      - name: Analyze with CodeQL
+        if: ${{ !env.ACT }}
+        uses: github/codeql-action/analyze@1bd86f2fdb4b86187fa4059f16f31a3202acc9ea # v4.39.4
+        with:
+          output: ${{ env.AUDIT_REPORTS_DIRECTORY }}/codeql
+      - name: Scan source code using Semgrep
+        if: ${{ !cancelled() && steps.source.outcome == 'success' }}
+        run: |
+          mkdir -p "$AUDIT_REPORTS_DIRECTORY"
+          semgrep scan --config=auto --error --verbose \
+            --sarif-output="$AUDIT_REPORTS_DIRECTORY/semgrep.sarif"
+      - name: Upload Semgrep to code scanning
+        if: >-
+          ${{ !cancelled() && !env.ACT && steps.source.outcome == 'success'
+              && hashFiles('dist/audit-reports/semgrep.sarif') != '' }}
+        uses: github/codeql-action/upload-sarif@1bd86f2fdb4b86187fa4059f16f31a3202acc9ea # v4.39.4
+        with:
+          sarif_file: ${{ env.AUDIT_REPORTS_DIRECTORY }}/semgrep.sarif
+          category: semgrep
+      - name: Validate landing SSR Caddyfile
+        if: ${{ !cancelled() && steps.source.outcome == 'success' }}
+        run: |
+          profile=apps/landing-mf-host-ssr/.env.local
+          caddy_version="$(sed -n 's/^CADDY_VERSION=//p' "$profile")"
+          : "${caddy_version:?Set CADDY_VERSION in the local SSR profile}"
+          docker run --rm -i --env-file "$profile" --entrypoint caddy "caddy:$caddy_version-alpine" \
+            validate --config - --adapter caddyfile \
+            < apps/landing-mf-host-ssr/Caddyfile
+      - name: Scan landing SSR IaC with Trivy
+        if: ${{ !cancelled() && steps.source.outcome == 'success' }}
+        run: |
+          mkdir -p "$AUDIT_REPORTS_DIRECTORY"
+          tar --exclude='*.dockerignore' -cf - apps/landing-mf-host-ssr \
+            | docker run --rm -i --workdir /tmp --entrypoint /bin/sh \
+                ghcr.io/aquasecurity/trivy:0.76.2@sha256:8f6bb947dbc528902e11f2f5be52f7b519f6a39d5d148f41166f2040499768fb \
+                -ec 'tar -xf -
+                  exec trivy config --format sarif apps/landing-mf-host-ssr' \
+            > "$AUDIT_REPORTS_DIRECTORY/trivy-landing-ssr.sarif"
+      - &install-dependencies
+        name: Install dependencies
+        id: install-dependencies
+        if: ${{ !cancelled() && steps.source.outcome == 'success' }}
+        run: npm ci
+      - name: Audit NPM packages
+        if: ${{ !cancelled() && steps.install-dependencies.outcome == 'success' }}
+        run: npm exec -- @codegena/audit-ci
+      - name: Prepare SBOM by package-lock.json (see artifacts)
+        id: sbom
+        if: ${{ !cancelled() && steps.source.outcome == 'success' }}
+        run: |
+          mkdir -p "$AUDIT_REPORTS_DIRECTORY"
+          npm exec --yes --package=@cyclonedx/cyclonedx-npm@7.0.1 -- cyclonedx-npm \
+            --output-format JSON \
+            --output-file "$AUDIT_REPORTS_DIRECTORY/bom.cdx.json" \
+            --package-lock-only \
+            --ignore-npm-errors
+      - name: Prepare OSV Scanner report (see artifacts)
+        if: ${{ !cancelled() && steps.sbom.outcome == 'success' }}
+        continue-on-error: true
+        run: |
+          # Stream the SBOM from act's isolated workspace. Exit code 1 means findings.
+          docker run --rm -i --entrypoint /bin/sh \
+            ghcr.io/google/osv-scanner:v2.7.1@sha256:a70ffffc2bfd33482953e5d6b64c6fcdb30239717a07b0f0d3ab2859ce3e4cde \
+            -ec 'cat > /tmp/bom.cdx.json
+              exec /osv-scanner scan source --lockfile /tmp/bom.cdx.json --format html' \
+            < "$AUDIT_REPORTS_DIRECTORY/bom.cdx.json" \
+            > "$AUDIT_REPORTS_DIRECTORY/osv-report.html" || test "$?" -eq 1
+          test -s "$AUDIT_REPORTS_DIRECTORY/osv-report.html"
+      - name: Prepare NPM Audit report (see artifacts)
+        if: ${{ !cancelled() && steps.source.outcome == 'success' }}
+        run: |
+          mkdir -p "$AUDIT_REPORTS_DIRECTORY"
+          npm audit --audit-level=none > "$AUDIT_REPORTS_DIRECTORY/npm-audit-report.txt"
+      - name: Security Artifacts
+        if: ${{ !cancelled() && !env.ACT }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with: &security-artifacts
+          name: security-artifacts
+          path: ${{ env.AUDIT_REPORTS_DIRECTORY }}
+          if-no-files-found: ignore
+          retention-days: 14
+          overwrite: true
+      - name: Security Artifacts (act)
+        if: ${{ !cancelled() && env.ACT && env.ACTIONS_RESULTS_URL != '' }}
+        # act rejects the v7 upload protocol (nektos/act#6114).
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with: *security-artifacts
+  nx-targets:
+    needs: [checkout, security-issues]
+    if: ${{ !cancelled() && needs.checkout.result == 'success' && needs.security-issues.result == 'success' }}
+    runs-on: self-hosted
+    outputs:
+      pages-artifact-name: >-
+        ${{ (steps.pages-artifact.outputs.artifact_id || steps.pages-artifact-local.outputs.artifact_id)
+            && env.PAGES_ARTIFACT_NAME || '' }}
+      playwright-report: ${{ steps.pages-report.outputs.playwright }}
+      jest-report: ${{ steps.pages-report.outputs.jest }}
+    env:
+      COMPOSE_PROJECT_NAME: codegena-pr-${{ github.run_id }}-${{ github.run_attempt }}
+      # Earlier attempts can leave artifacts in the same workflow run.
+      PAGES_ARTIFACT_NAME: github-pages-${{ github.run_attempt }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        id: source
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - *install-dependencies
+      - name: Install Chromium for E2E
+        # Both runner images include Chromium's system dependencies.
+        run: npm exec -- playwright install chromium
+      - name: Run affected targets
+        id: affected-targets
+        env:
+          NX_BASE: ${{ needs.checkout.outputs.base }}
+          NX_HEAD: ${{ needs.checkout.outputs.head }}
+          JEST_HTML_REPORTER_OUTPUT_PATH: ${{ github.workspace }}/dist/reports/jest/index.html
+        run: npm exec -- nx affected --targets=build,lint,test,e2e --parallel=1
+      - name: Collect landing E2E reports
+        if: ${{ !cancelled() && steps.affected-targets.outcome != 'skipped' }}
+        working-directory: apps/landing-mf-host-e2e
+        env:
+          COMPOSE_ENV_FILES: ../landing-mf-host-ssr/.env.local
+        run: |
+          playwright_container="$(docker compose ps --all --quiet playwright)"
+          [[ -n "$playwright_container" ]] || exit 0
+
+          trap 'docker compose down' EXIT
+          reports=dist/.playwright/apps/landing-mf-host-e2e
+          mkdir -p "$GITHUB_WORKSPACE/$reports"
+          docker compose cp "playwright:/workspace/$reports/." "$GITHUB_WORKSPACE/$reports/"
+      - name: E2E Artifacts
+        if: ${{ !cancelled() && !env.ACT }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with: &e2e-artifacts
+          name: e2e-artifacts
+          path: dist/.playwright
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 14
+          overwrite: true
+      - name: E2E Artifacts (act)
+        if: ${{ !cancelled() && env.ACT && env.ACTIONS_RESULTS_URL != '' }}
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with: *e2e-artifacts
+      - name: Prepare test reports for Pages
+        id: pages-report
+        if: >-
+          ${{ !cancelled() && steps.source.outcome == 'success'
+              && hashFiles('dist/.playwright/apps/landing-mf-host-e2e/playwright-report/index.html',
+                           'dist/reports/jest/index.html') != '' }}
+        run: |
+          site="$(mktemp -d "$RUNNER_TEMP/report-site.XXXXXX")"
+          printf 'path=%s\n' "$site" >> "$GITHUB_OUTPUT"
+          playwright_report=dist/.playwright/apps/landing-mf-host-e2e/playwright-report
+          if [[ -s "$playwright_report/index.html" ]]; then
+            cp -R "$playwright_report" "$site/last-report"
+            printf 'playwright=true\n' >> "$GITHUB_OUTPUT"
+          fi
+          if [[ -s dist/reports/jest/index.html ]]; then
+            mkdir -p "$site/last-jest-report"
+            cp dist/reports/jest/index.html "$site/last-jest-report/"
+            printf 'jest=true\n' >> "$GITHUB_OUTPUT"
+          fi
+      - name: Upload test reports for Pages
+        id: pages-artifact
+        if: ${{ !cancelled() && steps.pages-report.outcome == 'success' && !env.ACT }}
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with: &pages-artifact
+          name: ${{ env.PAGES_ARTIFACT_NAME }}
+          path: ${{ steps.pages-report.outputs.path }}
+      - name: Upload test reports for Pages (act)
+        id: pages-artifact-local
+        if: ${{ !cancelled() && steps.pages-report.outcome == 'success' && env.ACT && env.ACTIONS_RESULTS_URL != '' }}
+        uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4.0.0
+        with: *pages-artifact
+
+  publish-test-reports:
+    name: Publish test reports
+    needs: nx-targets
+    if: >-
+      ${{ !cancelled() && needs.nx-targets.outputs.pages-artifact-name != ''
+          && github.event.pull_request.head.repo.full_name == github.repository
+          && github.actor != 'dependabot[bot]' }}
+    runs-on: ubuntu-24.04
+    permissions: *pages-permissions
+    environment:
+      name: github-pages
+      url: ${{ steps.report-links.outputs.playwright-url || steps.report-links.outputs.jest-url }}
+    steps:
+      - name: Deploy test reports to GitHub Pages
+        id: deployment
+        if: ${{ !env.ACT }}
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
+        with:
+          artifact_name: ${{ needs.nx-targets.outputs.pages-artifact-name }}
+      - name: Link to the published test reports
+        id: report-links
+        if: ${{ steps.deployment.outcome == 'success' }}
+        env:
+          PAGES_URL: ${{ steps.deployment.outputs.page_url }}
+          HAS_PLAYWRIGHT: ${{ needs.nx-targets.outputs.playwright-report }}
+          HAS_JEST: ${{ needs.nx-targets.outputs.jest-report }}
+        run: |
+          pages_url="${PAGES_URL%/}"
+          if [[ "$HAS_PLAYWRIGHT" == true ]]; then
+            printf 'playwright-url=%s/last-report/\n' "$pages_url" >> "$GITHUB_OUTPUT"
+            printf '[Playwright report](%s/last-report/)\n\n' "$pages_url" >> "$GITHUB_STEP_SUMMARY"
+            printf '::notice title=Playwright report::Open the published report from the run summary.\n'
+          fi
+          if [[ "$HAS_JEST" == true ]]; then
+            printf 'jest-url=%s/last-jest-report/\n' "$pages_url" >> "$GITHUB_OUTPUT"
+            printf '[Jest report](%s/last-jest-report/)\n' "$pages_url" >> "$GITHUB_STEP_SUMMARY"
+          fi

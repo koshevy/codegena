@@ -1,0 +1,10 @@
+{
+  "$id": "object-pattern-properties-additional-properties-false",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "description": "Option `additionalProperties` has to be ignored due the `patternProperties`",
+  "additionalProperties": false,
+  "propertyNames": {
+    "pattern": "^[a-z]+$"
+  }
+}

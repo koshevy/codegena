@@ -1,0 +1,43 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Activity API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/activity": {
+      "get": {
+        "operationId": "Activity_getApiRequests",
+        "tags": ["Activity"],
+        "responses": {
+          "200": {
+            "description": "API requests listed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActivityGetApiRequestsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ActivityGetApiRequestsResponse": {
+        "type": "array",
+        "items": { "$ref": "#/components/schemas/APIRequest" }
+      },
+      "APIRequest": {
+        "type": "object",
+        "properties": {
+          "method": { "type": "string" },
+          "path": { "type": "string" }
+        },
+        "required": ["method", "path"]
+      }
+    }
+  }
+}

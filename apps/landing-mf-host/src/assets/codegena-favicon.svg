@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <title>Codegena C</title>
+  <style>
+    svg { --info: #176661; --primary: #3c4a8f; --secondary: #62317f; }
+    @media (prefers-color-scheme: dark) {
+      svg { --info: #82c9c9; --primary: #8abff4; --secondary: #d4b3ff; }
+    }
+  </style>
+  <defs>
+    <linearGradient id="letter-gradient" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="var(--info)" />
+      <stop offset="0.5" stop-color="var(--primary)" />
+      <stop offset="1" stop-color="var(--secondary)" />
+    </linearGradient>
+  </defs>
+  <g transform="translate(22 -1)">
+    <path
+      d="M140 22V55.75H55.25V136.5 M36 171V188.5H141V155"
+      fill="none"
+      stroke="url(#letter-gradient)"
+      stroke-opacity="0.5"
+      stroke-width="2.75"
+    />
+    <path
+      d="M25 4.75H131.5V39.5H46.25V136.5H131.5V171.75H24V139.75H5.25V34H25Z"
+      fill="url(#letter-gradient)"
+    />
+  </g>
+</svg>

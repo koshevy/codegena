@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/@codegena/audit-ci/vulnerabilities-ignore-schema.json",
+  "cwe": [],
+  "ghsa": [
+    {
+      "id": "GHSA-fc5q-39xc-vjpf",
+      "expires": "2026-12-01",
+      "description": "Reviewed 2026-11-17: existing Picomatch 2.3.2/4.0.4/4.0.7 supports build/test tooling; no patch exists. Malicious glob patterns can stall tooling. https://github.com/advisories/GHSA-fc5q-39xc-vjpf"
+    },
+    {
+      "id": "GHSA-gcqx-w48m-w2h4",
+      "expires": "2026-11-29",
+      "description": "Reviewed 2026-11-15: deepmerge 4.3.1 is required by build/test tooling; no patch exists. Trusted configuration only. https://github.com/advisories/GHSA-gcqx-w48m-w2h4"
+    }
+  ]
+}
