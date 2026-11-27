@@ -146,9 +146,11 @@ jobs:
     needs: checkout
     runs-on: self-hosted
     outputs:
-      pages-artifact: ${{ steps.pages-artifact.outputs.artifact_id }}
+      pages-artifact-name: ${{ steps.pages-artifact.outputs.artifact_id && env.PAGES_ARTIFACT_NAME || '' }}
     env:
       COMPOSE_PROJECT_NAME: codegena-pr-${{ github.run_id }}-${{ github.run_attempt }}
+      # Earlier attempts can leave artifacts in the same workflow run.
+      PAGES_ARTIFACT_NAME: github-pages-${{ github.run_attempt }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         id: source
@@ -201,13 +203,14 @@ jobs:
         if: ${{ !cancelled() && steps.pages-report.outcome == 'success' && (!env.ACT || env.ACTIONS_RESULTS_URL != '') }}
         uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4.0.0
         with:
+          name: ${{ env.PAGES_ARTIFACT_NAME }}
           path: ${{ runner.temp }}/report-site
 
   publish-playwright-report:
     name: Publish Playwright report
     needs: nx-targets
     if: >-
-      ${{ !cancelled() && needs.nx-targets.outputs.pages-artifact != ''
+      ${{ !cancelled() && needs.nx-targets.outputs.pages-artifact-name != ''
           && github.event.pull_request.head.repo.full_name == github.repository
           && github.actor != 'dependabot[bot]' }}
     runs-on: ubuntu-24.04
@@ -224,6 +227,8 @@ jobs:
         id: deployment
         if: ${{ !env.ACT }}
         uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
+        with:
+          artifact_name: ${{ needs.nx-targets.outputs.pages-artifact-name }}
       - name: Announce Playwright report
         id: report-link
         if: ${{ steps.deployment.outcome == 'success' }}
